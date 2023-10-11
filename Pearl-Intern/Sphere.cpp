@@ -90,7 +90,7 @@ void Sphere::Draw(ID3D11DeviceContext& context)
 	_transform->Bind(context);
 	_pso->Bind(context);
 	_mesh->Bind(context);
-	context.DrawIndexed(_mesh->GetCount(), 0u, 0u);
+	context.DrawIndexedInstanced(_mesh->GetCount(), 1u, 0u, 0u, 0u);
 }
 
 void Sphere::DrawInstanced()
