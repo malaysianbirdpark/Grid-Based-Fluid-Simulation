@@ -47,7 +47,7 @@ Sphere::Sphere(ID3D11Device& device, ID3D11DeviceContext& context)
 	indices.reserve(3 * stack_count * sector_count);
 
 	for (int i{ 0 }; i != stack_count; ++i) {
-		float k0{ i * static_cast<float>(sector_count) + 1 };
+		float k0{ i * (static_cast<float>(sector_count) + 1) };
 		float k1{ k0 + static_cast<float>(sector_count) + 1 };
 
 		for (auto j{ 0 }; j != sector_count; ++j, ++k0, ++k1) {
