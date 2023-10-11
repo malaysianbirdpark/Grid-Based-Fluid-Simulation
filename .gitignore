@@ -1,0 +1,8 @@
+bin/
+bin-int/
+packages/
+**/x64/
+.vs/
+**/3rd_party/
+**/ShaderLib/
+**/Assets/
