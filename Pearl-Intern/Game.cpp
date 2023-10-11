@@ -54,7 +54,7 @@ void Game::ProcessInput(float const dt)
 		translate.x += static_cast<float>(kbd_state.D) * dt;
 		translate.x -= static_cast<float>(kbd_state.A) * dt;
 		translate.y += static_cast<float>(kbd_state.R) * dt;
-		translate.y += static_cast<float>(kbd_state.F) * dt;
+		translate.y -= static_cast<float>(kbd_state.F) * dt;
 		translate.z += static_cast<float>(kbd_state.W) * dt;
 		translate.z -= static_cast<float>(kbd_state.S) * dt;
 
