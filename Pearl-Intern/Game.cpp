@@ -6,6 +6,8 @@
 #include "Camera.h"
 
 #include "Transform.h"
+#include "Input.h"
+#include "Clk.h"
 
 Game::Game() 
 {
@@ -15,7 +17,9 @@ Game::Game()
 	Renderer::Init(width, height, Win32::GetNativeWnd());
 	Camera::Init();
 
-	_sphere = std::make_unique<Sphere>(Renderer::Device());
+	Clk::Init();
+
+	_sphere = std::make_unique<Sphere>(Renderer::Device(), Renderer::Context());
 	_triangle = std::make_unique<Triangle>(Renderer::Device(), Renderer::Context());
 }
 
@@ -29,24 +33,48 @@ int Game::Run()
 		if (auto const ecode{ Win32::PumpMessage() }; ecode.has_value()) [[unlikely]]
 			return *ecode;
 
-		ProcessInput();
-		Update();
+		auto const dt{ Clk::Mark() };
+
+		ProcessInput(dt);
+		Update(dt);
 		Render();
 	}
 }
 
-void Game::ProcessInput()
+void Game::ProcessInput(float const dt)
 {
+	auto const& kbd_tracker{ Input::GetKeyboardState() };
+
+	if (kbd_tracker.pressed.Escape)
+		Input::ToggleRaw();
+
+	auto const kbd_state{ kbd_tracker.GetLastState() };
+	if (!Input::_cursorEnabled) {
+		DirectX::XMFLOAT3 translate{};
+		translate.x += static_cast<float>(kbd_state.D) * dt;
+		translate.x -= static_cast<float>(kbd_state.A) * dt;
+		translate.y += static_cast<float>(kbd_state.R) * dt;
+		translate.y += static_cast<float>(kbd_state.F) * dt;
+		translate.z += static_cast<float>(kbd_state.W) * dt;
+		translate.z -= static_cast<float>(kbd_state.S) * dt;
+
+		Camera::Translate(translate);
+
+		while (auto const raw_delta{ Input::ReadRawDelta() })
+			Camera::Rotate(raw_delta.value().first * dt, raw_delta.value().second * dt);
+	}
 }
 
-void Game::Update()
+void Game::Update(float const dt)
 {
-	_triangle->Update(Renderer::Context(), 1600.0f);
+	_sphere->Update(Renderer::Context(), dt);
+	_triangle->Update(Renderer::Context(), dt);
 }
 
 void Game::Render()
 {
 	Renderer::BeginFrame();
-	_triangle->Draw(Renderer::Context());
+	//_triangle->Draw(Renderer::Context());
+	_sphere->Draw(Renderer::Context());
 	Renderer::EndFrame();
 }

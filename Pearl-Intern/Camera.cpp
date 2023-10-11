@@ -6,7 +6,7 @@
 #define PI (3.141592f)
 
 void Camera::Init() {
-    DirectX::XMVECTOR const init_pos{ 0.0f, 0.0f, 0.0f, 1.0f };
+    DirectX::XMVECTOR const init_pos{ 0.0f, 0.0f, -5.0f, 1.0f };
     DirectX::XMStoreFloat3(&_pos, init_pos);
 }
 

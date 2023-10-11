@@ -42,6 +42,7 @@
     <ClInclude Include="pch.h" />
     <ClInclude Include="Input.h" />
     <ClInclude Include="CircularQueue.h" />
+    <ClInclude Include="Clk.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Camera.cpp" />
@@ -60,9 +61,11 @@
     <ClCompile Include="pch.cpp" />
     <ClCompile Include="Input.cpp" />
     <ClCompile Include="CircularQueue.cpp" />
+    <ClCompile Include="Clk.cpp" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="testPS.hlsl" />
     <FxCompile Include="testVS.hlsl" />
+    <FxCompile Include="sphereVS.hlsl" />
   </ItemGroup>
 </Project>

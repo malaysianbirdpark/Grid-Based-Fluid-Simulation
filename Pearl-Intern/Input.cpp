@@ -3,6 +3,17 @@
 
 void Input::Init(HWND hWnd)
 {
+    _hWnd = hWnd;
+    _mouse.SetWindow(hWnd);
+}
+
+DirectX::Keyboard::KeyboardStateTracker& Input::GetKeyboardState() {
+    _tracker.Update(_keyboard.GetState());
+    return _tracker;
+}
+
+DirectX::Mouse::State Input::GetMouseState() {
+    return _mouse.GetState();
 }
 
 std::optional<std::pair<int, int>> Input::ReadRawDelta()

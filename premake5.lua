@@ -26,11 +26,16 @@ project "Pearl-Intern"
         "%{prj.name}/**.cpp",
         "%{prj.name}/**.hlsl",
     }
+
     includedirs {
         "%{prj.name}/",
-        "%{prj.name}/3rd_party/DirectXTK-main/Inc/",
+        "3rd_party/",
         "%{prj.name}/3rd_party/imgui-docking/",
         "%{prj.name}/3rd_party/imgui-docking/backends"
+    }
+    
+    libdirs {
+        "3rd_party/DirectXTK-main/Bin/Desktop_2019/x64/Release"
     }
 
     links {
@@ -38,6 +43,7 @@ project "Pearl-Intern"
         "dxgi",
         "dxguid",
         "D3DCompiler",
+        "DirectXTK",
     }
 
     optimize "Speed"
@@ -49,7 +55,7 @@ project "Pearl-Intern"
     filter "files:**.hlsl"
         shaderentry "main"
         shadermodel "5.0"
-        shaderobjectfileoutput "%{wks.location}/%{file.basename}.cso"
+        shaderobjectfileoutput "%{wks.location}/%{prj.name}/%{file.basename}.cso"
 
     filter "files:**PS.hlsl"
         shadertype "Pixel"

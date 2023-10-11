@@ -25,11 +25,11 @@ Triangle::Triangle(ID3D11Device& device, ID3D11DeviceContext& context)
 	_pso->SetPixelShader(device, "testPS.cso");
 
 	_transform = std::make_unique<Transform>(device, context, DirectX::XMMatrixIdentity());
+	_transform->SetModel(DirectX::XMMatrixScaling(10.0f, 10.0f, 10.0f));
 }
 
 void Triangle::Update(ID3D11DeviceContext& context, float const dt)
 {
-	_transform->SetModel(DirectX::XMMatrixRotationZ(3.141592f / 4.0f));
 	_transform->Update(context);
 }
 

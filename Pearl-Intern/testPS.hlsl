@@ -10,8 +10,7 @@ PS_OUT main(PS_IN input)
 {
     PS_OUT output;
 
-	output.color = float4(1.0f, 1.0f, 1.0f, 1.0f);
-    clip(output.color.a < 0.1f ? -1 : 1);
+	output.color = float4(1.0f, 0.0f, 1.0f, 1.0f);
 
     return output;
 }

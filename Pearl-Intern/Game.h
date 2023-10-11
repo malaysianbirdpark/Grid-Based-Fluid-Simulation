@@ -11,8 +11,8 @@ class Game {
 public:  explicit  Game();
 public:            ~Game();
 public:  int       Run();
-private: void      ProcessInput();
-private: void      Update();
+private: void      ProcessInput(float const dt);
+private: void      Update(float const dt);
 private: void      Render();
 private:
 	std::unique_ptr<Sphere> _sphere;

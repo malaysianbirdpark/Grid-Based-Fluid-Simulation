@@ -66,7 +66,7 @@ void Win32::Init(int const width, int const height, char const* name) {
     }
     */
 
-    //Input::Init(_wndData.hWnd);
+    Input::Init(_wndData.hWnd);
 
     ShowWindow(_wndData.hWnd, SW_SHOWDEFAULT);
 }
@@ -150,7 +150,7 @@ LRESULT Win32::HandleMsg(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) noex
         case WM_CHAR:
             //if (imgui_io.WantCaptureKeyboard)
             //    break;
-            //DirectX::Keyboard::ProcessMessage(msg, wParam, lParam);
+            DirectX::Keyboard::ProcessMessage(msg, wParam, lParam);
             break;
         case WM_MENUCHAR:
             //return MAKELRESULT(0, MNC_CLOSE);
@@ -158,7 +158,7 @@ LRESULT Win32::HandleMsg(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) noex
         case WM_ACTIVATE:
         case WM_ACTIVATEAPP:
             Input::ToggleActivation(wParam & WA_ACTIVE);
-            //DirectX::Mouse::ProcessMessage(msg, wParam, lParam);
+            DirectX::Mouse::ProcessMessage(msg, wParam, lParam);
             break;
         case WM_LBUTTONDOWN:
             SetForegroundWindow(hWnd);
@@ -176,7 +176,7 @@ LRESULT Win32::HandleMsg(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) noex
         case WM_MOUSEHOVER:
             //if (imgui_io.WantCaptureMouse)
             //    break;
-            //DirectX::Mouse::ProcessMessage(msg, wParam, lParam);
+            DirectX::Mouse::ProcessMessage(msg, wParam, lParam);
             break;
         case WM_MOUSEACTIVATE:
             return MA_ACTIVATEANDEAT;

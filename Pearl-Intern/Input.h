@@ -3,6 +3,9 @@
 #include <optional>
 #include <vector>
 
+#include "DirectXTK-main/Inc/Mouse.h"
+#include "DirectXTK-main/Inc/Keyboard.h"
+
 #include "CircularQueue.h"
 
 class Input
@@ -10,6 +13,8 @@ class Input
 public:
     static void Init(HWND hWnd);
 public:
+    [[nodiscard]] static DirectX::Keyboard::KeyboardStateTracker& GetKeyboardState();
+    [[nodiscard]] static DirectX::Mouse::State GetMouseState();
     [[nodiscard]] static std::optional<std::pair<int, int>> ReadRawDelta();
 
     static void ToggleActivation(UINT flag);
@@ -37,6 +42,10 @@ private:
         int y;
     };
 private:
+    inline static DirectX::Mouse _mouse{};
+    inline static DirectX::Keyboard _keyboard{};
+    inline static DirectX::Keyboard::KeyboardStateTracker _tracker{};
+
     inline static CircularQueue<RawMouseData, 16u> _rawDeltaBuffer;
     inline static std::vector<BYTE>                _rawBuffer;
 
