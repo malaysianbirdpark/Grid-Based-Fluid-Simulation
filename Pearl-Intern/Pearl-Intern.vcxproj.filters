@@ -1,22 +1,68 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="소스 파일">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    <Filter Include="3rd_party">
+      <UniqueIdentifier>{BD86B353-29F1-67CA-722F-1970DED8451F}</UniqueIdentifier>
     </Filter>
-    <Filter Include="헤더 파일">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    <Filter Include="3rd_party\imgui-docking">
+      <UniqueIdentifier>{539D2C72-BFD4-7409-C8DE-D82C34959B02}</UniqueIdentifier>
     </Filter>
-    <Filter Include="리소스 파일">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    <Filter Include="3rd_party\imgui-docking\backends">
+      <UniqueIdentifier>{DDC4AF5B-C915-9B9D-F279-895FDE292E07}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="3rd_party\imgui-docking\misc">
+      <UniqueIdentifier>{0EFCC2AC-FAB6-B258-A36E-2BA38F08FDE8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="3rd_party\imgui-docking\misc\cpp">
+      <UniqueIdentifier>{E0CCF90E-CC1D-E550-F581-D312E13178BA}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="3rd_party\imgui-docking\misc\fonts">
+      <UniqueIdentifier>{E748D6B4-D384-D91E-3C97-F11528F28139}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="3rd_party\imgui-docking\misc\freetype">
+      <UniqueIdentifier>{816AF385-ED2E-F275-B694-224022188EAB}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="3rd_party\imgui-docking\misc\single_file">
+      <UniqueIdentifier>{FE4909DA-EAC6-FC1C-1344-FD30FF1F99B0}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Pearl-Intern.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
+    <ClInclude Include="Camera.h" />
+    <ClInclude Include="ComputeShader.h" />
+    <ClInclude Include="Game.h" />
+    <ClInclude Include="Mesh.h" />
+    <ClInclude Include="Particle.h" />
+    <ClInclude Include="PipelineStateObject.h" />
+    <ClInclude Include="Renderer.h" />
+    <ClInclude Include="Sphere.h" />
+    <ClInclude Include="Test.h" />
+    <ClInclude Include="Transform.h" />
+    <ClInclude Include="Triangle.h" />
+    <ClInclude Include="Win32.h" />
+    <ClInclude Include="pch.h" />
+    <ClInclude Include="Input.h" />
+    <ClInclude Include="CircularQueue.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="ComputeShader.cpp" />
+    <ClCompile Include="Game.cpp" />
+    <ClCompile Include="Mesh.cpp" />
+    <ClCompile Include="Particle.cpp" />
+    <ClCompile Include="PipelineStateObject.cpp" />
+    <ClCompile Include="Renderer.cpp" />
+    <ClCompile Include="Sphere.cpp" />
+    <ClCompile Include="Test.cpp" />
+    <ClCompile Include="Transform.cpp" />
+    <ClCompile Include="Triangle.cpp" />
+    <ClCompile Include="Win32.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="pch.cpp" />
+    <ClCompile Include="Input.cpp" />
+    <ClCompile Include="CircularQueue.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="testPS.hlsl" />
+    <FxCompile Include="testVS.hlsl" />
   </ItemGroup>
 </Project>

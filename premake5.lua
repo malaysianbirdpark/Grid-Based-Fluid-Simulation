@@ -1,6 +1,7 @@
 workspace "Pearl-Intern"  
     architecture "x64"
     configurations { "Debug", "Release" } 
+    toolset "v142"
     startproject "Pearl-Intern"
 
 outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
@@ -18,7 +19,7 @@ project "Pearl-Intern"
     objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
 
     pchheader "pch.h"
-    pchsource "pch.cpp"
+    pchsource "%{prj.name}/pch.cpp"
 
     files {
         "%{prj.name}/**.h",
@@ -26,7 +27,10 @@ project "Pearl-Intern"
         "%{prj.name}/**.hlsl",
     }
     includedirs {
-        "%{prj.name}/src/",
+        "%{prj.name}/",
+        "%{prj.name}/3rd_party/DirectXTK-main/Inc/",
+        "%{prj.name}/3rd_party/imgui-docking/",
+        "%{prj.name}/3rd_party/imgui-docking/backends"
     }
 
     links {
@@ -52,3 +56,9 @@ project "Pearl-Intern"
 
     filter "files:**VS.hlsl"
         shadertype "Vertex"
+
+    filter "files:**GS.hlsl"
+        shadertype "Geometry"
+
+    filter "files:**CS.hlsl"
+        shadertype "Compute"
