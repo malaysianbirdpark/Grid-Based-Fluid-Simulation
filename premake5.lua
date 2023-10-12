@@ -30,12 +30,14 @@ project "Pearl-Intern"
     includedirs {
         "%{prj.name}/",
         "3rd_party/",
-        "%{prj.name}/3rd_party/imgui-docking/",
-        "%{prj.name}/3rd_party/imgui-docking/backends"
+        "ImGui/",
+        "ImGui/backends/"
     }
     
     libdirs {
-        "3rd_party/DirectXTK-main/Bin/Desktop_2019/x64/Release"
+        "3rd_party/DirectXTK-main/Bin/Desktop_2019/x64/Release",
+        "bin/Debug-windows-x86_64/ImGui",
+        "bin/Release-windows-x86_64/ImGui",
     }
 
     links {
@@ -44,6 +46,7 @@ project "Pearl-Intern"
         "dxguid",
         "D3DCompiler",
         "DirectXTK",
+        "ImGui.lib",
     }
 
     optimize "Speed"
@@ -68,3 +71,36 @@ project "Pearl-Intern"
 
     filter "files:**CS.hlsl"
         shadertype "Compute"
+
+    vpaths {
+        ["HLSL"] = "**.hlsl",
+    }
+
+project "ImGui"
+    location "ImGui"
+    kind "StaticLib"
+    language "C++"   
+    cppdialect "C++17" 
+    staticruntime "On"
+    buildoptions "/MT"
+
+    includedirs {
+        "%{prj.name}/",
+        "3rd_party/libfreetype2/freetype2/include",
+    }
+
+    libdirs {
+        "3rd_party/libfreetype2/freetype2/objs/vc2010/Win32"
+    }
+
+    links {
+        "freetype265d.lib"
+    }
+
+    targetdir ("bin/" .. outputdir .. "/%{prj.name}")
+    objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
+
+    files {
+        "%{prj.name}/**.h",
+        "%{prj.name}/**.cpp",
+    }

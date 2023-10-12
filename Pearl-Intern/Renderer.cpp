@@ -2,6 +2,7 @@
 #include "Renderer.h"
 
 #include "Renderer.h"
+#include "ImGuiRenderer.h"
 
 void Renderer::Init(int width, int height, HWND native_wnd)
 {
@@ -67,6 +68,7 @@ void Renderer::Init(int width, int height, HWND native_wnd)
     InitRS(device);
     InitDS(device, width, height);
     InitBS(device);
+    InitSamplers(device);
 }
 
 void Renderer::BeginFrame()
@@ -81,10 +83,14 @@ void Renderer::BeginFrame()
     _immContext->ClearRenderTargetView(_backBufferView.Get(), clear_color);
     _immContext->ClearDepthStencilView(_dsv.Get(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0u);
 
+    _immContext->PSSetSamplers(0u, 1u, _samplerWrap.GetAddressOf());
+
+    ImGuiRenderer::BeginFrame();
 }
 
 void Renderer::EndFrame()
 {
+    ImGuiRenderer::EndFrame();
     _swapChain->Present(1u, 0u);
 }
 
@@ -109,7 +115,7 @@ void Renderer::InitRS(ID3D11Device& device)
 
     // Default Solid
     {
-        rd.FillMode = D3D11_FILL_MODE::D3D11_FILL_SOLID;
+        rd.FillMode = D3D11_FILL_MODE::D3D11_FILL_WIREFRAME;
         rd.CullMode = D3D11_CULL_MODE::D3D11_CULL_BACK;
         rd.FrontCounterClockwise = false;
         rd.DepthClipEnable = true;
@@ -169,6 +175,23 @@ void Renderer::InitBS(ID3D11Device& device)
         desc.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
 
         device.CreateBlendState(&desc, _bsDefault.ReleaseAndGetAddressOf());
+    }
+}
+
+void Renderer::InitSamplers(ID3D11Device& device)
+{
+    {
+        D3D11_SAMPLER_DESC sd{};
+        sd.Filter = D3D11_FILTER_ANISOTROPIC;
+        sd.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
+        sd.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
+        sd.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
+        sd.MaxAnisotropy = D3D11_REQ_MAXANISOTROPY;
+        sd.MipLODBias = 0.0f;
+        sd.MinLOD = 0.0f;
+        sd.MaxLOD = D3D11_FLOAT32_MAX;
+
+        device.CreateSamplerState(&sd, _samplerWrap.ReleaseAndGetAddressOf());
     }
 }
 

@@ -2,6 +2,8 @@
 #include "Win32.h"
 
 #include "Input.h"
+#include "imgui_impl_win32.h"
+#include "ImGuiRenderer.h"
 
 Win32::WindowClass::WindowClass() noexcept
     : _name{ "Window" }, hInst{ GetModuleHandle(nullptr) }
@@ -120,12 +122,11 @@ LRESULT CALLBACK Win32::HandleMsgThunk(HWND hWnd, UINT msg, WPARAM wParam, LPARA
 }
 
 LRESULT Win32::HandleMsg(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) noexcept {
-    //if (ImGui_ImplWin32_WndProcHandler(hWnd, msg, wParam, lParam))
-    //    return true;
+    if (ImGui_ImplWin32_WndProcHandler(hWnd, msg, wParam, lParam))
+        return true;
 
-    //if (ImGuiRenderer::imguiEnabled) [[likely]] {
-	if (true) {
-        //auto const imgui_io {ImGui::GetIO()};
+    if (ImGuiRenderer::imguiEnabled) [[likely]] {
+        auto const imgui_io {ImGui::GetIO()};
 
         switch (msg) {
             /* Window Resizing is currently disabled
@@ -148,8 +149,8 @@ LRESULT Win32::HandleMsg(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) noex
         case WM_KEYUP:
         case WM_SYSKEYUP:
         case WM_CHAR:
-            //if (imgui_io.WantCaptureKeyboard)
-            //    break;
+            if (imgui_io.WantCaptureKeyboard)
+                break;
             DirectX::Keyboard::ProcessMessage(msg, wParam, lParam);
             break;
         case WM_MENUCHAR:
@@ -162,7 +163,7 @@ LRESULT Win32::HandleMsg(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) noex
             break;
         case WM_LBUTTONDOWN:
             SetForegroundWindow(hWnd);
-            //DirectX::Mouse::ProcessMessage(msg, wParam, lParam);
+            DirectX::Mouse::ProcessMessage(msg, wParam, lParam);
             break;
         case WM_MOUSEMOVE:
         case WM_LBUTTONUP:
@@ -174,8 +175,8 @@ LRESULT Win32::HandleMsg(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) noex
         case WM_XBUTTONDOWN:
         case WM_XBUTTONUP:
         case WM_MOUSEHOVER:
-            //if (imgui_io.WantCaptureMouse)
-            //    break;
+            if (imgui_io.WantCaptureMouse)
+                break;
             DirectX::Mouse::ProcessMessage(msg, wParam, lParam);
             break;
         case WM_MOUSEACTIVATE:

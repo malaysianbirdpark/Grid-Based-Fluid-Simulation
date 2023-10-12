@@ -13,6 +13,8 @@ public:  static ID3D11DeviceContext& Context();
 private: static void   InitRS(ID3D11Device& device);
 private: static void   InitDS(ID3D11Device& device, int width, int height);
 private: static void   InitBS(ID3D11Device& device);
+private: static void   InitSamplers(ID3D11Device& device);
+
 private:
 	inline static Microsoft::WRL::ComPtr<ID3D11Device>              _device;
 	inline static Microsoft::WRL::ComPtr<ID3D11DeviceContext>       _immContext;
@@ -31,5 +33,7 @@ private:
     inline static Microsoft::WRL::ComPtr<ID3D11BlendState>          _bsDefault;
 
     inline static D3D11_VIEWPORT                                    _viewport{};
+
+    inline static Microsoft::WRL::ComPtr<ID3D11SamplerState>        _samplerWrap;
 };
  

@@ -64,7 +64,7 @@ void ImGuiRenderer::EndFrame()
         static_cast<float>(height)
     );
 
-    bool showDemoWindow{ false };
+    bool showDemoWindow{ true };
     if (showDemoWindow) [[unlikely]] {
         ImGui::ShowDemoWindow(&showDemoWindow);
     }

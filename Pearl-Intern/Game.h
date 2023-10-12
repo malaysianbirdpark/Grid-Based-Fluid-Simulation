@@ -6,6 +6,7 @@
 #include "Triangle.h"
 #include "Transform.h"
 #include "PipelineStateObject.h"
+#include "PSTextures.h"
 
 class Game {
 public:  explicit  Game();

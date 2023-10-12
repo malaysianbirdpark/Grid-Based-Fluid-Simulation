@@ -3,6 +3,7 @@
 
 #include "Win32.h"
 #include "Renderer.h"
+#include "ImGuiRenderer.h"
 #include "Camera.h"
 
 #include "Transform.h"
@@ -15,6 +16,7 @@ Game::Game()
 	int constexpr height{ 600 };
 	Win32::Init(width, height);
 	Renderer::Init(width, height, Win32::GetNativeWnd());
+	ImGuiRenderer::Init(Renderer::Context());
 	Camera::Init();
 
 	Clk::Init();
