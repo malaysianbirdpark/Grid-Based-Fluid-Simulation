@@ -76,6 +76,16 @@ project "Grid"
         ["HLSL"] = "**.hlsl",
     }
 
+    filter "configurations:Debug"
+    defines { "DEBUG" }  
+    runtime "Debug"
+    symbols "on" 
+
+filter "configurations:Release"  
+    defines { "RELEASE" }    
+    runtime "Release"
+    optimize "on" 
+
 project "ImGui"
     location "ImGui"
     kind "StaticLib"
