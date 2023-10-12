@@ -85,8 +85,8 @@ Sphere::Sphere(ID3D11Device& device, ID3D11DeviceContext& context)
 	_transform->SetModel(DirectX::XMMatrixScaling(10.0f, 10.0f, 10.0f));
 
 	_pstex = std::make_unique<PSTextures>();
-	_pstex->AddTexture(device, context, "./Textures/2k_earth_daymap.dds", PSTextures::Type::Diffuse);
-	_pstex->AddTexture(device, context, "./Textures/2k_earth_normal_map.dds", PSTextures::Type::Normal);
+	_pstex->AddTexture(device, context, "./Assets/Textures/2k_earth_daymap.dds", PSTextures::Type::Diffuse);
+	_pstex->AddTexture(device, context, "./Assets/Textures/2k_earth_normal_map.dds", PSTextures::Type::Normal);
 }
 
 void Sphere::Update(ID3D11DeviceContext& context, float const dt)
