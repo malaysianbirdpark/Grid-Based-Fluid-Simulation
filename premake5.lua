@@ -1,15 +1,15 @@
-workspace "Pearl-Intern"  
+workspace "Grid"  
     architecture "x64"
     configurations { "Debug", "Release" } 
     toolset "v142"
-    startproject "Pearl-Intern"
+    startproject "Grid"
 
 outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
 IncludeDir = {}
 
-project "Pearl-Intern"
-    location "Pearl-Intern"
+project "Grid"
+    location "Grid"
     kind "ConsoleApp"
     language "C++"   
     cppdialect "C++20" 
