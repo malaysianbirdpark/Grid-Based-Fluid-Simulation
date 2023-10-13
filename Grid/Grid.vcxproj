@@ -71,7 +71,7 @@
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>d3d11.lib;dxgi.lib;dxguid.lib;D3DCompiler.lib;DirectXTK.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>..\3rd_party\DirectXTK-main\Bin\Desktop_2019\x64\Release;..\bin\Debug-windows-x86_64\ImGui;..\bin\Release-windows-x86_64\ImGui;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>..\3rd_party\DirectXTK-main\Bin\Desktop_2019\x64\Debug;..\bin\Debug-windows-x86_64\ImGui;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -81,7 +81,7 @@
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>.;..\3rd_party;..\3rd_party\ImGui;..\3rd_party\ImGui\backends;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <Optimization>Full</Optimization>
+      <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <MinimalRebuild>false</MinimalRebuild>
@@ -96,23 +96,27 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalDependencies>d3d11.lib;dxgi.lib;dxguid.lib;D3DCompiler.lib;DirectXTK.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>..\3rd_party\DirectXTK-main\Bin\Desktop_2019\x64\Release;..\bin\Debug-windows-x86_64\ImGui;..\bin\Release-windows-x86_64\ImGui;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>..\3rd_party\DirectXTK-main\Bin\Desktop_2019\x64\Release;..\bin\Release-windows-x86_64\ImGui;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h" />
     <ClInclude Include="CircularQueue.h" />
     <ClInclude Include="Clk.h" />
-    <ClInclude Include="ComputePipeline.h" />
+    <ClInclude Include="ComputeStage.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="ImGuiRenderer.h" />
     <ClInclude Include="Input.h" />
+    <ClInclude Include="Material.h" />
     <ClInclude Include="Mesh.h" />
+    <ClInclude Include="ObjectRenderStage.h" />
     <ClInclude Include="PSTextures.h" />
-    <ClInclude Include="Particle.h" />
     <ClInclude Include="PipelineStateObject.h" />
+    <ClInclude Include="RenderGraph.h" />
     <ClInclude Include="Renderer.h" />
+    <ClInclude Include="RenderObject.h" />
     <ClInclude Include="Sphere.h" />
+    <ClInclude Include="Stage.h" />
     <ClInclude Include="Test.h" />
     <ClInclude Include="Transform.h" />
     <ClInclude Include="Triangle.h" />
@@ -123,16 +127,20 @@
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="CircularQueue.cpp" />
     <ClCompile Include="Clk.cpp" />
-    <ClCompile Include="ComputePipeline.cpp" />
+    <ClCompile Include="ComputeStage.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="ImGuiRenderer.cpp" />
     <ClCompile Include="Input.cpp" />
+    <ClCompile Include="Material.cpp" />
     <ClCompile Include="Mesh.cpp" />
+    <ClCompile Include="ObjectRenderStage.cpp" />
     <ClCompile Include="PSTextures.cpp" />
-    <ClCompile Include="Particle.cpp" />
     <ClCompile Include="PipelineStateObject.cpp" />
+    <ClCompile Include="RenderGraph.cpp" />
     <ClCompile Include="Renderer.cpp" />
+    <ClCompile Include="RenderObject.cpp" />
     <ClCompile Include="Sphere.cpp" />
+    <ClCompile Include="Stage.cpp" />
     <ClCompile Include="Test.cpp" />
     <ClCompile Include="Transform.cpp" />
     <ClCompile Include="Triangle.cpp" />

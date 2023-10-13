@@ -40,7 +40,7 @@ inline Mesh<VertexType>::Mesh(ID3D11Device& device, std::vector<VertexType> cons
 
     // index buffer
     {
-        _indexCount = indices.size();
+        _indexCount = static_cast<UINT>(indices.size());
 
         D3D11_BUFFER_DESC bd{};
         bd.BindFlags = D3D11_BIND_INDEX_BUFFER;

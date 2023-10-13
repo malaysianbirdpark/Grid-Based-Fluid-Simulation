@@ -1,9 +1,11 @@
 #pragma once
 
 #include <memory>
+
+#include "RenderObject.h"
 #include "Mesh.h"
 
-class Sphere {
+class Sphere : public RenderObject {
 	struct Vertex {
 		DirectX::XMFLOAT3 _pos{};
 		DirectX::XMFLOAT3 _normal{};
@@ -11,8 +13,8 @@ class Sphere {
 	};
 public:
 	explicit Sphere(ID3D11Device& device, ID3D11DeviceContext& context);
-	void Update(ID3D11DeviceContext& context, float const dt);
-	void Draw(ID3D11DeviceContext& context);
+	void Update(ID3D11DeviceContext& context, float const dt) override;
+	void Draw(ID3D11DeviceContext& context) override;
 	void DrawInstanced();
 private:
 	std::unique_ptr<class PipelineStateObject> _pso;

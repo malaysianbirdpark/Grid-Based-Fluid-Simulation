@@ -36,5 +36,5 @@ void PSTextures::AddTexture(ID3D11Device& device, ID3D11DeviceContext& context, 
 
 void PSTextures::Bind(ID3D11DeviceContext& context)
 {
-    context.PSSetShaderResources(0u, _srv.size(), _srv[0].GetAddressOf());
+    context.PSSetShaderResources(0u, static_cast<UINT>(_srv.size()), _srv[0].GetAddressOf());
 }

@@ -35,7 +35,6 @@
     <ClInclude Include="Input.h" />
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="PSTextures.h" />
-    <ClInclude Include="Particle.h" />
     <ClInclude Include="PipelineStateObject.h" />
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="Sphere.h" />
@@ -44,7 +43,12 @@
     <ClInclude Include="Triangle.h" />
     <ClInclude Include="Win32.h" />
     <ClInclude Include="pch.h" />
-    <ClInclude Include="ComputePipeline.h" />
+    <ClInclude Include="RenderGraph.h" />
+    <ClInclude Include="Stage.h" />
+    <ClInclude Include="ComputeStage.h" />
+    <ClInclude Include="ObjectRenderStage.h" />
+    <ClInclude Include="RenderObject.h" />
+    <ClInclude Include="Material.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Camera.cpp" />
@@ -55,7 +59,6 @@
     <ClCompile Include="Input.cpp" />
     <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="PSTextures.cpp" />
-    <ClCompile Include="Particle.cpp" />
     <ClCompile Include="PipelineStateObject.cpp" />
     <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="Sphere.cpp" />
@@ -65,7 +68,12 @@
     <ClCompile Include="Win32.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="pch.cpp" />
-    <ClCompile Include="ComputePipeline.cpp" />
+    <ClCompile Include="RenderGraph.cpp" />
+    <ClCompile Include="Stage.cpp" />
+    <ClCompile Include="ComputeStage.cpp" />
+    <ClCompile Include="ObjectRenderStage.cpp" />
+    <ClCompile Include="RenderObject.cpp" />
+    <ClCompile Include="Material.cpp" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="spherePS.hlsl" />

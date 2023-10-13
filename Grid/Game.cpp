@@ -12,6 +12,10 @@
 #include "Input.h"
 #include "Clk.h"
 
+#include "Sphere.h"
+
+#include "ObjectRenderStage.h"
+
 Game::Game() 
 {
 	int constexpr width{ 800 };
@@ -23,8 +27,9 @@ Game::Game()
 
 	Clk::Init();
 
-	_sphere = std::make_unique<Sphere>(Renderer::Device(), Renderer::Context());
-	_triangle = std::make_unique<Triangle>(Renderer::Device(), Renderer::Context());
+	_object.push_back(std::move(std::make_shared<Sphere>(Renderer::Device(), Renderer::Context())));
+
+	_renderGraph.InsertStageAsChild(-1, std::move(std::make_shared<ObjectRenderStage>(_object.back())));
 }
 
 Game::~Game()
@@ -71,14 +76,13 @@ void Game::ProcessInput(float const dt)
 
 void Game::Update(float const dt)
 {
-	_sphere->Update(Renderer::Context(), dt);
-	_triangle->Update(Renderer::Context(), dt);
+	for (auto& obj : _object)
+		obj->Update(Renderer::Context(), dt);
 }
 
 void Game::Render()
 {
 	Renderer::BeginFrame();
-	//_triangle->Draw(Renderer::Context());
-	_sphere->Draw(Renderer::Context());
+	_renderGraph.Run(Renderer::Context());
 	Renderer::EndFrame();
 }

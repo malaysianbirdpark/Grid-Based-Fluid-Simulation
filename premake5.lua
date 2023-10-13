@@ -33,12 +33,8 @@ project "Grid"
         "3rd_party/ImGui/",
         "3rd_party/ImGui/backends/"
     }
-    
-    libdirs {
-        "3rd_party/DirectXTK-main/Bin/Desktop_2019/x64/Release",
-        "bin/Debug-windows-x86_64/ImGui",
-        "bin/Release-windows-x86_64/ImGui",
-    }
+
+
 
     links {
         "d3d11",
@@ -78,12 +74,22 @@ project "Grid"
         defines { "DEBUG" }  
         runtime "Debug"
         symbols "on" 
+        libdirs {
+            "3rd_party/DirectXTK-main/Bin/Desktop_2019/x64/Debug",
+            "bin/Debug-windows-x86_64/ImGui",
+        }
         optimize "Debug"
 
     filter "configurations:Release"  
         defines { "RELEASE" }    
         runtime "Release"
+        libdirs {
+            "3rd_party/DirectXTK-main/Bin/Desktop_2019/x64/Release",
+            "bin/Release-windows-x86_64/ImGui",
+        }
         optimize "Speed"
+
+
 
 project "ImGui"
     location "3rd_party/ImGui"
