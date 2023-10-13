@@ -49,8 +49,6 @@ project "Grid"
         "ImGui",
     }
 
-    optimize "Speed"
-
     floatingpoint "Fast"
 
     characterset "MBCS"
@@ -75,6 +73,17 @@ project "Grid"
     vpaths {
         ["HLSL"] = "**.hlsl",
     }
+
+    filter "configurations:Debug"
+        defines { "DEBUG" }  
+        runtime "Debug"
+        symbols "on" 
+        optimize "Debug"
+
+    filter "configurations:Release"  
+        defines { "RELEASE" }    
+        runtime "Release"
+        optimize "Speed"
 
 project "ImGui"
     location "3rd_party/ImGui"
