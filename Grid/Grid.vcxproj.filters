@@ -49,6 +49,7 @@
     <ClInclude Include="ObjectRenderStage.h" />
     <ClInclude Include="RenderObject.h" />
     <ClInclude Include="Material.h" />
+    <ClInclude Include="ComputeStageBuilders.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Camera.cpp" />
@@ -74,11 +75,15 @@
     <ClCompile Include="ObjectRenderStage.cpp" />
     <ClCompile Include="RenderObject.cpp" />
     <ClCompile Include="Material.cpp" />
+    <ClCompile Include="ComputeStageBuilders.cpp" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="spherePS.hlsl" />
     <FxCompile Include="sphereVS.hlsl" />
     <FxCompile Include="testPS.hlsl" />
     <FxCompile Include="testVS.hlsl" />
+    <FxCompile Include="testCS.hlsl" />
+    <FxCompile Include="test1CS.hlsl" />
+    <FxCompile Include="Test2CS.hlsl" />
   </ItemGroup>
 </Project>

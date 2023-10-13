@@ -3,8 +3,8 @@
 
 #include "RenderObject.h"
 
-ObjectRenderStage::ObjectRenderStage(std::shared_ptr<RenderObject> object)
-	: _object{object}
+ObjectRenderStage::ObjectRenderStage(char const* name, std::shared_ptr<RenderObject> object)
+	: _name{name}, _object {object}
 {
 }
 

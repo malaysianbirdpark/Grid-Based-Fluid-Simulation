@@ -2,9 +2,15 @@
 #include "RenderGraph.h"
 
 #include <queue>
+#include <utility>
+
+#include "imgui.h"
+#include "imnodes.h"
 
 RenderGraph::RenderGraph()
 {
+    InsertStageAsChild(-1, std::make_shared<Stage::RootDummyStage>());
+    _links.resize(1);
 }
 
 void RenderGraph::Run(ID3D11DeviceContext& context)
@@ -28,6 +34,8 @@ void RenderGraph::Run(ID3D11DeviceContext& context)
             }
         }
     }
+
+    ImGuiShowRenderGraphEditWindow();
 }
 
 void RenderGraph::InsertStageAsChild(int32_t parent_id, Stage::Stage stage)
@@ -43,6 +51,10 @@ void RenderGraph::InsertStageAsChild(int32_t parent_id, Stage::Stage stage)
     }
 
     std::visit(Stage::SetID{ id }, _graph.back());
+
+    _links.emplace_back();
+    if (parent_id != -1)
+		_links[parent_id].emplace_back(id);
 }
 
 void RenderGraph::InsertStageAsSibling(int32_t sibling_id, Stage::Stage stage)
@@ -57,4 +69,64 @@ void RenderGraph::InsertStageAsSibling(int32_t sibling_id, Stage::Stage stage)
     std::visit(Stage::SetID{ id }, _graph.back());
     std::visit(Stage::AddChild{id}, _graph[parent_id]);
     std::visit(Stage::SetParent{ parent_id }, _graph.back());
+
+    _links.emplace_back();
+	_links[parent_id].emplace_back(id);
+}
+
+void RenderGraph::ImGuiShowRenderGraphEditWindow()
+{
+    if (ImGui::Begin("Render Graph")) {
+		ImNodes::BeginNodeEditor();
+
+        // Root
+		ImNodes::BeginNode(0);
+        ImNodes::BeginNodeTitleBar();
+		ImGui::Text(std::visit(Stage::GetStageName{}, _graph[0]));
+		ImGui::Text(std::visit(Stage::GetName{}, _graph[0]));
+        ImNodes::EndNodeTitleBar();
+
+        {
+            auto child_id{ 0 };
+			for (auto& child : std::visit(Stage::GetChilds{}, _graph[0])) {
+                child_id = std::visit(Stage::GetID{}, _graph[child]);
+				ImNodes::BeginOutputAttribute(child_id << 8);
+				ImGui::Text("Child %d", child_id);
+				ImNodes::EndOutputAttribute();
+			}
+        }
+
+		ImNodes::EndNode();
+
+        for (auto node_id{ 1 }; node_id < _graph.size(); ++node_id) {
+			ImNodes::BeginNode(node_id);
+			ImNodes::BeginNodeTitleBar();
+            ImGui::Text(std::visit(Stage::GetStageName{}, _graph[node_id]));
+            ImGui::Text(std::visit(Stage::GetName{}, _graph[node_id]));
+			ImNodes::EndNodeTitleBar();
+
+            ImNodes::BeginInputAttribute(node_id);
+            ImGui::Text("Parent");
+            ImNodes::EndInputAttribute();
+
+            auto child_id{ 0 };
+			for (auto& child : std::visit(Stage::GetChilds{}, _graph[node_id])) {
+                child_id = std::visit(Stage::GetID{}, _graph[child]);
+				ImNodes::BeginOutputAttribute(child_id << 8);
+				ImGui::Text("Child %d", child_id++);
+				ImNodes::EndOutputAttribute();
+			}
+
+			ImNodes::EndNode();
+        }
+
+        auto id{ 0 };
+        for (auto const& v : _links) {
+            for (auto const child : v) 
+                ImNodes::Link(id++, child << 8, child);
+        }
+
+		ImNodes::EndNodeEditor();
+    }
+	ImGui::End();
 }

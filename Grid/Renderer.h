@@ -9,6 +9,7 @@ public:  static void   EndFrame();
 public:  static DirectX::XMMATRIX GetProj();
 public:  static ID3D11Device& Device();
 public:  static ID3D11DeviceContext& Context();
+public:  static IDXGISwapChain& SwapChain();
 
 private: static void   InitRS(ID3D11Device& device);
 private: static void   InitDS(ID3D11Device& device, int width, int height);

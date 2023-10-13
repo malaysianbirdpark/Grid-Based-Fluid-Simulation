@@ -64,6 +64,7 @@
       <Optimization>Disabled</Optimization>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <FloatingPointModel>Fast</FloatingPointModel>
+      <AdditionalOptions>/MDd %(AdditionalOptions)</AdditionalOptions>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <ExternalWarningLevel>Level3</ExternalWarningLevel>
     </ClCompile>
@@ -88,6 +89,7 @@
       <StringPooling>true</StringPooling>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <FloatingPointModel>Fast</FloatingPointModel>
+      <AdditionalOptions>/MD %(AdditionalOptions)</AdditionalOptions>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <ExternalWarningLevel>Level3</ExternalWarningLevel>
     </ClCompile>
@@ -104,6 +106,7 @@
     <ClInclude Include="CircularQueue.h" />
     <ClInclude Include="Clk.h" />
     <ClInclude Include="ComputeStage.h" />
+    <ClInclude Include="ComputeStageBuilders.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="ImGuiRenderer.h" />
     <ClInclude Include="Input.h" />
@@ -113,8 +116,8 @@
     <ClInclude Include="PSTextures.h" />
     <ClInclude Include="PipelineStateObject.h" />
     <ClInclude Include="RenderGraph.h" />
-    <ClInclude Include="Renderer.h" />
     <ClInclude Include="RenderObject.h" />
+    <ClInclude Include="Renderer.h" />
     <ClInclude Include="Sphere.h" />
     <ClInclude Include="Stage.h" />
     <ClInclude Include="Test.h" />
@@ -128,6 +131,7 @@
     <ClCompile Include="CircularQueue.cpp" />
     <ClCompile Include="Clk.cpp" />
     <ClCompile Include="ComputeStage.cpp" />
+    <ClCompile Include="ComputeStageBuilders.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="ImGuiRenderer.cpp" />
     <ClCompile Include="Input.cpp" />
@@ -137,8 +141,8 @@
     <ClCompile Include="PSTextures.cpp" />
     <ClCompile Include="PipelineStateObject.cpp" />
     <ClCompile Include="RenderGraph.cpp" />
-    <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="RenderObject.cpp" />
+    <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="Sphere.cpp" />
     <ClCompile Include="Stage.cpp" />
     <ClCompile Include="Test.cpp" />
@@ -151,6 +155,12 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <FxCompile Include="Test2CS.hlsl">
+      <ShaderType>Compute</ShaderType>
+      <ShaderModel>5.0</ShaderModel>
+      <EntryPointName>main</EntryPointName>
+      <ObjectFileOutput>../Grid/Test2CS.cso</ObjectFileOutput>
+    </FxCompile>
     <FxCompile Include="spherePS.hlsl">
       <ShaderType>Pixel</ShaderType>
       <ShaderModel>5.0</ShaderModel>
@@ -162,6 +172,18 @@
       <ShaderModel>5.0</ShaderModel>
       <EntryPointName>main</EntryPointName>
       <ObjectFileOutput>../Grid/sphereVS.cso</ObjectFileOutput>
+    </FxCompile>
+    <FxCompile Include="test1CS.hlsl">
+      <ShaderType>Compute</ShaderType>
+      <ShaderModel>5.0</ShaderModel>
+      <EntryPointName>main</EntryPointName>
+      <ObjectFileOutput>../Grid/test1CS.cso</ObjectFileOutput>
+    </FxCompile>
+    <FxCompile Include="testCS.hlsl">
+      <ShaderType>Compute</ShaderType>
+      <ShaderModel>5.0</ShaderModel>
+      <EntryPointName>main</EntryPointName>
+      <ObjectFileOutput>../Grid/testCS.cso</ObjectFileOutput>
     </FxCompile>
     <FxCompile Include="testPS.hlsl">
       <ShaderType>Pixel</ShaderType>

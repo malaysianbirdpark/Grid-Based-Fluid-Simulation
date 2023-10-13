@@ -16,6 +16,8 @@
 
 #include "ObjectRenderStage.h"
 
+#include "ComputeStageBuilders.h"
+
 Game::Game() 
 {
 	int constexpr width{ 800 };
@@ -29,7 +31,10 @@ Game::Game()
 
 	_object.push_back(std::move(std::make_shared<Sphere>(Renderer::Device(), Renderer::Context())));
 
-	_renderGraph.InsertStageAsChild(-1, std::move(std::make_shared<ObjectRenderStage>(_object.back())));
+	//_renderGraph.InsertStageAsChild(-1, TestCS(Renderer::Device(), Renderer::SwapChain()));
+	_renderGraph.InsertStageAsChild(0, std::move(std::make_shared<ObjectRenderStage>("Earth", _object.back())));
+	_renderGraph.InsertStageAsChild(0, TestCS1(Renderer::Device(), Renderer::SwapChain()));
+	_renderGraph.InsertStageAsChild(1, TestCS2(Renderer::Device(), Renderer::SwapChain()));
 }
 
 Game::~Game()

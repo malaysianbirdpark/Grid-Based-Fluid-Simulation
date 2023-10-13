@@ -16,7 +16,7 @@ void Renderer::Init(int width, int height, HWND native_wnd)
     sd.BufferDesc.ScanlineOrdering = DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED;
     sd.SampleDesc.Count = 1;
     sd.SampleDesc.Quality = 0;
-    sd.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
+    sd.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT | DXGI_USAGE_UNORDERED_ACCESS;
     sd.BufferCount = 3;
     sd.OutputWindow = native_wnd;
     sd.Windowed = TRUE;
@@ -107,6 +107,11 @@ ID3D11Device& Renderer::Device()
 ID3D11DeviceContext& Renderer::Context()
 {
     return *_immContext.Get();
+}
+
+IDXGISwapChain& Renderer::SwapChain()
+{
+    return *_swapChain.Get();
 }
 
 void Renderer::InitRS(ID3D11Device& device)

@@ -34,8 +34,6 @@ project "Grid"
         "3rd_party/ImGui/backends/"
     }
 
-
-
     links {
         "d3d11",
         "dxgi",
@@ -78,6 +76,7 @@ project "Grid"
             "3rd_party/DirectXTK-main/Bin/Desktop_2019/x64/Debug",
             "bin/Debug-windows-x86_64/ImGui",
         }
+        buildoptions "/MDd"
         optimize "Debug"
 
     filter "configurations:Release"  
@@ -87,6 +86,7 @@ project "Grid"
             "3rd_party/DirectXTK-main/Bin/Desktop_2019/x64/Release",
             "bin/Release-windows-x86_64/ImGui",
         }
+        buildoptions "/MD"
         optimize "Speed"
 
 
@@ -96,8 +96,8 @@ project "ImGui"
     kind "StaticLib"
     language "C++"   
     cppdialect "C++17" 
-    staticruntime "On"
-    buildoptions "/MT"
+    staticruntime "Off"
+
 
     includedirs {
         "3rd_party/%{prj.name}/",
@@ -119,3 +119,13 @@ project "ImGui"
         "3rd_party/%{prj.name}/**.h",
         "3rd_party/%{prj.name}/**.cpp",
     }
+
+    filter "configurations:Debug"
+        runtime "Debug"
+        buildoptions "/MDd"
+        optimize "Debug"
+
+    filter "configurations:Release"     
+        runtime "Release"
+        buildoptions "/MD"
+        optimize "Speed"

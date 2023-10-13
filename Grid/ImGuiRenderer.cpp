@@ -4,15 +4,19 @@
 #include "imgui.h"
 #include "imgui_impl_win32.h"
 #include "imgui_impl_dx11.h"
+#include "imnodes.h"
 
 #include "Win32.h"
 #include "Renderer.h"
+
+#include "RenderGraph.h"
 
 void ImGuiRenderer::Init(ID3D11DeviceContext& context)
 {
     // Setup Dear ImGui context
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
+    ImNodes::CreateContext();
     ImGuiIO& io = ImGui::GetIO(); (void)io;
     io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;       // Enable Keyboard Controls
     //io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
@@ -46,6 +50,7 @@ void ImGuiRenderer::Shutdown()
 {
     ImGui_ImplDX11_Shutdown();
     ImGui_ImplWin32_Shutdown();
+    ImNodes::DestroyContext();
     ImGui::DestroyContext();
 }
 
@@ -59,6 +64,11 @@ void ImGuiRenderer::BeginFrame()
         ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
     }
     ImGui::End();
+
+    bool showDemoWindow{ true };
+    if (showDemoWindow) [[likely]] {
+        ImGui::ShowDemoWindow(&showDemoWindow);
+    }
 }
 
 void ImGuiRenderer::EndFrame()
@@ -69,10 +79,6 @@ void ImGuiRenderer::EndFrame()
         static_cast<float>(height)
     );
 
-    bool showDemoWindow{ true };
-    if (showDemoWindow) [[unlikely]] {
-        ImGui::ShowDemoWindow(&showDemoWindow);
-    }
 
     ImGui::Render();
     ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
