@@ -30,8 +30,8 @@ project "Grid"
     includedirs {
         "%{prj.name}/",
         "3rd_party/",
-        "ImGui/",
-        "ImGui/backends/"
+        "3rd_party/ImGui/",
+        "3rd_party/ImGui/backends/"
     }
     
     libdirs {
@@ -46,7 +46,7 @@ project "Grid"
         "dxguid",
         "D3DCompiler",
         "DirectXTK",
-        "ImGui.lib",
+        "ImGui",
     }
 
     optimize "Speed"
@@ -77,7 +77,7 @@ project "Grid"
     }
 
 project "ImGui"
-    location "ImGui"
+    location "3rd_party/ImGui"
     kind "StaticLib"
     language "C++"   
     cppdialect "C++17" 
@@ -85,7 +85,7 @@ project "ImGui"
     buildoptions "/MT"
 
     includedirs {
-        "%{prj.name}/",
+        "3rd_party/%{prj.name}/",
         "3rd_party/libfreetype2/freetype2/include",
     }
 
@@ -101,6 +101,6 @@ project "ImGui"
     objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
 
     files {
-        "%{prj.name}/**.h",
-        "%{prj.name}/**.cpp",
+        "3rd_party/%{prj.name}/**.h",
+        "3rd_party/%{prj.name}/**.cpp",
     }
