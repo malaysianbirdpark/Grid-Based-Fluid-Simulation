@@ -1,11 +1,8 @@
 #include "pch.h"
 #include "Renderer.h"
 
+#include "Renderer.h"
 #include "ImGuiRenderer.h"
-
-#include "CSTest.h"
-
-CSTest* yeah_ptr {nullptr};
 
 void Renderer::Init(int width, int height, HWND native_wnd)
 {
@@ -19,7 +16,7 @@ void Renderer::Init(int width, int height, HWND native_wnd)
     sd.BufferDesc.ScanlineOrdering = DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED;
     sd.SampleDesc.Count = 1;
     sd.SampleDesc.Quality = 0;
-    sd.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT | DXGI_USAGE_UNORDERED_ACCESS;
+    sd.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
     sd.BufferCount = 3;
     sd.OutputWindow = native_wnd;
     sd.Windowed = TRUE;
@@ -27,7 +24,7 @@ void Renderer::Init(int width, int height, HWND native_wnd)
     sd.Flags = 0u;
 
     auto swap_chain_flag{ 0u };
-#ifdef DEBUG
+#ifdef _DEBUG
     swap_chain_flag |= D3D11_CREATE_DEVICE_DEBUG;
 #endif
 
@@ -68,8 +65,6 @@ void Renderer::Init(int width, int height, HWND native_wnd)
     _viewport.TopLeftX = 0.0f;
     _viewport.TopLeftY = 0.0f;
 
-    yeah_ptr = new CSTest{device, swap_chain};
-
     InitRS(device);
     InitDS(device, width, height);
     InitBS(device);
@@ -95,9 +90,8 @@ void Renderer::BeginFrame()
 
 void Renderer::EndFrame()
 {
-    yeah_ptr->Run(*_immContext.Get());
     ImGuiRenderer::EndFrame();
-    _swapChain->Present(1u, 0u);
+    _swapChain->Present(0u, 0u);
 }
 
 DirectX::XMMATRIX Renderer::GetProj()

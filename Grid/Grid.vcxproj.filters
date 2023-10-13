@@ -39,12 +39,12 @@
     <ClInclude Include="PipelineStateObject.h" />
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="Sphere.h" />
+    <ClInclude Include="Test.h" />
     <ClInclude Include="Transform.h" />
     <ClInclude Include="Triangle.h" />
     <ClInclude Include="Win32.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="ComputePipeline.h" />
-    <ClInclude Include="CSTest.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Camera.cpp" />
@@ -59,19 +59,18 @@
     <ClCompile Include="PipelineStateObject.cpp" />
     <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="Sphere.cpp" />
+    <ClCompile Include="Test.cpp" />
     <ClCompile Include="Transform.cpp" />
     <ClCompile Include="Triangle.cpp" />
     <ClCompile Include="Win32.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="pch.cpp" />
     <ClCompile Include="ComputePipeline.cpp" />
-    <ClCompile Include="CSTest.cpp" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="spherePS.hlsl" />
     <FxCompile Include="sphereVS.hlsl" />
     <FxCompile Include="testPS.hlsl" />
     <FxCompile Include="testVS.hlsl" />
-    <FxCompile Include="testCS.hlsl" />
   </ItemGroup>
 </Project>

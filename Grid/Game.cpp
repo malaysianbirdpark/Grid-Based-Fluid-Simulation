@@ -12,8 +12,6 @@
 #include "Input.h"
 #include "Clk.h"
 
-#include "CSTest.h"
-
 Game::Game() 
 {
 	int constexpr width{ 800 };
