@@ -5,6 +5,8 @@
 #include "imgui_impl_win32.h"
 #include "ImGuiRenderer.h"
 
+IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
+
 Win32::WindowClass::WindowClass() noexcept
     : _name{ "Window" }, hInst{ GetModuleHandle(nullptr) }
 {
