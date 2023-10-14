@@ -29,6 +29,7 @@ ComputeStage::ComputeStage(char const* name, ID3D11Device& device, char const* c
 }
 
 void ComputeStage::Run(ID3D11DeviceContext& context) {
+    context.OMSetRenderTargets(0u, nullptr, nullptr);
 	context.CSSetShaderResources(0u, static_cast<UINT>(_srv.size()), _srv[0].GetAddressOf());
 	context.CSSetUnorderedAccessViews(0u, static_cast<UINT>(_uav.size()), _uav[0].GetAddressOf(), nullptr);
 	context.CSSetShader(_cs.Get(), nullptr, 0u);

@@ -105,11 +105,12 @@ project "ImGui"
     }
 
     libdirs {
-        "3rd_party/libfreetype2/freetype2/objs/vc2010/Win32"
+        "3rd_party/libfreetype2/freetype2/objs/vc2010/Win32",
+        "3rd_party/libfreetype2/freetype2/objs/vc2010/x64"
     }
 
     links {
-        "freetype265d.lib"
+        "freetype265.lib"
     }
 
     targetdir ("bin/" .. outputdir .. "/%{prj.name}")
