@@ -4,7 +4,7 @@
 #include <string>
 #include "DirectXTK-main\Inc\DDSTextureLoader.h"
 
-void PSTextures::AddTexture(ID3D11Device& device, ID3D11DeviceContext& context, char const* path, Type texture_type)
+void PSTextures::AddTexture(ID3D11DeviceContext& context, char const* path, Type texture_type)
 {
 	if (_srv.size() <= static_cast<int>(texture_type)) _srv.resize(static_cast<size_t>(texture_type) + 1);
 
@@ -18,7 +18,7 @@ void PSTextures::AddTexture(ID3D11Device& device, ID3D11DeviceContext& context, 
 
     auto const idx{ static_cast<size_t>(texture_type) };
     CreateDDSTextureFromFileEx(
-        &device,
+        pDevice,
         p.c_str(),
         0,
         D3D11_USAGE_DEFAULT,

@@ -5,14 +5,15 @@
 
 struct ComputeStage
 {
-public:  explicit ComputeStage(
+public:
+    explicit ComputeStage(
 	char const* name,
-	ID3D11Device& device,
 	char const* compute_shader_path,
 	UINT group_x,
 	UINT group_y,
 	UINT group_z
 );
+virtual ~ComputeStage() = default;
 
 public: int32_t                     _id{-1};
 public: std::string                 _name{};
@@ -20,12 +21,12 @@ public:  inline static std::string  _stageName{ "ComputeStage" };
 public: std::vector<int32_t>        _incoming{};
 public: std::vector<int32_t>        _outgoing{};
 
-private: Microsoft::WRL::ComPtr<ID3D11ComputeShader>                     _cs;
-private: std::vector<Microsoft::WRL::ComPtr<ID3D11UnorderedAccessView>>  _uav;
-private: std::vector<Microsoft::WRL::ComPtr<ID3D11ShaderResourceView>>   _srv;
+private:   Microsoft::WRL::ComPtr<ID3D11ComputeShader>                     _cs;
+protected: std::vector<Microsoft::WRL::ComPtr<ID3D11UnorderedAccessView>>  _uav;
+protected: std::vector<Microsoft::WRL::ComPtr<ID3D11ShaderResourceView>>   _srv;
 
-private: std::vector<ID3D11ShaderResourceView*>                          _nullSrv{};
-private: std::vector<ID3D11UnorderedAccessView*>                         _nullUav{};
+protected: std::vector<ID3D11ShaderResourceView*>                          _nullSrv{};
+protected: std::vector<ID3D11UnorderedAccessView*>                         _nullUav{};
 
 private: UINT _groupX{};
 private: UINT _groupY{};

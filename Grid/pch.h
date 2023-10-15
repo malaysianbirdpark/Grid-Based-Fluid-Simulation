@@ -45,3 +45,5 @@
 
 #include <d3d11.h>
 #include <dxgiformat.h>
+
+inline ID3D11Device* pDevice {nullptr};

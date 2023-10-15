@@ -1,7 +1,6 @@
 #include "pch.h"
 #include "Renderer.h"
 
-#include "Renderer.h"
 #include "ImGuiRenderer.h"
 
 void Renderer::Init(int width, int height, HWND native_wnd)
@@ -65,10 +64,12 @@ void Renderer::Init(int width, int height, HWND native_wnd)
     _viewport.TopLeftX = 0.0f;
     _viewport.TopLeftY = 0.0f;
 
-    InitRS(device);
-    InitDS(device, width, height);
-    InitBS(device);
-    InitSamplers(device);
+    pDevice = _device.Get();
+
+    InitRS();
+    InitDS(width, height);
+    InitBS();
+    InitSamplers();
 }
 
 void Renderer::BeginFrame()
@@ -114,7 +115,7 @@ IDXGISwapChain& Renderer::SwapChain()
     return *_swapChain.Get();
 }
 
-void Renderer::InitRS(ID3D11Device& device)
+void Renderer::InitRS()
 {
     D3D11_RASTERIZER_DESC rd{};
 
@@ -126,17 +127,17 @@ void Renderer::InitRS(ID3D11Device& device)
         rd.DepthClipEnable = true;
         rd.MultisampleEnable = true;
 
-        device.CreateRasterizerState(&rd, _rasterizerState.ReleaseAndGetAddressOf());
+        Device().CreateRasterizerState(&rd, _rasterizerState.ReleaseAndGetAddressOf());
     }
 }
 
-void Renderer::InitDS(ID3D11Device& device, int width, int height)
+void Renderer::InitDS(int width, int height)
 {
     // default
     {
         D3D11_DEPTH_STENCIL_DESC desc{ CD3D11_DEPTH_STENCIL_DESC{CD3D11_DEFAULT{}} };
 
-        device.CreateDepthStencilState(&desc, _dsDefault.ReleaseAndGetAddressOf());
+        Device().CreateDepthStencilState(&desc, _dsDefault.ReleaseAndGetAddressOf());
     }
 
     D3D11_TEXTURE2D_DESC descDepth{};
@@ -151,16 +152,16 @@ void Renderer::InitDS(ID3D11Device& device, int width, int height)
     descDepth.SampleDesc.Quality = 0;
 
     Microsoft::WRL::ComPtr<ID3D11Texture2D> _ds;
-    device.CreateTexture2D(&descDepth, nullptr, _ds.ReleaseAndGetAddressOf());
+    Device().CreateTexture2D(&descDepth, nullptr, _ds.ReleaseAndGetAddressOf());
 
     D3D11_DEPTH_STENCIL_VIEW_DESC desc_dsv{};
     desc_dsv.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
     desc_dsv.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2DMS;
     desc_dsv.Texture2D.MipSlice = 0u;
-    device.CreateDepthStencilView(_ds.Get(), &desc_dsv, _dsv.ReleaseAndGetAddressOf());
+    Device().CreateDepthStencilView(_ds.Get(), &desc_dsv, _dsv.ReleaseAndGetAddressOf());
 }
 
-void Renderer::InitBS(ID3D11Device& device)
+void Renderer::InitBS()
 {
     // Default
     {
@@ -179,11 +180,11 @@ void Renderer::InitBS(ID3D11Device& device)
 
         desc.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
 
-        device.CreateBlendState(&desc, _bsDefault.ReleaseAndGetAddressOf());
+        Device().CreateBlendState(&desc, _bsDefault.ReleaseAndGetAddressOf());
     }
 }
 
-void Renderer::InitSamplers(ID3D11Device& device)
+void Renderer::InitSamplers()
 {
     {
         D3D11_SAMPLER_DESC sd{};
@@ -196,7 +197,7 @@ void Renderer::InitSamplers(ID3D11Device& device)
         sd.MinLOD = 0.0f;
         sd.MaxLOD = D3D11_FLOAT32_MAX;
 
-        device.CreateSamplerState(&sd, _samplerWrap.ReleaseAndGetAddressOf());
+        Device().CreateSamplerState(&sd, _samplerWrap.ReleaseAndGetAddressOf());
     }
 }
 

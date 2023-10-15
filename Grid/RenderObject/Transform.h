@@ -8,7 +8,6 @@ class Transform
     };
 public:
     Transform(
-        ID3D11Device& device,
         ID3D11DeviceContext& context,
         DirectX::FXMMATRIX model
     );

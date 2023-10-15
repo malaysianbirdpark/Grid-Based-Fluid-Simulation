@@ -1,10 +1,10 @@
 #include "pch.h"
 #include "Transform.h"
 
-#include "Renderer.h"
 #include "Camera.h"
+#include "Renderer.h"
 
-Transform::Transform(ID3D11Device& device, ID3D11DeviceContext& context, DirectX::FXMMATRIX model)
+Transform::Transform(ID3D11DeviceContext& context, DirectX::FXMMATRIX model)
 {
     D3D11_BUFFER_DESC bd{};
     bd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
@@ -24,7 +24,7 @@ Transform::Transform(ID3D11Device& device, ID3D11DeviceContext& context, DirectX
     XMStoreFloat4x4(&_transform._mvp, XMMatrixTranspose(XMMatrixMultiply(XMMatrixMultiply(model, Camera::GetView()), Renderer::GetProj())));
     sd.pSysMem = &_transform;
 
-    device.CreateBuffer(&bd, &sd, _resource.ReleaseAndGetAddressOf());
+    pDevice->CreateBuffer(&bd, &sd, _resource.ReleaseAndGetAddressOf());
     Update(context);
 }
 

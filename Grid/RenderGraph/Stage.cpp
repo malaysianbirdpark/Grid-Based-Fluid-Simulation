@@ -16,7 +16,7 @@ void Stage::RootDummyStage::RenderNode() const {
         for (auto& child : _outgoing) {
             child_id = child;
             ImNodes::BeginOutputAttribute(child_id << 8);
-            ImGui::Text("Child %d", child_id);
+            ImGui::Text("Outgoing %d", child_id);
             ImNodes::EndOutputAttribute();
         }
     }

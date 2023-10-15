@@ -12,7 +12,7 @@ class Sphere : public RenderObject {
 		DirectX::XMFLOAT2 _uv{};
 	};
 public:
-	explicit Sphere(ID3D11Device& device, ID3D11DeviceContext& context);
+	explicit Sphere(ID3D11DeviceContext& context);
 	void Update(ID3D11DeviceContext& context, float const dt) override;
 	void Draw(ID3D11DeviceContext& context) override;
 	void DrawInstanced();

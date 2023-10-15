@@ -102,11 +102,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="RenderGraph\ResourceStage\BackBufferStage.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="Platform\Input.h" />
     <ClInclude Include="Platform\Win32.h" />
     <ClInclude Include="RenderGraph\ComputeStage\ComputeStage.h" />
-    <ClInclude Include="RenderGraph\ComputeStage\ComputeStageBuilders.h" />
     <ClInclude Include="RenderGraph\DrawStage.h" />
     <ClInclude Include="RenderGraph\RenderGraph.h" />
     <ClInclude Include="RenderGraph\ResourceStage\ResourceStage.h" />
@@ -122,17 +122,18 @@
     <ClInclude Include="Renderer\Camera.h" />
     <ClInclude Include="Renderer\ImGuiRenderer.h" />
     <ClInclude Include="Renderer\Renderer.h" />
+    <ClInclude Include="RenderGraph\ComputeStage\TestCS.h" />
     <ClInclude Include="Utils\CircularQueue.h" />
     <ClInclude Include="Utils\Clk.h" />
     <ClInclude Include="pch.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="RenderGraph\ResourceStage\BackBufferStage.cpp" />
     <ClCompile Include="EntryPoint.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Platform\Input.cpp" />
     <ClCompile Include="Platform\Win32.cpp" />
     <ClCompile Include="RenderGraph\ComputeStage\ComputeStage.cpp" />
-    <ClCompile Include="RenderGraph\ComputeStage\ComputeStageBuilders.cpp" />
     <ClCompile Include="RenderGraph\DrawStage.cpp" />
     <ClCompile Include="RenderGraph\RenderGraph.cpp" />
     <ClCompile Include="RenderGraph\ResourceStage\ResourceStage.cpp" />
@@ -148,6 +149,7 @@
     <ClCompile Include="Renderer\Camera.cpp" />
     <ClCompile Include="Renderer\ImGuiRenderer.cpp" />
     <ClCompile Include="Renderer\Renderer.cpp" />
+    <ClCompile Include="RenderGraph\ComputeStage\TestCS.cpp" />
     <ClCompile Include="Utils\CircularQueue.cpp" />
     <ClCompile Include="Utils\Clk.cpp" />
     <ClCompile Include="pch.cpp">

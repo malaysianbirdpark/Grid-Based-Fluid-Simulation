@@ -46,19 +46,6 @@ void RenderGraph::InsertStageAfter(int32_t from, Stage::Stage stage)
 
 void RenderGraph::InsertStageAsSibling(int32_t sibling_id, Stage::Stage stage)
 {
- //   auto const { std::visit(Stage::GetIncoming{}, _graph[sibling_id]) };
- //   if (parent_id == -1)
- //       return;
-
- //   auto const id{ static_cast<int32_t>(_graph.size()) };
- //   _graph.emplace_back(std::move(stage));
- //   _visited.emplace_back(false);
- //   std::visit(Stage::SetID{ id }, _graph.back());
- //   std::visit(Stage::AddOutgoing{id}, _graph[parent_id]);
- //   std::visit(Stage::AddIncoming{ parent_id }, _graph.back());
-
- //   _links.emplace_back();
-	//_links[parent_id].emplace_back(id);
 }
 
 void RenderGraph::ImGuiShowRenderGraphEditWindow()

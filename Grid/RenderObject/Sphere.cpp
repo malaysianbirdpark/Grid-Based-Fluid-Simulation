@@ -8,7 +8,7 @@
 #include "Transform.h"
 #include "PSTextures.h"
 
-Sphere::Sphere(ID3D11Device& device, ID3D11DeviceContext& context)
+Sphere::Sphere(ID3D11DeviceContext& context)
 {
 	static float constexpr PI{ 3.141592f };
 	static float constexpr R{ 1.0f };
@@ -68,7 +68,7 @@ Sphere::Sphere(ID3D11Device& device, ID3D11DeviceContext& context)
 			}
 		}
 	}
-	_mesh = std::make_unique<Mesh<Vertex>>(device, vertices, indices);
+	_mesh = std::make_unique<Mesh<Vertex>>(vertices, indices);
 
     std::vector<D3D11_INPUT_ELEMENT_DESC> inputElementDesc {
         {"POSITION", 0u, DXGI_FORMAT_R32G32B32_FLOAT, 0u, 0u, D3D11_INPUT_PER_VERTEX_DATA, 0u},
@@ -77,16 +77,16 @@ Sphere::Sphere(ID3D11Device& device, ID3D11DeviceContext& context)
     };
 	
 	_pso = std::make_unique<PipelineStateObject>();
-	_pso->SetVertexShader(device, "sphereVS.cso");
-	_pso->SetInputLayout(device, inputElementDesc);
-	_pso->SetPixelShader(device, "spherePS.cso");
+	_pso->SetVertexShader("./CSO/sphereVS.cso");
+	_pso->SetInputLayout(inputElementDesc);
+	_pso->SetPixelShader("./CSO/spherePS.cso");
 
-	_transform = std::make_unique<Transform>(device, context, DirectX::XMMatrixIdentity());
+	_transform = std::make_unique<Transform>(context, DirectX::XMMatrixIdentity());
 	_transform->SetModel(DirectX::XMMatrixScaling(10.0f, 10.0f, 10.0f));
 
 	_pstex = std::make_unique<PSTextures>();
-	_pstex->AddTexture(device, context, "./Assets/Textures/2k_earth_daymap.dds", PSTextures::Type::Diffuse);
-	_pstex->AddTexture(device, context, "./Assets/Textures/2k_earth_normal_map.dds", PSTextures::Type::Normal);
+	_pstex->AddTexture(context, "./Assets/Textures/2k_earth_daymap.dds", PSTextures::Type::Diffuse);
+	_pstex->AddTexture(context, "./Assets/Textures/2k_earth_normal_map.dds", PSTextures::Type::Normal);
 }
 
 void Sphere::Update(ID3D11DeviceContext& context, float const dt)

@@ -7,7 +7,7 @@
 #include "imgui.h"
 #include "imnodes.h"
 
-ComputeStage::ComputeStage(char const* name, ID3D11Device& device, char const* compute_shader_path, UINT group_x, UINT group_y, UINT group_z)
+ComputeStage::ComputeStage(char const* name, char const* compute_shader_path, UINT group_x, UINT group_y, UINT group_z)
     : _name{name}, _groupX{ group_x }, _groupY{ group_y }, _groupZ{ group_z }
 {
     std::string _path{ compute_shader_path };
@@ -20,7 +20,7 @@ ComputeStage::ComputeStage(char const* name, ID3D11Device& device, char const* c
         pBlob.ReleaseAndGetAddressOf()
     );
 
-    device.CreateComputeShader(
+    pDevice->CreateComputeShader(
         pBlob->GetBufferPointer(), 
         pBlob->GetBufferSize(),
         nullptr,
@@ -53,7 +53,7 @@ void ComputeStage::RenderNode() const {
 
     for (auto& child : _outgoing) {
         ImNodes::BeginOutputAttribute(child << 8);
-        ImGui::Text("Child %d", child);
+        ImGui::Text("Outgoing %d", child);
         ImNodes::EndOutputAttribute();
     }
 

@@ -4,9 +4,9 @@
 #include <string>
 #include <d3dcompiler.h>
 
-void PipelineStateObject::SetInputLayout(ID3D11Device& device, std::vector<D3D11_INPUT_ELEMENT_DESC> const& layout)
+void PipelineStateObject::SetInputLayout(std::vector<D3D11_INPUT_ELEMENT_DESC> const& layout)
 {
-    device.CreateInputLayout(
+    pDevice->CreateInputLayout(
         layout.data(),
         static_cast<UINT>(layout.size()),    
         _vsByteCode->GetBufferPointer(),
@@ -15,7 +15,7 @@ void PipelineStateObject::SetInputLayout(ID3D11Device& device, std::vector<D3D11
     );
 }
 
-void PipelineStateObject::SetVertexShader(ID3D11Device& device, char const* path)
+void PipelineStateObject::SetVertexShader(char const* path)
 {
     std::string _path{ path };
     std::wstring p(_path.length(), L' ');
@@ -26,7 +26,7 @@ void PipelineStateObject::SetVertexShader(ID3D11Device& device, char const* path
         _vsByteCode.ReleaseAndGetAddressOf()
     );
 
-    device.CreateVertexShader(
+    pDevice->CreateVertexShader(
         _vsByteCode->GetBufferPointer(),
         _vsByteCode->GetBufferSize(),
         nullptr,
@@ -34,7 +34,7 @@ void PipelineStateObject::SetVertexShader(ID3D11Device& device, char const* path
     );
 }
 
-void PipelineStateObject::SetGeometryShader(ID3D11Device& device, char const* path)
+void PipelineStateObject::SetGeometryShader(char const* path)
 {
     std::string _path{ path };
     std::wstring p(_path.length(), L' ');
@@ -46,7 +46,7 @@ void PipelineStateObject::SetGeometryShader(ID3D11Device& device, char const* pa
         pBlob.ReleaseAndGetAddressOf()
     );
 
-    device.CreateGeometryShader(
+    pDevice->CreateGeometryShader(
         pBlob->GetBufferPointer(), 
         pBlob->GetBufferSize(),
         nullptr,
@@ -54,7 +54,7 @@ void PipelineStateObject::SetGeometryShader(ID3D11Device& device, char const* pa
     );
 }
 
-void PipelineStateObject::SetPixelShader(ID3D11Device& device, char const* path)
+void PipelineStateObject::SetPixelShader(char const* path)
 {
     Microsoft::WRL::ComPtr<ID3DBlob> pBlob;
 
@@ -63,7 +63,7 @@ void PipelineStateObject::SetPixelShader(ID3D11Device& device, char const* path)
     std::ranges::copy(_path, p.begin());
 
     D3DReadFileToBlob(p.c_str(), pBlob.ReleaseAndGetAddressOf());
-    device.CreatePixelShader(pBlob->GetBufferPointer(), pBlob->GetBufferSize(), nullptr, _ps.ReleaseAndGetAddressOf());
+    pDevice->CreatePixelShader(pBlob->GetBufferPointer(), pBlob->GetBufferSize(), nullptr, _ps.ReleaseAndGetAddressOf());
 }
 
 void PipelineStateObject::Bind(ID3D11DeviceContext& context)

@@ -43,9 +43,6 @@
     <ClInclude Include="RenderGraph\ComputeStage\ComputeStage.h">
       <Filter>RenderGraph\ComputeStage</Filter>
     </ClInclude>
-    <ClInclude Include="RenderGraph\ComputeStage\ComputeStageBuilders.h">
-      <Filter>RenderGraph\ComputeStage</Filter>
-    </ClInclude>
     <ClInclude Include="RenderGraph\DrawStage.h">
       <Filter>RenderGraph</Filter>
     </ClInclude>
@@ -98,6 +95,8 @@
       <Filter>Utils</Filter>
     </ClInclude>
     <ClInclude Include="pch.h" />
+    <ClInclude Include="RenderGraph\ComputeStage\TestCS.h" />
+    <ClInclude Include="RenderGraph\ResourceStage\BackBufferStage.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EntryPoint.cpp" />
@@ -109,9 +108,6 @@
       <Filter>Platform</Filter>
     </ClCompile>
     <ClCompile Include="RenderGraph\ComputeStage\ComputeStage.cpp">
-      <Filter>RenderGraph\ComputeStage</Filter>
-    </ClCompile>
-    <ClCompile Include="RenderGraph\ComputeStage\ComputeStageBuilders.cpp">
       <Filter>RenderGraph\ComputeStage</Filter>
     </ClCompile>
     <ClCompile Include="RenderGraph\DrawStage.cpp">
@@ -166,6 +162,8 @@
       <Filter>Utils</Filter>
     </ClCompile>
     <ClCompile Include="pch.cpp" />
+    <ClCompile Include="RenderGraph\ComputeStage\TestCS.cpp" />
+    <ClCompile Include="RenderGraph\ResourceStage\BackBufferStage.cpp" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="HLSL_CS\SourcingTestCS.hlsl">

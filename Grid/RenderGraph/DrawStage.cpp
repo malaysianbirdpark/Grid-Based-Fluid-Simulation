@@ -23,12 +23,12 @@ void DrawStage::RenderNode() const {
     ImNodes::EndNodeTitleBar();
 
     ImNodes::BeginInputAttribute(_id);
-    ImGui::Text("Parent");
+    ImGui::Text("Incoming");
     ImNodes::EndInputAttribute();
 
     for (auto& child : _outgoing) {
         ImNodes::BeginOutputAttribute(child << 8);
-        ImGui::Text("Child %d", child);
+        ImGui::Text("Outgoing %d", child);
         ImNodes::EndOutputAttribute();
     }
 

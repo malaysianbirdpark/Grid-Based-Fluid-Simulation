@@ -15,8 +15,8 @@
 #include "Sphere.h"
 
 #include "DrawStage.h"
-
-#include "ComputeStageBuilders.h"
+#include "TestCS.h"
+#include "BackBufferStage.h"
 
 Game::Game() 
 {
@@ -29,16 +29,12 @@ Game::Game()
 
 	Clk::Init();
 
-	_object.push_back(std::move(std::make_shared<Sphere>(Renderer::Device(), Renderer::Context())));
+	_object.push_back(std::move(std::make_shared<Sphere>(Renderer::Context())));
 
 	//_renderGraph.InsertStageAfter(-1, TestCS(Renderer::Device(), Renderer::SwapChain()));
 	_renderGraph.InsertStageAfter(0, std::move(std::make_shared<DrawStage>("Earth", _object.back())));
-	_renderGraph.InsertStageAfter(0, TestCS1(Renderer::Device(), Renderer::SwapChain()));
-	_renderGraph.InsertStageAfter(1, TestCS2(Renderer::Device(), Renderer::SwapChain()));
-	_renderGraph.InsertStageAfter(1, StableFluid2D_Sourcing(Renderer::Device()));
-
-	Microsoft::WRL::ComPtr<ID3D11Resource> back_buffer {};
-	Renderer::SwapChain().GetBuffer(0u, IID_PPV_ARGS(back_buffer.GetAddressOf()));
+	_renderGraph.InsertStageAfter(0, std::move(std::make_shared<BackBufferStage>(Renderer::SwapChain())));
+	_renderGraph.InsertStageAfter(2, std::move(std::make_shared<TestCS>()));
 }
 
 Game::~Game()

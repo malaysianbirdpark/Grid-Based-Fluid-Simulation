@@ -5,7 +5,7 @@
 template <typename VertexType>
 class Mesh {
 public:
-	Mesh(ID3D11Device& device, std::vector<VertexType> const& vertices, std::vector<uint16_t> const& indices);
+	Mesh(std::vector<VertexType> const& vertices, std::vector<uint16_t> const& indices);
 
     UINT GetCount() const;
 
@@ -20,7 +20,7 @@ private:
 };
 
 template<typename VertexType>
-inline Mesh<VertexType>::Mesh(ID3D11Device& device, std::vector<VertexType> const& vertices, std::vector<uint16_t> const& indices)
+inline Mesh<VertexType>::Mesh(std::vector<VertexType> const& vertices, std::vector<uint16_t> const& indices)
 {
     // vertex buffer
     {
@@ -35,7 +35,7 @@ inline Mesh<VertexType>::Mesh(ID3D11Device& device, std::vector<VertexType> cons
         D3D11_SUBRESOURCE_DATA sd{};
         sd.pSysMem = vertices.data();
 
-        device.CreateBuffer(&bd, &sd, _vertexBuffer.ReleaseAndGetAddressOf());
+        pDevice->CreateBuffer(&bd, &sd, _vertexBuffer.ReleaseAndGetAddressOf());
     }
 
     // index buffer
@@ -53,7 +53,7 @@ inline Mesh<VertexType>::Mesh(ID3D11Device& device, std::vector<VertexType> cons
         D3D11_SUBRESOURCE_DATA sd{};
         sd.pSysMem = indices.data();
 
-        device.CreateBuffer(&bd, &sd, _indexBuffer.ReleaseAndGetAddressOf());
+        pDevice->CreateBuffer(&bd, &sd, _indexBuffer.ReleaseAndGetAddressOf());
     }
 
     _topology = D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST;

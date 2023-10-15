@@ -11,10 +11,10 @@ public:  static ID3D11Device& Device();
 public:  static ID3D11DeviceContext& Context();
 public:  static IDXGISwapChain& SwapChain();
 
-private: static void   InitRS(ID3D11Device& device);
-private: static void   InitDS(ID3D11Device& device, int width, int height);
-private: static void   InitBS(ID3D11Device& device);
-private: static void   InitSamplers(ID3D11Device& device);
+private: static void   InitRS();
+private: static void   InitDS(int width, int height);
+private: static void   InitBS();
+private: static void   InitSamplers();
 
 private:
 	inline static Microsoft::WRL::ComPtr<ID3D11Device>              _device;
