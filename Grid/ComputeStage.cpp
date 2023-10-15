@@ -4,6 +4,9 @@
 #include <string>
 #include <d3dcompiler.h>
 
+#include "imgui.h"
+#include "imnodes.h"
+
 ComputeStage::ComputeStage(char const* name, ID3D11Device& device, char const* compute_shader_path, std::vector<Microsoft::WRL::ComPtr<ID3D11UnorderedAccessView>>&& uav, std::vector<Microsoft::WRL::ComPtr<ID3D11ShaderResourceView>>&& srv, UINT group_x, UINT group_y, UINT group_z)
     : _name{name}, _uav {std::move(uav)}, _srv{ std::move(srv) }, _groupX{ group_x }, _groupY{ group_y }, _groupZ{ group_z }
 {
@@ -35,6 +38,26 @@ void ComputeStage::Run(ID3D11DeviceContext& context) {
 	context.CSSetShader(_cs.Get(), nullptr, 0u);
 	context.Dispatch(_groupX, _groupY, _groupZ);
 	SetBarrier(context);
+}
+
+void ComputeStage::RenderNode() const {
+    ImNodes::BeginNode(_id);
+    ImNodes::BeginNodeTitleBar();
+    ImGui::Text(_stageName.c_str());
+    ImGui::Text(_name.c_str());
+    ImNodes::EndNodeTitleBar();
+
+    ImNodes::BeginInputAttribute(_id);
+    ImGui::Text("Parent");
+    ImNodes::EndInputAttribute();
+
+    for (auto& child : _outgoing) {
+        ImNodes::BeginOutputAttribute(child << 8);
+        ImGui::Text("Child %d", child);
+        ImNodes::EndOutputAttribute();
+    }
+
+    ImNodes::EndNode();
 }
 
 void ComputeStage::SetBarrier(ID3D11DeviceContext& context) {

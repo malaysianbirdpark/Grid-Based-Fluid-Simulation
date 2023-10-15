@@ -14,7 +14,7 @@
 
 #include "Sphere.h"
 
-#include "ObjectRenderStage.h"
+#include "DrawStage.h"
 
 #include "ComputeStageBuilders.h"
 
@@ -31,10 +31,14 @@ Game::Game()
 
 	_object.push_back(std::move(std::make_shared<Sphere>(Renderer::Device(), Renderer::Context())));
 
-	//_renderGraph.InsertStageAsChild(-1, TestCS(Renderer::Device(), Renderer::SwapChain()));
-	_renderGraph.InsertStageAsChild(0, std::move(std::make_shared<ObjectRenderStage>("Earth", _object.back())));
-	_renderGraph.InsertStageAsChild(0, TestCS1(Renderer::Device(), Renderer::SwapChain()));
-	_renderGraph.InsertStageAsChild(1, TestCS2(Renderer::Device(), Renderer::SwapChain()));
+	//_renderGraph.InsertStageAfter(-1, TestCS(Renderer::Device(), Renderer::SwapChain()));
+	_renderGraph.InsertStageAfter(0, std::move(std::make_shared<DrawStage>("Earth", _object.back())));
+	_renderGraph.InsertStageAfter(0, TestCS1(Renderer::Device(), Renderer::SwapChain()));
+	_renderGraph.InsertStageAfter(1, TestCS2(Renderer::Device(), Renderer::SwapChain()));
+	_renderGraph.InsertStageAfter(1, StableFluid2D_Sourcing(Renderer::Device()));
+
+	Microsoft::WRL::ComPtr<ID3D11Resource> back_buffer {};
+	Renderer::SwapChain().GetBuffer(0u, IID_PPV_ARGS(back_buffer.GetAddressOf()));
 }
 
 Game::~Game()

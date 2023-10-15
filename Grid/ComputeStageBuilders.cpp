@@ -73,7 +73,7 @@ std::shared_ptr<ComputeStage> StableFluid2D_Sourcing(ID3D11Device& device) {
 		desc.BindFlags = D3D11_BIND_UNORDERED_ACCESS;
 		desc.Usage = D3D11_USAGE_DEFAULT;
 		desc.CPUAccessFlags = 0u;
-		desc.Format = DXGI_FORMAT_R16G16B16A16_FLOAT;
+		desc.Format = DXGI_FORMAT_R16G16_FLOAT;
 		desc.Width = 800;
 		desc.Height = 600;
 		desc.MipLevels = 1u;
@@ -81,7 +81,7 @@ std::shared_ptr<ComputeStage> StableFluid2D_Sourcing(ID3D11Device& device) {
 		desc.SampleDesc.Count = 1;
 
 		auto uav_desc {CD3D11_UNORDERED_ACCESS_VIEW_DESC{}};
-		uav_desc.Format = DXGI_FORMAT_R16G16B16A16_FLOAT;
+		uav_desc.Format = DXGI_FORMAT_R16G16_FLOAT;
 		uav_desc.ViewDimension = D3D11_UAV_DIMENSION_TEXTURE2D;
 		device.CreateTexture2D(&desc, nullptr, velocity_buf.ReleaseAndGetAddressOf());
 		device.CreateUnorderedAccessView(velocity_buf.Get(), nullptr, uav[0].ReleaseAndGetAddressOf());

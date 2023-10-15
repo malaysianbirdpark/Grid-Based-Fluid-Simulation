@@ -46,10 +46,11 @@
     <ClInclude Include="RenderGraph.h" />
     <ClInclude Include="Stage.h" />
     <ClInclude Include="ComputeStage.h" />
-    <ClInclude Include="ObjectRenderStage.h" />
+    <ClInclude Include="DrawStage.h" />
     <ClInclude Include="RenderObject.h" />
     <ClInclude Include="Material.h" />
     <ClInclude Include="ComputeStageBuilders.h" />
+    <ClInclude Include="ResourceStage.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Camera.cpp" />
@@ -72,10 +73,11 @@
     <ClCompile Include="RenderGraph.cpp" />
     <ClCompile Include="Stage.cpp" />
     <ClCompile Include="ComputeStage.cpp" />
-    <ClCompile Include="ObjectRenderStage.cpp" />
+    <ClCompile Include="DrawStage.cpp" />
     <ClCompile Include="RenderObject.cpp" />
     <ClCompile Include="Material.cpp" />
     <ClCompile Include="ComputeStageBuilders.cpp" />
+    <ClCompile Include="ResourceStage.cpp" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="spherePS.hlsl" />

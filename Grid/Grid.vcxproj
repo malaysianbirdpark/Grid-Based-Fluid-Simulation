@@ -112,12 +112,13 @@
     <ClInclude Include="Input.h" />
     <ClInclude Include="Material.h" />
     <ClInclude Include="Mesh.h" />
-    <ClInclude Include="ObjectRenderStage.h" />
+    <ClInclude Include="DrawStage.h" />
     <ClInclude Include="PSTextures.h" />
     <ClInclude Include="PipelineStateObject.h" />
     <ClInclude Include="RenderGraph.h" />
     <ClInclude Include="RenderObject.h" />
     <ClInclude Include="Renderer.h" />
+    <ClInclude Include="ResourceStage.h" />
     <ClInclude Include="Sphere.h" />
     <ClInclude Include="Stage.h" />
     <ClInclude Include="Test.h" />
@@ -137,12 +138,13 @@
     <ClCompile Include="Input.cpp" />
     <ClCompile Include="Material.cpp" />
     <ClCompile Include="Mesh.cpp" />
-    <ClCompile Include="ObjectRenderStage.cpp" />
+    <ClCompile Include="DrawStage.cpp" />
     <ClCompile Include="PSTextures.cpp" />
     <ClCompile Include="PipelineStateObject.cpp" />
     <ClCompile Include="RenderGraph.cpp" />
     <ClCompile Include="RenderObject.cpp" />
     <ClCompile Include="Renderer.cpp" />
+    <ClCompile Include="ResourceStage.cpp" />
     <ClCompile Include="Sphere.cpp" />
     <ClCompile Include="Stage.cpp" />
     <ClCompile Include="Test.cpp" />
@@ -156,10 +158,10 @@
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="SourcingTestCS.hlsl">
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Compute</ShaderType>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">4.0</ShaderModel>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Compute</ShaderType>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">4.0</ShaderModel>
+      <ShaderType>Compute</ShaderType>
+      <ShaderModel>5.0</ShaderModel>
+      <EntryPointName>main</EntryPointName>
+      <ObjectFileOutput>../Grid/SourcingTestCS.cso</ObjectFileOutput>
     </FxCompile>
     <FxCompile Include="Test2CS.hlsl">
       <ShaderType>Compute</ShaderType>
