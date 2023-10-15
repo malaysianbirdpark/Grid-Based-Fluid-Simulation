@@ -29,6 +29,8 @@ project "Grid"
 
     includedirs {
         "%{prj.name}/",
+        "%{prj.name}/*",
+        "%{prj.name}/**",
         "3rd_party/",
         "3rd_party/ImGui/",
         "3rd_party/ImGui/backends/"
@@ -50,7 +52,7 @@ project "Grid"
     filter "files:**.hlsl"
         shaderentry "main"
         shadermodel "5.0"
-        shaderobjectfileoutput "%{wks.location}/%{prj.name}/%{file.basename}.cso"
+        shaderobjectfileoutput "%{wks.location}/%{prj.name}/CSO/%{file.basename}.cso"
 
     filter "files:**PS.hlsl"
         shadertype "Pixel"

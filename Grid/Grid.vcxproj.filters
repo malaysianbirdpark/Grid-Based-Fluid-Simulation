@@ -1,92 +1,196 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="3rd_party">
-      <UniqueIdentifier>{BD86B353-29F1-67CA-722F-1970DED8451F}</UniqueIdentifier>
+    <Filter Include="HLSL_CS">
+      <UniqueIdentifier>{2DFF7161-99DE-F0FC-A2F6-7BD30E55575E}</UniqueIdentifier>
     </Filter>
-    <Filter Include="3rd_party\imgui-docking">
-      <UniqueIdentifier>{539D2C72-BFD4-7409-C8DE-D82C34959B02}</UniqueIdentifier>
+    <Filter Include="HLSL_PS">
+      <UniqueIdentifier>{DA007261-46E0-F0FC-4FF8-7BD3BB56575E}</UniqueIdentifier>
     </Filter>
-    <Filter Include="3rd_party\imgui-docking\backends">
-      <UniqueIdentifier>{DDC4AF5B-C915-9B9D-F279-895FDE292E07}</UniqueIdentifier>
+    <Filter Include="HLSL_VS">
+      <UniqueIdentifier>{A0017261-0CE1-F0FC-15F9-7BD38157575E}</UniqueIdentifier>
     </Filter>
-    <Filter Include="3rd_party\imgui-docking\misc">
-      <UniqueIdentifier>{0EFCC2AC-FAB6-B258-A36E-2BA38F08FDE8}</UniqueIdentifier>
+    <Filter Include="Platform">
+      <UniqueIdentifier>{2AC788B4-1694-E3BF-3FAD-D1672BD9184E}</UniqueIdentifier>
     </Filter>
-    <Filter Include="3rd_party\imgui-docking\misc\cpp">
-      <UniqueIdentifier>{E0CCF90E-CC1D-E550-F581-D312E13178BA}</UniqueIdentifier>
+    <Filter Include="RenderGraph">
+      <UniqueIdentifier>{57D96100-C38E-DAF5-4C83-D4CCB837D1F9}</UniqueIdentifier>
     </Filter>
-    <Filter Include="3rd_party\imgui-docking\misc\fonts">
-      <UniqueIdentifier>{E748D6B4-D384-D91E-3C97-F11528F28139}</UniqueIdentifier>
+    <Filter Include="RenderGraph\ComputeStage">
+      <UniqueIdentifier>{5722281B-4347-779B-6C92-5C2B581676B9}</UniqueIdentifier>
     </Filter>
-    <Filter Include="3rd_party\imgui-docking\misc\freetype">
-      <UniqueIdentifier>{816AF385-ED2E-F275-B694-224022188EAB}</UniqueIdentifier>
+    <Filter Include="RenderGraph\ResourceStage">
+      <UniqueIdentifier>{22E6970E-8EA8-CB98-D758-5A25435AA476}</UniqueIdentifier>
     </Filter>
-    <Filter Include="3rd_party\imgui-docking\misc\single_file">
-      <UniqueIdentifier>{FE4909DA-EAC6-FC1C-1344-FD30FF1F99B0}</UniqueIdentifier>
+    <Filter Include="RenderObject">
+      <UniqueIdentifier>{9C81291E-88E4-B8C2-316A-F1781DAC8445}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Renderer">
+      <UniqueIdentifier>{7CCE658F-689B-C09A-91B4-AE427DE0F528}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utils">
+      <UniqueIdentifier>{F68B420E-62A0-6ABF-2B22-0E1F97F566F0}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Camera.h" />
-    <ClInclude Include="CircularQueue.h" />
-    <ClInclude Include="Clk.h" />
     <ClInclude Include="Game.h" />
-    <ClInclude Include="ImGuiRenderer.h" />
-    <ClInclude Include="Input.h" />
-    <ClInclude Include="Mesh.h" />
-    <ClInclude Include="PSTextures.h" />
-    <ClInclude Include="PipelineStateObject.h" />
-    <ClInclude Include="Renderer.h" />
-    <ClInclude Include="Sphere.h" />
-    <ClInclude Include="Test.h" />
-    <ClInclude Include="Transform.h" />
-    <ClInclude Include="Triangle.h" />
-    <ClInclude Include="Win32.h" />
+    <ClInclude Include="Platform\Input.h">
+      <Filter>Platform</Filter>
+    </ClInclude>
+    <ClInclude Include="Platform\Win32.h">
+      <Filter>Platform</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderGraph\ComputeStage\ComputeStage.h">
+      <Filter>RenderGraph\ComputeStage</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderGraph\ComputeStage\ComputeStageBuilders.h">
+      <Filter>RenderGraph\ComputeStage</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderGraph\DrawStage.h">
+      <Filter>RenderGraph</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderGraph\RenderGraph.h">
+      <Filter>RenderGraph</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderGraph\ResourceStage\ResourceStage.h">
+      <Filter>RenderGraph\ResourceStage</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderGraph\Stage.h">
+      <Filter>RenderGraph</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderObject\Material.h">
+      <Filter>RenderObject</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderObject\Mesh.h">
+      <Filter>RenderObject</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderObject\PSTextures.h">
+      <Filter>RenderObject</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderObject\PipelineStateObject.h">
+      <Filter>RenderObject</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderObject\RenderObject.h">
+      <Filter>RenderObject</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderObject\Sphere.h">
+      <Filter>RenderObject</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderObject\Transform.h">
+      <Filter>RenderObject</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderObject\Triangle.h">
+      <Filter>RenderObject</Filter>
+    </ClInclude>
+    <ClInclude Include="Renderer\Camera.h">
+      <Filter>Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="Renderer\ImGuiRenderer.h">
+      <Filter>Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="Renderer\Renderer.h">
+      <Filter>Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\CircularQueue.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\Clk.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
     <ClInclude Include="pch.h" />
-    <ClInclude Include="RenderGraph.h" />
-    <ClInclude Include="Stage.h" />
-    <ClInclude Include="ComputeStage.h" />
-    <ClInclude Include="DrawStage.h" />
-    <ClInclude Include="RenderObject.h" />
-    <ClInclude Include="Material.h" />
-    <ClInclude Include="ComputeStageBuilders.h" />
-    <ClInclude Include="ResourceStage.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Camera.cpp" />
-    <ClCompile Include="CircularQueue.cpp" />
-    <ClCompile Include="Clk.cpp" />
+    <ClCompile Include="EntryPoint.cpp" />
     <ClCompile Include="Game.cpp" />
-    <ClCompile Include="ImGuiRenderer.cpp" />
-    <ClCompile Include="Input.cpp" />
-    <ClCompile Include="Mesh.cpp" />
-    <ClCompile Include="PSTextures.cpp" />
-    <ClCompile Include="PipelineStateObject.cpp" />
-    <ClCompile Include="Renderer.cpp" />
-    <ClCompile Include="Sphere.cpp" />
-    <ClCompile Include="Test.cpp" />
-    <ClCompile Include="Transform.cpp" />
-    <ClCompile Include="Triangle.cpp" />
-    <ClCompile Include="Win32.cpp" />
-    <ClCompile Include="main.cpp" />
+    <ClCompile Include="Platform\Input.cpp">
+      <Filter>Platform</Filter>
+    </ClCompile>
+    <ClCompile Include="Platform\Win32.cpp">
+      <Filter>Platform</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderGraph\ComputeStage\ComputeStage.cpp">
+      <Filter>RenderGraph\ComputeStage</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderGraph\ComputeStage\ComputeStageBuilders.cpp">
+      <Filter>RenderGraph\ComputeStage</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderGraph\DrawStage.cpp">
+      <Filter>RenderGraph</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderGraph\RenderGraph.cpp">
+      <Filter>RenderGraph</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderGraph\ResourceStage\ResourceStage.cpp">
+      <Filter>RenderGraph\ResourceStage</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderGraph\Stage.cpp">
+      <Filter>RenderGraph</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderObject\Material.cpp">
+      <Filter>RenderObject</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderObject\Mesh.cpp">
+      <Filter>RenderObject</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderObject\PSTextures.cpp">
+      <Filter>RenderObject</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderObject\PipelineStateObject.cpp">
+      <Filter>RenderObject</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderObject\RenderObject.cpp">
+      <Filter>RenderObject</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderObject\Sphere.cpp">
+      <Filter>RenderObject</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderObject\Transform.cpp">
+      <Filter>RenderObject</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderObject\Triangle.cpp">
+      <Filter>RenderObject</Filter>
+    </ClCompile>
+    <ClCompile Include="Renderer\Camera.cpp">
+      <Filter>Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="Renderer\ImGuiRenderer.cpp">
+      <Filter>Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="Renderer\Renderer.cpp">
+      <Filter>Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="Utils\CircularQueue.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="Utils\Clk.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
     <ClCompile Include="pch.cpp" />
-    <ClCompile Include="RenderGraph.cpp" />
-    <ClCompile Include="Stage.cpp" />
-    <ClCompile Include="ComputeStage.cpp" />
-    <ClCompile Include="DrawStage.cpp" />
-    <ClCompile Include="RenderObject.cpp" />
-    <ClCompile Include="Material.cpp" />
-    <ClCompile Include="ComputeStageBuilders.cpp" />
-    <ClCompile Include="ResourceStage.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="spherePS.hlsl" />
-    <FxCompile Include="sphereVS.hlsl" />
-    <FxCompile Include="testPS.hlsl" />
-    <FxCompile Include="testVS.hlsl" />
-    <FxCompile Include="testCS.hlsl" />
-    <FxCompile Include="test1CS.hlsl" />
-    <FxCompile Include="Test2CS.hlsl" />
-    <FxCompile Include="SourcingTestCS.hlsl" />
+    <FxCompile Include="HLSL_CS\SourcingTestCS.hlsl">
+      <Filter>HLSL_CS</Filter>
+    </FxCompile>
+    <FxCompile Include="HLSL_CS\Test2CS.hlsl">
+      <Filter>HLSL_CS</Filter>
+    </FxCompile>
+    <FxCompile Include="HLSL_CS\test1CS.hlsl">
+      <Filter>HLSL_CS</Filter>
+    </FxCompile>
+    <FxCompile Include="HLSL_CS\testCS.hlsl">
+      <Filter>HLSL_CS</Filter>
+    </FxCompile>
+    <FxCompile Include="HLSL_PS\spherePS.hlsl">
+      <Filter>HLSL_PS</Filter>
+    </FxCompile>
+    <FxCompile Include="HLSL_PS\testPS.hlsl">
+      <Filter>HLSL_PS</Filter>
+    </FxCompile>
+    <FxCompile Include="HLSL_VS\sphereVS.hlsl">
+      <Filter>HLSL_VS</Filter>
+    </FxCompile>
+    <FxCompile Include="HLSL_VS\testVS.hlsl">
+      <Filter>HLSL_VS</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>
