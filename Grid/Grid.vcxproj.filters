@@ -85,5 +85,6 @@
     <FxCompile Include="testCS.hlsl" />
     <FxCompile Include="test1CS.hlsl" />
     <FxCompile Include="Test2CS.hlsl" />
+    <FxCompile Include="SourcingTestCS.hlsl" />
   </ItemGroup>
 </Project>
