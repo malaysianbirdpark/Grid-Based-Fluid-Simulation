@@ -1,0 +1,69 @@
+{
+	"configurations" : 
+	[
+		{
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"hasInstallRule" : true,
+					"minimumCMakeVersion" : 
+					{
+						"string" : "2.6"
+					},
+					"projectIndex" : 0,
+					"source" : ".",
+					"targetIndexes" : 
+					[
+						0,
+						1
+					]
+				}
+			],
+			"name" : "Debug",
+			"projects" : 
+			[
+				{
+					"directoryIndexes" : 
+					[
+						0
+					],
+					"name" : "freetype",
+					"targetIndexes" : 
+					[
+						0,
+						1
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 0,
+					"id" : "dist::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-dist-Debug-9a17a19f08a5e78a274b.json",
+					"name" : "dist",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "freetype::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-freetype-Debug-59aadabf3b136b2976a8.json",
+					"name" : "freetype",
+					"projectIndex" : 0
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "C:/Users/woodong2077/Documents/GitHub/Grid/3rd_party/libfreetype2/freetype2/out/build/x64-Debug",
+		"source" : "C:/Users/woodong2077/Documents/GitHub/Grid/3rd_party/libfreetype2/freetype2"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 2
+	}
+}
