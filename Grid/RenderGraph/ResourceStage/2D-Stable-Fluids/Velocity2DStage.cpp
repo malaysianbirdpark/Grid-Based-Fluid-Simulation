@@ -1,13 +1,14 @@
 #include "pch.h"
 #include "Velocity2DStage.h"
 
+#include "ImGuiRenderer.h"
 #include "imnodes.h"
 
 Velocity2DStage::Velocity2DStage()
     : ResourceStage{"2D Velocity Buffer"}
 {
-	_incoming.resize(1);
-	_outgoing.resize(1);
+    _incoming.emplace_back(ImGuiNodeManager::IssueAttrID());
+    _outgoing.emplace_back(ImGuiNodeManager::IssueAttrID());
 
 	auto desc {CD3D11_TEXTURE2D_DESC{}};
 	desc.BindFlags = D3D11_BIND_UNORDERED_ACCESS;

@@ -26,9 +26,6 @@ ComputeStage::ComputeStage(char const* name, char const* compute_shader_path, UI
         nullptr,
         _cs.ReleaseAndGetAddressOf()
     );
-
-    _nullSrv.resize(_srv.size());
-    _nullUav.resize(_uav.size());
 }
 
 void ComputeStage::Run(ID3D11DeviceContext& context) {
@@ -61,7 +58,7 @@ void ComputeStage::RenderNode() const {
     ImNodes::EndNode();
 }
 
-void ComputeStage::SetBarrier(ID3D11DeviceContext& context) {
+void ComputeStage::SetBarrier(ID3D11DeviceContext& context) const {
     context.CSSetShaderResources(0, static_cast<UINT>(_nullSrv.size()), &_nullSrv[0]);
     context.CSSetUnorderedAccessViews(0, static_cast<UINT>(_nullUav.size()), &_nullUav[0], nullptr);
 }

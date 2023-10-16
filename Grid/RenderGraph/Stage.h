@@ -31,10 +31,10 @@ namespace Stage {
 
 	struct AddOutgoing {
 		AddOutgoing(int32_t node_id, int32_t attr_id) : _nodeID{ node_id }, _attrID{attr_id} {}
-		void operator() (std::shared_ptr<DrawStage> const& stage) { stage->_outgoing[_attrID] = _nodeID;  }
-		void operator() (std::shared_ptr<ComputeStage> const& stage) { stage->_outgoing[_attrID] = _nodeID;  }
-		void operator() (std::shared_ptr<ResourceStage> const& stage) { stage->_outgoing[_attrID] = _nodeID;  }
-		void operator() (std::shared_ptr<CopyStage> const& stage) { stage->_outgoing[0] = _nodeID;  }
+		void operator() (std::shared_ptr<DrawStage> const& stage) const { stage->_outgoing[_attrID] = _nodeID;  }
+		void operator() (std::shared_ptr<ComputeStage> const& stage) const { stage->_outgoing[_attrID] = _nodeID;  }
+		void operator() (std::shared_ptr<ResourceStage> const& stage) const { stage->_outgoing[_attrID] = _nodeID;  }
+		void operator() (std::shared_ptr<CopyStage> const& stage) const { stage->_outgoing[0] = _nodeID;  }
 	private:
 		int32_t _nodeID;
 		int32_t _attrID;

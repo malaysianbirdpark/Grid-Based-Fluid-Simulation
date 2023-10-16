@@ -1,13 +1,14 @@
 #include "pch.h"
 #include "CopyStage.h"
 
+#include "ImGuiRenderer.h"
 #include "imnodes.h"
 
 CopyStage::CopyStage()
 	: _src{nullptr}, _dest{nullptr}
 {
-    _incoming.resize(1);
-    _outgoing.resize(1);
+    _incoming.emplace_back(ImGuiNodeManager::IssueAttrID());
+    _outgoing.emplace_back(ImGuiNodeManager::IssueAttrID());
 }
 
 void CopyStage::Run(ID3D11DeviceContext& context)
@@ -38,7 +39,7 @@ void CopyStage::RenderNode() const
     ImNodes::EndInputAttribute();
 
     for (auto& child : _outgoing) {
-        ImNodes::BeginOutputAttribute(child << 4);
+        ImNodes::BeginOutputAttribute(child << 8);
         ImGui::Text("Copy To");
         ImNodes::EndOutputAttribute();
     }

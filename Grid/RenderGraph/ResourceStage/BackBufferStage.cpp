@@ -1,15 +1,15 @@
 #include "pch.h"
 #include "BackBufferStage.h"
 
-#include "imgui.h"
+#include "ImGuiRenderer.h"
 #include "imnodes.h"
 
 BackBufferStage::BackBufferStage(IDXGISwapChain& swap_chain)
     : ResourceStage{"Back-Buffer"}
 {
     swap_chain.GetBuffer(0u, IID_PPV_ARGS(_resource.ReleaseAndGetAddressOf()));
-    _incoming.resize(1);
-    _outgoing.resize(1);
+    _incoming.emplace_back(ImGuiNodeManager::IssueAttrID());
+    _outgoing.emplace_back(ImGuiNodeManager::IssueAttrID());
 }
 
 BackBufferStage::~BackBufferStage() {

@@ -36,6 +36,6 @@ public:  void Run(ID3D11DeviceContext& context);
 public:  virtual void RenderNode() const;
 public:  virtual void Consume(ID3D11Resource* resource, int32_t attribute_id) = 0;
 public:  virtual ID3D11Resource* Expose(int32_t attribute_id) = 0;
-private: void SetBarrier(ID3D11DeviceContext& context);
+private: void SetBarrier(ID3D11DeviceContext& context) const;
 };
 

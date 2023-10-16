@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "Sourcing2DStage.h"
 
+#include "ImGuiRenderer.h"
 #include "imnodes.h"
 
 Sourcing2DStage::Sourcing2DStage()
@@ -10,8 +11,9 @@ Sourcing2DStage::Sourcing2DStage()
     _srv.resize(1);
     _nullUav.resize(2);
     _nullSrv.resize(1);
-    _incoming.resize(1);
-    _outgoing.resize(2);
+    _incoming.emplace_back(ImGuiNodeManager::IssueAttrID());
+    _outgoing.emplace_back(ImGuiNodeManager::IssueAttrID());
+    _outgoing.emplace_back(ImGuiNodeManager::IssueAttrID());
 }
 
 Sourcing2DStage::~Sourcing2DStage()

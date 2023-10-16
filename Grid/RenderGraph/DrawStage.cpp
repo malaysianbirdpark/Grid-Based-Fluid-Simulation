@@ -5,11 +5,13 @@
 #include "imnodes.h"
 #include "RenderObject.h"
 
+#include "ImGuiRenderer.h"
+
 DrawStage::DrawStage(char const* name, std::shared_ptr<RenderObject> object)
 	: _name{name}, _object{object}
 {
-    _incoming.resize(1);
-    _outgoing.resize(1);
+    _incoming.emplace_back(ImGuiNodeManager::IssueAttrID());
+    _outgoing.emplace_back(ImGuiNodeManager::IssueAttrID());
 }
 
 void DrawStage::Run(ID3D11DeviceContext& context)
@@ -30,7 +32,7 @@ void DrawStage::RenderNode() const {
     ImNodes::EndInputAttribute();
 
     for (auto& child : _outgoing) {
-        ImNodes::BeginOutputAttribute(child << 4);
+        ImNodes::BeginOutputAttribute(child << 8);
         ImGui::Text("Outgoing");
         ImNodes::EndOutputAttribute();
     }

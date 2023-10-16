@@ -7,11 +7,10 @@
 #include "imgui.h"
 #include "imnodes.h"
 
+#include "ImGuiRenderer.h"
+
 RenderGraph::RenderGraph()
 {
-    _orderOfExecution.emplace_back(0);
-    _indegree[0] = 0;
-    _links.resize(1);
 }
 
 void RenderGraph::Run(ID3D11DeviceContext& context)
@@ -26,7 +25,7 @@ void RenderGraph::AddStage(Stage::Stage stage)
 {
     _graph.emplace_back(std::move(stage));
 
-	auto const id =  static_cast<int32_t>(_graph.size() - 1);
+	auto const id = ImGuiNodeManager::IssueNodeID();
 	_indegree[id] = 0;
 
     std::visit(Stage::SetID{ id }, _graph.back());
@@ -39,8 +38,8 @@ void RenderGraph::Link(int32_t from, int32_t from_attr, int32_t to, int32_t to_a
 	std::visit(Stage::AddOutgoing{to, from_attr}, _graph[from]);
 	std::visit(Stage::AddIncoming{from, to_attr}, _graph[to]);
 
-    std::string from_type{ std::visit(Stage::GetStageName{}, _graph[from]) };
-    std::string to_type{ std::visit(Stage::GetStageName{}, _graph[to]) };
+    std::string const from_type{ std::visit(Stage::GetStageName{}, _graph[from]) };
+    std::string const to_type{ std::visit(Stage::GetStageName{}, _graph[to]) };
 
     if (from_type == "Resource")
 		std::visit(Stage::Consume{std::visit(Stage::Expose{from_attr}, _graph[from]), to_attr}, _graph[to]);

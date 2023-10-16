@@ -87,3 +87,19 @@ void ImGuiRenderer::EndFrame()
         ImGui::RenderPlatformWindowsDefault();
     }
 }
+
+int32_t ImGuiNodeManager::IssueNodeID() {
+    return _nodeID++;
+}
+
+int32_t ImGuiNodeManager::IssueAttrID() {
+    return _attrID++;
+}
+
+int32_t ImGuiNodeManager::LastNodeID() {
+    return _nodeID - 1;
+}
+
+int32_t ImGuiNodeManager::LastAttrID() {
+    return _attrID - 1;
+}

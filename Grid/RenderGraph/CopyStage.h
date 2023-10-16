@@ -4,10 +4,10 @@
 #include <vector>
 
 class CopyStage {
-public: explicit CopyStage();
-public: virtual void     Run(ID3D11DeviceContext& context);
-public: void     Consume(ID3D11Resource* resource, int32_t attribute_id);
-public: void     RenderNode() const;
+public: explicit      CopyStage();
+public: virtual void  Run(ID3D11DeviceContext& context);
+public: void          Consume(ID3D11Resource* resource, int32_t attribute_id);
+public: void          RenderNode() const;
 
 public: int32_t                     _id{-1};
 public: std::string                 _name{"CopyStage"};

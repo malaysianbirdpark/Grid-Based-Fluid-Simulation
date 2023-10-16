@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "Advection2DStage.h"
 
+#include "ImGuiRenderer.h"
 #include "imnodes.h"
 
 Advection2DStage::Advection2DStage()
@@ -10,8 +11,11 @@ Advection2DStage::Advection2DStage()
     _srv.resize(2);
     _nullUav.resize(2);
     _nullSrv.resize(2);
-    _incoming.resize(2);
-    _outgoing.resize(2);
+
+    _incoming.emplace_back(ImGuiNodeManager::IssueAttrID());
+    _incoming.emplace_back(ImGuiNodeManager::IssueAttrID());
+    _outgoing.emplace_back(ImGuiNodeManager::IssueAttrID());
+    _outgoing.emplace_back(ImGuiNodeManager::IssueAttrID());
 }
 
 Advection2DStage::~Advection2DStage()
