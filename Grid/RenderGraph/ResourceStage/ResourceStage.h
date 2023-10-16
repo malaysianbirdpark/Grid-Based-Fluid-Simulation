@@ -14,7 +14,5 @@ public:
     inline static std::string               _stageName{ "Resource" };
     std::vector<int32_t>                    _incoming{};
     std::vector<int32_t>                    _outgoing{};
-protected:
-    Microsoft::WRL::ComPtr<ID3D11Resource>  _resource;
 };
 

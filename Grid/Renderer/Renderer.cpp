@@ -84,7 +84,8 @@ void Renderer::BeginFrame()
     _immContext->ClearRenderTargetView(_backBufferView.Get(), clear_color);
     _immContext->ClearDepthStencilView(_dsv.Get(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0u);
 
-    _immContext->PSSetSamplers(0u, 1u, _samplerWrap.GetAddressOf());
+    _immContext->PSSetSamplers(0u, 1u, _samplerWrapAni.GetAddressOf());
+    _immContext->CSSetSamplers(0u, 1u, _samplerWrapAni.GetAddressOf());
 
     ImGuiRenderer::BeginFrame();
 }
@@ -197,7 +198,7 @@ void Renderer::InitSamplers()
         sd.MinLOD = 0.0f;
         sd.MaxLOD = D3D11_FLOAT32_MAX;
 
-        Device().CreateSamplerState(&sd, _samplerWrap.ReleaseAndGetAddressOf());
+        Device().CreateSamplerState(&sd, _samplerWrapAni.ReleaseAndGetAddressOf());
     }
 }
 

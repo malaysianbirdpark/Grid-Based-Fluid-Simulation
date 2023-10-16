@@ -31,6 +31,8 @@ project "Grid"
         "%{prj.name}/",
         "%{prj.name}/*",
         "%{prj.name}/**",
+        "%{prj.name}/RenderGraph/ComputeStage/**",
+        "%{prj.name}/RenderGraph/ResourceStage/**",
         "3rd_party/",
         "3rd_party/ImGui/",
         "3rd_party/ImGui/backends/"

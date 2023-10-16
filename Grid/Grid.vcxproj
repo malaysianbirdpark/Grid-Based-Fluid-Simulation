@@ -59,7 +59,7 @@
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>.;3rd_party;Assets;CSO;HLSL_CS;HLSL_PS;HLSL_VS;Platform;Renderer;RenderGraph;RenderObject;Utils;Assets\Textures;RenderGraph\ComputeStage;RenderGraph\ResourceStage;..\3rd_party;..\3rd_party\ImGui;..\3rd_party\ImGui\backends;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.;3rd_party;Assets;CSO;HLSL_CS;HLSL_PS;HLSL_VS;Platform;Renderer;RenderGraph;RenderObject;Utils;Assets\Textures;RenderGraph\ComputeStage;RenderGraph\ResourceStage;RenderGraph\ComputeStage\2D-Stable-Fluids;RenderGraph\ResourceStage\2D-Stable-Fluids;..\3rd_party;..\3rd_party\ImGui;..\3rd_party\ImGui\backends;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
@@ -80,7 +80,7 @@
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>.;3rd_party;Assets;CSO;HLSL_CS;HLSL_PS;HLSL_VS;Platform;Renderer;RenderGraph;RenderObject;Utils;Assets\Textures;RenderGraph\ComputeStage;RenderGraph\ResourceStage;..\3rd_party;..\3rd_party\ImGui;..\3rd_party\ImGui\backends;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.;3rd_party;Assets;CSO;HLSL_CS;HLSL_PS;HLSL_VS;Platform;Renderer;RenderGraph;RenderObject;Utils;Assets\Textures;RenderGraph\ComputeStage;RenderGraph\ResourceStage;RenderGraph\ComputeStage\2D-Stable-Fluids;RenderGraph\ResourceStage\2D-Stable-Fluids;..\3rd_party;..\3rd_party\ImGui;..\3rd_party\ImGui\backends;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -103,10 +103,19 @@
     <ClInclude Include="Game.h" />
     <ClInclude Include="Platform\Input.h" />
     <ClInclude Include="Platform\Win32.h" />
+    <ClInclude Include="RenderGraph\ComputeStage\2D-Stable-Fluids\Advection2DStage.h" />
+    <ClInclude Include="RenderGraph\ComputeStage\2D-Stable-Fluids\ComputePressure2DStage.h" />
+    <ClInclude Include="RenderGraph\ComputeStage\2D-Stable-Fluids\Diffuse2DStage.h" />
+    <ClInclude Include="RenderGraph\ComputeStage\2D-Stable-Fluids\ForceApply2DStage.h" />
+    <ClInclude Include="RenderGraph\ComputeStage\2D-Stable-Fluids\Sourcing2DStage.h" />
     <ClInclude Include="RenderGraph\ComputeStage\ComputeStage.h" />
     <ClInclude Include="RenderGraph\ComputeStage\TestCS.h" />
+    <ClInclude Include="RenderGraph\CopyStage.h" />
     <ClInclude Include="RenderGraph\DrawStage.h" />
     <ClInclude Include="RenderGraph\RenderGraph.h" />
+    <ClInclude Include="RenderGraph\ResourceStage\2D-Stable-Fluids\Pressure2DStage.h" />
+    <ClInclude Include="RenderGraph\ResourceStage\2D-Stable-Fluids\Quantity2DStage.h" />
+    <ClInclude Include="RenderGraph\ResourceStage\2D-Stable-Fluids\Velocity2DStage.h" />
     <ClInclude Include="RenderGraph\ResourceStage\BackBufferStage.h" />
     <ClInclude Include="RenderGraph\ResourceStage\ResourceStage.h" />
     <ClInclude Include="RenderGraph\Stage.h" />
@@ -130,10 +139,19 @@
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Platform\Input.cpp" />
     <ClCompile Include="Platform\Win32.cpp" />
+    <ClCompile Include="RenderGraph\ComputeStage\2D-Stable-Fluids\Advection2DStage.cpp" />
+    <ClCompile Include="RenderGraph\ComputeStage\2D-Stable-Fluids\ComputePressure2DStage.cpp" />
+    <ClCompile Include="RenderGraph\ComputeStage\2D-Stable-Fluids\Diffuse2DStage.cpp" />
+    <ClCompile Include="RenderGraph\ComputeStage\2D-Stable-Fluids\ForceApply2DStage.cpp" />
+    <ClCompile Include="RenderGraph\ComputeStage\2D-Stable-Fluids\Sourcing2DStage.cpp" />
     <ClCompile Include="RenderGraph\ComputeStage\ComputeStage.cpp" />
     <ClCompile Include="RenderGraph\ComputeStage\TestCS.cpp" />
+    <ClCompile Include="RenderGraph\CopyStage.cpp" />
     <ClCompile Include="RenderGraph\DrawStage.cpp" />
     <ClCompile Include="RenderGraph\RenderGraph.cpp" />
+    <ClCompile Include="RenderGraph\ResourceStage\2D-Stable-Fluids\Pressure2DStage.cpp" />
+    <ClCompile Include="RenderGraph\ResourceStage\2D-Stable-Fluids\Quantity2DStage.cpp" />
+    <ClCompile Include="RenderGraph\ResourceStage\2D-Stable-Fluids\Velocity2DStage.cpp" />
     <ClCompile Include="RenderGraph\ResourceStage\BackBufferStage.cpp" />
     <ClCompile Include="RenderGraph\ResourceStage\ResourceStage.cpp" />
     <ClCompile Include="RenderGraph\Stage.cpp" />
@@ -155,11 +173,17 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="HLSL_CS\SourcingTestCS.hlsl">
+    <FxCompile Include="HLSL_CS\Advection2D_CS.hlsl">
       <ShaderType>Compute</ShaderType>
       <ShaderModel>5.0</ShaderModel>
       <EntryPointName>main</EntryPointName>
-      <ObjectFileOutput>../Grid/CSO/SourcingTestCS.cso</ObjectFileOutput>
+      <ObjectFileOutput>../Grid/CSO/Advection2D_CS.cso</ObjectFileOutput>
+    </FxCompile>
+    <FxCompile Include="HLSL_CS\Sourcing2D_CS.hlsl">
+      <ShaderType>Compute</ShaderType>
+      <ShaderModel>5.0</ShaderModel>
+      <EntryPointName>main</EntryPointName>
+      <ObjectFileOutput>../Grid/CSO/Sourcing2D_CS.cso</ObjectFileOutput>
     </FxCompile>
     <FxCompile Include="HLSL_CS\Test2CS.hlsl">
       <ShaderType>Compute</ShaderType>

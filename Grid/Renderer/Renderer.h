@@ -35,6 +35,7 @@ private:
 
     inline static D3D11_VIEWPORT                                    _viewport{};
 
-    inline static Microsoft::WRL::ComPtr<ID3D11SamplerState>        _samplerWrap;
+    inline static Microsoft::WRL::ComPtr<ID3D11SamplerState>        _samplerWrapAni;
+    inline static Microsoft::WRL::ComPtr<ID3D11SamplerState>        _samplerClamp;
 };
  

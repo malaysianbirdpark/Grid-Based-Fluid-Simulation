@@ -24,6 +24,7 @@ void BackBufferStage::RenderNode() const {
     ImNodes::BeginNodeTitleBar();
     ImGui::Text(_stageName.c_str());
     ImGui::Text(_name.c_str());
+    ImGui::Text("%d", _id);
     ImNodes::EndNodeTitleBar();
 
     ImNodes::BeginInputAttribute(_id);
@@ -37,5 +38,4 @@ void BackBufferStage::RenderNode() const {
     }
 
     ImNodes::EndNode();
-
 }

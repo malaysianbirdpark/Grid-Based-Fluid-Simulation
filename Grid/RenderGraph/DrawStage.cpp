@@ -22,6 +22,7 @@ void DrawStage::RenderNode() const {
     ImNodes::BeginNodeTitleBar();
     ImGui::Text(_stageName.c_str());
     ImGui::Text(_name.c_str());
+    ImGui::Text("%d", _id);
     ImNodes::EndNodeTitleBar();
 
     ImNodes::BeginInputAttribute(_id);
@@ -29,8 +30,8 @@ void DrawStage::RenderNode() const {
     ImNodes::EndInputAttribute();
 
     for (auto& child : _outgoing) {
-        ImNodes::BeginOutputAttribute(child << 8);
-        ImGui::Text("Outgoing %d", child);
+        ImNodes::BeginOutputAttribute(child << 4);
+        ImGui::Text("Outgoing");
         ImNodes::EndOutputAttribute();
     }
 

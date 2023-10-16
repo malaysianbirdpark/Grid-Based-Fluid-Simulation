@@ -17,6 +17,11 @@
 #include "DrawStage.h"
 #include "TestCS.h"
 #include "BackBufferStage.h"
+#include "Velocity2DStage.h"
+#include "Quantity2DStage.h"
+#include "Sourcing2DStage.h"
+#include "CopyStage.h"
+#include "Advection2DStage.h"
 
 Game::Game() 
 {
@@ -34,9 +39,17 @@ Game::Game()
 	//_renderGraph.InsertStageAfter(-1, TestCS(Renderer::Device(), Renderer::SwapChain()));
 	_renderGraph.AddStage(std::move(std::make_shared<DrawStage>("Earth", _object.back())));
 	_renderGraph.AddStage(std::move(std::make_shared<BackBufferStage>(Renderer::SwapChain())));
-	_renderGraph.AddStage(std::move(std::make_shared<TestCS>()));
-	_renderGraph.Link(0, 0, 1, 0);
-	_renderGraph.Link(1, 0, 2, 0);
+	_renderGraph.AddStage(std::move(std::make_shared<Sourcing2DStage>()));
+	_renderGraph.AddStage(std::move(std::make_shared<Velocity2DStage>()));
+	_renderGraph.AddStage(std::move(std::make_shared<CopyStage>()));
+	_renderGraph.AddStage(std::move(std::make_shared<Quantity2DStage>()));
+	_renderGraph.AddStage(std::move(std::make_shared<Advection2DStage>()));
+	_renderGraph.Link(2, 0, 3, 0);
+	_renderGraph.Link(2, 1, 5, 0);
+	//_renderGraph.Link(5, 0, 4, 0);
+    _renderGraph.Link(4, 1, 1, 0);
+	_renderGraph.Link(3, 0, 6, 0);
+	//_renderGraph.Link(5, 0, 6, 1);
 }
 
 Game::~Game()

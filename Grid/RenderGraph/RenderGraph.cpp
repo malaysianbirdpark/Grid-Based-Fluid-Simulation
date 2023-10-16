@@ -36,9 +36,17 @@ void RenderGraph::AddStage(Stage::Stage stage)
 
 void RenderGraph::Link(int32_t from, int32_t from_attr, int32_t to, int32_t to_attr)
 {
-	std::visit(Stage::AddOutgoing{to, to_attr}, _graph[from]);
-	std::visit(Stage::AddIncoming{from, from_attr}, _graph[to]);
-    std::visit(Stage::Consume{std::visit(Stage::Expose{from_attr}, _graph[from]), to_attr}, _graph[to]);
+	std::visit(Stage::AddOutgoing{to, from_attr}, _graph[from]);
+	std::visit(Stage::AddIncoming{from, to_attr}, _graph[to]);
+
+    std::string from_type{ std::visit(Stage::GetStageName{}, _graph[from]) };
+    std::string to_type{ std::visit(Stage::GetStageName{}, _graph[to]) };
+
+    if (from_type == "Resource")
+		std::visit(Stage::Consume{std::visit(Stage::Expose{from_attr}, _graph[from]), to_attr}, _graph[to]);
+    else if (to_type == "Resource")
+		std::visit(Stage::Consume{ std::visit(Stage::Expose{to_attr}, _graph[to]), from_attr }, _graph[from]);
+
 	++_indegree[to];
 
 	_links[from].emplace_back(to);
@@ -58,8 +66,8 @@ void RenderGraph::ImGuiShowRenderGraphEditWindow()
 
         auto id{ 0 };
         for (auto const& v : _links) {
-            for (auto const child : v) 
-                ImNodes::Link(id++, child << 8, child);
+            for (auto const to : v) 
+                ImNodes::Link(id++, to << 8, to);
         }
 
 		ImNodes::EndNodeEditor();
