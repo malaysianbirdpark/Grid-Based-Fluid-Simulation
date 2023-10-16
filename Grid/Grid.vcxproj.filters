@@ -43,9 +43,6 @@
     <ClInclude Include="RenderGraph\ComputeStage\ComputeStage.h">
       <Filter>RenderGraph\ComputeStage</Filter>
     </ClInclude>
-    <ClInclude Include="RenderGraph\ComputeStage\ComputeStageBuilders.h">
-      <Filter>RenderGraph\ComputeStage</Filter>
-    </ClInclude>
     <ClInclude Include="RenderGraph\ComputeStage\TestCS.h">
       <Filter>RenderGraph\ComputeStage</Filter>
     </ClInclude>
@@ -115,9 +112,6 @@
       <Filter>Platform</Filter>
     </ClCompile>
     <ClCompile Include="RenderGraph\ComputeStage\ComputeStage.cpp">
-      <Filter>RenderGraph\ComputeStage</Filter>
-    </ClCompile>
-    <ClCompile Include="RenderGraph\ComputeStage\ComputeStageBuilders.cpp">
       <Filter>RenderGraph\ComputeStage</Filter>
     </ClCompile>
     <ClCompile Include="RenderGraph\ComputeStage\TestCS.cpp">

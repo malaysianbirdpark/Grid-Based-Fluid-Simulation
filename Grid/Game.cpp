@@ -32,9 +32,11 @@ Game::Game()
 	_object.push_back(std::move(std::make_shared<Sphere>(Renderer::Context())));
 
 	//_renderGraph.InsertStageAfter(-1, TestCS(Renderer::Device(), Renderer::SwapChain()));
-	_renderGraph.InsertStageAfter(0, std::move(std::make_shared<DrawStage>("Earth", _object.back())));
-	_renderGraph.InsertStageAfter(0, std::move(std::make_shared<BackBufferStage>(Renderer::SwapChain())));
-	_renderGraph.InsertStageAfter(2, std::move(std::make_shared<TestCS>()));
+	_renderGraph.AddStage(std::move(std::make_shared<DrawStage>("Earth", _object.back())));
+	_renderGraph.AddStage(std::move(std::make_shared<BackBufferStage>(Renderer::SwapChain())));
+	_renderGraph.AddStage(std::move(std::make_shared<TestCS>()));
+	_renderGraph.Link(0, 0, 1, 0);
+	_renderGraph.Link(1, 0, 2, 0);
 }
 
 Game::~Game()

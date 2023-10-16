@@ -2,12 +2,13 @@
 #include "TestCS.h"
 
 TestCS::TestCS()
-    : ComputeStage{"Test: Paint Whole Screen", "CSO/testCS.cso", 32, 32, 1}
+    : ComputeStage{"Test: paint half of the screen", "CSO/testCS.cso", 32, 32, 1}
 {
     _uav.resize(1);
     _srv.resize(1);
     _nullUav.resize(1);
     _nullSrv.resize(1);
+    _incoming.resize(1);
 }
 
 TestCS::~TestCS() {

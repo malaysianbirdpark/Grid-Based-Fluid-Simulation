@@ -9,7 +9,6 @@
 
 RenderGraph::RenderGraph()
 {
-    InsertStageAfter(-1, std::make_shared<Stage::RootDummyStage>());
     _orderOfExecution.emplace_back(0);
     _indegree[0] = 0;
     _links.resize(1);
@@ -23,29 +22,28 @@ void RenderGraph::Run(ID3D11DeviceContext& context)
     ImGuiShowRenderGraphEditWindow();
 }
 
-void RenderGraph::InsertStageAfter(int32_t from, Stage::Stage stage)
+void RenderGraph::AddStage(Stage::Stage stage)
 {
     _graph.emplace_back(std::move(stage));
 
-    auto id{ 0 };
-    if (from != -1) [[likely]] {
-		id =  static_cast<int32_t>(_graph.size() - 1);
-		std::visit(Stage::AddOutgoing{id}, _graph[from]);
-		std::visit(Stage::AddIncoming{ from }, _graph.back());
-        _indegree[id] = 1;
-    }
+	auto const id =  static_cast<int32_t>(_graph.size() - 1);
+	_indegree[id] = 0;
 
     std::visit(Stage::SetID{ id }, _graph.back());
 
     _links.emplace_back();
-    if (from != -1)
-		_links[from].emplace_back(id);
-
-    RecalculateTopology();
 }
 
-void RenderGraph::InsertStageAsSibling(int32_t sibling_id, Stage::Stage stage)
+void RenderGraph::Link(int32_t from, int32_t from_attr, int32_t to, int32_t to_attr)
 {
+	std::visit(Stage::AddOutgoing{to, to_attr}, _graph[from]);
+	std::visit(Stage::AddIncoming{from, from_attr}, _graph[to]);
+    std::visit(Stage::Consume{std::visit(Stage::Expose{from_attr}, _graph[from]), to_attr}, _graph[to]);
+	++_indegree[to];
+
+	_links[from].emplace_back(to);
+
+    RecalculateTopology();
 }
 
 void RenderGraph::ImGuiShowRenderGraphEditWindow()

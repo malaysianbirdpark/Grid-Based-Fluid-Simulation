@@ -11,8 +11,8 @@ public:  explicit RenderGraph();
 public:  void     Run(ID3D11DeviceContext& context);
 public:  void     Feed(ID3D11DeviceContext& context, int32_t feeder, int32_t consumer);
 public:  void     Consume(ID3D11DeviceContext& context, int32_t feeder, int32_t consumer);
-public:  void     InsertStageAfter(int32_t from, Stage::Stage stage);
-public:  void     InsertStageAsSibling(int32_t sibling_id, Stage::Stage stage);
+public:  void     AddStage(Stage::Stage stage);
+public:  void     Link(int32_t from, int32_t from_attr, int32_t to, int32_t to_attr);
 public:  void     ImGuiShowRenderGraphEditWindow();
 private: void     RecalculateTopology();
 private:

@@ -104,7 +104,6 @@
     <ClInclude Include="Platform\Input.h" />
     <ClInclude Include="Platform\Win32.h" />
     <ClInclude Include="RenderGraph\ComputeStage\ComputeStage.h" />
-    <ClInclude Include="RenderGraph\ComputeStage\ComputeStageBuilders.h" />
     <ClInclude Include="RenderGraph\ComputeStage\TestCS.h" />
     <ClInclude Include="RenderGraph\DrawStage.h" />
     <ClInclude Include="RenderGraph\RenderGraph.h" />
@@ -132,7 +131,6 @@
     <ClCompile Include="Platform\Input.cpp" />
     <ClCompile Include="Platform\Win32.cpp" />
     <ClCompile Include="RenderGraph\ComputeStage\ComputeStage.cpp" />
-    <ClCompile Include="RenderGraph\ComputeStage\ComputeStageBuilders.cpp" />
     <ClCompile Include="RenderGraph\ComputeStage\TestCS.cpp" />
     <ClCompile Include="RenderGraph\DrawStage.cpp" />
     <ClCompile Include="RenderGraph\RenderGraph.cpp" />

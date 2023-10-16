@@ -8,6 +8,8 @@ BackBufferStage::BackBufferStage(IDXGISwapChain& swap_chain)
     : ResourceStage{"Back-Buffer"}
 {
     swap_chain.GetBuffer(0u, IID_PPV_ARGS(_resource.ReleaseAndGetAddressOf()));
+    _incoming.resize(1);
+    _outgoing.resize(1);
 }
 
 BackBufferStage::~BackBufferStage() {

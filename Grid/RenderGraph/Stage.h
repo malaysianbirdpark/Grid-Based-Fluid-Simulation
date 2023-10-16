@@ -39,13 +39,14 @@ namespace Stage {
 	};
 
 	struct AddOutgoing {
-		AddOutgoing(int32_t child_id) : _childID{child_id} {}
-		void operator() (std::shared_ptr<RootDummyStage> const& stage) { stage->_outgoing.emplace_back(_childID); }
-		void operator() (std::shared_ptr<DrawStage> const& stage) { stage->_outgoing.emplace_back(_childID);  }
-		void operator() (std::shared_ptr<ComputeStage> const& stage) { stage->_outgoing.emplace_back(_childID);  }
-		void operator() (std::shared_ptr<ResourceStage> const& stage) { stage->_outgoing.emplace_back(_childID);  }
+		AddOutgoing(int32_t node_id, int32_t attr_id) : _nodeID{ node_id }, _attrID{attr_id} {}
+		void operator() (std::shared_ptr<RootDummyStage> const& stage) { stage->_outgoing[_attrID] = _nodeID; }
+		void operator() (std::shared_ptr<DrawStage> const& stage) { stage->_outgoing[_attrID] = _nodeID;  }
+		void operator() (std::shared_ptr<ComputeStage> const& stage) { stage->_outgoing[_attrID] = _nodeID;  }
+		void operator() (std::shared_ptr<ResourceStage> const& stage) { stage->_outgoing[_attrID] = _nodeID;  }
 	private:
-		int32_t _childID;
+		int32_t _nodeID;
+		int32_t _attrID;
 	};
 
 	struct GetOutgoings {
@@ -56,13 +57,14 @@ namespace Stage {
 	};
 
 	struct AddIncoming {
-		AddIncoming(int32_t from) : _from{from} {}
+		AddIncoming(int32_t node_id, int32_t attr_id) : _nodeID{ node_id }, _attrID{ attr_id } {}
 		void operator() (std::shared_ptr<RootDummyStage> const& stage) const {}
-		void operator() (std::shared_ptr<DrawStage> const& stage) const { stage->_incoming.emplace_back(_from); }
-		void operator() (std::shared_ptr<ComputeStage> const& stage) const { stage->_incoming.emplace_back(_from); }
-		void operator() (std::shared_ptr<ResourceStage> const& stage) const { stage->_incoming.emplace_back(_from); }
+		void operator() (std::shared_ptr<DrawStage> const& stage) const { stage->_incoming[_attrID] = _nodeID; }
+		void operator() (std::shared_ptr<ComputeStage> const& stage) const { stage->_incoming[_attrID] = _nodeID; }
+		void operator() (std::shared_ptr<ResourceStage> const& stage) const { stage->_incoming[_attrID] = _nodeID; }
 	private:
-		int32_t _from;
+		int32_t _nodeID;
+		int32_t _attrID;
 	};
 
 	struct GetIncoming {
@@ -111,9 +113,9 @@ namespace Stage {
 	};
 
 	struct Expose {
-		Expose(int32_t attribute_id = 0) : _attribute{attribute_id} {}
-		void operator() (std::shared_ptr<RootDummyStage> const& stage) const {}
-		void operator() (std::shared_ptr<DrawStage> const& stage) const {}
+		Expose(int32_t attribute_id) : _attribute{attribute_id} {}
+		ID3D11Resource* operator() (std::shared_ptr<RootDummyStage> const& stage) const { return nullptr;  }
+		ID3D11Resource* operator() (std::shared_ptr<DrawStage> const& stage) const { return nullptr;  }
 		ID3D11Resource* operator() (std::shared_ptr<ComputeStage> const& stage) const { return stage->Expose(_attribute); }
 		ID3D11Resource* operator() (std::shared_ptr<ResourceStage> const& stage) const { return stage->Expose(); }
 	private:
@@ -124,7 +126,7 @@ namespace Stage {
 		Consume(ID3D11Resource* resource, int32_t attribute_id) : _resource{resource}, _attribute{attribute_id} {}
 		void operator() (std::shared_ptr<RootDummyStage> const& stage) const {}
 		void operator() (std::shared_ptr<DrawStage> const& stage) const {}
-		void operator() (std::shared_ptr<ComputeStage> const& stage) const { stage->Consume(_resource, _attribute); }
+		void operator() (std::shared_ptr<ComputeStage> const& stage) const { if(_resource) stage->Consume(_resource, _attribute); }
 		void operator() (std::shared_ptr<ResourceStage> const& stage) const {}
 	private:
 		ID3D11Resource* _resource;
