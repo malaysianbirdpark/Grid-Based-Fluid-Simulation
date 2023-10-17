@@ -54,7 +54,6 @@ void CBFluidColor::Upload(ID3D11DeviceContext& context)
 
 void CBFluidColor::Update()
 {
-    //DirectX::XMVECTOR const color{ std::rand() / RAND_MAX, std::rand() / RAND_MAX, std::rand() / RAND_MAX, 1.0f };
-    DirectX::XMVECTOR const color{1.0f, 0.0f, 0.0f, 1.0f};
+    DirectX::XMVECTOR const color{ std::rand() / RAND_MAX, std::rand() / RAND_MAX, std::rand() / RAND_MAX, 1.0f };
     DirectX::XMStoreFloat4(&_data._color, color);
 }
