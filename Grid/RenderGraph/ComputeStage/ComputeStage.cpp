@@ -33,7 +33,11 @@ void ComputeStage::Run(ID3D11DeviceContext& context) {
 	context.CSSetShaderResources(0u, static_cast<UINT>(_srv.size()), _srv[0].GetAddressOf());
 	context.CSSetUnorderedAccessViews(0u, static_cast<UINT>(_uav.size()), _uav[0].GetAddressOf(), nullptr);
 	context.CSSetShader(_cs.Get(), nullptr, 0u);
-	context.Dispatch(_groupX, _groupY, _groupZ);
+	context.Dispatch(
+        static_cast<UINT>(ceil(800.0f / _groupX)),
+        static_cast<UINT>(ceil(600.0f / _groupY)), 
+        _groupZ
+    );
 	SetBarrier(context);
 }
 
@@ -45,13 +49,15 @@ void ComputeStage::RenderNode() const {
     ImGui::Text("%d", _id);
     ImNodes::EndNodeTitleBar();
 
-    ImNodes::BeginInputAttribute(_id);
-    ImGui::Text("Incoming");
-    ImNodes::EndInputAttribute();
+    for (auto& in : _incoming) {
+		ImNodes::BeginInputAttribute(in.first);
+		ImGui::Text("%s (%d)", _attrNames.at(in.first).c_str(), in.first);
+		ImNodes::EndInputAttribute();
+    }
 
-    for (auto& child : _outgoing) {
-        ImNodes::BeginOutputAttribute(child << 8);
-        ImGui::Text("Outgoing %d", child);
+    for (auto& out : _outgoing) {
+        ImNodes::BeginOutputAttribute(out.first);
+        ImGui::Text("%s (%d)", _attrNames.at(out.first).c_str(), out.first);
         ImNodes::EndOutputAttribute();
     }
 

@@ -15,12 +15,3 @@ private:
 };
 
 
-class ImGuiNodeManager {
-public: static int32_t IssueNodeID();
-public: static int32_t IssueAttrID();
-public: static int32_t LastNodeID();
-public: static int32_t LastAttrID();
-private:
-	inline static int32_t _nodeID {0};
-	inline static int32_t _attrID {0};
-};

@@ -1,7 +1,7 @@
 #pragma once
 
 #include <string>
-#include <vector>
+#include <unordered_map>
 
 class CopyStage {
 public: explicit      CopyStage();
@@ -12,8 +12,9 @@ public: void          RenderNode() const;
 public: int32_t                     _id{-1};
 public: std::string                 _name{"CopyStage"};
 public: inline static std::string   _stageName{ "CopyStage" };
-public: std::vector<int32_t>        _incoming{};
-public: std::vector<int32_t>        _outgoing{};
+public: std::unordered_map<int32_t, int32_t> _incoming{};
+public: std::unordered_map<int32_t, int32_t> _outgoing{};
+public:  std::unordered_map<int32_t, std::string> _attrNames;
 
 protected: ID3D11Resource* _src;
 protected: ID3D11Resource* _dest;

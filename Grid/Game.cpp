@@ -15,13 +15,13 @@
 #include "Sphere.h"
 
 #include "DrawStage.h"
-#include "TestCS.h"
 #include "BackBufferStage.h"
 #include "Velocity2DStage.h"
 #include "Quantity2DStage.h"
 #include "Sourcing2DStage.h"
 #include "CopyStage.h"
 #include "Advection2DStage.h"
+#include "CBFluidColor.h"
 
 Game::Game() 
 {
@@ -43,13 +43,17 @@ Game::Game()
 	_renderGraph.AddStage(std::move(std::make_shared<Velocity2DStage>()));
 	_renderGraph.AddStage(std::move(std::make_shared<CopyStage>()));
 	_renderGraph.AddStage(std::move(std::make_shared<Quantity2DStage>()));
+	_renderGraph.AddStage(std::move(std::make_shared<Quantity2DStage>()));
 	_renderGraph.AddStage(std::move(std::make_shared<Advection2DStage>()));
-	_renderGraph.Link(2, 0, 3, 0);
-	_renderGraph.Link(2, 1, 5, 0);
-	//_renderGraph.Link(5, 0, 4, 0);
-    _renderGraph.Link(4, 1, 1, 0);
-	_renderGraph.Link(3, 0, 6, 0);
-	//_renderGraph.Link(5, 0, 6, 1);
+	_renderGraph.AddStage(std::move(std::make_shared<CBFluidColor>()));
+	_renderGraph.Link(4, 261, 1, 1);
+	_renderGraph.Link(6, 263, 4, 4);
+	_renderGraph.Link(7, 265, 6, 6);
+	_renderGraph.Link(3, 260, 7, 7);
+	_renderGraph.Link(5, 262, 7, 8);
+	_renderGraph.Link(2, 258, 3, 3);
+	_renderGraph.Link(2, 259, 5, 5);
+	_renderGraph.Link(8, 266, 2, 2);
 }
 
 Game::~Game()
@@ -98,6 +102,7 @@ void Game::Update(float const dt)
 {
 	for (auto& obj : _object)
 		obj->Update(Renderer::Context(), dt);
+	_renderGraph.Update();
 }
 
 void Game::Render()

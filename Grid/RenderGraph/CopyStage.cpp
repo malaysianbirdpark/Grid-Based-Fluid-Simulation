@@ -4,11 +4,15 @@
 #include "ImGuiRenderer.h"
 #include "imnodes.h"
 
+#include "NodeManager.h"
+
 CopyStage::CopyStage()
 	: _src{nullptr}, _dest{nullptr}
 {
-    _incoming.emplace_back(ImGuiNodeManager::IssueAttrID());
-    _outgoing.emplace_back(ImGuiNodeManager::IssueAttrID());
+    _incoming[NodeManager::IssueIncomingAttrID()] = -1;
+    _attrNames[NodeManager::LastIncomingAttrID()] = { "Src" };
+    _outgoing[NodeManager::IssueOutgoingAttrID()] = -1;
+    _attrNames[NodeManager::LastOutgoingAttrID()] = { "Dest" };
 }
 
 void CopyStage::Run(ID3D11DeviceContext& context)
@@ -19,9 +23,9 @@ void CopyStage::Run(ID3D11DeviceContext& context)
 
 void CopyStage::Consume(ID3D11Resource* resource, int32_t attribute_id)
 {
-	if (attribute_id == 0)
+	if (attribute_id == _incoming.begin()->first)
 		_src = resource;
-	else if (attribute_id == 1)
+	else if (attribute_id == _outgoing.begin()->first)
 		_dest = resource;
 }
 
@@ -34,13 +38,15 @@ void CopyStage::RenderNode() const
     ImGui::Text("%d", _id);
     ImNodes::EndNodeTitleBar();
 
-    ImNodes::BeginInputAttribute(_id);
-    ImGui::Text("Copy From");
-    ImNodes::EndInputAttribute();
+    for (auto& in : _incoming) {
+		ImNodes::BeginInputAttribute(in.first);
+		ImGui::Text("%s (%d)", _attrNames.at(in.first).c_str(), in.first);
+		ImNodes::EndInputAttribute();
+    }
 
-    for (auto& child : _outgoing) {
-        ImNodes::BeginOutputAttribute(child << 8);
-        ImGui::Text("Copy To");
+    for (auto& out : _outgoing) {
+        ImNodes::BeginOutputAttribute(out.first);
+        ImGui::Text("%s (%d)", _attrNames.at(out.first).c_str(), out.first);
         ImNodes::EndOutputAttribute();
     }
 

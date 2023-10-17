@@ -8,7 +8,7 @@ void Renderer::Init(int width, int height, HWND native_wnd)
 	DXGI_SWAP_CHAIN_DESC sd{};
     sd.BufferDesc.Width = 0;
     sd.BufferDesc.Height = 0;
-    sd.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+    sd.BufferDesc.Format = DXGI_FORMAT_R16G16B16A16_FLOAT;
     sd.BufferDesc.RefreshRate.Numerator = 0;
     sd.BufferDesc.RefreshRate.Denominator = 0;
     sd.BufferDesc.Scaling = DXGI_MODE_SCALING_UNSPECIFIED;
@@ -84,8 +84,8 @@ void Renderer::BeginFrame()
     _immContext->ClearRenderTargetView(_backBufferView.Get(), clear_color);
     _immContext->ClearDepthStencilView(_dsv.Get(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0u);
 
-    _immContext->PSSetSamplers(0u, 1u, _samplerWrapAni.GetAddressOf());
-    _immContext->CSSetSamplers(0u, 1u, _samplerWrapAni.GetAddressOf());
+    _immContext->PSSetSamplers(0u, 1u, _sampler.GetAddressOf());
+    _immContext->CSSetSamplers(0u, 1u, _sampler.GetAddressOf());
 
     ImGuiRenderer::BeginFrame();
 }
@@ -189,16 +189,19 @@ void Renderer::InitSamplers()
 {
     {
         D3D11_SAMPLER_DESC sd{};
-        sd.Filter = D3D11_FILTER_ANISOTROPIC;
+        sd.Filter = D3D11_FILTER_MIN_MAG_MIP_POINT;
+        //sd.Filter = D3D11_FILTER_ANISOTROPIC;
+        sd.ComparisonFunc = D3D11_COMPARISON_NEVER;
         sd.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
         sd.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
         sd.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
-        sd.MaxAnisotropy = D3D11_REQ_MAXANISOTROPY;
+        //sd.MaxAnisotropy = D3D11_REQ_MAXANISOTROPY;
+        sd.MaxAnisotropy = 1;
         sd.MipLODBias = 0.0f;
         sd.MinLOD = 0.0f;
         sd.MaxLOD = D3D11_FLOAT32_MAX;
 
-        Device().CreateSamplerState(&sd, _samplerWrapAni.ReleaseAndGetAddressOf());
+        pDevice->CreateSamplerState(&sd, _sampler.ReleaseAndGetAddressOf());
     }
 }
 

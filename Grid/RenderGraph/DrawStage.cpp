@@ -5,13 +5,15 @@
 #include "imnodes.h"
 #include "RenderObject.h"
 
-#include "ImGuiRenderer.h"
+#include "NodeManager.h"
 
 DrawStage::DrawStage(char const* name, std::shared_ptr<RenderObject> object)
 	: _name{name}, _object{object}
 {
-    _incoming.emplace_back(ImGuiNodeManager::IssueAttrID());
-    _outgoing.emplace_back(ImGuiNodeManager::IssueAttrID());
+    _incoming[NodeManager::IssueIncomingAttrID()] = -1;
+    _attrNames[NodeManager::LastIncomingAttrID()] = { "Before" };
+    _outgoing[NodeManager::IssueOutgoingAttrID()] = -1;
+    _attrNames[NodeManager::LastOutgoingAttrID()] = { "After" };
 }
 
 void DrawStage::Run(ID3D11DeviceContext& context)
@@ -27,13 +29,15 @@ void DrawStage::RenderNode() const {
     ImGui::Text("%d", _id);
     ImNodes::EndNodeTitleBar();
 
-    ImNodes::BeginInputAttribute(_id);
-    ImGui::Text("Incoming");
-    ImNodes::EndInputAttribute();
+    for (auto& in : _incoming) {
+		ImNodes::BeginInputAttribute(in.first);
+		ImGui::Text("%s (%d)", _attrNames.at(in.first).c_str(), in.first);
+		ImNodes::EndInputAttribute();
+    }
 
-    for (auto& child : _outgoing) {
-        ImNodes::BeginOutputAttribute(child << 8);
-        ImGui::Text("Outgoing");
+    for (auto& out : _outgoing) {
+        ImNodes::BeginOutputAttribute(out.first);
+        ImGui::Text("%s (%d)", _attrNames.at(out.first).c_str(), out.first);
         ImNodes::EndOutputAttribute();
     }
 

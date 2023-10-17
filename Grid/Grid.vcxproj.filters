@@ -22,6 +22,9 @@
     <Filter Include="RenderGraph\ComputeStage\2D-Stable-Fluids">
       <UniqueIdentifier>{D886C057-44A1-23F9-8DC3-338DF91C4B00}</UniqueIdentifier>
     </Filter>
+    <Filter Include="RenderGraph\ConstantBufferStage">
+      <UniqueIdentifier>{1ED433FA-8AB7-423A-93BA-7076FF1C098B}</UniqueIdentifier>
+    </Filter>
     <Filter Include="RenderGraph\ResourceStage">
       <UniqueIdentifier>{22E6970E-8EA8-CB98-D758-5A25435AA476}</UniqueIdentifier>
     </Filter>
@@ -64,13 +67,19 @@
     <ClInclude Include="RenderGraph\ComputeStage\ComputeStage.h">
       <Filter>RenderGraph\ComputeStage</Filter>
     </ClInclude>
-    <ClInclude Include="RenderGraph\ComputeStage\TestCS.h">
-      <Filter>RenderGraph\ComputeStage</Filter>
+    <ClInclude Include="RenderGraph\ConstantBufferStage\CBFluidColor.h">
+      <Filter>RenderGraph\ConstantBufferStage</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderGraph\ConstantBufferStage\ConstantBufferStage.h">
+      <Filter>RenderGraph\ConstantBufferStage</Filter>
     </ClInclude>
     <ClInclude Include="RenderGraph\CopyStage.h">
       <Filter>RenderGraph</Filter>
     </ClInclude>
     <ClInclude Include="RenderGraph\DrawStage.h">
+      <Filter>RenderGraph</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderGraph\NodeManager.h">
       <Filter>RenderGraph</Filter>
     </ClInclude>
     <ClInclude Include="RenderGraph\RenderGraph.h">
@@ -134,7 +143,6 @@
       <Filter>Utils</Filter>
     </ClInclude>
     <ClInclude Include="pch.h" />
-    <ClInclude Include="RenderGraph\NodeLinkManager.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EntryPoint.cpp" />
@@ -163,13 +171,19 @@
     <ClCompile Include="RenderGraph\ComputeStage\ComputeStage.cpp">
       <Filter>RenderGraph\ComputeStage</Filter>
     </ClCompile>
-    <ClCompile Include="RenderGraph\ComputeStage\TestCS.cpp">
-      <Filter>RenderGraph\ComputeStage</Filter>
+    <ClCompile Include="RenderGraph\ConstantBufferStage\CBFluidColor.cpp">
+      <Filter>RenderGraph\ConstantBufferStage</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderGraph\ConstantBufferStage\ConstantBufferStage.cpp">
+      <Filter>RenderGraph\ConstantBufferStage</Filter>
     </ClCompile>
     <ClCompile Include="RenderGraph\CopyStage.cpp">
       <Filter>RenderGraph</Filter>
     </ClCompile>
     <ClCompile Include="RenderGraph\DrawStage.cpp">
+      <Filter>RenderGraph</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderGraph\NodeManager.cpp">
       <Filter>RenderGraph</Filter>
     </ClCompile>
     <ClCompile Include="RenderGraph\RenderGraph.cpp">
@@ -233,7 +247,6 @@
       <Filter>Utils</Filter>
     </ClCompile>
     <ClCompile Include="pch.cpp" />
-    <ClCompile Include="RenderGraph\NodeLinkManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="HLSL_CS\Advection2D_CS.hlsl">

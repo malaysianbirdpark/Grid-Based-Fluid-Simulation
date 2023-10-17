@@ -4,11 +4,13 @@
 #include <string>
 #include <memory>
 #include <variant>
+#include "unordered_map"
 
 #include "DrawStage.h"
 #include "ComputeStage.h"
 #include "ResourceStage.h"
 #include "CopyStage.h"
+#include "ConstantBufferStage.h"
 
 namespace Stage {
 	using Stage =
@@ -16,7 +18,8 @@ namespace Stage {
 			std::shared_ptr<DrawStage>,
 			std::shared_ptr<ComputeStage>,
 		    std::shared_ptr<ResourceStage>,
-		    std::shared_ptr<CopyStage>
+		    std::shared_ptr<CopyStage>,
+		    std::shared_ptr<ConstantBufferStage>
 		>;
 
 	struct Run {
@@ -25,6 +28,7 @@ namespace Stage {
 		void operator() (std::shared_ptr<ComputeStage> const& stage) const { stage->Run(_context); }
 		void operator() (std::shared_ptr<ResourceStage> const& stage) const {}
 		void operator() (std::shared_ptr<CopyStage> const& stage) const { stage->Run(_context);  }
+		void operator() (std::shared_ptr<ConstantBufferStage> const& stage) const { stage->Run(_context);  }
 	private:
 		ID3D11DeviceContext& _context;
 	};
@@ -34,17 +38,19 @@ namespace Stage {
 		void operator() (std::shared_ptr<DrawStage> const& stage) const { stage->_outgoing[_attrID] = _nodeID;  }
 		void operator() (std::shared_ptr<ComputeStage> const& stage) const { stage->_outgoing[_attrID] = _nodeID;  }
 		void operator() (std::shared_ptr<ResourceStage> const& stage) const { stage->_outgoing[_attrID] = _nodeID;  }
-		void operator() (std::shared_ptr<CopyStage> const& stage) const { stage->_outgoing[0] = _nodeID;  }
+		void operator() (std::shared_ptr<CopyStage> const& stage) const { stage->_outgoing[_attrID] = _nodeID;  }
+		void operator() (std::shared_ptr<ConstantBufferStage> const& stage) const { stage->_outgoing[_attrID] = _nodeID;  }
 	private:
 		int32_t _nodeID;
 		int32_t _attrID;
 	};
 
 	struct GetOutgoings {
-		std::vector<int32_t> const& operator() (std::shared_ptr<DrawStage> const& stage) const { return stage->_outgoing; }
-		std::vector<int32_t> const& operator() (std::shared_ptr<ComputeStage> const& stage) const { return stage->_outgoing; }
-		std::vector<int32_t> const& operator() (std::shared_ptr<ResourceStage> const& stage) const { return stage->_outgoing; }
-		std::vector<int32_t> const& operator() (std::shared_ptr<CopyStage> const& stage) const { return stage->_outgoing; }
+		std::unordered_map<int32_t, int32_t> const& operator() (std::shared_ptr<DrawStage> const& stage) const { return stage->_outgoing; }
+		std::unordered_map<int32_t, int32_t> const& operator() (std::shared_ptr<ComputeStage> const& stage) const { return stage->_outgoing; }
+		std::unordered_map<int32_t, int32_t> const& operator() (std::shared_ptr<ResourceStage> const& stage) const { return stage->_outgoing; }
+		std::unordered_map<int32_t, int32_t> const& operator() (std::shared_ptr<CopyStage> const& stage) const { return stage->_outgoing; }
+		std::unordered_map<int32_t, int32_t> const& operator() (std::shared_ptr<ConstantBufferStage> const& stage) const { return stage->_outgoing; }
 	};
 
 	struct AddIncoming {
@@ -52,17 +58,19 @@ namespace Stage {
 		void operator() (std::shared_ptr<DrawStage> const& stage) const { stage->_incoming[_attrID] = _nodeID; }
 		void operator() (std::shared_ptr<ComputeStage> const& stage) const { stage->_incoming[_attrID] = _nodeID; }
 		void operator() (std::shared_ptr<ResourceStage> const& stage) const { stage->_incoming[_attrID] = _nodeID; }
-		void operator() (std::shared_ptr<CopyStage> const& stage) const { stage->_incoming[0] = _nodeID; }
+		void operator() (std::shared_ptr<CopyStage> const& stage) const { stage->_incoming[_attrID] = _nodeID; }
+		void operator() (std::shared_ptr<ConstantBufferStage> const& stage) const { stage->_incoming[_attrID] = _nodeID; }
 	private:
 		int32_t _nodeID;
 		int32_t _attrID;
 	};
 
 	struct GetIncoming {
-		std::vector<int32_t> operator() (std::shared_ptr<DrawStage> const& stage) const { return stage->_incoming;  }
-		std::vector<int32_t> operator() (std::shared_ptr<ComputeStage> const& stage) const { return stage->_incoming;  }
-		std::vector<int32_t> operator() (std::shared_ptr<ResourceStage> const& stage) const { return stage->_incoming;  }
-		std::vector<int32_t> operator() (std::shared_ptr<CopyStage> const& stage) const { return stage->_incoming;  }
+		std::unordered_map<int32_t, int32_t> operator() (std::shared_ptr<DrawStage> const& stage) const { return stage->_incoming;  }
+		std::unordered_map<int32_t, int32_t> operator() (std::shared_ptr<ComputeStage> const& stage) const { return stage->_incoming;  }
+		std::unordered_map<int32_t, int32_t> operator() (std::shared_ptr<ResourceStage> const& stage) const { return stage->_incoming;  }
+		std::unordered_map<int32_t, int32_t> operator() (std::shared_ptr<CopyStage> const& stage) const { return stage->_incoming;  }
+		std::unordered_map<int32_t, int32_t> operator() (std::shared_ptr<ConstantBufferStage> const& stage) const { return stage->_incoming;  }
 	};
 
 	struct GetID {
@@ -70,6 +78,7 @@ namespace Stage {
 		int32_t operator() (std::shared_ptr<ComputeStage> const& stage) const { return stage->_id;  }
 		int32_t operator() (std::shared_ptr<ResourceStage> const& stage) const { return stage->_id;  }
 		int32_t operator() (std::shared_ptr<CopyStage> const& stage) const { return stage->_id;  }
+		int32_t operator() (std::shared_ptr<ConstantBufferStage> const& stage) const { return stage->_id;  }
 	};
 
 	struct SetID {
@@ -78,6 +87,7 @@ namespace Stage {
 		void operator() (std::shared_ptr<ComputeStage> const& stage) const { stage->_id = _id; }
 		void operator() (std::shared_ptr<ResourceStage> const& stage) const { stage->_id = _id; }
 		void operator() (std::shared_ptr<CopyStage> const& stage) const { stage->_id = _id; }
+		void operator() (std::shared_ptr<ConstantBufferStage> const& stage) const { stage->_id = _id; }
 	private:
 		int32_t _id;
 	};
@@ -87,6 +97,7 @@ namespace Stage {
 		char const* operator() (std::shared_ptr<ComputeStage> const& stage) const { return stage->_name.c_str(); }
 		char const* operator() (std::shared_ptr<ResourceStage> const& stage) const { return stage->_name.c_str(); }
 		char const* operator() (std::shared_ptr<CopyStage> const& stage) const { return stage->_name.c_str(); }
+		char const* operator() (std::shared_ptr<ConstantBufferStage> const& stage) const { return stage->_name.c_str(); }
 	};
 
 	struct GetStageName {
@@ -94,6 +105,7 @@ namespace Stage {
 		char const* operator() (std::shared_ptr<ComputeStage> const& stage) const { return stage->_stageName.c_str(); }
 		char const* operator() (std::shared_ptr<ResourceStage> const& stage) const { return stage->_stageName.c_str(); }
 		char const* operator() (std::shared_ptr<CopyStage> const& stage) const { return stage->_stageName.c_str(); }
+		char const* operator() (std::shared_ptr<ConstantBufferStage> const& stage) const { return stage->_stageName.c_str(); }
 	};
 
 	struct RenderNode {
@@ -101,6 +113,7 @@ namespace Stage {
 		void operator() (std::shared_ptr<ComputeStage> const& stage) const { stage->RenderNode(); }
 		void operator() (std::shared_ptr<ResourceStage> const& stage) const { stage->RenderNode(); }
 		void operator() (std::shared_ptr<CopyStage> const& stage) const { stage->RenderNode(); }
+		void operator() (std::shared_ptr<ConstantBufferStage> const& stage) const { stage->RenderNode(); }
 	};
 
 	struct Expose {
@@ -109,6 +122,7 @@ namespace Stage {
 		ID3D11Resource* operator() (std::shared_ptr<ComputeStage> const& stage) const { return stage->Expose(_attribute); }
 		ID3D11Resource* operator() (std::shared_ptr<ResourceStage> const& stage) const { return stage->Expose(); }
 		ID3D11Resource* operator() (std::shared_ptr<CopyStage> const& stage) const { return nullptr; }
+		ID3D11Resource* operator() (std::shared_ptr<ConstantBufferStage> const& stage) const { return nullptr; }
 	private:
 		int32_t _attribute;
 	};
@@ -119,6 +133,7 @@ namespace Stage {
 		void operator() (std::shared_ptr<ComputeStage> const& stage) const { if(_resource) stage->Consume(_resource, _attribute); }
 		void operator() (std::shared_ptr<ResourceStage> const& stage) const {}
 		void operator() (std::shared_ptr<CopyStage> const& stage) const { if (_resource) stage->Consume(_resource, _attribute); }
+		void operator() (std::shared_ptr<ConstantBufferStage> const& stage) const {}
 	private:
 		ID3D11Resource* _resource;
 		int32_t _attribute;
