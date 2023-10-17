@@ -8,6 +8,8 @@ cbuffer color : register(b0) {
 [numthreads(32, 32, 1)]
 void main(uint3 DTid : SV_DispatchThreadID )
 {
-	if (DTid.x <= 300)
-		quantity[DTid.xy] = fluid_color;
+    velocity[DTid.xy] = float2(1.0f, 0.0f);
+	if (DTid.x >= 100.0f && DTid.x <= 150.0f && DTid.y >= 200.0f && DTid.y <= 250.0f) {
+		quantity[DTid.xy] += float4(0.1f, 0.0f, 0.0f, 1.0f);
+	}
 }

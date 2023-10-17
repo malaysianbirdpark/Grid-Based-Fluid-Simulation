@@ -189,7 +189,7 @@ void Renderer::InitSamplers()
 {
     {
         D3D11_SAMPLER_DESC sd{};
-        sd.Filter = D3D11_FILTER_MIN_MAG_MIP_POINT;
+        sd.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
         //sd.Filter = D3D11_FILTER_ANISOTROPIC;
         sd.ComparisonFunc = D3D11_COMPARISON_NEVER;
         sd.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
