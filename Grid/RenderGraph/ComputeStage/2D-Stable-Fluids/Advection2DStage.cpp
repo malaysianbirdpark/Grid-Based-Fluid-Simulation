@@ -6,7 +6,7 @@
 #include "NodeManager.h"
 
 Advection2DStage::Advection2DStage()
-    : ComputeStage("2D-Fluid Advection Stage", "./CSO/Advection2D_CS.cso", 32, 32, 1)
+    : ComputeStage{ "2D-Fluid Advection", "./CSO/Advection2D_CS.cso", 32, 32, 1 }
 {
     _uav.resize(2);
     _srv.resize(2);

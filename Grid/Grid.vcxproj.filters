@@ -52,13 +52,13 @@
     <ClInclude Include="RenderGraph\ComputeStage\2D-Stable-Fluids\Advection2DStage.h">
       <Filter>RenderGraph\ComputeStage\2D-Stable-Fluids</Filter>
     </ClInclude>
-    <ClInclude Include="RenderGraph\ComputeStage\2D-Stable-Fluids\ComputePressure2DStage.h">
+    <ClInclude Include="RenderGraph\ComputeStage\2D-Stable-Fluids\Divergence2DStage.h">
       <Filter>RenderGraph\ComputeStage\2D-Stable-Fluids</Filter>
     </ClInclude>
-    <ClInclude Include="RenderGraph\ComputeStage\2D-Stable-Fluids\Diffuse2DStage.h">
+    <ClInclude Include="RenderGraph\ComputeStage\2D-Stable-Fluids\GradientSubtract2DStage.h">
       <Filter>RenderGraph\ComputeStage\2D-Stable-Fluids</Filter>
     </ClInclude>
-    <ClInclude Include="RenderGraph\ComputeStage\2D-Stable-Fluids\ForceApply2DStage.h">
+    <ClInclude Include="RenderGraph\ComputeStage\2D-Stable-Fluids\Poisson2DStage.h">
       <Filter>RenderGraph\ComputeStage\2D-Stable-Fluids</Filter>
     </ClInclude>
     <ClInclude Include="RenderGraph\ComputeStage\2D-Stable-Fluids\Sourcing2DStage.h">
@@ -68,6 +68,12 @@
       <Filter>RenderGraph\ComputeStage</Filter>
     </ClInclude>
     <ClInclude Include="RenderGraph\ConstantBufferStage\CBFluidColor.h">
+      <Filter>RenderGraph\ConstantBufferStage</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderGraph\ConstantBufferStage\CBPoisson.h">
+      <Filter>RenderGraph\ConstantBufferStage</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderGraph\ConstantBufferStage\CBTimestep.h">
       <Filter>RenderGraph\ConstantBufferStage</Filter>
     </ClInclude>
     <ClInclude Include="RenderGraph\ConstantBufferStage\ConstantBufferStage.h">
@@ -98,6 +104,9 @@
       <Filter>RenderGraph\ResourceStage</Filter>
     </ClInclude>
     <ClInclude Include="RenderGraph\ResourceStage\ResourceStage.h">
+      <Filter>RenderGraph\ResourceStage</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderGraph\ResourceStage\ViewportStage.h">
       <Filter>RenderGraph\ResourceStage</Filter>
     </ClInclude>
     <ClInclude Include="RenderGraph\Stage.h">
@@ -143,8 +152,7 @@
       <Filter>Utils</Filter>
     </ClInclude>
     <ClInclude Include="pch.h" />
-    <ClInclude Include="RenderGraph\ConstantBufferStage\CBTimestep.h" />
-    <ClInclude Include="RenderGraph\ResourceStage\ViewportStage.h" />
+    <ClInclude Include="RenderGraph\ResourceStage\2D-Stable-Fluids\Pressure1DStage.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EntryPoint.cpp" />
@@ -158,13 +166,13 @@
     <ClCompile Include="RenderGraph\ComputeStage\2D-Stable-Fluids\Advection2DStage.cpp">
       <Filter>RenderGraph\ComputeStage\2D-Stable-Fluids</Filter>
     </ClCompile>
-    <ClCompile Include="RenderGraph\ComputeStage\2D-Stable-Fluids\ComputePressure2DStage.cpp">
+    <ClCompile Include="RenderGraph\ComputeStage\2D-Stable-Fluids\Divergence2DStage.cpp">
       <Filter>RenderGraph\ComputeStage\2D-Stable-Fluids</Filter>
     </ClCompile>
-    <ClCompile Include="RenderGraph\ComputeStage\2D-Stable-Fluids\Diffuse2DStage.cpp">
+    <ClCompile Include="RenderGraph\ComputeStage\2D-Stable-Fluids\GradientSubtract2DStage.cpp">
       <Filter>RenderGraph\ComputeStage\2D-Stable-Fluids</Filter>
     </ClCompile>
-    <ClCompile Include="RenderGraph\ComputeStage\2D-Stable-Fluids\ForceApply2DStage.cpp">
+    <ClCompile Include="RenderGraph\ComputeStage\2D-Stable-Fluids\Poisson2DStage.cpp">
       <Filter>RenderGraph\ComputeStage\2D-Stable-Fluids</Filter>
     </ClCompile>
     <ClCompile Include="RenderGraph\ComputeStage\2D-Stable-Fluids\Sourcing2DStage.cpp">
@@ -174,6 +182,12 @@
       <Filter>RenderGraph\ComputeStage</Filter>
     </ClCompile>
     <ClCompile Include="RenderGraph\ConstantBufferStage\CBFluidColor.cpp">
+      <Filter>RenderGraph\ConstantBufferStage</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderGraph\ConstantBufferStage\CBPoisson.cpp">
+      <Filter>RenderGraph\ConstantBufferStage</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderGraph\ConstantBufferStage\CBTimestep.cpp">
       <Filter>RenderGraph\ConstantBufferStage</Filter>
     </ClCompile>
     <ClCompile Include="RenderGraph\ConstantBufferStage\ConstantBufferStage.cpp">
@@ -204,6 +218,9 @@
       <Filter>RenderGraph\ResourceStage</Filter>
     </ClCompile>
     <ClCompile Include="RenderGraph\ResourceStage\ResourceStage.cpp">
+      <Filter>RenderGraph\ResourceStage</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderGraph\ResourceStage\ViewportStage.cpp">
       <Filter>RenderGraph\ResourceStage</Filter>
     </ClCompile>
     <ClCompile Include="RenderGraph\Stage.cpp">
@@ -249,11 +266,19 @@
       <Filter>Utils</Filter>
     </ClCompile>
     <ClCompile Include="pch.cpp" />
-    <ClCompile Include="RenderGraph\ConstantBufferStage\CBTimestep.cpp" />
-    <ClCompile Include="RenderGraph\ResourceStage\ViewportStage.cpp" />
+    <ClCompile Include="RenderGraph\ResourceStage\2D-Stable-Fluids\Pressure1DStage.cpp" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="HLSL_CS\Advection2D_CS.hlsl">
+      <Filter>HLSL_CS</Filter>
+    </FxCompile>
+    <FxCompile Include="HLSL_CS\Divergence2D_CS.hlsl">
+      <Filter>HLSL_CS</Filter>
+    </FxCompile>
+    <FxCompile Include="HLSL_CS\GradientSub2D_CS.hlsl">
+      <Filter>HLSL_CS</Filter>
+    </FxCompile>
+    <FxCompile Include="HLSL_CS\Poisson2D_CS.hlsl">
       <Filter>HLSL_CS</Filter>
     </FxCompile>
     <FxCompile Include="HLSL_CS\Sourcing2D_CS.hlsl">

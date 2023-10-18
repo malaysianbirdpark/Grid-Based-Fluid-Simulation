@@ -6,7 +6,7 @@
 #include "NodeManager.h"
 
 Quantity2DStage::Quantity2DStage()
-	: ResourceStage{"2D Quantity Buffer"}
+	: ResourceStage{"2D-Quantity"}
 {
     _incoming[NodeManager::IssueIncomingAttrID()] = -1;
     _attrNames[NodeManager::LastIncomingAttrID()] = { "Modifier" };

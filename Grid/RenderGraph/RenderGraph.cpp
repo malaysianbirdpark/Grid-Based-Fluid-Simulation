@@ -41,10 +41,10 @@ void RenderGraph::Link(int32_t from, int32_t from_attr, int32_t to, int32_t to_a
     std::string const from_type{ std::visit(Stage::GetStageName{}, _graph[from]) };
     std::string const to_type{ std::visit(Stage::GetStageName{}, _graph[to]) };
 
-    if (from_type == "Resource")
-		std::visit(Stage::Consume{std::visit(Stage::Expose{from_attr}, _graph[from]), to_attr}, _graph[to]);
-    else if (to_type == "Resource")
-		std::visit(Stage::Consume{ std::visit(Stage::Expose{to_attr}, _graph[to]), from_attr }, _graph[from]);
+  //  if (from_type == "Resource")
+		//std::visit(Stage::Consume{std::visit(Stage::Expose{from_attr}, _graph[from]), to_attr}, _graph[to]);
+  //  else if (to_type == "Resource")
+		//std::visit(Stage::Consume{ std::visit(Stage::Expose{to_attr}, _graph[to]), from_attr }, _graph[from]);
 
 	++_indegree[to];
     _topology[from].emplace_back(to);

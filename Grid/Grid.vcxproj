@@ -100,17 +100,19 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="RenderGraph\ConstantBufferStage\CBTimestep.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="Platform\Input.h" />
     <ClInclude Include="Platform\Win32.h" />
+    <ClInclude Include="RenderGraph\ResourceStage\2D-Stable-Fluids\Pressure1DStage.h" />
     <ClInclude Include="RenderGraph\ComputeStage\2D-Stable-Fluids\Advection2DStage.h" />
-    <ClInclude Include="RenderGraph\ComputeStage\2D-Stable-Fluids\ComputePressure2DStage.h" />
-    <ClInclude Include="RenderGraph\ComputeStage\2D-Stable-Fluids\Diffuse2DStage.h" />
-    <ClInclude Include="RenderGraph\ComputeStage\2D-Stable-Fluids\ForceApply2DStage.h" />
+    <ClInclude Include="RenderGraph\ComputeStage\2D-Stable-Fluids\Divergence2DStage.h" />
+    <ClInclude Include="RenderGraph\ComputeStage\2D-Stable-Fluids\GradientSubtract2DStage.h" />
+    <ClInclude Include="RenderGraph\ComputeStage\2D-Stable-Fluids\Poisson2DStage.h" />
     <ClInclude Include="RenderGraph\ComputeStage\2D-Stable-Fluids\Sourcing2DStage.h" />
     <ClInclude Include="RenderGraph\ComputeStage\ComputeStage.h" />
     <ClInclude Include="RenderGraph\ConstantBufferStage\CBFluidColor.h" />
+    <ClInclude Include="RenderGraph\ConstantBufferStage\CBPoisson.h" />
+    <ClInclude Include="RenderGraph\ConstantBufferStage\CBTimestep.h" />
     <ClInclude Include="RenderGraph\ConstantBufferStage\ConstantBufferStage.h" />
     <ClInclude Include="RenderGraph\CopyStage.h" />
     <ClInclude Include="RenderGraph\DrawStage.h" />
@@ -121,6 +123,7 @@
     <ClInclude Include="RenderGraph\ResourceStage\2D-Stable-Fluids\Velocity2DStage.h" />
     <ClInclude Include="RenderGraph\ResourceStage\BackBufferStage.h" />
     <ClInclude Include="RenderGraph\ResourceStage\ResourceStage.h" />
+    <ClInclude Include="RenderGraph\ResourceStage\ViewportStage.h" />
     <ClInclude Include="RenderGraph\Stage.h" />
     <ClInclude Include="RenderObject\Material.h" />
     <ClInclude Include="RenderObject\Mesh.h" />
@@ -136,21 +139,22 @@
     <ClInclude Include="Utils\CircularQueue.h" />
     <ClInclude Include="Utils\Clk.h" />
     <ClInclude Include="pch.h" />
-    <ClInclude Include="RenderGraph\ResourceStage\ViewportStage.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="RenderGraph\ConstantBufferStage\CBTimestep.cpp" />
     <ClCompile Include="EntryPoint.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Platform\Input.cpp" />
     <ClCompile Include="Platform\Win32.cpp" />
+    <ClCompile Include="RenderGraph\ResourceStage\2D-Stable-Fluids\Pressure1DStage.cpp" />
     <ClCompile Include="RenderGraph\ComputeStage\2D-Stable-Fluids\Advection2DStage.cpp" />
-    <ClCompile Include="RenderGraph\ComputeStage\2D-Stable-Fluids\ComputePressure2DStage.cpp" />
-    <ClCompile Include="RenderGraph\ComputeStage\2D-Stable-Fluids\Diffuse2DStage.cpp" />
-    <ClCompile Include="RenderGraph\ComputeStage\2D-Stable-Fluids\ForceApply2DStage.cpp" />
+    <ClCompile Include="RenderGraph\ComputeStage\2D-Stable-Fluids\Divergence2DStage.cpp" />
+    <ClCompile Include="RenderGraph\ComputeStage\2D-Stable-Fluids\GradientSubtract2DStage.cpp" />
+    <ClCompile Include="RenderGraph\ComputeStage\2D-Stable-Fluids\Poisson2DStage.cpp" />
     <ClCompile Include="RenderGraph\ComputeStage\2D-Stable-Fluids\Sourcing2DStage.cpp" />
     <ClCompile Include="RenderGraph\ComputeStage\ComputeStage.cpp" />
     <ClCompile Include="RenderGraph\ConstantBufferStage\CBFluidColor.cpp" />
+    <ClCompile Include="RenderGraph\ConstantBufferStage\CBPoisson.cpp" />
+    <ClCompile Include="RenderGraph\ConstantBufferStage\CBTimestep.cpp" />
     <ClCompile Include="RenderGraph\ConstantBufferStage\ConstantBufferStage.cpp" />
     <ClCompile Include="RenderGraph\CopyStage.cpp" />
     <ClCompile Include="RenderGraph\DrawStage.cpp" />
@@ -161,6 +165,7 @@
     <ClCompile Include="RenderGraph\ResourceStage\2D-Stable-Fluids\Velocity2DStage.cpp" />
     <ClCompile Include="RenderGraph\ResourceStage\BackBufferStage.cpp" />
     <ClCompile Include="RenderGraph\ResourceStage\ResourceStage.cpp" />
+    <ClCompile Include="RenderGraph\ResourceStage\ViewportStage.cpp" />
     <ClCompile Include="RenderGraph\Stage.cpp" />
     <ClCompile Include="RenderObject\Material.cpp" />
     <ClCompile Include="RenderObject\Mesh.cpp" />
@@ -178,7 +183,6 @@
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="RenderGraph\ResourceStage\ViewportStage.cpp" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="HLSL_CS\Advection2D_CS.hlsl">
@@ -186,6 +190,24 @@
       <ShaderModel>5.0</ShaderModel>
       <EntryPointName>main</EntryPointName>
       <ObjectFileOutput>../Grid/CSO/Advection2D_CS.cso</ObjectFileOutput>
+    </FxCompile>
+    <FxCompile Include="HLSL_CS\Divergence2D_CS.hlsl">
+      <ShaderType>Compute</ShaderType>
+      <ShaderModel>5.0</ShaderModel>
+      <EntryPointName>main</EntryPointName>
+      <ObjectFileOutput>../Grid/CSO/Divergence2D_CS.cso</ObjectFileOutput>
+    </FxCompile>
+    <FxCompile Include="HLSL_CS\GradientSub2D_CS.hlsl">
+      <ShaderType>Compute</ShaderType>
+      <ShaderModel>5.0</ShaderModel>
+      <EntryPointName>main</EntryPointName>
+      <ObjectFileOutput>../Grid/CSO/GradientSub2D_CS.cso</ObjectFileOutput>
+    </FxCompile>
+    <FxCompile Include="HLSL_CS\Poisson2D_CS.hlsl">
+      <ShaderType>Compute</ShaderType>
+      <ShaderModel>5.0</ShaderModel>
+      <EntryPointName>main</EntryPointName>
+      <ObjectFileOutput>../Grid/CSO/Poisson2D_CS.cso</ObjectFileOutput>
     </FxCompile>
     <FxCompile Include="HLSL_CS\Sourcing2D_CS.hlsl">
       <ShaderType>Compute</ShaderType>

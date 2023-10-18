@@ -24,12 +24,18 @@
 #include "Advection2DStage.h"
 #include "CBFluidColor.h"
 #include "CBTimestep.h"
+#include "Poisson2DStage.h"
+#include "Pressure2DStage.h"
+#include "Pressure1DStage.h"
+#include "CBPoisson.h"
+#include "Divergence2DStage.h"
+#include "GradientSubtract2DStage.h"
 
 Game::Game() 
 {
-	int constexpr width{ 1600 };
-	int constexpr height{ 900 };
-	gViewportInfo.width = 800;
+	int constexpr width{ 1920 };
+	int constexpr height{ 1080 };
+	gViewportInfo.width = 600;
 	gViewportInfo.height = 600;
 	Win32::Init(width, height);
 	Renderer::Init(width, height, gWindowInfo.hWnd);
@@ -39,8 +45,6 @@ Game::Game()
 
 	_object.push_back(std::move(std::make_shared<Sphere>(Renderer::Context())));
 
-	//_renderGraph.InsertStageAfter(-1, TestCS(Renderer::Device(), Renderer::SwapChain()));
-	_renderGraph.AddStage(std::move(std::make_shared<DrawStage>("Earth", _object.back())));
 	_renderGraph.AddStage(std::move(std::make_shared<ViewportStage>()));
 	_renderGraph.AddStage(std::move(std::make_shared<Sourcing2DStage>()));
 	_renderGraph.AddStage(std::move(std::make_shared<Velocity2DStage>()));
@@ -51,17 +55,37 @@ Game::Game()
 	_renderGraph.AddStage(std::move(std::make_shared<CBFluidColor>()));
 	_renderGraph.AddStage(std::move(std::make_shared<Velocity2DStage>()));
 	_renderGraph.AddStage(std::move(std::make_shared<CBTimestep>()));
-	_renderGraph.Link(4, 261, 1, 1);
-	_renderGraph.Link(6, 263, 4, 4);
-	_renderGraph.Link(7, 264, 9, 10);
-	_renderGraph.Link(7, 265, 6, 6);
-	_renderGraph.Link(7, 265, 6, 6);
-	_renderGraph.Link(3, 260, 7, 8);
-	_renderGraph.Link(5, 262, 7, 9);
-	_renderGraph.Link(2, 258, 3, 3);
-	_renderGraph.Link(2, 259, 5, 5);
-	_renderGraph.Link(8, 266, 2, 2);
-	_renderGraph.Link(10, 268, 7, 7);
+	_renderGraph.AddStage(std::move(std::make_shared<Poisson2DStage>()));
+	_renderGraph.AddStage(std::move(std::make_shared<Pressure2DStage>()));
+	_renderGraph.AddStage(std::move(std::make_shared<Pressure1DStage>()));
+	_renderGraph.AddStage(std::move(std::make_shared<CBPoisson>(
+		Renderer::Context(), 
+		- (1.0f / gViewportInfo.width) * (1.0f / gViewportInfo.width), 
+	    4))
+	);
+	_renderGraph.AddStage(std::move(std::make_shared<Divergence2DStage>()));
+	_renderGraph.AddStage(std::move(std::make_shared<GradientSubtract2DStage>()));
+	_renderGraph.AddStage(std::move(std::make_shared<Velocity2DStage>()));
+
+	//_renderGraph.Link(7, 265, 1, 1);
+	//_renderGraph.Link(1, 257, 2, 2);
+	//_renderGraph.Link(1, 258, 4, 4);
+	//_renderGraph.Link(9, 267, 6, 6);
+	//_renderGraph.Link(2, 259, 6, 7);
+	//_renderGraph.Link(4, 261, 6, 8);
+	//_renderGraph.Link(6, 263, 8, 9);
+	//_renderGraph.Link(6, 264, 5, 5);
+	//_renderGraph.Link(11, 269, 10, 10);
+	//_renderGraph.Link(8, 266, 14, 15);
+	//_renderGraph.Link(14, 272, 10, 11);
+	//_renderGraph.Link(10, 268, 12, 14);
+	//_renderGraph.Link(13, 271, 10, 12);
+	//_renderGraph.Link(12, 270, 15, 16);
+	//_renderGraph.Link(8, 266, 15, 17);
+	//_renderGraph.Link(15, 273, 16, 18);
+
+	//_renderGraph.Link(5, 262, 3, 3);
+	//_renderGraph.Link(3, 260, 0, 0);
 }
 
 Game::~Game()

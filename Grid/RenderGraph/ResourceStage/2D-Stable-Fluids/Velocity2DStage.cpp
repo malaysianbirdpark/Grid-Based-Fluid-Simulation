@@ -6,7 +6,7 @@
 #include "NodeManager.h"
 
 Velocity2DStage::Velocity2DStage()
-    : ResourceStage{"2D Velocity Buffer"}
+    : ResourceStage{"2D-Velocity"}
 {
     _incoming[NodeManager::IssueIncomingAttrID()] = -1;
     _attrNames[NodeManager::LastIncomingAttrID()] = { "Modifier" };

@@ -2,7 +2,7 @@
 
 #include "ComputeStage.h"
 
-class Advection2DStage : public ComputeStage
+class Advection2DStage final : public ComputeStage
 {
 public: Advection2DStage();
 public: ~Advection2DStage() override;
