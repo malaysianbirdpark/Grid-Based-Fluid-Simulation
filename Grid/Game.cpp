@@ -45,18 +45,10 @@ Game::Game()
 
 	_object.push_back(std::move(std::make_shared<Sphere>(Renderer::Context())));
 
-	_renderGraph.AddStage(std::move(std::make_shared<ViewportStage>()));
-	_renderGraph.AddStage(std::move(std::make_shared<Sourcing2DStage>()));
-	_renderGraph.AddStage(std::move(std::make_shared<Velocity2DStage>()));
-	_renderGraph.AddStage(std::move(std::make_shared<CopyStage>()));
-	_renderGraph.AddStage(std::move(std::make_shared<Quantity2DStage>()));
-	_renderGraph.AddStage(std::move(std::make_shared<Quantity2DStage>()));
-	_renderGraph.AddStage(std::move(std::make_shared<Advection2DStage>()));
 	_renderGraph.AddStage(std::move(std::make_shared<CBFluidColor>()));
-	_renderGraph.AddStage(std::move(std::make_shared<Velocity2DStage>()));
+	_renderGraph.AddStage(std::move(std::make_shared<Sourcing2DStage>()));
 	_renderGraph.AddStage(std::move(std::make_shared<CBTimestep>()));
-	_renderGraph.AddStage(std::move(std::make_shared<Poisson2DStage>()));
-	_renderGraph.AddStage(std::move(std::make_shared<Pressure2DStage>()));
+	_renderGraph.AddStage(std::move(std::make_shared<Advection2DStage>()));
 	_renderGraph.AddStage(std::move(std::make_shared<Pressure1DStage>()));
 	_renderGraph.AddStage(std::move(std::make_shared<CBPoisson>(
 		Renderer::Context(), 
@@ -64,28 +56,25 @@ Game::Game()
 	    4))
 	);
 	_renderGraph.AddStage(std::move(std::make_shared<Divergence2DStage>()));
+	_renderGraph.AddStage(std::move(std::make_shared<Poisson2DStage>()));
 	_renderGraph.AddStage(std::move(std::make_shared<GradientSubtract2DStage>()));
-	_renderGraph.AddStage(std::move(std::make_shared<Velocity2DStage>()));
+	_renderGraph.AddStage(std::move(std::make_shared<CopyStage>()));
+	_renderGraph.AddStage(std::move(std::make_shared<ViewportStage>()));
 
-	//_renderGraph.Link(7, 265, 1, 1);
-	//_renderGraph.Link(1, 257, 2, 2);
-	//_renderGraph.Link(1, 258, 4, 4);
-	//_renderGraph.Link(9, 267, 6, 6);
-	//_renderGraph.Link(2, 259, 6, 7);
-	//_renderGraph.Link(4, 261, 6, 8);
-	//_renderGraph.Link(6, 263, 8, 9);
-	//_renderGraph.Link(6, 264, 5, 5);
-	//_renderGraph.Link(11, 269, 10, 10);
-	//_renderGraph.Link(8, 266, 14, 15);
-	//_renderGraph.Link(14, 272, 10, 11);
-	//_renderGraph.Link(10, 268, 12, 14);
-	//_renderGraph.Link(13, 271, 10, 12);
-	//_renderGraph.Link(12, 270, 15, 16);
-	//_renderGraph.Link(8, 266, 15, 17);
-	//_renderGraph.Link(15, 273, 16, 18);
-
-	//_renderGraph.Link(5, 262, 3, 3);
-	//_renderGraph.Link(3, 260, 0, 0);
+	_renderGraph.Link(0, 256, 1, 0);
+	_renderGraph.Link(2, 259, 3, 3);
+	_renderGraph.Link(1, 257, 3, 4);
+	_renderGraph.Link(1, 258, 3, 5);
+	_renderGraph.Link(3, 261, 9, 13);
+	_renderGraph.Link(3, 261, 1, 2);
+	_renderGraph.Link(9, 267, 10, 14);
+	_renderGraph.Link(4, 262, 7, 8);
+	_renderGraph.Link(3, 260, 6, 7);
+	_renderGraph.Link(6, 264, 7, 9);
+	_renderGraph.Link(5, 263, 7, 10);
+	_renderGraph.Link(7, 265, 8, 11);
+	_renderGraph.Link(3, 260, 8, 12);
+	_renderGraph.Link(8, 266, 1, 1);
 }
 
 Game::~Game()

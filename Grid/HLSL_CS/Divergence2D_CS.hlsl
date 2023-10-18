@@ -1,6 +1,6 @@
 Texture2D<float2> x_in : register(t0);
 
-RWTexture2D<float> x_out : register(u0);
+RWTexture2D<float> div : register(u0);
 
 SamplerState sampler0 : register(s0);
 
@@ -21,5 +21,5 @@ void main( uint3 DTid : SV_DispatchThreadID )
 	const float2 right = x_in.SampleLevel(sampler0, pos + float2(dw, 0.0f), 0.0f);
 	const float2 left = x_in.SampleLevel(sampler0, pos - float2(dw, 0.0f), 0.0f);
 
-	x_out[DTid.xy] = ((right.x - left.x) + (up.y - down.y)) * dw * 0.5f;
+	div[DTid.xy] = (right.x - left.x) * dw + (up.y - down.y) * dh;
 }

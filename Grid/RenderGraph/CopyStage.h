@@ -23,6 +23,12 @@ protected: ID3D11Resource* _dest;
 
 class ResolveStage final : public CopyStage {
 public: explicit ResolveStage();
-public: ~ResolveStage() = default;
+public: virtual ~ResolveStage() = default;
 public: virtual void Run(ID3D11DeviceContext& context) override;
+};
+
+class FeedBackStage final : public CopyStage {
+public: explicit FeedBackStage(ID3D11Resource* dest);
+public: virtual ~FeedBackStage() = default;
+protected:
 };

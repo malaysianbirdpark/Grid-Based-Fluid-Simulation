@@ -24,6 +24,7 @@ public: std::unordered_map<int32_t, int32_t> _outgoing{};
 public:  std::unordered_map<int32_t, std::string> _attrNames;
 
 private:   Microsoft::WRL::ComPtr<ID3D11ComputeShader>                     _cs;
+protected: std::vector<Microsoft::WRL::ComPtr<ID3D11Texture2D>>            _resource;
 protected: std::vector<Microsoft::WRL::ComPtr<ID3D11UnorderedAccessView>>  _uav;
 protected: std::vector<Microsoft::WRL::ComPtr<ID3D11ShaderResourceView>>   _srv;
 

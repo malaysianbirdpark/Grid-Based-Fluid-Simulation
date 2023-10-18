@@ -64,3 +64,10 @@ void ResolveStage::Run(ID3D11DeviceContext& context)
     if ((_dest != nullptr) & (_src != nullptr))
 		context.ResolveSubresource(_dest, 0u, _src, 0u, DXGI_FORMAT_R8G8B8A8_UNORM);
 }
+
+FeedBackStage::FeedBackStage(ID3D11Resource* dest)
+{
+    _name = { "FeedBack" };
+    _stageName = { "FeedBackStage" };
+    _dest = dest;
+}

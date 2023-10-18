@@ -60,3 +60,6 @@ inline struct _ViewportInfo {
 	int32_t width{};
 	int32_t height{};
 } gViewportInfo;
+
+inline ID3D11Resource* velocity_feedback {nullptr};
+inline ID3D11Resource* quantity_feedback {nullptr};
