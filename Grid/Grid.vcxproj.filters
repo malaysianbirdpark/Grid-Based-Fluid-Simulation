@@ -67,6 +67,9 @@
     <ClInclude Include="RenderGraph\ComputeStage\ComputeStage.h">
       <Filter>RenderGraph\ComputeStage</Filter>
     </ClInclude>
+    <ClInclude Include="RenderGraph\ComputeStage\Initializer2DStage.h">
+      <Filter>RenderGraph\ComputeStage</Filter>
+    </ClInclude>
     <ClInclude Include="RenderGraph\ConstantBufferStage\CBFluidColor.h">
       <Filter>RenderGraph\ConstantBufferStage</Filter>
     </ClInclude>
@@ -90,6 +93,9 @@
     </ClInclude>
     <ClInclude Include="RenderGraph\RenderGraph.h">
       <Filter>RenderGraph</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderGraph\ResourceStage\2D-Stable-Fluids\Pressure1DStage.h">
+      <Filter>RenderGraph\ResourceStage\2D-Stable-Fluids</Filter>
     </ClInclude>
     <ClInclude Include="RenderGraph\ResourceStage\2D-Stable-Fluids\Pressure2DStage.h">
       <Filter>RenderGraph\ResourceStage\2D-Stable-Fluids</Filter>
@@ -152,7 +158,6 @@
       <Filter>Utils</Filter>
     </ClInclude>
     <ClInclude Include="pch.h" />
-    <ClInclude Include="RenderGraph\ResourceStage\2D-Stable-Fluids\Pressure1DStage.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EntryPoint.cpp" />
@@ -181,6 +186,9 @@
     <ClCompile Include="RenderGraph\ComputeStage\ComputeStage.cpp">
       <Filter>RenderGraph\ComputeStage</Filter>
     </ClCompile>
+    <ClCompile Include="RenderGraph\ComputeStage\Initializer2DStage.cpp">
+      <Filter>RenderGraph\ComputeStage</Filter>
+    </ClCompile>
     <ClCompile Include="RenderGraph\ConstantBufferStage\CBFluidColor.cpp">
       <Filter>RenderGraph\ConstantBufferStage</Filter>
     </ClCompile>
@@ -204,6 +212,9 @@
     </ClCompile>
     <ClCompile Include="RenderGraph\RenderGraph.cpp">
       <Filter>RenderGraph</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderGraph\ResourceStage\2D-Stable-Fluids\Pressure1DStage.cpp">
+      <Filter>RenderGraph\ResourceStage\2D-Stable-Fluids</Filter>
     </ClCompile>
     <ClCompile Include="RenderGraph\ResourceStage\2D-Stable-Fluids\Pressure2DStage.cpp">
       <Filter>RenderGraph\ResourceStage\2D-Stable-Fluids</Filter>
@@ -266,7 +277,6 @@
       <Filter>Utils</Filter>
     </ClCompile>
     <ClCompile Include="pch.cpp" />
-    <ClCompile Include="RenderGraph\ResourceStage\2D-Stable-Fluids\Pressure1DStage.cpp" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="HLSL_CS\Advection2D_CS.hlsl">
@@ -276,6 +286,9 @@
       <Filter>HLSL_CS</Filter>
     </FxCompile>
     <FxCompile Include="HLSL_CS\GradientSub2D_CS.hlsl">
+      <Filter>HLSL_CS</Filter>
+    </FxCompile>
+    <FxCompile Include="HLSL_CS\Initializer2D_CS.hlsl">
       <Filter>HLSL_CS</Filter>
     </FxCompile>
     <FxCompile Include="HLSL_CS\Poisson2D_CS.hlsl">

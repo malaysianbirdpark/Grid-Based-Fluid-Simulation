@@ -39,7 +39,6 @@ GradientSubtract2DStage::GradientSubtract2DStage()
     _resultID = NodeManager::IssueOutgoingAttrID();
     _outgoing[_resultID] = -1;
     _attrNames[_resultID] = { "Result" };
-
 }
 
 void GradientSubtract2DStage::Run(ID3D11DeviceContext& context)

@@ -6,9 +6,9 @@
 Divergence2DStage::Divergence2DStage()
 	: ComputeStage{"2D-Divergence Operation", "./CSO/Divergence2D_CS.cso", 32, 32, 1}
 {
-    _uav.resize(1);
+    _uav.resize(2);
     _srv.resize(1);
-    _nullUav.resize(1);
+    _nullUav.resize(2);
     _nullSrv.resize(1);
 
     _resource.resize(1);
@@ -45,7 +45,8 @@ void Divergence2DStage::Run(ID3D11DeviceContext& context)
 void Divergence2DStage::Consume(ID3D11Resource* resource, int32_t attribute_id)
 {
     if (attribute_id == _xInID)
-        pDevice->CreateShaderResourceView(resource, nullptr, _srv[0].ReleaseAndGetAddressOf());
+        pDevice->CreateUnorderedAccessView(resource, nullptr, _uav[1].ReleaseAndGetAddressOf());
+        //pDevice->CreateShaderResourceView(resource, nullptr, _srv[0].ReleaseAndGetAddressOf());
 }
 
 ID3D11Resource* Divergence2DStage::Expose(int32_t attribute_id)

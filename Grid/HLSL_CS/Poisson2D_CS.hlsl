@@ -27,5 +27,6 @@ void main( uint3 DTid : SV_DispatchThreadID )
 	const float right = x_in.SampleLevel(sampler0, pos + float2(dw, 0.0f), 0.0f);
 	const float left = x_in.SampleLevel(sampler0, pos - float2(dw, 0.0f), 0.0f);
 
-	x_out[DTid.xy] = (up + down + left + right - alpha * b_in.SampleLevel(sampler0, pos, 0.0f)) * r_beta;
+	//x_out[DTid.xy] = (up + down + left + right - alpha * b_in.SampleLevel(sampler0, pos, 0.0f)) * r_beta;
+	x_out[DTid.xy] = (up + down + left + right - b_in.SampleLevel(sampler0, pos, 0.0f)) * r_beta;
 }

@@ -30,6 +30,7 @@
 #include "CBPoisson.h"
 #include "Divergence2DStage.h"
 #include "GradientSubtract2DStage.h"
+#include "Initializer2DStage.h"
 
 Game::Game() 
 {
@@ -49,6 +50,7 @@ Game::Game()
 	_renderGraph.AddStage(std::move(std::make_shared<Sourcing2DStage>()));
 	_renderGraph.AddStage(std::move(std::make_shared<CBTimestep>()));
 	_renderGraph.AddStage(std::move(std::make_shared<Advection2DStage>()));
+	_renderGraph.AddStage(std::move(std::make_shared<Initializer2DStage>()));
 	_renderGraph.AddStage(std::move(std::make_shared<Pressure1DStage>()));
 	_renderGraph.AddStage(std::move(std::make_shared<CBPoisson>(
 		Renderer::Context(), 
@@ -65,16 +67,18 @@ Game::Game()
 	_renderGraph.Link(2, 259, 3, 3);
 	_renderGraph.Link(1, 257, 3, 4);
 	_renderGraph.Link(1, 258, 3, 5);
-	_renderGraph.Link(3, 261, 9, 13);
+	_renderGraph.Link(3, 260, 7, 7);
+	_renderGraph.Link(3, 261, 10, 13);
+	_renderGraph.Link(4, 262, 5, 6);
+	_renderGraph.Link(10, 268, 11, 14);
+	_renderGraph.Link(7, 265, 8, 9);
+	_renderGraph.Link(5, 263, 8, 8);
+	_renderGraph.Link(6, 264, 8, 10);
+	_renderGraph.Link(8, 266, 9, 11);
+	_renderGraph.Link(3, 260, 9, 12);
+	_renderGraph.Link(9, 267, 1, 1);
 	_renderGraph.Link(3, 261, 1, 2);
-	_renderGraph.Link(9, 267, 10, 14);
-	_renderGraph.Link(4, 262, 7, 8);
-	_renderGraph.Link(3, 260, 6, 7);
-	_renderGraph.Link(6, 264, 7, 9);
-	_renderGraph.Link(5, 263, 7, 10);
-	_renderGraph.Link(7, 265, 8, 11);
-	_renderGraph.Link(3, 260, 8, 12);
-	_renderGraph.Link(8, 266, 1, 1);
+
 }
 
 Game::~Game()
