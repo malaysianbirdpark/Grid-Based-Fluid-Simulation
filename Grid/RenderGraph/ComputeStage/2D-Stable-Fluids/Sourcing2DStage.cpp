@@ -15,7 +15,7 @@ Sourcing2DStage::Sourcing2DStage()
 
     _fluidColorID = NodeManager::IssueIncomingAttrID();
     _incoming[_fluidColorID] = -1;
-    _attrNames[_fluidColorID] = { "Fluid Color (CB)" };
+    _attrNames[_fluidColorID] = { "Fluid Color(CB)" };
 
     _velocityID = NodeManager::IssueOutgoingAttrID();
     _outgoing[_velocityID] = -1;

@@ -19,12 +19,19 @@ private: static void   InitSamplers();
 private:
 	inline static Microsoft::WRL::ComPtr<ID3D11Device>              _device;
 	inline static Microsoft::WRL::ComPtr<ID3D11DeviceContext>       _immContext;
+	inline static Microsoft::WRL::ComPtr<ID3D11DeviceContext>       _defaultContext;
+	inline static Microsoft::WRL::ComPtr<ID3D11DeviceContext>       _imguiContext;
 	inline static Microsoft::WRL::ComPtr<IDXGISwapChain>            _swapChain;
 
     inline static DirectX::XMFLOAT4X4                               _proj;
 
     inline static Microsoft::WRL::ComPtr<ID3D11Resource>            _backBuffers;
     inline static Microsoft::WRL::ComPtr<ID3D11RenderTargetView>    _backBufferView;
+
+    inline static Microsoft::WRL::ComPtr<ID3D11Texture2D>           _viewportBuffer;
+
+    inline static Microsoft::WRL::ComPtr<ID3D11Texture2D>           _imguiBuffer;
+    inline static Microsoft::WRL::ComPtr<ID3D11RenderTargetView>    _imguiRTV;
 
     inline static Microsoft::WRL::ComPtr<ID3D11RasterizerState>     _rasterizerState;
 

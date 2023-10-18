@@ -47,3 +47,16 @@
 #include <dxgiformat.h>
 
 inline ID3D11Device* pDevice {nullptr};
+inline Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> pViewportSRV{ nullptr };
+
+inline struct _WindowInfo {
+	int32_t width{};
+	int32_t height{};
+	HWND hWnd{ nullptr };
+	class WindowClass* wndClass{ nullptr };
+} gWindowInfo;
+
+inline struct _ViewportInfo {
+	int32_t width{};
+	int32_t height{};
+} gViewportInfo;

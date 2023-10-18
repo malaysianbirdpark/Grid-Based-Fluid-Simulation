@@ -4,7 +4,7 @@
 
 class CBFluidColor final : public ConstantBufferStage
 {
-    struct Constants {
+	struct Constants {
 		DirectX::XMFLOAT4 _color;
 	};
 

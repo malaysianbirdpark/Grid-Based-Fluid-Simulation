@@ -18,8 +18,8 @@ Velocity2DStage::Velocity2DStage()
 	desc.Usage = D3D11_USAGE_DEFAULT;
 	desc.CPUAccessFlags = 0u;
 	desc.Format = DXGI_FORMAT_R16G16_FLOAT;
-	desc.Width = 800u;
-	desc.Height = 600u;
+	desc.Width = gViewportInfo.width;
+	desc.Height = gViewportInfo.height;
 	desc.MipLevels = 1u;
 	desc.ArraySize = 1u;
 	desc.SampleDesc.Count = 1;

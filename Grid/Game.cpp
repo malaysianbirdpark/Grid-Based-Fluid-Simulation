@@ -16,20 +16,23 @@
 
 #include "DrawStage.h"
 #include "BackBufferStage.h"
+#include "ViewportStage.h"
 #include "Velocity2DStage.h"
 #include "Quantity2DStage.h"
 #include "Sourcing2DStage.h"
 #include "CopyStage.h"
 #include "Advection2DStage.h"
 #include "CBFluidColor.h"
+#include "CBTimestep.h"
 
 Game::Game() 
 {
-	int constexpr width{ 800 };
-	int constexpr height{ 600 };
+	int constexpr width{ 1600 };
+	int constexpr height{ 900 };
+	gViewportInfo.width = 800;
+	gViewportInfo.height = 600;
 	Win32::Init(width, height);
-	Renderer::Init(width, height, Win32::GetNativeWnd());
-	ImGuiRenderer::Init(Renderer::Context());
+	Renderer::Init(width, height, gWindowInfo.hWnd);
 	Camera::Init();
 
 	Clk::Init();
@@ -38,7 +41,7 @@ Game::Game()
 
 	//_renderGraph.InsertStageAfter(-1, TestCS(Renderer::Device(), Renderer::SwapChain()));
 	_renderGraph.AddStage(std::move(std::make_shared<DrawStage>("Earth", _object.back())));
-	_renderGraph.AddStage(std::move(std::make_shared<BackBufferStage>(Renderer::SwapChain())));
+	_renderGraph.AddStage(std::move(std::make_shared<ViewportStage>()));
 	_renderGraph.AddStage(std::move(std::make_shared<Sourcing2DStage>()));
 	_renderGraph.AddStage(std::move(std::make_shared<Velocity2DStage>()));
 	_renderGraph.AddStage(std::move(std::make_shared<CopyStage>()));
@@ -46,14 +49,19 @@ Game::Game()
 	_renderGraph.AddStage(std::move(std::make_shared<Quantity2DStage>()));
 	_renderGraph.AddStage(std::move(std::make_shared<Advection2DStage>()));
 	_renderGraph.AddStage(std::move(std::make_shared<CBFluidColor>()));
+	_renderGraph.AddStage(std::move(std::make_shared<Velocity2DStage>()));
+	_renderGraph.AddStage(std::move(std::make_shared<CBTimestep>()));
 	_renderGraph.Link(4, 261, 1, 1);
 	_renderGraph.Link(6, 263, 4, 4);
+	_renderGraph.Link(7, 264, 9, 10);
 	_renderGraph.Link(7, 265, 6, 6);
-	_renderGraph.Link(3, 260, 7, 7);
-	_renderGraph.Link(5, 262, 7, 8);
+	_renderGraph.Link(7, 265, 6, 6);
+	_renderGraph.Link(3, 260, 7, 8);
+	_renderGraph.Link(5, 262, 7, 9);
 	_renderGraph.Link(2, 258, 3, 3);
 	_renderGraph.Link(2, 259, 5, 5);
 	_renderGraph.Link(8, 266, 2, 2);
+	_renderGraph.Link(10, 268, 7, 7);
 }
 
 Game::~Game()

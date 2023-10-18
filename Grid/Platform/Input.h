@@ -34,8 +34,8 @@ private:
     static void FreeCursor();
     static void ShowCursor();
 
-    //static void EnableImGuiMouse();
-    //static void DisableImGuiMouse();
+    static void EnableImGuiMouse();
+    static void DisableImGuiMouse();
 private:
     struct RawMouseData {
         int x;

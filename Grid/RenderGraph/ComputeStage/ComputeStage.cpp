@@ -34,8 +34,8 @@ void ComputeStage::Run(ID3D11DeviceContext& context) {
 	context.CSSetUnorderedAccessViews(0u, static_cast<UINT>(_uav.size()), _uav[0].GetAddressOf(), nullptr);
 	context.CSSetShader(_cs.Get(), nullptr, 0u);
 	context.Dispatch(
-        static_cast<UINT>(ceil(800.0f / _groupX)),
-        static_cast<UINT>(ceil(600.0f / _groupY)), 
+        static_cast<UINT>(ceil(static_cast<float>(gViewportInfo.width) / _groupX)),
+        static_cast<UINT>(ceil(static_cast<float>(gViewportInfo.height) / _groupY)), 
         _groupZ
     );
 	SetBarrier(context);

@@ -1,14 +1,17 @@
 #include "pch.h"
 #include "Renderer.h"
 
+#include <array>
+
 #include "ImGuiRenderer.h"
+
 
 void Renderer::Init(int width, int height, HWND native_wnd)
 {
 	DXGI_SWAP_CHAIN_DESC sd{};
     sd.BufferDesc.Width = 0;
     sd.BufferDesc.Height = 0;
-    sd.BufferDesc.Format = DXGI_FORMAT_R16G16B16A16_FLOAT;
+    sd.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
     sd.BufferDesc.RefreshRate.Numerator = 0;
     sd.BufferDesc.RefreshRate.Denominator = 0;
     sd.BufferDesc.Scaling = DXGI_MODE_SCALING_UNSPECIFIED;
@@ -57,12 +60,37 @@ void Renderer::Init(int width, int height, HWND native_wnd)
     swap_chain.GetBuffer(0u, IID_PPV_ARGS(_backBuffers.ReleaseAndGetAddressOf()));
     device.CreateRenderTargetView(_backBuffers.Get(), nullptr, _backBufferView.ReleaseAndGetAddressOf());
 
+    D3D11_TEXTURE2D_DESC desc;
+    static_cast<ID3D11Texture2D*>(_backBuffers.Get())->GetDesc(&desc);
+    desc.MipLevels = desc.ArraySize = 1;
+    desc.BindFlags = D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE;
+    desc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+    desc.Usage = D3D11_USAGE_DEFAULT;
+    desc.MiscFlags = 0;
+    desc.CPUAccessFlags = 0;
+    desc.SampleDesc.Count = 1;
+    desc.SampleDesc.Quality = 0;
+
+    device.CreateTexture2D(&desc, nullptr, _imguiBuffer.ReleaseAndGetAddressOf());
+    device.CreateRenderTargetView(_imguiBuffer.Get(), nullptr, _imguiRTV.ReleaseAndGetAddressOf());
+
+    desc.Format = DXGI_FORMAT_R16G16B16A16_FLOAT;
+    desc.Width = gViewportInfo.width;
+    desc.Height = gViewportInfo.height;
+    device.CreateTexture2D(&desc, nullptr, _viewportBuffer.ReleaseAndGetAddressOf());
+    device.CreateShaderResourceView(_viewportBuffer.Get(), nullptr, pViewportSRV.ReleaseAndGetAddressOf());
+
     _viewport.Width = static_cast<float>(width);
     _viewport.Height = static_cast<float>(height);
     _viewport.MinDepth = 0.0f;
     _viewport.MaxDepth = 1.0f;
     _viewport.TopLeftX = 0.0f;
     _viewport.TopLeftY = 0.0f;
+
+    device.CreateDeferredContext(0u, _defaultContext.ReleaseAndGetAddressOf());
+    device.CreateDeferredContext(0u, _imguiContext.ReleaseAndGetAddressOf());
+
+	ImGuiRenderer::Init(_imguiContext.Get());
 
     pDevice = _device.Get();
 
@@ -76,16 +104,23 @@ void Renderer::BeginFrame()
 {
 	static float constexpr clear_color[4]{ 0.0f, 0.0f, 0.0f, 1.0f };
 
-    _immContext->RSSetViewports(1u, &_viewport);
-    _immContext->RSSetState(_rasterizerState.Get());
-    _immContext->OMSetDepthStencilState(_dsDefault.Get(), 0u);
-    _immContext->OMSetBlendState(_bsDefault.Get(), nullptr, 0xFFFFFFFFu);
-    _immContext->OMSetRenderTargets(1u, _backBufferView.GetAddressOf(), _dsv.Get());
-    _immContext->ClearRenderTargetView(_backBufferView.Get(), clear_color);
-    _immContext->ClearDepthStencilView(_dsv.Get(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0u);
+    _defaultContext->RSSetViewports(1u, &_viewport);
+    _defaultContext->RSSetState(_rasterizerState.Get());
+    _defaultContext->OMSetDepthStencilState(_dsDefault.Get(), 0u);
+    _defaultContext->OMSetBlendState(_bsDefault.Get(), nullptr, 0xFFFFFFFFu);
+    _defaultContext->OMSetRenderTargets(1u, _backBufferView.GetAddressOf(), _dsv.Get());
+    _defaultContext->ClearRenderTargetView(_backBufferView.Get(), clear_color);
+    _defaultContext->ClearDepthStencilView(_dsv.Get(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0u);
 
-    _immContext->PSSetSamplers(0u, 1u, _sampler.GetAddressOf());
-    _immContext->CSSetSamplers(0u, 1u, _sampler.GetAddressOf());
+    _defaultContext->PSSetSamplers(0u, 1u, _sampler.GetAddressOf());
+    _defaultContext->CSSetSamplers(0u, 1u, _sampler.GetAddressOf());
+
+	_imguiContext->RSSetViewports(1u, &_viewport);
+    _imguiContext->RSSetState(_rasterizerState.Get());
+    _imguiContext->OMSetDepthStencilState(_dsDefault.Get(), 0u);
+    _imguiContext->OMSetRenderTargets(1u, _imguiRTV.GetAddressOf(), nullptr);
+
+    _imguiContext->CopyResource(_backBuffers.Get(), _imguiBuffer.Get());
 
     ImGuiRenderer::BeginFrame();
 }
@@ -93,6 +128,17 @@ void Renderer::BeginFrame()
 void Renderer::EndFrame()
 {
     ImGuiRenderer::EndFrame();
+
+    static std::array<ID3D11CommandList*, 2> cmd_lists{};
+    _defaultContext->FinishCommandList(FALSE, &cmd_lists[0]);
+    _imguiContext->FinishCommandList(FALSE, &cmd_lists[1]);
+
+	_immContext->ExecuteCommandList(cmd_lists[0], FALSE);
+	_immContext->ExecuteCommandList(cmd_lists[1], FALSE);
+
+    cmd_lists[0]->Release();
+    cmd_lists[1]->Release();
+
     _swapChain->Present(0u, 0u);
 }
 
@@ -108,7 +154,7 @@ ID3D11Device& Renderer::Device()
 
 ID3D11DeviceContext& Renderer::Context()
 {
-    return *_immContext.Get();
+    return *_defaultContext.Get();
 }
 
 IDXGISwapChain& Renderer::SwapChain()
@@ -192,9 +238,9 @@ void Renderer::InitSamplers()
         sd.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
         //sd.Filter = D3D11_FILTER_ANISOTROPIC;
         sd.ComparisonFunc = D3D11_COMPARISON_NEVER;
-        sd.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
-        sd.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
-        sd.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
+        sd.AddressU = D3D11_TEXTURE_ADDRESS_CLAMP;
+        sd.AddressV = D3D11_TEXTURE_ADDRESS_CLAMP;
+        sd.AddressW = D3D11_TEXTURE_ADDRESS_CLAMP;
         //sd.MaxAnisotropy = D3D11_REQ_MAXANISOTROPY;
         sd.MaxAnisotropy = 1;
         sd.MipLODBias = 0.0f;

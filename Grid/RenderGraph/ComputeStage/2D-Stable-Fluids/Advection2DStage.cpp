@@ -13,6 +13,10 @@ Advection2DStage::Advection2DStage()
     _nullUav.resize(2);
     _nullSrv.resize(2);
 
+    _cbTimestepID = NodeManager::IssueIncomingAttrID();
+    _incoming[_cbTimestepID] = -1;
+    _attrNames[_cbTimestepID] = { "Timestep(CB)" };
+
     _velocityInID = NodeManager::IssueIncomingAttrID();
     _incoming[_velocityInID] = -1;
     _attrNames[_velocityInID] = { "Velocity in" };
@@ -40,18 +44,17 @@ void Advection2DStage::Run(ID3D11DeviceContext& context) {
     Microsoft::WRL::ComPtr<ID3D11Resource> src {nullptr};
     Microsoft::WRL::ComPtr<ID3D11Resource> dest {nullptr};
 
-    //_uav[0]->GetResource(src.ReleaseAndGetAddressOf());
-    //_srv[0]->GetResource(dest.ReleaseAndGetAddressOf());
-    //context.CopyResource(dest.Get(), src.Get());
+    if ((_uav[0] != nullptr) & (_srv[0].Get() != nullptr)) {
+		_uav[0]->GetResource(src.ReleaseAndGetAddressOf());
+		_srv[0]->GetResource(dest.ReleaseAndGetAddressOf());
+		context.CopyResource(dest.Get(), src.Get());
+    }
 
-    _uav[1]->GetResource(src.ReleaseAndGetAddressOf());
-    _srv[1]->GetResource(dest.ReleaseAndGetAddressOf());
-    context.CopyResource(dest.Get(), src.Get());
-
-    //std::swap(_uav[0], _uav[2]);
-    //std::swap(_uav[1], _uav[3]);
-    //std::swap(_srv[0], _srv[2]);
-    //std::swap(_srv[1], _srv[3]);
+    if ((_uav[1] != nullptr) & (_srv[1].Get() != nullptr)) {
+		_uav[1]->GetResource(src.ReleaseAndGetAddressOf());
+		_srv[1]->GetResource(dest.ReleaseAndGetAddressOf());
+		context.CopyResource(dest.Get(), src.Get());
+    }
 }
 
 void Advection2DStage::Consume(ID3D11Resource* resource, int32_t attribute_id)

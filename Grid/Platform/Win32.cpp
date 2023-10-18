@@ -7,13 +7,13 @@
 
 IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
-Win32::WindowClass::WindowClass() noexcept
+WindowClass::WindowClass() noexcept
     : _name{ "Window" }, hInst{ GetModuleHandle(nullptr) }
 {
     WNDCLASSEX wc{};
     wc.cbSize = sizeof(wc);
     wc.style = CS_OWNDC;
-    wc.lpfnWndProc = HandleMsgSetup;
+    wc.lpfnWndProc = Win32::HandleMsgSetup;
     wc.cbClsExtra = 0;
     wc.cbWndExtra = 0;
     wc.hInstance = GetInstance();
@@ -26,18 +26,18 @@ Win32::WindowClass::WindowClass() noexcept
     RegisterClassEx(&wc);
 }
 
-Win32::WindowClass::~WindowClass() {
+WindowClass::~WindowClass() {
 }
 
-void Win32::WindowClass::Shutdown() {
+void WindowClass::Shutdown() {
     UnregisterClass(_name.c_str(), GetInstance());
 }
 
 void Win32::Init(int const width, int const height, char const* name) {
-    _wndData.wndClass = new WindowClass{};
+    gWindowInfo.wndClass = new WindowClass{};
 
-    _wndData.width = width;
-    _wndData.height = height;
+    gWindowInfo.width = width;
+    gWindowInfo.height = height;
 
     // calculate window size base on desired client region size 
     RECT wr;
@@ -51,8 +51,8 @@ void Win32::Init(int const width, int const height, char const* name) {
 
     // create window & get hWnd
     Win32 p{};
-    _wndData.hWnd = CreateWindow(
-        _wndData.wndClass->GetName(),
+    gWindowInfo.hWnd = CreateWindow(
+        gWindowInfo.wndClass->GetName(),
         name,
         WS_CAPTION | WS_MINIMIZEBOX | WS_SYSMENU, //| WS_THICKFRAME,
         CW_USEDEFAULT,
@@ -61,7 +61,7 @@ void Win32::Init(int const width, int const height, char const* name) {
         wr.bottom - wr.top,
         nullptr,
         nullptr,
-        _wndData.wndClass->GetInstance(),
+        gWindowInfo.wndClass->GetInstance(),
         &p
     );
     /*
@@ -70,15 +70,15 @@ void Win32::Init(int const width, int const height, char const* name) {
     }
     */
 
-    Input::Init(_wndData.hWnd);
+    Input::Init(gWindowInfo.hWnd);
 
-    ShowWindow(_wndData.hWnd, SW_SHOWDEFAULT);
+    ShowWindow(gWindowInfo.hWnd, SW_SHOWDEFAULT);
 }
 
 void Win32::Shutdown() {
-    _wndData.wndClass->Shutdown();
-    delete _wndData.wndClass;
-    DestroyWindow(_wndData.hWnd);
+    gWindowInfo.wndClass->Shutdown();
+    delete gWindowInfo.wndClass;
+    DestroyWindow(gWindowInfo.hWnd);
 }
 
 std::optional<int> Win32::PumpMessage() {
@@ -95,8 +95,8 @@ std::optional<int> Win32::PumpMessage() {
 }
 
 void Win32::SetWindowSize(int width, int height) {
-    _wndData.width = width;
-    _wndData.height = height;
+    gWindowInfo.width = width;
+    gWindowInfo.height = height;
 }
 
 void Win32::SetViewportSize(int width, int height) {
@@ -151,8 +151,8 @@ LRESULT Win32::HandleMsg(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) noex
         case WM_KEYUP:
         case WM_SYSKEYUP:
         case WM_CHAR:
-            if (imgui_io.WantCaptureKeyboard)
-                break;
+            //if (imgui_io.WantCaptureKeyboard)
+            //    break;
             DirectX::Keyboard::ProcessMessage(msg, wParam, lParam);
             break;
         case WM_MENUCHAR:

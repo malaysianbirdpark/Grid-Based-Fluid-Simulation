@@ -143,6 +143,8 @@
       <Filter>Utils</Filter>
     </ClInclude>
     <ClInclude Include="pch.h" />
+    <ClInclude Include="RenderGraph\ConstantBufferStage\CBTimestep.h" />
+    <ClInclude Include="RenderGraph\ResourceStage\ViewportStage.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EntryPoint.cpp" />
@@ -247,6 +249,8 @@
       <Filter>Utils</Filter>
     </ClCompile>
     <ClCompile Include="pch.cpp" />
+    <ClCompile Include="RenderGraph\ConstantBufferStage\CBTimestep.cpp" />
+    <ClCompile Include="RenderGraph\ResourceStage\ViewportStage.cpp" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="HLSL_CS\Advection2D_CS.hlsl">

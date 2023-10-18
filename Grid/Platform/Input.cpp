@@ -1,6 +1,8 @@
 #include "pch.h"
 #include "Input.h"
 
+#include "imgui.h"
+
 void Input::Init(HWND hWnd)
 {
     _hWnd = hWnd;
@@ -97,7 +99,7 @@ void Input::EnableCursor()
 {
     _cursorEnabled = true;
     ShowCursor();
-    //EnableImGuiMouse();
+    EnableImGuiMouse();
     FreeCursor();
 }
 
@@ -105,16 +107,18 @@ void Input::DisableCursor()
 {
     _cursorEnabled = false;
     HideCursor();
-    //DisableImGuiMouse();
+    DisableImGuiMouse();
     ConfineCursor();
 }
 
 void Input::ClearKeyboard()
 {
+    _keyboard.Reset();
 }
 
 void Input::ClearMouse()
 {
+    _mouse.ResetScrollWheelValue();
 }
 
 void Input::ConfineCursor()
@@ -134,11 +138,18 @@ void Input::HideCursor()
 void Input::FreeCursor()
 {
     ClipCursor(nullptr);
-
 }
 
 void Input::ShowCursor()
 {
     while (::ShowCursor(TRUE) < 0)
         ;
+}
+
+void Input::EnableImGuiMouse() {
+    ImGui::GetIO().ConfigFlags &= ~ImGuiConfigFlags_NoMouse;
+}
+
+void Input::DisableImGuiMouse() {
+    ImGui::GetIO().ConfigFlags |= ImGuiConfigFlags_NoMouse;
 }
