@@ -37,22 +37,14 @@ Divergence2DStage::Divergence2DStage()
     _attrNames[_xOutID] = { "x out" };
 }
 
-void Divergence2DStage::Run(ID3D11DeviceContext& context)
-{
-    ComputeStage::Run(context);
-}
-
 void Divergence2DStage::Consume(ID3D11Resource* resource, int32_t attribute_id)
 {
     if (attribute_id == _xInID)
         pDevice->CreateUnorderedAccessView(resource, nullptr, _uav[1].ReleaseAndGetAddressOf());
-        //pDevice->CreateShaderResourceView(resource, nullptr, _srv[0].ReleaseAndGetAddressOf());
 }
 
 ID3D11Resource* Divergence2DStage::Expose(int32_t attribute_id)
 {
-    ID3D11Resource* resource {nullptr};
     if (attribute_id == _xOutID)
-        _uav[0]->GetResource(&resource);
-    return resource;
+		return static_cast<ID3D11Resource*>(_resource[0].Get());
 }

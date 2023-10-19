@@ -29,12 +29,10 @@ Sourcing2DStage::Sourcing2DStage()
 
     pDevice->CreateTexture2D(&desc, nullptr, _resource[0].ReleaseAndGetAddressOf());
     pDevice->CreateUnorderedAccessView(_resource[0].Get(), nullptr, _uav[2].ReleaseAndGetAddressOf());
-    velocity_feedback = _resource[0].Get();
 
 	desc.Format = DXGI_FORMAT_R16G16B16A16_FLOAT;
     pDevice->CreateTexture2D(&desc, nullptr, _resource[1].ReleaseAndGetAddressOf());
     pDevice->CreateUnorderedAccessView(_resource[1].Get(), nullptr, _uav[3].ReleaseAndGetAddressOf());
-    quantity_feedback = _resource[1].Get();
 
     _fluidColorID = NodeManager::IssueIncomingAttrID();
     _incoming[_fluidColorID] = -1;
@@ -57,10 +55,6 @@ Sourcing2DStage::Sourcing2DStage()
     _attrNames[_quantityOutID] = { "Quantity out" };
 }
 
-Sourcing2DStage::~Sourcing2DStage()
-{
-}
-
 void Sourcing2DStage::Consume(ID3D11Resource* resource, int32_t attribute_id)
 {
     if (attribute_id == _velocityInID)
@@ -73,8 +67,8 @@ ID3D11Resource* Sourcing2DStage::Expose(int32_t attribute_id)
 {
     ID3D11Resource* resource {nullptr};
     if (attribute_id == _velocityOutID)
-        _uav[2]->GetResource(&resource);
+        return static_cast<ID3D11Resource*>(_resource[0].Get());
     else if (attribute_id == _quantityOutID)
-        _uav[3]->GetResource(&resource);
+        return static_cast<ID3D11Resource*>(_resource[1].Get());
     return resource;
 }

@@ -6,10 +6,10 @@
 Poisson2DStage::Poisson2DStage()
     : ComputeStage{"2D-Poisson Solver", "./CSO/Poisson2D_CS.cso", 32, 32, 1}
 {
-    _uav.resize(1);
-    _srv.resize(2);
+    _uav.resize(2);
+    _srv.resize(3);
     _nullUav.resize(2);
-    _nullSrv.resize(2);
+    _nullSrv.resize(3);
 
     _resource.resize(1);
 
@@ -27,6 +27,7 @@ Poisson2DStage::Poisson2DStage()
 
     pDevice->CreateTexture2D(&desc, nullptr, _resource[0].ReleaseAndGetAddressOf());
     pDevice->CreateUnorderedAccessView(_resource[0].Get(), nullptr, _uav[0].ReleaseAndGetAddressOf());
+    pDevice->CreateShaderResourceView(_resource[0].Get(), nullptr, _srv[2].ReleaseAndGetAddressOf());
 
     _xInID = NodeManager::IssueIncomingAttrID();
     _incoming[_xInID] = -1;
@@ -45,38 +46,31 @@ Poisson2DStage::Poisson2DStage()
     _attrNames[_xOutID] = { "new x" };
 }
 
-Poisson2DStage::~Poisson2DStage()
-{
-}
-
 void Poisson2DStage::Run(ID3D11DeviceContext& context)
 {
     ID3D11Resource* src {nullptr};
     ID3D11Resource* dest {nullptr};
-    for (auto i {0}; i != 40; ++i) {
+    for (auto i {0}; i != 5; ++i) {
         ComputeStage::Run(context);
 
-        if ((_uav[0] != nullptr) & (_srv[0].Get() != nullptr)) {
-            _uav[0]->GetResource(&src);
-            _srv[0]->GetResource(&dest);
-
-            context.CopyResource(dest, src);
-        }
+		std::swap(_srv[2], _srv[0]);
+		std::swap(_uav[0], _uav[1]);
     }
 }
 
 void Poisson2DStage::Consume(ID3D11Resource* resource, int32_t attribute_id)
 {
-    if (attribute_id == _xInID)
-        pDevice->CreateShaderResourceView(resource, nullptr, _srv[0].ReleaseAndGetAddressOf());
-    else if (attribute_id == _bID)
+    if (attribute_id == _xInID) {
+		pDevice->CreateUnorderedAccessView(resource, nullptr, _uav[1].ReleaseAndGetAddressOf());
+		pDevice->CreateShaderResourceView(resource, nullptr, _srv[0].ReleaseAndGetAddressOf());
+    }
+    else if (attribute_id == _bID) {
         pDevice->CreateShaderResourceView(resource, nullptr, _srv[1].ReleaseAndGetAddressOf());
+    }
 }
 
 ID3D11Resource* Poisson2DStage::Expose(int32_t attribute_id)
 {
-    ID3D11Resource* resource;
     if (attribute_id == _xOutID)
-        _uav[0]->GetResource(&resource);
-    return resource;
+		return static_cast<ID3D11Resource*>(_resource[0].Get());
 }

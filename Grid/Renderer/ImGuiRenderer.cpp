@@ -179,7 +179,7 @@ void ImGuiRenderer::ImGuiShowViewport()
             pViewportSRV.Get(),
             ImVec2{ 
                 static_cast<float>(gViewportInfo.width),
-                static_cast<float>(gViewportInfo.height),
+                static_cast<float>(gViewportInfo.height)
             }
         );
     }

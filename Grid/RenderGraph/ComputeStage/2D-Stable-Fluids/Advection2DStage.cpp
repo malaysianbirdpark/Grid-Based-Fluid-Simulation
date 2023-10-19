@@ -53,27 +53,9 @@ Advection2DStage::Advection2DStage()
     _attrNames[_quantityOutID] = { "Quantity out" };
 }
 
-Advection2DStage::~Advection2DStage()
+void Advection2DStage::Run(ID3D11DeviceContext& context)
 {
-}
-
-void Advection2DStage::Run(ID3D11DeviceContext& context) {
     ComputeStage::Run(context);
-
-    //Microsoft::WRL::ComPtr<ID3D11Resource> src {nullptr};
-    //Microsoft::WRL::ComPtr<ID3D11Resource> dest {nullptr};
-
-  //  if ((_uav[0] != nullptr) & (_srv[0].Get() != nullptr)) {
-		//_uav[0]->GetResource(src.ReleaseAndGetAddressOf());
-		//_srv[0]->GetResource(dest.ReleaseAndGetAddressOf());
-		//context.CopyResource(dest.Get(), src.Get());
-  //  }
-
-  //  if ((_uav[1] != nullptr) & (_srv[1].Get() != nullptr)) {
-		//_uav[1]->GetResource(src.ReleaseAndGetAddressOf());
-		//_srv[1]->GetResource(dest.ReleaseAndGetAddressOf());
-		//context.CopyResource(dest.Get(), src.Get());
-  //  }
 }
 
 void Advection2DStage::Consume(ID3D11Resource* resource, int32_t attribute_id)
@@ -86,10 +68,8 @@ void Advection2DStage::Consume(ID3D11Resource* resource, int32_t attribute_id)
 
 ID3D11Resource* Advection2DStage::Expose(int32_t attribute_id)
 {
-    ID3D11Resource* resource {nullptr};
     if (attribute_id == _velocityOutID)
-        _uav[0]->GetResource(&resource);
+        return static_cast<ID3D11Resource*>(_resource[0].Get());
     else if (attribute_id == _quantityOutID)
-        _uav[1]->GetResource(&resource);
-    return resource;
+        return static_cast<ID3D11Resource*>(_resource[1].Get());
 }

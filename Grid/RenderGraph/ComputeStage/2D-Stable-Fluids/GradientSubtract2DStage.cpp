@@ -41,11 +41,6 @@ GradientSubtract2DStage::GradientSubtract2DStage()
     _attrNames[_resultID] = { "Result" };
 }
 
-void GradientSubtract2DStage::Run(ID3D11DeviceContext& context)
-{
-    ComputeStage::Run(context);
-}
-
 void GradientSubtract2DStage::Consume(ID3D11Resource* resource, int32_t attribute_id)
 {
     if (attribute_id == _xInID)
@@ -56,8 +51,6 @@ void GradientSubtract2DStage::Consume(ID3D11Resource* resource, int32_t attribut
 
 ID3D11Resource* GradientSubtract2DStage::Expose(int32_t attribute_id)
 {
-    ID3D11Resource* resource;
     if (attribute_id == _resultID)
-        _uav[1]->GetResource(&resource);
-    return resource;
+        return static_cast<ID3D11Resource*>(_resource[0].Get());
 }

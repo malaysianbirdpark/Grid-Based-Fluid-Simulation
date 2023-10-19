@@ -36,8 +36,8 @@ Game::Game()
 {
 	int constexpr width{ 1920 };
 	int constexpr height{ 1080 };
-	gViewportInfo.width = 600;
-	gViewportInfo.height = 600;
+	gViewportInfo.width = 640;
+	gViewportInfo.height = 640;
 	Win32::Init(width, height);
 	Renderer::Init(width, height, gWindowInfo.hWnd);
 	Camera::Init();
@@ -50,16 +50,18 @@ Game::Game()
 	_renderGraph.AddStage(std::move(std::make_shared<Sourcing2DStage>()));
 	_renderGraph.AddStage(std::move(std::make_shared<CBTimestep>()));
 	_renderGraph.AddStage(std::move(std::make_shared<Advection2DStage>()));
-	_renderGraph.AddStage(std::move(std::make_shared<Initializer2DStage>()));
-	_renderGraph.AddStage(std::move(std::make_shared<Pressure1DStage>()));
-	_renderGraph.AddStage(std::move(std::make_shared<CBPoisson>(
-		Renderer::Context(), 
-		- (1.0f / gViewportInfo.width) * (1.0f / gViewportInfo.width), 
-	    4))
-	);
-	_renderGraph.AddStage(std::move(std::make_shared<Divergence2DStage>()));
-	_renderGraph.AddStage(std::move(std::make_shared<Poisson2DStage>()));
-	_renderGraph.AddStage(std::move(std::make_shared<GradientSubtract2DStage>()));
+
+	//_renderGraph.AddStage(std::move(std::make_shared<Initializer2DStage>()));
+	//_renderGraph.AddStage(std::move(std::make_shared<Pressure1DStage>()));
+	//_renderGraph.AddStage(std::move(std::make_shared<CBPoisson>(
+	//	Renderer::Context(), 
+	//	- (1.0f / gViewportInfo.width) * (1.0f / gViewportInfo.width), 
+	//    4))
+	//);
+	//_renderGraph.AddStage(std::move(std::make_shared<Divergence2DStage>()));
+	//_renderGraph.AddStage(std::move(std::make_shared<Poisson2DStage>()));
+	//_renderGraph.AddStage(std::move(std::make_shared<GradientSubtract2DStage>()));
+
 	_renderGraph.AddStage(std::move(std::make_shared<CopyStage>()));
 	_renderGraph.AddStage(std::move(std::make_shared<ViewportStage>()));
 
@@ -67,18 +69,22 @@ Game::Game()
 	_renderGraph.Link(2, 259, 3, 3);
 	_renderGraph.Link(1, 257, 3, 4);
 	_renderGraph.Link(1, 258, 3, 5);
-	_renderGraph.Link(3, 260, 7, 7);
-	_renderGraph.Link(3, 261, 10, 13);
-	_renderGraph.Link(4, 262, 5, 6);
-	_renderGraph.Link(10, 268, 11, 14);
-	_renderGraph.Link(7, 265, 8, 9);
-	_renderGraph.Link(5, 263, 8, 8);
-	_renderGraph.Link(6, 264, 8, 10);
-	_renderGraph.Link(8, 266, 9, 11);
-	_renderGraph.Link(3, 260, 9, 12);
-	_renderGraph.Link(9, 267, 1, 1);
+	_renderGraph.Link(3, 261, 4, 6);
+	_renderGraph.Link(4, 262, 5, 7);
+	
+	// TEMP
+	_renderGraph.Link(3, 260, 1, 1);
 	_renderGraph.Link(3, 261, 1, 2);
 
+	//_renderGraph.Link(3, 260, 7, 7);
+	//_renderGraph.Link(4, 262, 5, 6);
+	//_renderGraph.Link(7, 265, 8, 9);
+	//_renderGraph.Link(5, 263, 8, 8);
+	//_renderGraph.Link(6, 264, 8, 10);
+	//_renderGraph.Link(8, 266, 9, 11);
+	//_renderGraph.Link(3, 260, 9, 12);
+	//_renderGraph.Link(9, 267, 1, 1);
+	//_renderGraph.Link(3, 261, 1, 2);
 }
 
 Game::~Game()
