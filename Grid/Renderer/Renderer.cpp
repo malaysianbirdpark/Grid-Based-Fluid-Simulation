@@ -238,10 +238,10 @@ void Renderer::InitSamplers()
         D3D11_SAMPLER_DESC sd{};
         sd.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
         sd.ComparisonFunc = D3D11_COMPARISON_NEVER;
-        sd.AddressU = D3D11_TEXTURE_ADDRESS_BORDER;
-        sd.AddressV = D3D11_TEXTURE_ADDRESS_BORDER;
-        sd.AddressW = D3D11_TEXTURE_ADDRESS_BORDER;
-        sd.BorderColor[0] = 1.0f;
+        sd.AddressU = D3D11_TEXTURE_ADDRESS_CLAMP;
+        sd.AddressV = D3D11_TEXTURE_ADDRESS_CLAMP;
+        sd.AddressW = D3D11_TEXTURE_ADDRESS_CLAMP;
+        sd.BorderColor[0] = 0.0f;
         sd.BorderColor[1] = 0.0f;
         sd.BorderColor[2] = 0.0f;
         sd.BorderColor[3] = 1.0f;
@@ -258,9 +258,9 @@ void Renderer::InitSamplers()
         D3D11_SAMPLER_DESC sd{};
         sd.Filter = D3D11_FILTER_MIN_MAG_MIP_POINT;
         sd.ComparisonFunc = D3D11_COMPARISON_NEVER;
-        sd.AddressU = D3D11_TEXTURE_ADDRESS_BORDER;
-        sd.AddressV = D3D11_TEXTURE_ADDRESS_BORDER;
-        sd.AddressW = D3D11_TEXTURE_ADDRESS_BORDER;
+        sd.AddressU = D3D11_TEXTURE_ADDRESS_CLAMP;
+        sd.AddressV = D3D11_TEXTURE_ADDRESS_CLAMP;
+        sd.AddressW = D3D11_TEXTURE_ADDRESS_CLAMP;
         sd.BorderColor[0] = 0.0f;
         sd.BorderColor[1] = 0.0f;
         sd.BorderColor[2] = 0.0f;
@@ -268,7 +268,8 @@ void Renderer::InitSamplers()
         sd.MaxAnisotropy = 1;
         sd.MipLODBias = 0.0f;
         sd.MinLOD = 0.0f;
-        sd.MaxLOD = D3D11_FLOAT32_MAX;
+        //sd.MaxLOD = D3D11_FLOAT32_MAX;
+        sd.MaxLOD = 0.0f;
 
         pDevice->CreateSamplerState(&sd, _samplerPoint.ReleaseAndGetAddressOf());
     }

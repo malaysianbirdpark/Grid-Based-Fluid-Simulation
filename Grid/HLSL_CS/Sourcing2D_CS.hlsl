@@ -1,8 +1,8 @@
-RWTexture2D<min16float2> velocity_in : register(u0);
-RWTexture2D<min16float4> quantity_in : register(u1);
+RWTexture2D<float2> velocity_in : register(u0);
+RWTexture2D<float4> quantity_in : register(u1);
 
-RWTexture2D<min16float2> velocity : register(u2);
-RWTexture2D<min16float4> quantity : register(u3);
+RWTexture2D<float2> velocity : register(u2);
+RWTexture2D<float4> quantity : register(u3);
 
 cbuffer color : register(b0) {
 	float4 fluid_color;
@@ -11,8 +11,11 @@ cbuffer color : register(b0) {
 [numthreads(32, 32, 1)]
 void main(uint3 DTid : SV_DispatchThreadID )
 {
+	uint width;
+	uint height;
+	quantity_in.GetDimensions(width, height);
+
 	velocity[DTid.xy] = velocity_in[DTid.xy];
-	velocity[DTid.xy] = normalize(min16float2(DTid.x - 320, DTid.y - 320)) * 0.01f;
     //quantity[DTid.xy] = quantity_in[DTid.xy] - 0.0000001f;
     quantity[DTid.xy] = quantity_in[DTid.xy];
 
@@ -28,13 +31,16 @@ void main(uint3 DTid : SV_DispatchThreadID )
 	//}
 
 	// circle at the center
-	if ((DTid.x - 320) * (DTid.x - 320) + (DTid.y - 320) * (DTid.y - 320) <= 1600) {
-		quantity[DTid.xy] += fluid_color * 0.007f;
+
+	if (DTid.x > 0 && DTid.x < width - 1 && DTid.y > 0 && DTid.y < height - 1) {
+        velocity[DTid.xy] += normalize(float2(0.0f, -1.0f)) * 0.0021f;
+        if ((DTid.x - 320) * (DTid.x - 320) + (DTid.y - 320) * (DTid.y - 320) <= 1600) {
+            quantity[DTid.xy] += fluid_color * 0.047f;
+        }
 	}
 
-	if ((DTid.x - 320) * (DTid.x - 320) + (DTid.y - 320) * (DTid.y - 320) > 1600) {
-		if ((DTid.x - 320) * (DTid.x - 320) + (DTid.y - 320) * (DTid.y - 320) <= 3600) {
-			velocity[DTid.xy] += normalize(min16float2(DTid.x - 320, DTid.y - 320)) * 0.001f;
-		}
-	}
+    //if ((DTid.x - 320) * (DTid.x - 320) + (DTid.y - 320) * (DTid.y - 320) > 1600)
+    //    if ((DTid.x - 320) * (DTid.x - 320) + (DTid.y - 320) * (DTid.y - 320) <= 10000)
+    //        velocity[DTid.xy] += normalize(float2(DTid.x - 320, DTid.y - 320)) * 0.0001f;
+            //velocity[DTid.xy] += normalize(float2(400 - 320, 200 - 320)) * 0.0001f;
 }
