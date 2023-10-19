@@ -238,10 +238,10 @@ void Renderer::InitSamplers()
         D3D11_SAMPLER_DESC sd{};
         sd.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
         sd.ComparisonFunc = D3D11_COMPARISON_NEVER;
-        sd.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
-        sd.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
-        sd.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
-        sd.BorderColor[0] = 0.0f;
+        sd.AddressU = D3D11_TEXTURE_ADDRESS_BORDER;
+        sd.AddressV = D3D11_TEXTURE_ADDRESS_BORDER;
+        sd.AddressW = D3D11_TEXTURE_ADDRESS_BORDER;
+        sd.BorderColor[0] = 1.0f;
         sd.BorderColor[1] = 0.0f;
         sd.BorderColor[2] = 0.0f;
         sd.BorderColor[3] = 1.0f;
@@ -261,7 +261,7 @@ void Renderer::InitSamplers()
         sd.AddressU = D3D11_TEXTURE_ADDRESS_BORDER;
         sd.AddressV = D3D11_TEXTURE_ADDRESS_BORDER;
         sd.AddressW = D3D11_TEXTURE_ADDRESS_BORDER;
-        sd.BorderColor[0] = 1.0f;
+        sd.BorderColor[0] = 0.0f;
         sd.BorderColor[1] = 0.0f;
         sd.BorderColor[2] = 0.0f;
         sd.BorderColor[3] = 1.0f;

@@ -20,8 +20,8 @@ void main( uint3 DTid : SV_DispatchThreadID ) {
 	const min16float2 dr = min16float2((1.0f / width), (1.0f / height));
 
 	const min16float2 pos = (min16float2(DTid.xy) + 0.5f) * dr;
-	const min16float2 target = (pos - velocity_in.SampleLevel(sampler0, pos, 0.0f) * dt);
+	const min16float2 target = (pos - velocity_in.SampleLevel(sampler1, pos, 0.0f) * dt);
 
-    velocity_out[DTid.xy] = velocity_in.SampleLevel(sampler1, target, 0.0f);
-	quantity_out[DTid.xy] = quantity_in.SampleLevel(sampler1, target, 0.0f);
+    velocity_out[DTid.xy] = velocity_in.SampleLevel(sampler0, target, 0.0f);
+	quantity_out[DTid.xy] = quantity_in.SampleLevel(sampler0, target, 0.0f);
 }

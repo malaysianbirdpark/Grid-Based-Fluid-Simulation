@@ -12,7 +12,7 @@ cbuffer color : register(b0) {
 void main(uint3 DTid : SV_DispatchThreadID )
 {
 	velocity[DTid.xy] = velocity_in[DTid.xy];
-	velocity[DTid.xy] += normalize(float2(DTid.x - 320, DTid.y - 320)) * 0.01f;
+	velocity[DTid.xy] = normalize(min16float2(DTid.x - 320, DTid.y - 320)) * 0.01f;
     //quantity[DTid.xy] = quantity_in[DTid.xy] - 0.0000001f;
     quantity[DTid.xy] = quantity_in[DTid.xy];
 
@@ -34,7 +34,7 @@ void main(uint3 DTid : SV_DispatchThreadID )
 
 	if ((DTid.x - 320) * (DTid.x - 320) + (DTid.y - 320) * (DTid.y - 320) > 1600) {
 		if ((DTid.x - 320) * (DTid.x - 320) + (DTid.y - 320) * (DTid.y - 320) <= 3600) {
-			velocity[DTid.xy] += float2(DTid.x - 320, DTid.y - 320) * 0.00001f;
+			velocity[DTid.xy] += normalize(min16float2(DTid.x - 320, DTid.y - 320)) * 0.001f;
 		}
 	}
 }
