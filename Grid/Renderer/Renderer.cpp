@@ -241,7 +241,7 @@ void Renderer::InitSamplers()
         sd.AddressU = D3D11_TEXTURE_ADDRESS_CLAMP;
         sd.AddressV = D3D11_TEXTURE_ADDRESS_CLAMP;
         sd.AddressW = D3D11_TEXTURE_ADDRESS_CLAMP;
-        sd.BorderColor[0] = 0.0f;
+        sd.BorderColor[0] = 1.0f;
         sd.BorderColor[1] = 0.0f;
         sd.BorderColor[2] = 0.0f;
         sd.BorderColor[3] = 1.0f;

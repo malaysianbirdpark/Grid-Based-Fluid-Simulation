@@ -3,8 +3,8 @@
 
 #include "NodeManager.h"
 
-CBPoisson::CBPoisson(ID3D11DeviceContext& context, float alpha, float beta)
-	: ConstantBufferStage{"Poisson Constants"}, _data{alpha, 1 / beta}
+CBPoisson::CBPoisson(ID3D11DeviceContext& context)
+	: ConstantBufferStage{"Poisson Constants"}
 {
     _csID = NodeManager::IssueOutgoingAttrID();
     _outgoing[_csID] = -1;
@@ -17,6 +17,8 @@ CBPoisson::CBPoisson(ID3D11DeviceContext& context, float alpha, float beta)
     bd.MiscFlags = 0;
     bd.ByteWidth = sizeof(Constants);
     bd.StructureByteStride = 0u;
+
+    _data.alpha = -1.0f;
 
     D3D11_SUBRESOURCE_DATA sd{};
     sd.pSysMem = &_data;

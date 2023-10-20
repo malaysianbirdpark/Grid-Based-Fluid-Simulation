@@ -66,8 +66,8 @@ void ImGuiRenderer::BeginFrame()
     }
     ImGui::End();
 
-    bool showDemoWindow{ false };
-    if (showDemoWindow) [[unlikely]] {
+    bool showDemoWindow{ true };
+    if (showDemoWindow) [[likely]] {
         ImGui::ShowDemoWindow(&showDemoWindow);
     }
 }

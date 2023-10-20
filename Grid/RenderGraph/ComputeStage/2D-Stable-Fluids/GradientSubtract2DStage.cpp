@@ -6,9 +6,9 @@
 GradientSubtract2DStage::GradientSubtract2DStage()
 	: ComputeStage{"2D-GradientSubtract", "./CSO/GradientSub2D_CS.cso", 32, 32, 1}
 {
-    _uav.resize(2);
+    _uav.resize(3);
     _srv.resize(1);
-    _nullUav.resize(2);
+    _nullUav.resize(3);
     _nullSrv.resize(1);
 
     _resource.resize(1);
@@ -26,7 +26,7 @@ GradientSubtract2DStage::GradientSubtract2DStage()
 	desc.SampleDesc.Quality = 0;
 
     pDevice->CreateTexture2D(&desc, nullptr, _resource[0].ReleaseAndGetAddressOf());
-    pDevice->CreateUnorderedAccessView(_resource[0].Get(), nullptr, _uav[1].ReleaseAndGetAddressOf());
+    pDevice->CreateUnorderedAccessView(_resource[0].Get(), nullptr, _uav[2].ReleaseAndGetAddressOf());
 
     _xInID = NodeManager::IssueIncomingAttrID();
     _incoming[_xInID] = -1;
@@ -44,9 +44,9 @@ GradientSubtract2DStage::GradientSubtract2DStage()
 void GradientSubtract2DStage::Consume(ID3D11Resource* resource, int32_t attribute_id)
 {
     if (attribute_id == _xInID)
-        pDevice->CreateShaderResourceView(resource, nullptr, _srv[0].ReleaseAndGetAddressOf());
-    else if (attribute_id == _subTargetID)
         pDevice->CreateUnorderedAccessView(resource, nullptr, _uav[0].ReleaseAndGetAddressOf());
+    else if (attribute_id == _subTargetID)
+        pDevice->CreateUnorderedAccessView(resource, nullptr, _uav[1].ReleaseAndGetAddressOf());
 }
 
 ID3D11Resource* GradientSubtract2DStage::Expose(int32_t attribute_id)

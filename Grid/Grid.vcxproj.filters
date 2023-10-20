@@ -28,9 +28,6 @@
     <Filter Include="RenderGraph\ResourceStage">
       <UniqueIdentifier>{22E6970E-8EA8-CB98-D758-5A25435AA476}</UniqueIdentifier>
     </Filter>
-    <Filter Include="RenderGraph\ResourceStage\2D-Stable-Fluids">
-      <UniqueIdentifier>{03BA9B1E-EF21-62EC-588D-7602441479D8}</UniqueIdentifier>
-    </Filter>
     <Filter Include="RenderObject">
       <UniqueIdentifier>{9C81291E-88E4-B8C2-316A-F1781DAC8445}</UniqueIdentifier>
     </Filter>
@@ -58,7 +55,13 @@
     <ClInclude Include="RenderGraph\ComputeStage\2D-Stable-Fluids\GradientSubtract2DStage.h">
       <Filter>RenderGraph\ComputeStage\2D-Stable-Fluids</Filter>
     </ClInclude>
-    <ClInclude Include="RenderGraph\ComputeStage\2D-Stable-Fluids\Poisson2DStage.h">
+    <ClInclude Include="RenderGraph\ComputeStage\2D-Stable-Fluids\Poisson2D1DStage.h">
+      <Filter>RenderGraph\ComputeStage\2D-Stable-Fluids</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderGraph\ComputeStage\2D-Stable-Fluids\Poisson2D2DStage.h">
+      <Filter>RenderGraph\ComputeStage\2D-Stable-Fluids</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderGraph\ComputeStage\2D-Stable-Fluids\Poisson2D4DStage.h">
       <Filter>RenderGraph\ComputeStage\2D-Stable-Fluids</Filter>
     </ClInclude>
     <ClInclude Include="RenderGraph\ComputeStage\2D-Stable-Fluids\Sourcing2DStage.h">
@@ -70,7 +73,7 @@
     <ClInclude Include="RenderGraph\ComputeStage\Initializer2DStage.h">
       <Filter>RenderGraph\ComputeStage</Filter>
     </ClInclude>
-    <ClInclude Include="RenderGraph\ConstantBufferStage\CBFluidColor.h">
+    <ClInclude Include="RenderGraph\ConstantBufferStage\CBFluid.h">
       <Filter>RenderGraph\ConstantBufferStage</Filter>
     </ClInclude>
     <ClInclude Include="RenderGraph\ConstantBufferStage\CBPoisson.h">
@@ -93,18 +96,6 @@
     </ClInclude>
     <ClInclude Include="RenderGraph\RenderGraph.h">
       <Filter>RenderGraph</Filter>
-    </ClInclude>
-    <ClInclude Include="RenderGraph\ResourceStage\2D-Stable-Fluids\Pressure1DStage.h">
-      <Filter>RenderGraph\ResourceStage\2D-Stable-Fluids</Filter>
-    </ClInclude>
-    <ClInclude Include="RenderGraph\ResourceStage\2D-Stable-Fluids\Pressure2DStage.h">
-      <Filter>RenderGraph\ResourceStage\2D-Stable-Fluids</Filter>
-    </ClInclude>
-    <ClInclude Include="RenderGraph\ResourceStage\2D-Stable-Fluids\Quantity2DStage.h">
-      <Filter>RenderGraph\ResourceStage\2D-Stable-Fluids</Filter>
-    </ClInclude>
-    <ClInclude Include="RenderGraph\ResourceStage\2D-Stable-Fluids\Velocity2DStage.h">
-      <Filter>RenderGraph\ResourceStage\2D-Stable-Fluids</Filter>
     </ClInclude>
     <ClInclude Include="RenderGraph\ResourceStage\BackBufferStage.h">
       <Filter>RenderGraph\ResourceStage</Filter>
@@ -158,6 +149,9 @@
       <Filter>Utils</Filter>
     </ClInclude>
     <ClInclude Include="pch.h" />
+    <ClInclude Include="RenderGraph\ResourceStage\Pressure2DStage.h" />
+    <ClInclude Include="RenderGraph\ResourceStage\Pressure1DStage.h" />
+    <ClInclude Include="RenderGraph\ConstantBufferStage\CBViscosity.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EntryPoint.cpp" />
@@ -177,7 +171,13 @@
     <ClCompile Include="RenderGraph\ComputeStage\2D-Stable-Fluids\GradientSubtract2DStage.cpp">
       <Filter>RenderGraph\ComputeStage\2D-Stable-Fluids</Filter>
     </ClCompile>
-    <ClCompile Include="RenderGraph\ComputeStage\2D-Stable-Fluids\Poisson2DStage.cpp">
+    <ClCompile Include="RenderGraph\ComputeStage\2D-Stable-Fluids\Poisson2D1DStage.cpp">
+      <Filter>RenderGraph\ComputeStage\2D-Stable-Fluids</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderGraph\ComputeStage\2D-Stable-Fluids\Poisson2D2DStage.cpp">
+      <Filter>RenderGraph\ComputeStage\2D-Stable-Fluids</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderGraph\ComputeStage\2D-Stable-Fluids\Poisson2D4DStage.cpp">
       <Filter>RenderGraph\ComputeStage\2D-Stable-Fluids</Filter>
     </ClCompile>
     <ClCompile Include="RenderGraph\ComputeStage\2D-Stable-Fluids\Sourcing2DStage.cpp">
@@ -189,7 +189,7 @@
     <ClCompile Include="RenderGraph\ComputeStage\Initializer2DStage.cpp">
       <Filter>RenderGraph\ComputeStage</Filter>
     </ClCompile>
-    <ClCompile Include="RenderGraph\ConstantBufferStage\CBFluidColor.cpp">
+    <ClCompile Include="RenderGraph\ConstantBufferStage\CBFluid.cpp">
       <Filter>RenderGraph\ConstantBufferStage</Filter>
     </ClCompile>
     <ClCompile Include="RenderGraph\ConstantBufferStage\CBPoisson.cpp">
@@ -212,18 +212,6 @@
     </ClCompile>
     <ClCompile Include="RenderGraph\RenderGraph.cpp">
       <Filter>RenderGraph</Filter>
-    </ClCompile>
-    <ClCompile Include="RenderGraph\ResourceStage\2D-Stable-Fluids\Pressure1DStage.cpp">
-      <Filter>RenderGraph\ResourceStage\2D-Stable-Fluids</Filter>
-    </ClCompile>
-    <ClCompile Include="RenderGraph\ResourceStage\2D-Stable-Fluids\Pressure2DStage.cpp">
-      <Filter>RenderGraph\ResourceStage\2D-Stable-Fluids</Filter>
-    </ClCompile>
-    <ClCompile Include="RenderGraph\ResourceStage\2D-Stable-Fluids\Quantity2DStage.cpp">
-      <Filter>RenderGraph\ResourceStage\2D-Stable-Fluids</Filter>
-    </ClCompile>
-    <ClCompile Include="RenderGraph\ResourceStage\2D-Stable-Fluids\Velocity2DStage.cpp">
-      <Filter>RenderGraph\ResourceStage\2D-Stable-Fluids</Filter>
     </ClCompile>
     <ClCompile Include="RenderGraph\ResourceStage\BackBufferStage.cpp">
       <Filter>RenderGraph\ResourceStage</Filter>
@@ -277,6 +265,9 @@
       <Filter>Utils</Filter>
     </ClCompile>
     <ClCompile Include="pch.cpp" />
+    <ClCompile Include="RenderGraph\ResourceStage\Pressure2DStage.cpp" />
+    <ClCompile Include="RenderGraph\ResourceStage\Pressure1DStage.cpp" />
+    <ClCompile Include="RenderGraph\ConstantBufferStage\CBViscosity.cpp" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="HLSL_CS\Advection2D_CS.hlsl">
@@ -291,7 +282,13 @@
     <FxCompile Include="HLSL_CS\Initializer2D_CS.hlsl">
       <Filter>HLSL_CS</Filter>
     </FxCompile>
-    <FxCompile Include="HLSL_CS\Poisson2D_CS.hlsl">
+    <FxCompile Include="HLSL_CS\Poisson2D1D_CS.hlsl">
+      <Filter>HLSL_CS</Filter>
+    </FxCompile>
+    <FxCompile Include="HLSL_CS\Poisson2D2D_CS.hlsl">
+      <Filter>HLSL_CS</Filter>
+    </FxCompile>
+    <FxCompile Include="HLSL_CS\Poisson2D4D_CS.hlsl">
       <Filter>HLSL_CS</Filter>
     </FxCompile>
     <FxCompile Include="HLSL_CS\Sourcing2D_CS.hlsl">
