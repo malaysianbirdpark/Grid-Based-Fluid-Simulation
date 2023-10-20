@@ -55,11 +55,7 @@ Game::Game()
 
 	_renderGraph.AddStage(std::move(std::make_shared<Initializer2DStage>()));
 	_renderGraph.AddStage(std::move(std::make_shared<Pressure1DStage>()));
-	_renderGraph.AddStage(std::move(std::make_shared<CBPoisson>(
-		Renderer::Context(), 
-		- (1.0f / gViewportInfo.width) * (1.0f / gViewportInfo.width), 
-	    4))
-	);
+	_renderGraph.AddStage(std::move(std::make_shared<CBPoisson>(Renderer::Context(), 2.40f, 4.0f)));
 	_renderGraph.AddStage(std::move(std::make_shared<Divergence2DStage>()));
 	_renderGraph.AddStage(std::move(std::make_shared<Poisson2DStage>()));
 	_renderGraph.AddStage(std::move(std::make_shared<GradientSubtract2DStage>()));

@@ -33,7 +33,7 @@ void main(uint3 DTid : SV_DispatchThreadID )
 	// circle at the center
 
 	if (DTid.x > 0 && DTid.x < width - 1 && DTid.y > 0 && DTid.y < height - 1) {
-        velocity[DTid.xy] += normalize(float2(0.0f, -1.0f)) * 0.0021f;
+        velocity[DTid.xy] += normalize(float2(0.0f, -1.0f)) * 0.0011f;
         if ((DTid.x - 320) * (DTid.x - 320) + (DTid.y - 320) * (DTid.y - 320) <= 1600) {
             quantity[DTid.xy] += fluid_color * 0.047f;
         }
