@@ -59,7 +59,7 @@
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>.;3rd_party;Assets;CSO;HLSL_CS;HLSL_PS;HLSL_VS;Platform;Renderer;RenderGraph;RenderObject;Utils;Assets\Textures;RenderGraph\ComputeStage;RenderGraph\ConstantBufferStage;RenderGraph\ResourceStage;RenderGraph\ComputeStage\2D-Stable-Fluids;..\3rd_party;..\3rd_party\ImGui;..\3rd_party\ImGui\backends;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.;Assets;CSO;HLSL_CS;HLSL_PS;HLSL_VS;Platform;Renderer;RenderGraph;RenderObject;Utils;Assets\Textures;RenderGraph\ComputeStage;RenderGraph\ConstantBufferStage;RenderGraph\ResourceStage;RenderGraph\ComputeStage\2D-Stable-Fluids;..\3rd_party;..\3rd_party\ImGui;..\3rd_party\ImGui\backends;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
@@ -80,7 +80,7 @@
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>.;3rd_party;Assets;CSO;HLSL_CS;HLSL_PS;HLSL_VS;Platform;Renderer;RenderGraph;RenderObject;Utils;Assets\Textures;RenderGraph\ComputeStage;RenderGraph\ConstantBufferStage;RenderGraph\ResourceStage;RenderGraph\ComputeStage\2D-Stable-Fluids;..\3rd_party;..\3rd_party\ImGui;..\3rd_party\ImGui\backends;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.;Assets;CSO;HLSL_CS;HLSL_PS;HLSL_VS;Platform;Renderer;RenderGraph;RenderObject;Utils;Assets\Textures;RenderGraph\ComputeStage;RenderGraph\ConstantBufferStage;RenderGraph\ResourceStage;RenderGraph\ComputeStage\2D-Stable-Fluids;..\3rd_party;..\3rd_party\ImGui;..\3rd_party\ImGui\backends;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -100,12 +100,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="RenderGraph\ConstantBufferStage\CBViscosity.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="Platform\Input.h" />
     <ClInclude Include="Platform\Win32.h" />
-    <ClInclude Include="RenderGraph\ResourceStage\Pressure1DStage.h" />
-    <ClInclude Include="RenderGraph\ResourceStage\Pressure2DStage.h" />
     <ClInclude Include="RenderGraph\ComputeStage\2D-Stable-Fluids\Advection2DStage.h" />
     <ClInclude Include="RenderGraph\ComputeStage\2D-Stable-Fluids\Divergence2DStage.h" />
     <ClInclude Include="RenderGraph\ComputeStage\2D-Stable-Fluids\GradientSubtract2DStage.h" />
@@ -118,12 +115,15 @@
     <ClInclude Include="RenderGraph\ConstantBufferStage\CBFluid.h" />
     <ClInclude Include="RenderGraph\ConstantBufferStage\CBPoisson.h" />
     <ClInclude Include="RenderGraph\ConstantBufferStage\CBTimestep.h" />
+    <ClInclude Include="RenderGraph\ConstantBufferStage\CBViscosity.h" />
     <ClInclude Include="RenderGraph\ConstantBufferStage\ConstantBufferStage.h" />
     <ClInclude Include="RenderGraph\CopyStage.h" />
     <ClInclude Include="RenderGraph\DrawStage.h" />
     <ClInclude Include="RenderGraph\NodeManager.h" />
     <ClInclude Include="RenderGraph\RenderGraph.h" />
     <ClInclude Include="RenderGraph\ResourceStage\BackBufferStage.h" />
+    <ClInclude Include="RenderGraph\ResourceStage\Pressure1DStage.h" />
+    <ClInclude Include="RenderGraph\ResourceStage\Pressure2DStage.h" />
     <ClInclude Include="RenderGraph\ResourceStage\ResourceStage.h" />
     <ClInclude Include="RenderGraph\ResourceStage\ViewportStage.h" />
     <ClInclude Include="RenderGraph\Stage.h" />
@@ -143,13 +143,10 @@
     <ClInclude Include="pch.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="RenderGraph\ConstantBufferStage\CBViscosity.cpp" />
     <ClCompile Include="EntryPoint.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Platform\Input.cpp" />
     <ClCompile Include="Platform\Win32.cpp" />
-    <ClCompile Include="RenderGraph\ResourceStage\Pressure1DStage.cpp" />
-    <ClCompile Include="RenderGraph\ResourceStage\Pressure2DStage.cpp" />
     <ClCompile Include="RenderGraph\ComputeStage\2D-Stable-Fluids\Advection2DStage.cpp" />
     <ClCompile Include="RenderGraph\ComputeStage\2D-Stable-Fluids\Divergence2DStage.cpp" />
     <ClCompile Include="RenderGraph\ComputeStage\2D-Stable-Fluids\GradientSubtract2DStage.cpp" />
@@ -162,12 +159,15 @@
     <ClCompile Include="RenderGraph\ConstantBufferStage\CBFluid.cpp" />
     <ClCompile Include="RenderGraph\ConstantBufferStage\CBPoisson.cpp" />
     <ClCompile Include="RenderGraph\ConstantBufferStage\CBTimestep.cpp" />
+    <ClCompile Include="RenderGraph\ConstantBufferStage\CBViscosity.cpp" />
     <ClCompile Include="RenderGraph\ConstantBufferStage\ConstantBufferStage.cpp" />
     <ClCompile Include="RenderGraph\CopyStage.cpp" />
     <ClCompile Include="RenderGraph\DrawStage.cpp" />
     <ClCompile Include="RenderGraph\NodeManager.cpp" />
     <ClCompile Include="RenderGraph\RenderGraph.cpp" />
     <ClCompile Include="RenderGraph\ResourceStage\BackBufferStage.cpp" />
+    <ClCompile Include="RenderGraph\ResourceStage\Pressure1DStage.cpp" />
+    <ClCompile Include="RenderGraph\ResourceStage\Pressure2DStage.cpp" />
     <ClCompile Include="RenderGraph\ResourceStage\ResourceStage.cpp" />
     <ClCompile Include="RenderGraph\ResourceStage\ViewportStage.cpp" />
     <ClCompile Include="RenderGraph\Stage.cpp" />
@@ -236,6 +236,12 @@
       <ShaderModel>5.0</ShaderModel>
       <EntryPointName>main</EntryPointName>
       <ObjectFileOutput>../Grid/CSO/Sourcing2D_CS.cso</ObjectFileOutput>
+    </FxCompile>
+    <FxCompile Include="HLSL_CS\Vector4DUnorm_CS.hlsl">
+      <ShaderType>Compute</ShaderType>
+      <ShaderModel>5.0</ShaderModel>
+      <EntryPointName>main</EntryPointName>
+      <ObjectFileOutput>../Grid/CSO/Vector4DUnorm_CS.cso</ObjectFileOutput>
     </FxCompile>
     <FxCompile Include="HLSL_PS\spherePS.hlsl">
       <ShaderType>Pixel</ShaderType>

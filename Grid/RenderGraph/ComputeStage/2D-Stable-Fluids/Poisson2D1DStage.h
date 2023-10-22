@@ -14,5 +14,10 @@ private:
 	int32_t _bID{};
 	int32_t _constID{};
 	int32_t _xOutID{};
+
+	Microsoft::WRL::ComPtr<ID3D11ComputeShader>       _normalizer;
+	Microsoft::WRL::ComPtr<ID3D11Texture2D>           _resultUnorm;
+	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView>  _resultUnormSR;
+	Microsoft::WRL::ComPtr<ID3D11UnorderedAccessView> _resultUnormView;
 };
 

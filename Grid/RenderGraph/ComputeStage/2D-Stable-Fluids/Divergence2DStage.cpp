@@ -8,8 +8,8 @@ Divergence2DStage::Divergence2DStage()
 {
     _uav.resize(2);
     _srv.resize(1);
-    _nullUav.resize(2);
-    _nullSrv.resize(1);
+    _nullUav.resize(5);
+    _nullSrv.resize(5);
 
     _resource.resize(1);
 

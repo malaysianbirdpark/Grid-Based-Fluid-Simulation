@@ -28,6 +28,5 @@ void main( uint3 DTid : SV_DispatchThreadID )
     const float right = x_in[uint2(min(DTid.x + 1, width - 1), DTid.y)];
     const float left = x_in[uint2(max(DTid.x - 1, 0), DTid.y)];
 
-	//x_out[DTid.xy] = (up + down + left + right + alpha * b_in[DTid.xy]) * r_beta;
-	x_out[DTid.xy] = (up + down + left + right - 2.25f * b_in[DTid.xy]) * 0.25f;
+	x_out[DTid.xy] = (up + down + left + right + alpha * b_in[DTid.xy]) * r_beta;
 }

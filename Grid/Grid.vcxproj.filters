@@ -82,6 +82,9 @@
     <ClInclude Include="RenderGraph\ConstantBufferStage\CBTimestep.h">
       <Filter>RenderGraph\ConstantBufferStage</Filter>
     </ClInclude>
+    <ClInclude Include="RenderGraph\ConstantBufferStage\CBViscosity.h">
+      <Filter>RenderGraph\ConstantBufferStage</Filter>
+    </ClInclude>
     <ClInclude Include="RenderGraph\ConstantBufferStage\ConstantBufferStage.h">
       <Filter>RenderGraph\ConstantBufferStage</Filter>
     </ClInclude>
@@ -98,6 +101,12 @@
       <Filter>RenderGraph</Filter>
     </ClInclude>
     <ClInclude Include="RenderGraph\ResourceStage\BackBufferStage.h">
+      <Filter>RenderGraph\ResourceStage</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderGraph\ResourceStage\Pressure1DStage.h">
+      <Filter>RenderGraph\ResourceStage</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderGraph\ResourceStage\Pressure2DStage.h">
       <Filter>RenderGraph\ResourceStage</Filter>
     </ClInclude>
     <ClInclude Include="RenderGraph\ResourceStage\ResourceStage.h">
@@ -149,9 +158,6 @@
       <Filter>Utils</Filter>
     </ClInclude>
     <ClInclude Include="pch.h" />
-    <ClInclude Include="RenderGraph\ResourceStage\Pressure2DStage.h" />
-    <ClInclude Include="RenderGraph\ResourceStage\Pressure1DStage.h" />
-    <ClInclude Include="RenderGraph\ConstantBufferStage\CBViscosity.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EntryPoint.cpp" />
@@ -198,6 +204,9 @@
     <ClCompile Include="RenderGraph\ConstantBufferStage\CBTimestep.cpp">
       <Filter>RenderGraph\ConstantBufferStage</Filter>
     </ClCompile>
+    <ClCompile Include="RenderGraph\ConstantBufferStage\CBViscosity.cpp">
+      <Filter>RenderGraph\ConstantBufferStage</Filter>
+    </ClCompile>
     <ClCompile Include="RenderGraph\ConstantBufferStage\ConstantBufferStage.cpp">
       <Filter>RenderGraph\ConstantBufferStage</Filter>
     </ClCompile>
@@ -214,6 +223,12 @@
       <Filter>RenderGraph</Filter>
     </ClCompile>
     <ClCompile Include="RenderGraph\ResourceStage\BackBufferStage.cpp">
+      <Filter>RenderGraph\ResourceStage</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderGraph\ResourceStage\Pressure1DStage.cpp">
+      <Filter>RenderGraph\ResourceStage</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderGraph\ResourceStage\Pressure2DStage.cpp">
       <Filter>RenderGraph\ResourceStage</Filter>
     </ClCompile>
     <ClCompile Include="RenderGraph\ResourceStage\ResourceStage.cpp">
@@ -265,9 +280,6 @@
       <Filter>Utils</Filter>
     </ClCompile>
     <ClCompile Include="pch.cpp" />
-    <ClCompile Include="RenderGraph\ResourceStage\Pressure2DStage.cpp" />
-    <ClCompile Include="RenderGraph\ResourceStage\Pressure1DStage.cpp" />
-    <ClCompile Include="RenderGraph\ConstantBufferStage\CBViscosity.cpp" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="HLSL_CS\Advection2D_CS.hlsl">
@@ -292,6 +304,9 @@
       <Filter>HLSL_CS</Filter>
     </FxCompile>
     <FxCompile Include="HLSL_CS\Sourcing2D_CS.hlsl">
+      <Filter>HLSL_CS</Filter>
+    </FxCompile>
+    <FxCompile Include="HLSL_CS\Vector4DUnorm_CS.hlsl">
       <Filter>HLSL_CS</Filter>
     </FxCompile>
     <FxCompile Include="HLSL_PS\spherePS.hlsl">

@@ -1,6 +1,9 @@
 #include "pch.h"
 #include "Poisson2D1DStage.h"
 
+#include <d3dcompiler.h>
+
+#include "imnodes.h"
 #include "NodeManager.h"
 
 Poisson2D1DStage::Poisson2D1DStage()
@@ -8,8 +11,8 @@ Poisson2D1DStage::Poisson2D1DStage()
 {
     _uav.resize(2);
     _srv.resize(3);
-    _nullUav.resize(2);
-    _nullSrv.resize(3);
+    _nullUav.resize(5);
+    _nullSrv.resize(5);
 
     _resource.resize(1);
 
@@ -44,6 +47,27 @@ Poisson2D1DStage::Poisson2D1DStage()
     _xOutID = NodeManager::IssueOutgoingAttrID();
     _outgoing[_xOutID] = -1;
     _attrNames[_xOutID] = { "new x" };
+
+    std::string _path{ "./CSO/Vector4DUnorm_CS.cso" };
+    std::wstring p(_path.length(), L' ');
+    std::ranges::copy(_path, p.begin());
+
+    Microsoft::WRL::ComPtr<ID3DBlob> pBlob;
+    D3DReadFileToBlob(
+        p.c_str(),
+        pBlob.ReleaseAndGetAddressOf()
+    );
+
+    pDevice->CreateComputeShader(
+        pBlob->GetBufferPointer(), 
+        pBlob->GetBufferSize(),
+        nullptr,
+        _normalizer.ReleaseAndGetAddressOf()
+    );
+
+    pDevice->CreateTexture2D(&desc, nullptr, _resultUnorm.ReleaseAndGetAddressOf());
+    pDevice->CreateUnorderedAccessView(_resultUnorm.Get(), nullptr, _resultUnormView.ReleaseAndGetAddressOf());
+    pDevice->CreateShaderResourceView(_resultUnorm.Get(), nullptr, _resultUnormSR.ReleaseAndGetAddressOf());
 }
 
 void Poisson2D1DStage::Run(ID3D11DeviceContext& context)
@@ -60,6 +84,31 @@ void Poisson2D1DStage::Run(ID3D11DeviceContext& context)
             _groupZ
         );
         SetBarrier(context);
+    }
+
+    if (ImNodes::IsNodeSelected(_id)) {
+        ImGui::Begin("Node Editor");
+
+        context.CSSetShaderResources(0u, 1u, _srv[1].GetAddressOf());
+        context.CSSetUnorderedAccessViews(0u, 1u, _resultUnormView.GetAddressOf(), nullptr);
+        context.CSSetShader(_normalizer.Get(), nullptr, 0u);
+        context.Dispatch(
+            static_cast<UINT>(ceil(static_cast<float>(gViewportInfo.width) / _groupX)),
+            static_cast<UINT>(ceil(static_cast<float>(gViewportInfo.height) / _groupY)), 
+            _groupZ
+        );
+        SetBarrier(context);
+
+        ImGui::Text("Result");
+        ImGui::Image(
+            _resultUnormSR.Get(), 
+            ImVec2{ 
+                static_cast<float>(gViewportInfo.width >> 1),
+                static_cast<float>(gViewportInfo.height >> 1)
+            }
+        );
+
+        ImGui::End();
     }
 }
 

@@ -23,9 +23,8 @@ void main(uint3 DTid : SV_DispatchThreadID )
 
 	// circle at the center
 	if (DTid.x < width && DTid.y < height) {
-		if (length(velocity[DTid.xy].xy) <= 2.0f)
-            velocity[DTid.xy].xy += normalize(float2(dir.xy)) * speed;
         if ((DTid.x - (width / 2)) * (DTid.x - (width / 2)) + (DTid.y - (height / 2)) * (DTid.y - (height / 2)) <= 1600) {
+            velocity[DTid.xy].xy += normalize(float2(dir.xy)) * speed;
             quantity[DTid.xy] += color * color_scale;
         }
 	}

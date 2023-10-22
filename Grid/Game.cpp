@@ -37,10 +37,10 @@
 
 Game::Game() 
 {
-	int constexpr width{ 1280 };
-	int constexpr height{ 720 };
-	gViewportInfo.width = 320;
-	gViewportInfo.height = 320;
+	int constexpr width{ 1920 };
+	int constexpr height{ 1080 };
+	gViewportInfo.width = 640;
+	gViewportInfo.height = 640;
 	Win32::Init(width, height);
 	Renderer::Init(width, height, gWindowInfo.hWnd);
 	Camera::Init();
@@ -68,34 +68,38 @@ Game::Game()
 	_renderGraph.AddStage(std::move(std::make_shared<CopyStage>()));
 	_renderGraph.AddStage(std::move(std::make_shared<ViewportStage>()));
 
-	//_renderGraph.Link(0, 256, 1, 0);
-	//_renderGraph.Link(2, 259, 3, 3);
-	//_renderGraph.Link(1, 257, 3, 4);
-	//_renderGraph.Link(1, 258, 3, 5);
+	// full
+	{
+        _renderGraph.Link(0, 256, 1, 0);
+        _renderGraph.Link(2, 259, 3, 3);
+        _renderGraph.Link(1, 257, 3, 4);
+        _renderGraph.Link(1, 258, 3, 5);
 
-	//_renderGraph.Link(3, 260, 5, 6);
-	//_renderGraph.Link(3, 260, 5, 7);
-	//_renderGraph.Link(3, 260, 6, 10);
+        _renderGraph.Link(3, 260, 5, 6);
+        _renderGraph.Link(3, 260, 5, 7);
+        _renderGraph.Link(3, 260, 6, 10);
 
-	//_renderGraph.Link(4, 262, 5, 8);
-	//_renderGraph.Link(4, 262, 6, 11);
+        _renderGraph.Link(4, 262, 5, 8);
+        _renderGraph.Link(4, 262, 6, 11);
 
-	//_renderGraph.Link(7, 265, 8, 12);
-	//_renderGraph.Link(8, 266, 11, 14);
+        _renderGraph.Link(7, 265, 8, 12);
+        _renderGraph.Link(8, 266, 11, 14);
 
-	//_renderGraph.Link(5, 263, 10, 13);
-	//_renderGraph.Link(10, 268, 11, 15);
-	//_renderGraph.Link(9, 267, 11, 16);
+        _renderGraph.Link(5, 263, 10, 13);
+        _renderGraph.Link(10, 268, 11, 15);
+        _renderGraph.Link(9, 267, 11, 16);
 
-	//_renderGraph.Link(11, 269, 12, 17);
-	//_renderGraph.Link(5, 263, 12, 18);
-	//_renderGraph.Link(12, 270, 1, 1);
+        _renderGraph.Link(11, 269, 12, 17);
+        _renderGraph.Link(5, 263, 12, 18);
+        _renderGraph.Link(12, 270, 1, 1);
 
-	//_renderGraph.Link(13, 271, 14, 20);
-	//_renderGraph.Link(12, 270, 1, 1);
+        _renderGraph.Link(13, 271, 14, 20);
+        _renderGraph.Link(12, 270, 1, 1);
 
-	//_renderGraph.Link(3, 261, 13, 19);
-	//_renderGraph.Link(3, 261, 1, 2);
+        _renderGraph.Link(3, 261, 13, 19);
+        _renderGraph.Link(3, 261, 1, 2);
+	}
+
 
 	ImNodes::LoadCurrentEditorStateFromIniFile("imnodes_state.ini");
 }

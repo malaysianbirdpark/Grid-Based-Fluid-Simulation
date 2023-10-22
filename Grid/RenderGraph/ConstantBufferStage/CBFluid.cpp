@@ -60,14 +60,14 @@ void CBFluid::Update()
         ImGui::Text("Color");
         ImGui::RadioButton("Random Color", &color_mode, 0); ImGui::SameLine();
         ImGui::RadioButton("Fixed Color", &color_mode, 1); 
-        ImGui::InputFloat("Color Scale", &_data._colorScale, 0.0f, 0.0f, "%.7f");
+        ImGui::DragFloat("Color Scale", &_data._colorScale, 0.01f, 0.0f, 2.0f);
         if (color_mode == 1)
             ImGui::ColorPicker3("Fluid Color", &_data._color.x);
 
         ImGui::Text("Velocity");
         ImGui::RadioButton("Random Direction", &velocity_mode, 0); ImGui::SameLine();
         ImGui::RadioButton("Fixed Direction", &velocity_mode, 1); 
-        ImGui::InputFloat("Speed", &_data._speed, 0.0f, 0.0f, "%.7f");
+        ImGui::DragFloat("Speed", &_data._speed, 0.01f, 0.0f, 2.0f);
         if (velocity_mode == 1) 
             ImGui::DragFloat2("Fluid Velocity", &_data._velocityDir.x, 0.005f, -1.0f, 1.0f);
 

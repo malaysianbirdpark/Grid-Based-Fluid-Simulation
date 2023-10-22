@@ -15,5 +15,10 @@ private:
 	int32_t _velocityOutID{};
 	int32_t _quantityInID{};
 	int32_t _quantityOutID{};
+
+	Microsoft::WRL::ComPtr<ID3D11ComputeShader>       _normalizer;
+	Microsoft::WRL::ComPtr<ID3D11Texture2D>           _velocityUnorm;
+	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView>  _velocityUnormSR;
+	Microsoft::WRL::ComPtr<ID3D11UnorderedAccessView> _velocityUnormView;
 };
 
