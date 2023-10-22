@@ -18,6 +18,11 @@ void main( uint3 DTid : SV_DispatchThreadID )
 	uint height;
 	x_in.GetDimensions(width, height);
 
+	if (DTid.x == 0 && DTid.y == 0) {
+        x_out[DTid.xy] = 0.0f;
+		return;
+    }
+
     const float4 up = x_in[uint2(DTid.x, min(DTid.y + 1, height - 1))];
     const float4 down = x_in[uint2(DTid.x, max(DTid.y - 1, 0))];
     const float4 right = x_in[uint2(min(DTid.x + 1, width - 1), DTid.y)];

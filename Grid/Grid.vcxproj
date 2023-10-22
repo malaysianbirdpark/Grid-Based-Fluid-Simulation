@@ -237,24 +237,6 @@
       <EntryPointName>main</EntryPointName>
       <ObjectFileOutput>../Grid/CSO/Sourcing2D_CS.cso</ObjectFileOutput>
     </FxCompile>
-    <FxCompile Include="HLSL_CS\Test2CS.hlsl">
-      <ShaderType>Compute</ShaderType>
-      <ShaderModel>5.0</ShaderModel>
-      <EntryPointName>main</EntryPointName>
-      <ObjectFileOutput>../Grid/CSO/Test2CS.cso</ObjectFileOutput>
-    </FxCompile>
-    <FxCompile Include="HLSL_CS\test1CS.hlsl">
-      <ShaderType>Compute</ShaderType>
-      <ShaderModel>5.0</ShaderModel>
-      <EntryPointName>main</EntryPointName>
-      <ObjectFileOutput>../Grid/CSO/test1CS.cso</ObjectFileOutput>
-    </FxCompile>
-    <FxCompile Include="HLSL_CS\testCS.hlsl">
-      <ShaderType>Compute</ShaderType>
-      <ShaderModel>5.0</ShaderModel>
-      <EntryPointName>main</EntryPointName>
-      <ObjectFileOutput>../Grid/CSO/testCS.cso</ObjectFileOutput>
-    </FxCompile>
     <FxCompile Include="HLSL_PS\spherePS.hlsl">
       <ShaderType>Pixel</ShaderType>
       <ShaderModel>5.0</ShaderModel>

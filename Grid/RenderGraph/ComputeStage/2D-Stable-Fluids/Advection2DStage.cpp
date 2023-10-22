@@ -17,7 +17,8 @@ Advection2DStage::Advection2DStage()
 	desc.BindFlags = D3D11_BIND_UNORDERED_ACCESS | D3D11_BIND_SHADER_RESOURCE;
 	desc.Usage = D3D11_USAGE_DEFAULT;
 	desc.CPUAccessFlags = 0u;
-	desc.Format = DXGI_FORMAT_R16G16_FLOAT;
+	//desc.Format = DXGI_FORMAT_R16G16_FLOAT;
+	desc.Format = DXGI_FORMAT_R16G16B16A16_FLOAT;
 	desc.Width = gViewportInfo.width;
 	desc.Height = gViewportInfo.height;
 	desc.MipLevels = 1u;
@@ -28,7 +29,7 @@ Advection2DStage::Advection2DStage()
     pDevice->CreateTexture2D(&desc, nullptr, _resource[0].ReleaseAndGetAddressOf());
     pDevice->CreateUnorderedAccessView(_resource[0].Get(), nullptr, _uav[0].ReleaseAndGetAddressOf());
 
-	desc.Format = DXGI_FORMAT_R16G16B16A16_FLOAT;
+	//desc.Format = DXGI_FORMAT_R16G16B16A16_FLOAT;
     pDevice->CreateTexture2D(&desc, nullptr, _resource[1].ReleaseAndGetAddressOf());
     pDevice->CreateUnorderedAccessView(_resource[1].Get(), nullptr, _uav[1].ReleaseAndGetAddressOf());
 

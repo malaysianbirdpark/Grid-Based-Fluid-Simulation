@@ -20,10 +20,15 @@ void main(uint3 DTid : SV_DispatchThreadID)
 	uint height;
 	x_in.GetDimensions(width, height);
 
-	const float2 up = x_in[uint2(DTid.x, min(DTid.y + 1, height - 1))];
-	const float2 down = x_in[uint2(DTid.x, max(DTid.y - 1, 0))];
-	const float2 right = x_in[uint2(min(DTid.x + 1, width - 1), DTid.y)];
-	const float2 left = x_in[uint2(max(DTid.x - 1, 0), DTid.y)];
+	if (DTid.x == 0 && DTid.y == 0) {
+        x_out[DTid.xy] = 0.0f;
+		return;
+    }
 
-	x_out[DTid.xy] = (up + down + right + left + alpha * b_in[DTid.xy]) * r_beta;
+	const float2 up = x_in[uint2(DTid.x, min(DTid.y + 1, height - 1))].xy;
+	const float2 down = x_in[uint2(DTid.x, max(DTid.y - 1, 0))].xy;
+	const float2 right = x_in[uint2(min(DTid.x + 1, width - 1), DTid.y)].xy;
+	const float2 left = x_in[uint2(max(DTid.x - 1, 0), DTid.y)].xy;
+
+	x_out[DTid.xy].xy = (up + down + right + left + alpha * b_in[DTid.xy].xy) * r_beta;
 }

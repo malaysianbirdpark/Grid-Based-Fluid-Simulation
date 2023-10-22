@@ -6,10 +6,10 @@
 Poisson2D1DStage::Poisson2D1DStage()
     : ComputeStage{"2D1D-Poisson Solver", "./CSO/Poisson2D1D_CS.cso", 32, 32, 1}
 {
-    _uav.resize(1);
-    _srv.resize(2);
-    _nullUav.resize(1);
-    _nullSrv.resize(2);
+    _uav.resize(2);
+    _srv.resize(3);
+    _nullUav.resize(2);
+    _nullSrv.resize(3);
 
     _resource.resize(1);
 
@@ -26,7 +26,8 @@ Poisson2D1DStage::Poisson2D1DStage()
 	desc.SampleDesc.Quality = 0;
 
     pDevice->CreateTexture2D(&desc, nullptr, _resource[0].ReleaseAndGetAddressOf());
-    pDevice->CreateUnorderedAccessView(_resource[0].Get(), nullptr, _uav[0].ReleaseAndGetAddressOf());
+    pDevice->CreateUnorderedAccessView(_resource[0].Get(), nullptr, _uav[1].ReleaseAndGetAddressOf());
+    pDevice->CreateShaderResourceView(_resource[0].Get(), nullptr, _srv[1].ReleaseAndGetAddressOf());
 
     _xInID = NodeManager::IssueIncomingAttrID();
     _incoming[_xInID] = -1;
@@ -47,26 +48,29 @@ Poisson2D1DStage::Poisson2D1DStage()
 
 void Poisson2D1DStage::Run(ID3D11DeviceContext& context)
 {
-    ID3D11Resource* src {nullptr};
-    ID3D11Resource* dest {nullptr};
-    for (auto i {0}; i != 31; ++i) {
-        ComputeStage::Run(context);
-
-        if (_uav[0].Get() && _srv[0].Get()) {
-			_uav[0]->GetResource(&src);
-			_srv[0]->GetResource(&dest);
-			context.CopyResource(dest, src);
-        }
+    for (auto i {0}; i != 30; ++i) {
+        context.OMSetRenderTargets(0u, nullptr, nullptr);
+        context.CSSetShaderResources(0u, 1u, _srv[i & 0b1].GetAddressOf());
+        context.CSSetShaderResources(1u, 1u, _srv[2].GetAddressOf());
+        context.CSSetUnorderedAccessViews(0u, 1u, _uav[!(i & 0b1)].GetAddressOf(), nullptr);
+        context.CSSetShader(_cs.Get(), nullptr, 0u);
+        context.Dispatch(
+            static_cast<UINT>(ceil(static_cast<float>(gViewportInfo.width) / _groupX)),
+            static_cast<UINT>(ceil(static_cast<float>(gViewportInfo.height) / _groupY)), 
+            _groupZ
+        );
+        SetBarrier(context);
     }
 }
 
 void Poisson2D1DStage::Consume(ID3D11Resource* resource, int32_t attribute_id)
 {
     if (attribute_id == _xInID) {
+		pDevice->CreateUnorderedAccessView(resource, nullptr, _uav[0].ReleaseAndGetAddressOf());
 		pDevice->CreateShaderResourceView(resource, nullptr, _srv[0].ReleaseAndGetAddressOf());
     }
     else if (attribute_id == _bID) {
-        pDevice->CreateShaderResourceView(resource, nullptr, _srv[1].ReleaseAndGetAddressOf());
+        pDevice->CreateShaderResourceView(resource, nullptr, _srv[2].ReleaseAndGetAddressOf());
     }
 }
 

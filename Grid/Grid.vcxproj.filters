@@ -294,15 +294,6 @@
     <FxCompile Include="HLSL_CS\Sourcing2D_CS.hlsl">
       <Filter>HLSL_CS</Filter>
     </FxCompile>
-    <FxCompile Include="HLSL_CS\Test2CS.hlsl">
-      <Filter>HLSL_CS</Filter>
-    </FxCompile>
-    <FxCompile Include="HLSL_CS\test1CS.hlsl">
-      <Filter>HLSL_CS</Filter>
-    </FxCompile>
-    <FxCompile Include="HLSL_CS\testCS.hlsl">
-      <Filter>HLSL_CS</Filter>
-    </FxCompile>
     <FxCompile Include="HLSL_PS\spherePS.hlsl">
       <Filter>HLSL_PS</Filter>
     </FxCompile>
