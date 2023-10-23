@@ -4,7 +4,7 @@
 #include "NodeManager.h"
 
 Initializer2DStage::Initializer2DStage()
-    : ComputeStage{"Initializer", "./CSO/Initializer2D_CS.cso", 32, 32, 1}
+    : Compute2DStage{"Initializer", "./CSO/Initializer2D_CS.cso", 32, 32, 1}
 {
     _uav.resize(1);
     _srv.resize(1);

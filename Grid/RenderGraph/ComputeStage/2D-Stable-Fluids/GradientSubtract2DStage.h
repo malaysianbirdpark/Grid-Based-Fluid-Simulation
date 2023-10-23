@@ -1,8 +1,8 @@
 #pragma once
 
-#include "ComputeStage.h"
+#include "Compute2DStage.h"
 
-class GradientSubtract2DStage final : public ComputeStage
+class GradientSubtract2DStage final : public Compute2DStage
 {
 public: GradientSubtract2DStage();
 public: void Run(ID3D11DeviceContext& context) override;

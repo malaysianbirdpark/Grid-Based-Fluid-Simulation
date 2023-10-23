@@ -1,8 +1,8 @@
 #pragma once
 
-#include "ComputeStage.h"
+#include "Compute2DStage.h"
 
-class Advection2DStage final : public ComputeStage
+class Advection2DStage final : public Compute2DStage
 {
 public: Advection2DStage();
 public: virtual ~Advection2DStage() override = default;

@@ -12,7 +12,7 @@ public:  void     Run(ID3D11DeviceContext& context);
 public:  void     AddStage(Stage::Stage stage);
 public:  void     Link(int32_t from, int32_t from_attr, int32_t to, int32_t to_attr);
 public:  void     ImGuiShowRenderGraphEditWindow();
-public:  void     Update();
+public:  void     Update(ID3D11DeviceContext& context);
 private: void     RecalculateTopology();
 private:
 	std::vector<Stage::Stage>                          _graph;

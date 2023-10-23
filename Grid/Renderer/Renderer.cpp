@@ -2,6 +2,8 @@
 #include "Renderer.h"
 
 #include <array>
+#include <string>
+#include <d3dcompiler.h>
 
 #include "ImGuiRenderer.h"
 
@@ -18,7 +20,7 @@ void Renderer::Init(int width, int height, HWND native_wnd)
     sd.BufferDesc.ScanlineOrdering = DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED;
     sd.SampleDesc.Count = 1;
     sd.SampleDesc.Quality = 0;
-    sd.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT | DXGI_USAGE_UNORDERED_ACCESS;
+    sd.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
     sd.BufferCount = 3;
     sd.OutputWindow = native_wnd;
     sd.Windowed = TRUE;
@@ -52,7 +54,7 @@ void Renderer::Init(int width, int height, HWND native_wnd)
 
     DirectX::XMStoreFloat4x4(&_proj, DirectX::XMMatrixPerspectiveFovLH(
         70.0f,
-        static_cast<float>(width) / height,
+        static_cast<float>(gViewportInfo.width) / gViewportInfo.height,
         0.01f,
         200.0f
     ));
@@ -74,7 +76,6 @@ void Renderer::Init(int width, int height, HWND native_wnd)
     device.CreateTexture2D(&desc, nullptr, _imguiBuffer.ReleaseAndGetAddressOf());
     device.CreateRenderTargetView(_imguiBuffer.Get(), nullptr, _imguiRTV.ReleaseAndGetAddressOf());
 
-    desc.Format = DXGI_FORMAT_R16G16B16A16_FLOAT;
     desc.Width = gViewportInfo.width;
     desc.Height = gViewportInfo.height;
     device.CreateTexture2D(&desc, nullptr, _viewportBuffer.ReleaseAndGetAddressOf());
@@ -108,6 +109,7 @@ void Renderer::BeginFrame()
     _defaultContext->RSSetState(_rasterizerState.Get());
     _defaultContext->OMSetDepthStencilState(_dsDefault.Get(), 0u);
     _defaultContext->OMSetBlendState(_bsDefault.Get(), nullptr, 0xFFFFFFFFu);
+
     _defaultContext->OMSetRenderTargets(1u, _backBufferView.GetAddressOf(), _dsv.Get());
     _defaultContext->ClearRenderTargetView(_backBufferView.Get(), clear_color);
     _defaultContext->ClearDepthStencilView(_dsv.Get(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0u);
@@ -121,14 +123,14 @@ void Renderer::BeginFrame()
     _imguiContext->OMSetDepthStencilState(_dsDefault.Get(), 0u);
     _imguiContext->OMSetRenderTargets(1u, _imguiRTV.GetAddressOf(), nullptr);
 
-    _imguiContext->CopyResource(_backBuffers.Get(), _imguiBuffer.Get());
-
     ImGuiRenderer::BeginFrame();
 }
 
 void Renderer::EndFrame()
 {
     ImGuiRenderer::EndFrame();
+
+    _imguiContext->CopyResource(_backBuffers.Get(), _imguiBuffer.Get());
 
     static std::array<ID3D11CommandList*, 2> cmd_lists{};
     _defaultContext->FinishCommandList(FALSE, &cmd_lists[0]);
@@ -204,7 +206,7 @@ void Renderer::InitDS(int width, int height)
 
     D3D11_DEPTH_STENCIL_VIEW_DESC desc_dsv{};
     desc_dsv.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
-    desc_dsv.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2DMS;
+    desc_dsv.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
     desc_dsv.Texture2D.MipSlice = 0u;
     Device().CreateDepthStencilView(_ds.Get(), &desc_dsv, _dsv.ReleaseAndGetAddressOf());
 }

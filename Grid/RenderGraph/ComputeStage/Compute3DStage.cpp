@@ -1,13 +1,12 @@
 #include "pch.h"
-#include "ComputeStage.h"
+#include "Compute3DStage.h"
 
-#include <string>
 #include <d3dcompiler.h>
 
 #include "imgui.h"
 #include "imnodes.h"
 
-ComputeStage::ComputeStage(char const* name, char const* compute_shader_path, UINT group_x, UINT group_y, UINT group_z)
+Compute3DStage::Compute3DStage(char const* name, char const* compute_shader_path, UINT group_x, UINT group_y, UINT group_z)
     : _name{name}, _groupX{ group_x }, _groupY{ group_y }, _groupZ{ group_z }
 {
     std::string _path{ compute_shader_path };
@@ -28,7 +27,7 @@ ComputeStage::ComputeStage(char const* name, char const* compute_shader_path, UI
     );
 }
 
-void ComputeStage::Run(ID3D11DeviceContext& context) {
+void Compute3DStage::Run(ID3D11DeviceContext& context) {
     context.OMSetRenderTargets(0u, nullptr, nullptr);
 	context.CSSetShaderResources(0u, static_cast<UINT>(_srv.size()), _srv[0].GetAddressOf());
 	context.CSSetUnorderedAccessViews(0u, static_cast<UINT>(_uav.size()), _uav[0].GetAddressOf(), nullptr);
@@ -41,7 +40,7 @@ void ComputeStage::Run(ID3D11DeviceContext& context) {
 	SetBarrier(context);
 }
 
-void ComputeStage::RenderNode() const {
+void Compute3DStage::RenderNode() const {
     ImNodes::BeginNode(_id);
     ImNodes::BeginNodeTitleBar();
     ImGui::Text(_stageName.c_str());
@@ -64,7 +63,8 @@ void ComputeStage::RenderNode() const {
     ImNodes::EndNode();
 }
 
-void ComputeStage::SetBarrier(ID3D11DeviceContext& context) const {
-    context.CSSetShaderResources(0, static_cast<UINT>(_nullSrv.size()), &_nullSrv[0]);
-    context.CSSetUnorderedAccessViews(0, static_cast<UINT>(_nullUav.size()), &_nullUav[0], nullptr);
+void Compute3DStage::SetBarrier(ID3D11DeviceContext& context) const {
+    context.CSSetShaderResources(0u, static_cast<UINT>(_nullSrv.size()), &_nullSrv[0]);
+    context.CSSetUnorderedAccessViews(0u, static_cast<UINT>(_nullUav.size()), &_nullUav[0], nullptr);
 }
+

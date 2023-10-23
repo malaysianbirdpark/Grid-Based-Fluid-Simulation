@@ -4,7 +4,7 @@
 #include "NodeManager.h"
 
 Divergence2DStage::Divergence2DStage()
-	: ComputeStage{"2D-Divergence Operation", "./CSO/Divergence2D_CS.cso", 32, 32, 1}
+	: Compute2DStage{"2D-Divergence Operation", "./CSO/Divergence2D_CS.cso", 32, 32, 1}
 {
     _uav.resize(2);
     _srv.resize(1);

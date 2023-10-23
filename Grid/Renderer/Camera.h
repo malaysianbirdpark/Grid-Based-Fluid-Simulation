@@ -17,6 +17,6 @@ private:
     inline static float _pitch{ 0.0f };
     inline static float _yaw{ 0.0f };
     inline static float _travelSpeed{ 22.5f };
-    inline static float _rotationSpeed{ 4.0f };
+    inline static float _rotationSpeed{ 1.0f };
 };
 

@@ -1,5 +1,5 @@
-Texture2D<float2> x_in : register(s0);
-Texture2D<float2> b_in : register(s1);
+Texture2D<float2> x_in : register(t0);
+Texture2D<float2> b_in : register(t1);
 
 RWTexture2D<float2> x_out : register(u0);
 

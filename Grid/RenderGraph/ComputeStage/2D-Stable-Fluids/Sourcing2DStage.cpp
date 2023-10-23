@@ -7,7 +7,7 @@
 #include <d3dcompiler.h>
 
 Sourcing2DStage::Sourcing2DStage()
-    : ComputeStage{"2D-Fluid Sourcing", "./CSO/Sourcing2D_CS.cso", 32, 32, 1}
+    : Compute2DStage{"2D-Fluid Sourcing", "./CSO/Sourcing2D_CS.cso", 32, 32, 1}
 {
     _uav.resize(2);
     _srv.resize(4);
@@ -84,17 +84,16 @@ Sourcing2DStage::Sourcing2DStage()
 }
 
 void Sourcing2DStage::Run(ID3D11DeviceContext& context) {
-
     context.OMSetRenderTargets(0u, nullptr, nullptr);
-	context.CSSetShaderResources(0u, 2u, _srv[0].GetAddressOf());
-	context.CSSetUnorderedAccessViews(0u, 2u, _uav[0].GetAddressOf(), nullptr);
-	context.CSSetShader(_cs.Get(), nullptr, 0u);
-	context.Dispatch(
+    context.CSSetShaderResources(0u, 2u, _srv[0].GetAddressOf());
+    context.CSSetUnorderedAccessViews(0u, 2u, _uav[0].GetAddressOf(), nullptr);
+    context.CSSetShader(_cs.Get(), nullptr, 0u);
+    context.Dispatch(
         static_cast<UINT>(ceil(static_cast<float>(gViewportInfo.width) / _groupX)),
-        static_cast<UINT>(ceil(static_cast<float>(gViewportInfo.height) / _groupY)), 
+        static_cast<UINT>(ceil(static_cast<float>(gViewportInfo.height) / _groupY)),
         _groupZ
     );
-	SetBarrier(context);
+    SetBarrier(context);
 
     if (ImNodes::IsNodeSelected(_id)) {
         ImGui::Begin("Node Editor");

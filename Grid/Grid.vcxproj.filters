@@ -22,6 +22,9 @@
     <Filter Include="RenderGraph\ComputeStage\2D-Stable-Fluids">
       <UniqueIdentifier>{D886C057-44A1-23F9-8DC3-338DF91C4B00}</UniqueIdentifier>
     </Filter>
+    <Filter Include="RenderGraph\ComputeStage\3D-Stable-Fluids">
+      <UniqueIdentifier>{B9ACF563-25C7-5805-6EE9-6899DA42800C}</UniqueIdentifier>
+    </Filter>
     <Filter Include="RenderGraph\ConstantBufferStage">
       <UniqueIdentifier>{1ED433FA-8AB7-423A-93BA-7076FF1C098B}</UniqueIdentifier>
     </Filter>
@@ -67,7 +70,31 @@
     <ClInclude Include="RenderGraph\ComputeStage\2D-Stable-Fluids\Sourcing2DStage.h">
       <Filter>RenderGraph\ComputeStage\2D-Stable-Fluids</Filter>
     </ClInclude>
-    <ClInclude Include="RenderGraph\ComputeStage\ComputeStage.h">
+    <ClInclude Include="RenderGraph\ComputeStage\3D-Stable-Fluids\Advection3DStage.h">
+      <Filter>RenderGraph\ComputeStage\3D-Stable-Fluids</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderGraph\ComputeStage\3D-Stable-Fluids\Divergence3DStage.h">
+      <Filter>RenderGraph\ComputeStage\3D-Stable-Fluids</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderGraph\ComputeStage\3D-Stable-Fluids\GradientSubtract3DStage.h">
+      <Filter>RenderGraph\ComputeStage\3D-Stable-Fluids</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderGraph\ComputeStage\3D-Stable-Fluids\Poisson3D1DStage.h">
+      <Filter>RenderGraph\ComputeStage\3D-Stable-Fluids</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderGraph\ComputeStage\3D-Stable-Fluids\Poisson3D2DStage.h">
+      <Filter>RenderGraph\ComputeStage\3D-Stable-Fluids</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderGraph\ComputeStage\3D-Stable-Fluids\Poisson3D4DStage.h">
+      <Filter>RenderGraph\ComputeStage\3D-Stable-Fluids</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderGraph\ComputeStage\3D-Stable-Fluids\Sourcing3DStage.h">
+      <Filter>RenderGraph\ComputeStage\3D-Stable-Fluids</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderGraph\ComputeStage\Compute2DStage.h">
+      <Filter>RenderGraph\ComputeStage</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderGraph\ComputeStage\Compute3DStage.h">
       <Filter>RenderGraph\ComputeStage</Filter>
     </ClInclude>
     <ClInclude Include="RenderGraph\ComputeStage\Initializer2DStage.h">
@@ -142,6 +169,9 @@
     <ClInclude Include="RenderObject\Triangle.h">
       <Filter>RenderObject</Filter>
     </ClInclude>
+    <ClInclude Include="RenderObject\VolumeCube.h">
+      <Filter>RenderObject</Filter>
+    </ClInclude>
     <ClInclude Include="Renderer\Camera.h">
       <Filter>Renderer</Filter>
     </ClInclude>
@@ -151,6 +181,7 @@
     <ClInclude Include="Renderer\Renderer.h">
       <Filter>Renderer</Filter>
     </ClInclude>
+    <ClInclude Include="Texture3D.h" />
     <ClInclude Include="Utils\CircularQueue.h">
       <Filter>Utils</Filter>
     </ClInclude>
@@ -189,7 +220,31 @@
     <ClCompile Include="RenderGraph\ComputeStage\2D-Stable-Fluids\Sourcing2DStage.cpp">
       <Filter>RenderGraph\ComputeStage\2D-Stable-Fluids</Filter>
     </ClCompile>
-    <ClCompile Include="RenderGraph\ComputeStage\ComputeStage.cpp">
+    <ClCompile Include="RenderGraph\ComputeStage\3D-Stable-Fluids\Advection3DStage.cpp">
+      <Filter>RenderGraph\ComputeStage\3D-Stable-Fluids</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderGraph\ComputeStage\3D-Stable-Fluids\Divergence3DStage.cpp">
+      <Filter>RenderGraph\ComputeStage\3D-Stable-Fluids</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderGraph\ComputeStage\3D-Stable-Fluids\GradientSubtract3DStage.cpp">
+      <Filter>RenderGraph\ComputeStage\3D-Stable-Fluids</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderGraph\ComputeStage\3D-Stable-Fluids\Poisson3D1DStage.cpp">
+      <Filter>RenderGraph\ComputeStage\3D-Stable-Fluids</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderGraph\ComputeStage\3D-Stable-Fluids\Poisson3D2DStage.cpp">
+      <Filter>RenderGraph\ComputeStage\3D-Stable-Fluids</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderGraph\ComputeStage\3D-Stable-Fluids\Poisson3D4DStage.cpp">
+      <Filter>RenderGraph\ComputeStage\3D-Stable-Fluids</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderGraph\ComputeStage\3D-Stable-Fluids\Sourcing3DStage.cpp">
+      <Filter>RenderGraph\ComputeStage\3D-Stable-Fluids</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderGraph\ComputeStage\Compute2DStage.cpp">
+      <Filter>RenderGraph\ComputeStage</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderGraph\ComputeStage\Compute3DStage.cpp">
       <Filter>RenderGraph\ComputeStage</Filter>
     </ClCompile>
     <ClCompile Include="RenderGraph\ComputeStage\Initializer2DStage.cpp">
@@ -264,6 +319,9 @@
     <ClCompile Include="RenderObject\Triangle.cpp">
       <Filter>RenderObject</Filter>
     </ClCompile>
+    <ClCompile Include="RenderObject\VolumeCube.cpp">
+      <Filter>RenderObject</Filter>
+    </ClCompile>
     <ClCompile Include="Renderer\Camera.cpp">
       <Filter>Renderer</Filter>
     </ClCompile>
@@ -273,6 +331,7 @@
     <ClCompile Include="Renderer\Renderer.cpp">
       <Filter>Renderer</Filter>
     </ClCompile>
+    <ClCompile Include="Texture3D.cpp" />
     <ClCompile Include="Utils\CircularQueue.cpp">
       <Filter>Utils</Filter>
     </ClCompile>
@@ -280,6 +339,7 @@
       <Filter>Utils</Filter>
     </ClCompile>
     <ClCompile Include="pch.cpp" />
+    <ClCompile Include="temp.cpp" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="HLSL_CS\Advection2D_CS.hlsl">
@@ -309,11 +369,17 @@
     <FxCompile Include="HLSL_CS\Vector4DUnorm_CS.hlsl">
       <Filter>HLSL_CS</Filter>
     </FxCompile>
+    <FxCompile Include="HLSL_PS\VolumeCube_PS.hlsl">
+      <Filter>HLSL_PS</Filter>
+    </FxCompile>
     <FxCompile Include="HLSL_PS\spherePS.hlsl">
       <Filter>HLSL_PS</Filter>
     </FxCompile>
     <FxCompile Include="HLSL_PS\testPS.hlsl">
       <Filter>HLSL_PS</Filter>
+    </FxCompile>
+    <FxCompile Include="HLSL_VS\VolumeCube_VS.hlsl">
+      <Filter>HLSL_VS</Filter>
     </FxCompile>
     <FxCompile Include="HLSL_VS\sphereVS.hlsl">
       <Filter>HLSL_VS</Filter>

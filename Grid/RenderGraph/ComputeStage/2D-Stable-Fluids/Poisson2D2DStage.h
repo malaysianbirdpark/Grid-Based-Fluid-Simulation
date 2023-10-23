@@ -1,8 +1,8 @@
 #pragma once
 
-#include "ComputeStage.h"
+#include "Compute2DStage.h"
 
-class Poisson2D2DStage final : public ComputeStage
+class Poisson2D2DStage final : public Compute2DStage
 {
 public: Poisson2D2DStage();
 public: virtual ~Poisson2D2DStage() override = default;

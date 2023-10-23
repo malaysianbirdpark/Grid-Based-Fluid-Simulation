@@ -16,8 +16,6 @@ RenderGraph::RenderGraph()
 
 void RenderGraph::Run(ID3D11DeviceContext& context)
 {
-    //for (auto const node : _orderOfExecution)
-    //    std::visit(Stage::Run{context}, _graph[node]);
     for (auto& node : _graph)
         std::visit(Stage::Run{context}, node);
 
@@ -43,9 +41,7 @@ void RenderGraph::Link(int32_t from, int32_t from_attr, int32_t to, int32_t to_a
     std::string const from_type{ std::visit(Stage::GetStageName{}, _graph[from]) };
     std::string const to_type{ std::visit(Stage::GetStageName{}, _graph[to]) };
 
-    if (from_type == "Resource")
-		std::visit(Stage::Consume{std::visit(Stage::Expose{from_attr}, _graph[from]), to_attr}, _graph[to]);
-    else if (to_type == "Resource")
+    if (to_type == "Resource")
 		std::visit(Stage::Consume{ std::visit(Stage::Expose{to_attr}, _graph[to]), from_attr }, _graph[from]);
     else
 		std::visit(Stage::Consume{ std::visit(Stage::Expose{from_attr}, _graph[from]), to_attr }, _graph[to]);
@@ -76,7 +72,7 @@ void RenderGraph::ImGuiShowRenderGraphEditWindow()
 	ImGui::End();
 }
 
-void RenderGraph::Update()
+void RenderGraph::Update(ID3D11DeviceContext& context)
 {
     int32_t start{};
     int32_t end{};
@@ -86,6 +82,9 @@ void RenderGraph::Update()
         if ((from != -1) & (to != -1))
 			Link(from, start, to, end);
     }
+
+    for (auto& node : _graph)
+        std::visit(Stage::Update{context}, node);
 }
 
 void RenderGraph::RecalculateTopology() {

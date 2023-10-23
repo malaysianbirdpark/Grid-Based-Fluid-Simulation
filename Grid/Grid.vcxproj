@@ -59,7 +59,7 @@
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>.;Assets;CSO;HLSL_CS;HLSL_PS;HLSL_VS;Platform;Renderer;RenderGraph;RenderObject;Utils;Assets\Textures;RenderGraph\ComputeStage;RenderGraph\ConstantBufferStage;RenderGraph\ResourceStage;RenderGraph\ComputeStage\2D-Stable-Fluids;..\3rd_party;..\3rd_party\ImGui;..\3rd_party\ImGui\backends;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.;3rd_party;Assets;CSO;HLSL_CS;HLSL_PS;HLSL_VS;Platform;Renderer;RenderGraph;RenderObject;Utils;Assets\Textures;RenderGraph\ComputeStage;RenderGraph\ConstantBufferStage;RenderGraph\PixelStage;RenderGraph\ResourceStage;RenderGraph\VertexStage;RenderGraph\ComputeStage\2D-Stable-Fluids;RenderGraph\ComputeStage\3D-Stable-Fluids;..\3rd_party;..\3rd_party\ImGui;..\3rd_party\ImGui\backends;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
@@ -80,7 +80,7 @@
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>.;Assets;CSO;HLSL_CS;HLSL_PS;HLSL_VS;Platform;Renderer;RenderGraph;RenderObject;Utils;Assets\Textures;RenderGraph\ComputeStage;RenderGraph\ConstantBufferStage;RenderGraph\ResourceStage;RenderGraph\ComputeStage\2D-Stable-Fluids;..\3rd_party;..\3rd_party\ImGui;..\3rd_party\ImGui\backends;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.;3rd_party;Assets;CSO;HLSL_CS;HLSL_PS;HLSL_VS;Platform;Renderer;RenderGraph;RenderObject;Utils;Assets\Textures;RenderGraph\ComputeStage;RenderGraph\ConstantBufferStage;RenderGraph\PixelStage;RenderGraph\ResourceStage;RenderGraph\VertexStage;RenderGraph\ComputeStage\2D-Stable-Fluids;RenderGraph\ComputeStage\3D-Stable-Fluids;..\3rd_party;..\3rd_party\ImGui;..\3rd_party\ImGui\backends;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -110,7 +110,15 @@
     <ClInclude Include="RenderGraph\ComputeStage\2D-Stable-Fluids\Poisson2D2DStage.h" />
     <ClInclude Include="RenderGraph\ComputeStage\2D-Stable-Fluids\Poisson2D4DStage.h" />
     <ClInclude Include="RenderGraph\ComputeStage\2D-Stable-Fluids\Sourcing2DStage.h" />
-    <ClInclude Include="RenderGraph\ComputeStage\ComputeStage.h" />
+    <ClInclude Include="RenderGraph\ComputeStage\3D-Stable-Fluids\Advection3DStage.h" />
+    <ClInclude Include="RenderGraph\ComputeStage\3D-Stable-Fluids\Divergence3DStage.h" />
+    <ClInclude Include="RenderGraph\ComputeStage\3D-Stable-Fluids\GradientSubtract3DStage.h" />
+    <ClInclude Include="RenderGraph\ComputeStage\3D-Stable-Fluids\Poisson3D1DStage.h" />
+    <ClInclude Include="RenderGraph\ComputeStage\3D-Stable-Fluids\Poisson3D2DStage.h" />
+    <ClInclude Include="RenderGraph\ComputeStage\3D-Stable-Fluids\Poisson3D4DStage.h" />
+    <ClInclude Include="RenderGraph\ComputeStage\3D-Stable-Fluids\Sourcing3DStage.h" />
+    <ClInclude Include="RenderGraph\ComputeStage\Compute2DStage.h" />
+    <ClInclude Include="RenderGraph\ComputeStage\Compute3DStage.h" />
     <ClInclude Include="RenderGraph\ComputeStage\Initializer2DStage.h" />
     <ClInclude Include="RenderGraph\ConstantBufferStage\CBFluid.h" />
     <ClInclude Include="RenderGraph\ConstantBufferStage\CBPoisson.h" />
@@ -135,9 +143,11 @@
     <ClInclude Include="RenderObject\Sphere.h" />
     <ClInclude Include="RenderObject\Transform.h" />
     <ClInclude Include="RenderObject\Triangle.h" />
+    <ClInclude Include="RenderObject\VolumeCube.h" />
     <ClInclude Include="Renderer\Camera.h" />
     <ClInclude Include="Renderer\ImGuiRenderer.h" />
     <ClInclude Include="Renderer\Renderer.h" />
+    <ClInclude Include="Texture3D.h" />
     <ClInclude Include="Utils\CircularQueue.h" />
     <ClInclude Include="Utils\Clk.h" />
     <ClInclude Include="pch.h" />
@@ -154,7 +164,15 @@
     <ClCompile Include="RenderGraph\ComputeStage\2D-Stable-Fluids\Poisson2D2DStage.cpp" />
     <ClCompile Include="RenderGraph\ComputeStage\2D-Stable-Fluids\Poisson2D4DStage.cpp" />
     <ClCompile Include="RenderGraph\ComputeStage\2D-Stable-Fluids\Sourcing2DStage.cpp" />
-    <ClCompile Include="RenderGraph\ComputeStage\ComputeStage.cpp" />
+    <ClCompile Include="RenderGraph\ComputeStage\3D-Stable-Fluids\Advection3DStage.cpp" />
+    <ClCompile Include="RenderGraph\ComputeStage\3D-Stable-Fluids\Divergence3DStage.cpp" />
+    <ClCompile Include="RenderGraph\ComputeStage\3D-Stable-Fluids\GradientSubtract3DStage.cpp" />
+    <ClCompile Include="RenderGraph\ComputeStage\3D-Stable-Fluids\Poisson3D1DStage.cpp" />
+    <ClCompile Include="RenderGraph\ComputeStage\3D-Stable-Fluids\Poisson3D2DStage.cpp" />
+    <ClCompile Include="RenderGraph\ComputeStage\3D-Stable-Fluids\Poisson3D4DStage.cpp" />
+    <ClCompile Include="RenderGraph\ComputeStage\3D-Stable-Fluids\Sourcing3DStage.cpp" />
+    <ClCompile Include="RenderGraph\ComputeStage\Compute2DStage.cpp" />
+    <ClCompile Include="RenderGraph\ComputeStage\Compute3DStage.cpp" />
     <ClCompile Include="RenderGraph\ComputeStage\Initializer2DStage.cpp" />
     <ClCompile Include="RenderGraph\ConstantBufferStage\CBFluid.cpp" />
     <ClCompile Include="RenderGraph\ConstantBufferStage\CBPoisson.cpp" />
@@ -179,14 +197,17 @@
     <ClCompile Include="RenderObject\Sphere.cpp" />
     <ClCompile Include="RenderObject\Transform.cpp" />
     <ClCompile Include="RenderObject\Triangle.cpp" />
+    <ClCompile Include="RenderObject\VolumeCube.cpp" />
     <ClCompile Include="Renderer\Camera.cpp" />
     <ClCompile Include="Renderer\ImGuiRenderer.cpp" />
     <ClCompile Include="Renderer\Renderer.cpp" />
+    <ClCompile Include="Texture3D.cpp" />
     <ClCompile Include="Utils\CircularQueue.cpp" />
     <ClCompile Include="Utils\Clk.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="temp.cpp" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="HLSL_CS\Advection2D_CS.hlsl">
@@ -243,6 +264,12 @@
       <EntryPointName>main</EntryPointName>
       <ObjectFileOutput>../Grid/CSO/Vector4DUnorm_CS.cso</ObjectFileOutput>
     </FxCompile>
+    <FxCompile Include="HLSL_PS\VolumeCube_PS.hlsl">
+      <ShaderType>Pixel</ShaderType>
+      <ShaderModel>5.0</ShaderModel>
+      <EntryPointName>main</EntryPointName>
+      <ObjectFileOutput>../Grid/CSO/VolumeCube_PS.cso</ObjectFileOutput>
+    </FxCompile>
     <FxCompile Include="HLSL_PS\spherePS.hlsl">
       <ShaderType>Pixel</ShaderType>
       <ShaderModel>5.0</ShaderModel>
@@ -254,6 +281,12 @@
       <ShaderModel>5.0</ShaderModel>
       <EntryPointName>main</EntryPointName>
       <ObjectFileOutput>../Grid/CSO/testPS.cso</ObjectFileOutput>
+    </FxCompile>
+    <FxCompile Include="HLSL_VS\VolumeCube_VS.hlsl">
+      <ShaderType>Vertex</ShaderType>
+      <ShaderModel>5.0</ShaderModel>
+      <EntryPointName>main</EntryPointName>
+      <ObjectFileOutput>../Grid/CSO/VolumeCube_VS.cso</ObjectFileOutput>
     </FxCompile>
     <FxCompile Include="HLSL_VS\sphereVS.hlsl">
       <ShaderType>Vertex</ShaderType>

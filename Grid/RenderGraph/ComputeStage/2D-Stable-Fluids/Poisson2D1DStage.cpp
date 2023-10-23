@@ -7,7 +7,7 @@
 #include "NodeManager.h"
 
 Poisson2D1DStage::Poisson2D1DStage()
-    : ComputeStage{"2D1D-Poisson Solver", "./CSO/Poisson2D1D_CS.cso", 32, 32, 1}
+    : Compute2DStage{"2D1D-Poisson Solver", "./CSO/Poisson2D1D_CS.cso", 32, 32, 1}
 {
     _uav.resize(2);
     _srv.resize(3);
@@ -72,7 +72,7 @@ Poisson2D1DStage::Poisson2D1DStage()
 
 void Poisson2D1DStage::Run(ID3D11DeviceContext& context)
 {
-    for (auto i {0}; i != 30; ++i) {
+    for (auto i {0}; i != 31; ++i) {
         context.OMSetRenderTargets(0u, nullptr, nullptr);
         context.CSSetShaderResources(0u, 1u, _srv[i & 0b1].GetAddressOf());
         context.CSSetShaderResources(1u, 1u, _srv[2].GetAddressOf());
@@ -126,5 +126,7 @@ void Poisson2D1DStage::Consume(ID3D11Resource* resource, int32_t attribute_id)
 ID3D11Resource* Poisson2D1DStage::Expose(int32_t attribute_id)
 {
     if (attribute_id == _xOutID)
-		return static_cast<ID3D11Resource*>(_resource[0].Get());
+        return static_cast<ID3D11Resource*>(_resource[0].Get());
+    else
+        return nullptr;
 }

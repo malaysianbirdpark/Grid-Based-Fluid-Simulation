@@ -1,8 +1,8 @@
 #pragma once
 
-#include "ComputeStage.h"
+#include "Compute2DStage.h"
 
-class Divergence2DStage final : public ComputeStage
+class Divergence2DStage final : public Compute2DStage
 {
 public: Divergence2DStage();
 public: ~Divergence2DStage() override = default;

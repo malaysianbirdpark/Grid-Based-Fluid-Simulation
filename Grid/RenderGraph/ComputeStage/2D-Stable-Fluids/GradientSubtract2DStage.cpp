@@ -7,7 +7,7 @@
 #include "NodeManager.h"
 
 GradientSubtract2DStage::GradientSubtract2DStage()
-	: ComputeStage{"2D-GradientSubtract", "./CSO/GradientSub2D_CS.cso", 32, 32, 1}
+	: Compute2DStage{"2D-GradientSubtract", "./CSO/GradientSub2D_CS.cso", 32, 32, 1}
 {
     _uav.resize(3);
     _srv.resize(1);
@@ -31,7 +31,6 @@ GradientSubtract2DStage::GradientSubtract2DStage()
 
     pDevice->CreateTexture2D(&desc, nullptr, _resource[0].ReleaseAndGetAddressOf());
     pDevice->CreateUnorderedAccessView(_resource[0].Get(), nullptr, _uav[2].ReleaseAndGetAddressOf());
-    pDevice->CreateShaderResourceView(_resource[0].Get(), nullptr, _srv[0].ReleaseAndGetAddressOf());
 
     _xInID = NodeManager::IssueIncomingAttrID();
     _incoming[_xInID] = -1;
@@ -69,7 +68,7 @@ GradientSubtract2DStage::GradientSubtract2DStage()
 }
 
 void GradientSubtract2DStage::Run(ID3D11DeviceContext& context) {
-    ComputeStage::Run(context);
+    Compute2DStage::Run(context);
 
     if (ImNodes::IsNodeSelected(_id)) {
         ImGui::Begin("Node Editor");

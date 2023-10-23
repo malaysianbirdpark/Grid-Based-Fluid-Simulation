@@ -1,7 +1,7 @@
 #pragma once
 
-#include "ComputeStage.h"
-class Initializer2DStage final : public ComputeStage
+#include "Compute2DStage.h"
+class Initializer2DStage final : public Compute2DStage
 {
 public: Initializer2DStage();
 public: virtual ~Initializer2DStage() override = default;
