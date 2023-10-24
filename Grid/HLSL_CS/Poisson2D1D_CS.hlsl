@@ -8,9 +8,6 @@ cbuffer constants : register(b2) {
 	float r_beta;
 };
 
-SamplerState sampler0 : register(s0);
-SamplerState sampler1 : register(s1);
-
 [numthreads(32, 32, 1)]
 void main( uint3 DTid : SV_DispatchThreadID )
 {

@@ -216,11 +216,23 @@
       <EntryPointName>main</EntryPointName>
       <ObjectFileOutput>../Grid/CSO/Advection2D_CS.cso</ObjectFileOutput>
     </FxCompile>
+    <FxCompile Include="HLSL_CS\Advection3D_CS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Compute</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">4.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Compute</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">4.0</ShaderModel>
+    </FxCompile>
     <FxCompile Include="HLSL_CS\Divergence2D_CS.hlsl">
       <ShaderType>Compute</ShaderType>
       <ShaderModel>5.0</ShaderModel>
       <EntryPointName>main</EntryPointName>
       <ObjectFileOutput>../Grid/CSO/Divergence2D_CS.cso</ObjectFileOutput>
+    </FxCompile>
+    <FxCompile Include="HLSL_CS\Divergence3D_CS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Compute</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">4.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Compute</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">4.0</ShaderModel>
     </FxCompile>
     <FxCompile Include="HLSL_CS\GradientSub2D_CS.hlsl">
       <ShaderType>Compute</ShaderType>
@@ -228,11 +240,23 @@
       <EntryPointName>main</EntryPointName>
       <ObjectFileOutput>../Grid/CSO/GradientSub2D_CS.cso</ObjectFileOutput>
     </FxCompile>
+    <FxCompile Include="HLSL_CS\GradientSub3D_CS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Compute</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">4.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Compute</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">4.0</ShaderModel>
+    </FxCompile>
     <FxCompile Include="HLSL_CS\Initializer2D_CS.hlsl">
       <ShaderType>Compute</ShaderType>
       <ShaderModel>5.0</ShaderModel>
       <EntryPointName>main</EntryPointName>
       <ObjectFileOutput>../Grid/CSO/Initializer2D_CS.cso</ObjectFileOutput>
+    </FxCompile>
+    <FxCompile Include="HLSL_CS\Initializer3D_CS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Compute</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">4.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Compute</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">4.0</ShaderModel>
     </FxCompile>
     <FxCompile Include="HLSL_CS\Poisson2D1D_CS.hlsl">
       <ShaderType>Compute</ShaderType>
@@ -252,11 +276,35 @@
       <EntryPointName>main</EntryPointName>
       <ObjectFileOutput>../Grid/CSO/Poisson2D4D_CS.cso</ObjectFileOutput>
     </FxCompile>
+    <FxCompile Include="HLSL_CS\Poisson3D1D_CS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Compute</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">4.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Compute</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">4.0</ShaderModel>
+    </FxCompile>
+    <FxCompile Include="HLSL_CS\Poisson3D3D_CS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Compute</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">4.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Compute</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">4.0</ShaderModel>
+    </FxCompile>
+    <FxCompile Include="HLSL_CS\Poisson3D4D_CS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Compute</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">4.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Compute</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">4.0</ShaderModel>
+    </FxCompile>
     <FxCompile Include="HLSL_CS\Sourcing2D_CS.hlsl">
       <ShaderType>Compute</ShaderType>
       <ShaderModel>5.0</ShaderModel>
       <EntryPointName>main</EntryPointName>
       <ObjectFileOutput>../Grid/CSO/Sourcing2D_CS.cso</ObjectFileOutput>
+    </FxCompile>
+    <FxCompile Include="HLSL_CS\Sourcing3D_CS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Compute</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">4.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Compute</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">4.0</ShaderModel>
     </FxCompile>
     <FxCompile Include="HLSL_CS\Vector4DUnorm_CS.hlsl">
       <ShaderType>Compute</ShaderType>

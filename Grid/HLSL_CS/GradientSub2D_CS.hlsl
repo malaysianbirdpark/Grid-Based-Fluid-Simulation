@@ -3,9 +3,6 @@ RWTexture2D<float> x_in : register(u0);
 RWTexture2D<float2> sub_target : register(u1);
 RWTexture2D<float2> result : register(u2);
 
-SamplerState sampler0 : register(s0);
-SamplerState sampler1 : register(s1);
-
 [numthreads(32, 32, 1)]
 void main( uint3 DTid : SV_DispatchThreadID )
 {

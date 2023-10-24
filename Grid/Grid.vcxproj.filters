@@ -387,5 +387,13 @@
     <FxCompile Include="HLSL_VS\testVS.hlsl">
       <Filter>HLSL_VS</Filter>
     </FxCompile>
+    <FxCompile Include="HLSL_CS\Divergence3D_CS.hlsl" />
+    <FxCompile Include="HLSL_CS\Advection3D_CS.hlsl" />
+    <FxCompile Include="HLSL_CS\GradientSub3D_CS.hlsl" />
+    <FxCompile Include="HLSL_CS\Initializer3D_CS.hlsl" />
+    <FxCompile Include="HLSL_CS\Poisson3D1D_CS.hlsl" />
+    <FxCompile Include="HLSL_CS\Poisson3D3D_CS.hlsl" />
+    <FxCompile Include="HLSL_CS\Poisson3D4D_CS.hlsl" />
+    <FxCompile Include="HLSL_CS\Sourcing3D_CS.hlsl" />
   </ItemGroup>
 </Project>
