@@ -18,7 +18,7 @@ void main( uint3 DTid : SV_DispatchThreadID ) {
 	uint depth;
 	quantity_in.GetDimensions(width, height, depth);
 
-	const float3 dr = float2((1.0f / width), (1.0f / height), (1.0f / depth));
+	const float3 dr = float3((1.0f / width), (1.0f / height), (1.0f / depth));
 
 	const float3 pos = (DTid.xyz + 0.5f) * dr;
     const float3 target = (pos - velocity_in.SampleLevel(sampler1, pos, 0.0f).xyz * dt);

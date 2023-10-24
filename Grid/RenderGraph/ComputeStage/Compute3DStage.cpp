@@ -35,7 +35,7 @@ void Compute3DStage::Run(ID3D11DeviceContext& context) {
 	context.Dispatch(
         static_cast<UINT>(ceil(static_cast<float>(gViewportInfo.width) / _groupX)),
         static_cast<UINT>(ceil(static_cast<float>(gViewportInfo.height) / _groupY)), 
-        _groupZ
+        static_cast<UINT>(ceil(static_cast<float>(gViewportInfo.depth) / _groupZ)) 
     );
 	SetBarrier(context);
 }

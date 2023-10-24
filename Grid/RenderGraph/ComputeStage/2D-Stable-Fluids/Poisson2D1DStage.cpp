@@ -127,6 +127,5 @@ ID3D11Resource* Poisson2D1DStage::Expose(int32_t attribute_id)
 {
     if (attribute_id == _xOutID)
         return static_cast<ID3D11Resource*>(_resource[0].Get());
-    else
-        return nullptr;
+	return nullptr;
 }

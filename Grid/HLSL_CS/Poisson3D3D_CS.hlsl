@@ -25,8 +25,8 @@ void main( uint3 DTid : SV_DispatchThreadID )
     const float3 down = x_in[uint3(DTid.x, max(DTid.y - 1, 0), DTid.z)];
     const float3 right = x_in[uint3(min(DTid.x + 1, width - 1), DTid.y, DTid.z)];
     const float3 left = x_in[uint3(max(DTid.x - 1, 0), DTid.y, DTid.z)];
-    const float3 front = x_in[uint3(DTid.x, DTid.y, min(DTid.z + 1, depth - 1)];
-    const float3 behind = x_in[uint3(DTid.x , DTid.y, max(DTid.z - 1, 0)];
+    const float3 front = x_in[uint3(DTid.x, DTid.y, min(DTid.z + 1, depth - 1))];
+    const float3 behind = x_in[uint3(DTid.x , DTid.y, max(DTid.z - 1, 0))];
 
 	x_out[DTid.xyz] = (up + down + left + right + front + behind + alpha * b_in[DTid.xyz]) * r_beta;
 }

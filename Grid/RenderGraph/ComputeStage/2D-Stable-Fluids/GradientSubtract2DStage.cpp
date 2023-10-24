@@ -108,4 +108,5 @@ ID3D11Resource* GradientSubtract2DStage::Expose(int32_t attribute_id)
 {
     if (attribute_id == _resultID)
         return static_cast<ID3D11Resource*>(_resource[0].Get());
+	return nullptr;
 }

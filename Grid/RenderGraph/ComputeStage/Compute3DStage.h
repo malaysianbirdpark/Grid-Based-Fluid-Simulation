@@ -40,6 +40,5 @@ public:  void RenderNode() const;
 public:  virtual void Consume(ID3D11Resource* resource, int32_t attribute_id) = 0;
 public:  virtual ID3D11Resource* Expose(int32_t attribute_id) = 0;
 protected: void SetBarrier(ID3D11DeviceContext& context) const;
-
 };
 

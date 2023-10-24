@@ -41,6 +41,8 @@
 #include "CBViscosity.h"
 
 #include "VolumeCube.h"
+#include "DrawVolumeStage.h"
+#include "Texture3DTest.h"
 
 Game::Game() 
 {
@@ -48,15 +50,21 @@ Game::Game()
 	int constexpr height{ 1080 };
 	gViewportInfo.width = 640;
 	gViewportInfo.height = 640;
+	gViewportInfo.depth = 640;
 	Win32::Init(width, height);
 	Renderer::Init(width, height, gWindowInfo.hWnd);
 	Camera::Init();
 
 	Clk::Init();
 
-	_renderGraph.AddStage(std::move(std::make_shared<DrawStage>("VolumeCube", std::make_shared<VolumeCube>(Renderer::Context()))));
+	_renderGraph.AddStage(std::move(std::make_shared<Texture3DTest>()));
+	_renderGraph.AddStage(std::move(std::make_shared<DrawVolumeStage>(Renderer::Context())));
 	_renderGraph.AddStage(std::move(std::make_shared<CopyStage>()));
 	_renderGraph.AddStage(std::move(std::make_shared<ViewportStage>()));
+
+	_renderGraph.Link(0, 256, 1, 1);
+	_renderGraph.Link(1, 257, 2, 2);
+	_renderGraph.Link(2, 258, 3, 3);
 
 	ImNodes::LoadCurrentEditorStateFromIniFile("imnodes_state.ini");
 }

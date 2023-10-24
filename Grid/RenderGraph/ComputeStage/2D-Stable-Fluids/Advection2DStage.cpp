@@ -133,4 +133,5 @@ ID3D11Resource* Advection2DStage::Expose(int32_t attribute_id)
         return static_cast<ID3D11Resource*>(_resource[0].Get());
     else if (attribute_id == _quantityOutID)
         return static_cast<ID3D11Resource*>(_resource[1].Get());
+    return nullptr;
 }

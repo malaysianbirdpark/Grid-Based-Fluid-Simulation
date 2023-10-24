@@ -28,6 +28,9 @@
     <Filter Include="RenderGraph\ConstantBufferStage">
       <UniqueIdentifier>{1ED433FA-8AB7-423A-93BA-7076FF1C098B}</UniqueIdentifier>
     </Filter>
+    <Filter Include="RenderGraph\DrawStage">
+      <UniqueIdentifier>{A8479CC0-14B4-57BB-DDA7-EF1849D37923}</UniqueIdentifier>
+    </Filter>
     <Filter Include="RenderGraph\ResourceStage">
       <UniqueIdentifier>{22E6970E-8EA8-CB98-D758-5A25435AA476}</UniqueIdentifier>
     </Filter>
@@ -118,8 +121,11 @@
     <ClInclude Include="RenderGraph\CopyStage.h">
       <Filter>RenderGraph</Filter>
     </ClInclude>
-    <ClInclude Include="RenderGraph\DrawStage.h">
-      <Filter>RenderGraph</Filter>
+    <ClInclude Include="RenderGraph\DrawStage\DrawStage.h">
+      <Filter>RenderGraph\DrawStage</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderGraph\DrawStage\DrawVolumeStage.h">
+      <Filter>RenderGraph\DrawStage</Filter>
     </ClInclude>
     <ClInclude Include="RenderGraph\NodeManager.h">
       <Filter>RenderGraph</Filter>
@@ -189,6 +195,7 @@
       <Filter>Utils</Filter>
     </ClInclude>
     <ClInclude Include="pch.h" />
+    <ClInclude Include="RenderGraph\ComputeStage\3D-Stable-Fluids\Texture3DTest.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EntryPoint.cpp" />
@@ -268,8 +275,11 @@
     <ClCompile Include="RenderGraph\CopyStage.cpp">
       <Filter>RenderGraph</Filter>
     </ClCompile>
-    <ClCompile Include="RenderGraph\DrawStage.cpp">
-      <Filter>RenderGraph</Filter>
+    <ClCompile Include="RenderGraph\DrawStage\DrawStage.cpp">
+      <Filter>RenderGraph\DrawStage</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderGraph\DrawStage\DrawVolumeStage.cpp">
+      <Filter>RenderGraph\DrawStage</Filter>
     </ClCompile>
     <ClCompile Include="RenderGraph\NodeManager.cpp">
       <Filter>RenderGraph</Filter>
@@ -340,18 +350,34 @@
     </ClCompile>
     <ClCompile Include="pch.cpp" />
     <ClCompile Include="temp.cpp" />
+    <ClCompile Include="RenderGraph\ComputeStage\3D-Stable-Fluids\Texture3DTest.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <FxCompile Include="HLSL_CS\3DTextureTest_CS.hlsl">
+      <Filter>HLSL_CS</Filter>
+    </FxCompile>
     <FxCompile Include="HLSL_CS\Advection2D_CS.hlsl">
+      <Filter>HLSL_CS</Filter>
+    </FxCompile>
+    <FxCompile Include="HLSL_CS\Advection3D_CS.hlsl">
       <Filter>HLSL_CS</Filter>
     </FxCompile>
     <FxCompile Include="HLSL_CS\Divergence2D_CS.hlsl">
       <Filter>HLSL_CS</Filter>
     </FxCompile>
+    <FxCompile Include="HLSL_CS\Divergence3D_CS.hlsl">
+      <Filter>HLSL_CS</Filter>
+    </FxCompile>
     <FxCompile Include="HLSL_CS\GradientSub2D_CS.hlsl">
       <Filter>HLSL_CS</Filter>
     </FxCompile>
+    <FxCompile Include="HLSL_CS\GradientSub3D_CS.hlsl">
+      <Filter>HLSL_CS</Filter>
+    </FxCompile>
     <FxCompile Include="HLSL_CS\Initializer2D_CS.hlsl">
+      <Filter>HLSL_CS</Filter>
+    </FxCompile>
+    <FxCompile Include="HLSL_CS\Initializer3D_CS.hlsl">
       <Filter>HLSL_CS</Filter>
     </FxCompile>
     <FxCompile Include="HLSL_CS\Poisson2D1D_CS.hlsl">
@@ -363,11 +389,26 @@
     <FxCompile Include="HLSL_CS\Poisson2D4D_CS.hlsl">
       <Filter>HLSL_CS</Filter>
     </FxCompile>
+    <FxCompile Include="HLSL_CS\Poisson3D1D_CS.hlsl">
+      <Filter>HLSL_CS</Filter>
+    </FxCompile>
+    <FxCompile Include="HLSL_CS\Poisson3D3D_CS.hlsl">
+      <Filter>HLSL_CS</Filter>
+    </FxCompile>
+    <FxCompile Include="HLSL_CS\Poisson3D4D_CS.hlsl">
+      <Filter>HLSL_CS</Filter>
+    </FxCompile>
     <FxCompile Include="HLSL_CS\Sourcing2D_CS.hlsl">
+      <Filter>HLSL_CS</Filter>
+    </FxCompile>
+    <FxCompile Include="HLSL_CS\Sourcing3D_CS.hlsl">
       <Filter>HLSL_CS</Filter>
     </FxCompile>
     <FxCompile Include="HLSL_CS\Vector4DUnorm_CS.hlsl">
       <Filter>HLSL_CS</Filter>
+    </FxCompile>
+    <FxCompile Include="HLSL_PS\VolumeCubeFaces_PS.hlsl">
+      <Filter>HLSL_PS</Filter>
     </FxCompile>
     <FxCompile Include="HLSL_PS\VolumeCube_PS.hlsl">
       <Filter>HLSL_PS</Filter>
@@ -387,13 +428,5 @@
     <FxCompile Include="HLSL_VS\testVS.hlsl">
       <Filter>HLSL_VS</Filter>
     </FxCompile>
-    <FxCompile Include="HLSL_CS\Divergence3D_CS.hlsl" />
-    <FxCompile Include="HLSL_CS\Advection3D_CS.hlsl" />
-    <FxCompile Include="HLSL_CS\GradientSub3D_CS.hlsl" />
-    <FxCompile Include="HLSL_CS\Initializer3D_CS.hlsl" />
-    <FxCompile Include="HLSL_CS\Poisson3D1D_CS.hlsl" />
-    <FxCompile Include="HLSL_CS\Poisson3D3D_CS.hlsl" />
-    <FxCompile Include="HLSL_CS\Poisson3D4D_CS.hlsl" />
-    <FxCompile Include="HLSL_CS\Sourcing3D_CS.hlsl" />
   </ItemGroup>
 </Project>

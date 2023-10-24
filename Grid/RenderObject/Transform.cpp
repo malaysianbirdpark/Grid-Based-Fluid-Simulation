@@ -20,7 +20,9 @@ Transform::Transform(ID3D11DeviceContext& context, DirectX::FXMMATRIX model)
 
     D3D11_SUBRESOURCE_DATA sd{};
     XMStoreFloat4x4(&_transform._m, XMMatrixTranspose(model));
-    XMStoreFloat4x4(&_transform._mit, XMMatrixInverse(nullptr, model));
+    XMStoreFloat4x4(&_transform._mv, XMMatrixTranspose(XMMatrixMultiply(model, Camera::GetView())));
+    //XMStoreFloat4x4(&_transform._mit, XMMatrixInverse(nullptr, model));
+    //XMStoreFloat4x4(&_transform._mvp, XMMatrixTranspose(XMMatrixMultiply(XMLoadFloat4x4(&_transform._mv), Renderer::GetProj())));
     XMStoreFloat4x4(&_transform._mvp, XMMatrixTranspose(XMMatrixMultiply(XMMatrixMultiply(model, Camera::GetView()), Renderer::GetProj())));
     sd.pSysMem = &_transform;
 
@@ -43,7 +45,9 @@ void Transform::Update(ID3D11DeviceContext& context)
     using namespace DirectX;
     auto const model{ XMLoadFloat4x4(&_model) };
     XMStoreFloat4x4(&_transform._m, XMMatrixTranspose(model));
-    XMStoreFloat4x4(&_transform._mit, XMMatrixInverse(nullptr, model));
+    XMStoreFloat4x4(&_transform._mv, XMMatrixTranspose(XMMatrixMultiply(model, Camera::GetView())));
+    //XMStoreFloat4x4(&_transform._mit, XMMatrixInverse(nullptr, model));
+    //XMStoreFloat4x4(&_transform._mvp, XMMatrixTranspose(XMMatrixMultiply(XMLoadFloat4x4(&_transform._mv), Renderer::GetProj())));
     XMStoreFloat4x4(&_transform._mvp, XMMatrixTranspose(XMMatrixMultiply(XMMatrixMultiply(model, Camera::GetView()), Renderer::GetProj())));
 
     D3D11_MAPPED_SUBRESOURCE msr{};
