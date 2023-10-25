@@ -3,6 +3,7 @@
 
 #include <cstdlib>
 #include <ctime>
+#include <DirectXPackedVector.h>
 
 #include "imnodes.h"
 #include "NodeManager.h"
@@ -75,14 +76,14 @@ void CBFluid::Update()
     }
 
     if (color_mode == 0) {
-		DirectX::XMVECTOR const random_color{
+        DirectX::PackedVector::XMCOLOR const random_color {
 			static_cast<float>(std::rand()) / RAND_MAX,
 			static_cast<float>(std::rand()) / RAND_MAX,
 			static_cast<float>(std::rand()) / RAND_MAX,
             1.0f
         };
 
-		DirectX::XMStoreFloat4(&_data._color, random_color);
+		DirectX::XMStoreFloat4(&_data._color, DirectX::PackedVector::XMLoadColor(&random_color));
     }
 
     if (velocity_mode == 0) {

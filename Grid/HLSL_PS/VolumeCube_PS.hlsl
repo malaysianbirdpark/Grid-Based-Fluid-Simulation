@@ -1,5 +1,5 @@
 struct PS_IN {
-    float4 world_pos  : POSITION;
+    float4 view_pos   : POSITION;
     float4 sv_pos     : SV_Position;
 };
 
@@ -12,17 +12,23 @@ Texture2D back_faces  : register(t3);
 
 SamplerState sampler0 : register(s0);
 
-cbuffer Constants {
+cbuffer Transform : register(b0) {
+    matrix m;
+    matrix mv;
+    matrix mvi;
+    matrix mvp;
+}
+
+cbuffer Constants : register(b1) {
     int step_size;
     int iterations;
 };
 
 float4 main(PS_IN input) : SV_Target
 {
-    float2 uv = input.sv_pos.xy;
-    //float2 uv = input.sv_pos.xy /= input.sv_pos.w;
-    //uv.x = 0.5f * uv.x + 0.5f;
-    //uv.y = -0.5f * uv.y + 0.5f;
+    float2 uv = input.sv_pos.xy /= input.sv_pos.w;
+    uv.x = 0.5f * uv.x + 0.5f;
+    uv.y = -0.5f * uv.y + 0.5f;
 
     const float3 front = front_faces.Sample(sampler0, uv).xyz;
     const float3 back = back_faces.Sample(sampler0, uv).xyz;
@@ -38,7 +44,11 @@ float4 main(PS_IN input) : SV_Target
 
     //for (int i = 0; i < iterations; ++i) {
     for (int i = 0; i < 55; ++i) {
-        src = volume_tex.Sample(sampler0, cur_pos);
+        float3 uvw = mul(float4(cur_pos, 1.0f), mvi);
+		uvw.x = 0.5f * uvw.x + 0.5f;
+		uvw.y = -0.5f * uvw.y + 0.5f;
+		uvw.z = 0.5f * uvw.z + 0.5f;
+        src = volume_tex.Sample(sampler0, uvw);
         //src = float4(0.5f, 0.22f, 0.39f, 0.2f);
 
         src.rgb *= src.a;
@@ -49,7 +59,7 @@ float4 main(PS_IN input) : SV_Target
 
         cur_pos += step;
 
-        if (cur_pos.x > 1.0f || cur_pos.y > 1.0f || cur_pos.z > 1.0f)
+        if (uvw.x > 1.0f || uvw.y > 1.0f || uvw.z > 1.0f)
             break;
     }
 

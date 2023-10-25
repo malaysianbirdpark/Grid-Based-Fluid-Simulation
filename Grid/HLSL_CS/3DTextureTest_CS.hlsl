@@ -32,5 +32,5 @@ void main( uint3 DTid : SV_DispatchThreadID ) {
 	if ((DTid.x - (width / 2)) * (DTid.x - (width / 2)) + (DTid.y - (height / 2)) * (DTid.y - (height / 2)) + (DTid.z - (depth / 2)) * (DTid.z - (depth / 2)) <= 64000.0f)
 		target[DTid.xyz] = float4(0.0f, 0.0f, 1.0f, 1.0f);
 	else
-		target[DTid.xyz] = float4(1.0f, 0.0f, 0.0f, 0.01f);
+		target[DTid.xyz] = float4(0.0f, 0.0f, 0.0f, 0.00f);
 }

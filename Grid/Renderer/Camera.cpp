@@ -6,7 +6,7 @@
 #define PI (3.141592f)
 
 void Camera::Init() {
-    DirectX::XMVECTOR const init_pos{ 0.0f, 0.0f, -5.0f, 1.0f };
+    DirectX::XMVECTOR const init_pos{ 0.0f, 0.0f, -20.0f, 1.0f };
     DirectX::XMStoreFloat3(&_pos, init_pos);
 }
 
@@ -17,14 +17,13 @@ DirectX::XMVECTOR Camera::GetPos() {
 DirectX::XMMATRIX Camera::GetView() {
     auto const lookAt{
         DirectX::XMVector3Transform(
-        DirectX::XMVectorSet(0.0f, 0.0f, 1.0f, 0.0f),
-        DirectX::XMMatrixRotationRollPitchYaw(_pitch, _yaw, 0.0f)
-    )
+			DirectX::XMVectorSet(0.0f, 0.0f, 1.0f, 0.0f),
+			DirectX::XMMatrixRotationRollPitchYaw(_pitch, _yaw, 0.0f)
+		)
     };
     auto const camPos{
         DirectX::XMLoadFloat3(&_pos)
     };
-    // TODO: CamTarget
     auto const camTarget{
         DirectX::XMVectorAdd(camPos, lookAt)
     };
