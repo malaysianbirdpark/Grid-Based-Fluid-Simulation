@@ -1,5 +1,6 @@
 struct PS_IN {
     float4 view_pos   : POSITION;
+    float3 uvw       : TEXCOORD;
     float4 sv_pos     : SV_POSITION;
 };
 

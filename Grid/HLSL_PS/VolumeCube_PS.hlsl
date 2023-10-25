@@ -1,5 +1,6 @@
 struct PS_IN {
     float4 view_pos   : POSITION;
+    float3 uvw        : TEXCOORD;
     float4 sv_pos     : SV_Position;
 };
 
@@ -44,12 +45,7 @@ float4 main(PS_IN input) : SV_Target
 
     //for (int i = 0; i < iterations; ++i) {
     for (int i = 0; i < 55; ++i) {
-        float3 uvw = mul(float4(cur_pos, 1.0f), mvi);
-		uvw.x = 0.5f * uvw.x + 0.5f;
-		uvw.y = -0.5f * uvw.y + 0.5f;
-		uvw.z = 0.5f * uvw.z + 0.5f;
-        src = volume_tex.Sample(sampler0, uvw);
-        //src = float4(0.5f, 0.22f, 0.39f, 0.2f);
+        src = volume_tex.Sample(sampler0, (cur_pos + 1.0f) * 0.5f);
 
         src.rgb *= src.a;
         dest = (1.0f - dest.a) * src + dest;
@@ -59,8 +55,8 @@ float4 main(PS_IN input) : SV_Target
 
         cur_pos += step;
 
-        if (uvw.x > 1.0f || uvw.y > 1.0f || uvw.z > 1.0f)
-            break;
+        //if (cur_pos.x > 1.0f || cur_pos.y > 1.0f || cur_pos.z > 1.0f)
+        //    break;
     }
 
     return dest + previous.Load(input.sv_pos);

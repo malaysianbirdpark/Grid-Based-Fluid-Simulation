@@ -9,14 +9,14 @@ VolumeCube::VolumeCube(ID3D11DeviceContext& context)
 	std::vector<Vertex> vertices;
 	vertices.resize(8);
 
-	vertices[0] = { {-1.0f,  1.0f, -1.0f} };
-	vertices[1] = { {-1.0f,  1.0f,  1.0f} };
-	vertices[2] = { { 1.0f,  1.0f,  1.0f} };
-	vertices[3] = { { 1.0f,  1.0f, -1.0f} };
-	vertices[4] = { {-1.0f, -1.0f, -1.0f} };
-	vertices[5] = { {-1.0f, -1.0f,  1.0f} };
-	vertices[6] = { { 1.0f, -1.0f,  1.0f} };
-	vertices[7] = { { 1.0f, -1.0f, -1.0f} };
+	vertices[0] = { {-1.0f,  1.0f, -1.0f}, {0, 0, 0} };
+	vertices[1] = { {-1.0f,  1.0f,  1.0f}, {0, 0, 1} };
+	vertices[2] = { { 1.0f,  1.0f,  1.0f}, {1, 0, 1} };
+	vertices[3] = { { 1.0f,  1.0f, -1.0f}, {1, 0, 0} };
+	vertices[4] = { {-1.0f, -1.0f, -1.0f}, {0, 1, 0} };
+	vertices[5] = { {-1.0f, -1.0f,  1.0f}, {0, 1, 1} };
+	vertices[6] = { { 1.0f, -1.0f,  1.0f}, {1, 1, 1} };
+	vertices[7] = { { 1.0f, -1.0f, -1.0f}, {1, 1, 0} };
 
 	std::vector<uint16_t> indices{
 		0, 1, 2, 0, 2, 3,

@@ -4,7 +4,7 @@
 #include "NodeManager.h"
 
 Texture3DTest::Texture3DTest()
-	: Compute3DStage{"Test", "./CSO/3DTextureTest_CS.cso", 16, 8, 8}
+	: Compute3DStage{"Test", "./CSO/3DTextureTest_CS.cso", 8, 8, 8}
 {
     _uav.resize(1);
     _srv.resize(1);
