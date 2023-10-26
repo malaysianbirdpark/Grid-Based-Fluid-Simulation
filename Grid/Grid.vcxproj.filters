@@ -94,6 +94,9 @@
     <ClInclude Include="RenderGraph\ComputeStage\3D-Stable-Fluids\Sourcing3DStage.h">
       <Filter>RenderGraph\ComputeStage\3D-Stable-Fluids</Filter>
     </ClInclude>
+    <ClInclude Include="RenderGraph\ComputeStage\3D-Stable-Fluids\Texture3DTest.h">
+      <Filter>RenderGraph\ComputeStage\3D-Stable-Fluids</Filter>
+    </ClInclude>
     <ClInclude Include="RenderGraph\ComputeStage\Compute2DStage.h">
       <Filter>RenderGraph\ComputeStage</Filter>
     </ClInclude>
@@ -136,10 +139,7 @@
     <ClInclude Include="RenderGraph\ResourceStage\BackBufferStage.h">
       <Filter>RenderGraph\ResourceStage</Filter>
     </ClInclude>
-    <ClInclude Include="RenderGraph\ResourceStage\Pressure1DStage.h">
-      <Filter>RenderGraph\ResourceStage</Filter>
-    </ClInclude>
-    <ClInclude Include="RenderGraph\ResourceStage\Pressure2DStage.h">
+    <ClInclude Include="RenderGraph\ResourceStage\Pressure2D1DStage.h">
       <Filter>RenderGraph\ResourceStage</Filter>
     </ClInclude>
     <ClInclude Include="RenderGraph\ResourceStage\ResourceStage.h">
@@ -195,7 +195,8 @@
       <Filter>Utils</Filter>
     </ClInclude>
     <ClInclude Include="pch.h" />
-    <ClInclude Include="RenderGraph\ComputeStage\3D-Stable-Fluids\Texture3DTest.h" />
+    <ClInclude Include="RenderGraph\ResourceStage\Pressure3D1DStage.h" />
+    <ClInclude Include="Initializer3DStage.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EntryPoint.cpp" />
@@ -248,6 +249,9 @@
     <ClCompile Include="RenderGraph\ComputeStage\3D-Stable-Fluids\Sourcing3DStage.cpp">
       <Filter>RenderGraph\ComputeStage\3D-Stable-Fluids</Filter>
     </ClCompile>
+    <ClCompile Include="RenderGraph\ComputeStage\3D-Stable-Fluids\Texture3DTest.cpp">
+      <Filter>RenderGraph\ComputeStage\3D-Stable-Fluids</Filter>
+    </ClCompile>
     <ClCompile Include="RenderGraph\ComputeStage\Compute2DStage.cpp">
       <Filter>RenderGraph\ComputeStage</Filter>
     </ClCompile>
@@ -290,10 +294,7 @@
     <ClCompile Include="RenderGraph\ResourceStage\BackBufferStage.cpp">
       <Filter>RenderGraph\ResourceStage</Filter>
     </ClCompile>
-    <ClCompile Include="RenderGraph\ResourceStage\Pressure1DStage.cpp">
-      <Filter>RenderGraph\ResourceStage</Filter>
-    </ClCompile>
-    <ClCompile Include="RenderGraph\ResourceStage\Pressure2DStage.cpp">
+    <ClCompile Include="RenderGraph\ResourceStage\Pressure2D1DStage.cpp">
       <Filter>RenderGraph\ResourceStage</Filter>
     </ClCompile>
     <ClCompile Include="RenderGraph\ResourceStage\ResourceStage.cpp">
@@ -350,7 +351,8 @@
     </ClCompile>
     <ClCompile Include="pch.cpp" />
     <ClCompile Include="temp.cpp" />
-    <ClCompile Include="RenderGraph\ComputeStage\3D-Stable-Fluids\Texture3DTest.cpp" />
+    <ClCompile Include="RenderGraph\ResourceStage\Pressure3D1DStage.cpp" />
+    <ClCompile Include="Initializer3DStage.cpp" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="HLSL_CS\3DTextureTest_CS.hlsl">

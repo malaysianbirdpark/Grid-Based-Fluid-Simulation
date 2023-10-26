@@ -87,8 +87,8 @@ void Advection2DStage::Run(ID3D11DeviceContext& context)
     context.CSSetUnorderedAccessViews(0u, 2u, _uav[0].GetAddressOf(), nullptr);
     context.CSSetShader(_cs.Get(), nullptr, 0u);
     context.Dispatch(
-        static_cast<UINT>(ceil(static_cast<float>(gViewportInfo.width) / _groupX)),
-        static_cast<UINT>(ceil(static_cast<float>(gViewportInfo.height) / _groupY)),
+        static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.width) / _groupX)),
+        static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.height) / _groupY)),
         _groupZ
     );
     SetBarrier(context);
@@ -100,8 +100,8 @@ void Advection2DStage::Run(ID3D11DeviceContext& context)
         context.CSSetUnorderedAccessViews(0u, 1u, _velocityUnormView.GetAddressOf(), nullptr);
         context.CSSetShader(_normalizer.Get(), nullptr, 0u);
         context.Dispatch(
-            static_cast<UINT>(ceil(static_cast<float>(gViewportInfo.width) / _groupX)),
-            static_cast<UINT>(ceil(static_cast<float>(gViewportInfo.height) / _groupY)), 
+            static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.width) / _groupX)),
+            static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.height) / _groupY)), 
             _groupZ
         );
         SetBarrier(context);
@@ -110,8 +110,8 @@ void Advection2DStage::Run(ID3D11DeviceContext& context)
         ImGui::Image(
             _velocityUnormSR.Get(), 
             ImVec2{ 
-                static_cast<float>(gViewportInfo.width >> 1),
-                static_cast<float>(gViewportInfo.height >> 1)
+                static_cast<float>(gSimulationInfo.width >> 1),
+                static_cast<float>(gSimulationInfo.height >> 1)
             }
         );
 

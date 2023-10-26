@@ -5,10 +5,11 @@
 class CBFluid final : public ConstantBufferStage
 {
 	struct Constants {
-		DirectX::XMFLOAT2 _velocityDir;
-		float             _colorScale{ 0.04f };
+		DirectX::XMFLOAT3 _velocityDir;
 		float             _speed{ 0.0065f };
 		DirectX::XMFLOAT4 _color;
+		float             _colorScale{ 0.04f };
+		float             _pad[3];
 	};
 
 public: CBFluid();

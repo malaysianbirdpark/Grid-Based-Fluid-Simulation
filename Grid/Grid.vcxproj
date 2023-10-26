@@ -101,8 +101,10 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Game.h" />
+    <ClInclude Include="Initializer3DStage.h" />
     <ClInclude Include="Platform\Input.h" />
     <ClInclude Include="Platform\Win32.h" />
+    <ClInclude Include="RenderGraph\ResourceStage\Pressure3D1DStage.h" />
     <ClInclude Include="RenderGraph\ComputeStage\2D-Stable-Fluids\Advection2DStage.h" />
     <ClInclude Include="RenderGraph\ComputeStage\2D-Stable-Fluids\Divergence2DStage.h" />
     <ClInclude Include="RenderGraph\ComputeStage\2D-Stable-Fluids\GradientSubtract2DStage.h" />
@@ -117,6 +119,7 @@
     <ClInclude Include="RenderGraph\ComputeStage\3D-Stable-Fluids\Poisson3D2DStage.h" />
     <ClInclude Include="RenderGraph\ComputeStage\3D-Stable-Fluids\Poisson3D4DStage.h" />
     <ClInclude Include="RenderGraph\ComputeStage\3D-Stable-Fluids\Sourcing3DStage.h" />
+    <ClInclude Include="RenderGraph\ComputeStage\3D-Stable-Fluids\Texture3DTest.h" />
     <ClInclude Include="RenderGraph\ComputeStage\Compute2DStage.h" />
     <ClInclude Include="RenderGraph\ComputeStage\Compute3DStage.h" />
     <ClInclude Include="RenderGraph\ComputeStage\Initializer2DStage.h" />
@@ -131,8 +134,7 @@
     <ClInclude Include="RenderGraph\NodeManager.h" />
     <ClInclude Include="RenderGraph\RenderGraph.h" />
     <ClInclude Include="RenderGraph\ResourceStage\BackBufferStage.h" />
-    <ClInclude Include="RenderGraph\ResourceStage\Pressure1DStage.h" />
-    <ClInclude Include="RenderGraph\ResourceStage\Pressure2DStage.h" />
+    <ClInclude Include="RenderGraph\ResourceStage\Pressure2D1DStage.h" />
     <ClInclude Include="RenderGraph\ResourceStage\ResourceStage.h" />
     <ClInclude Include="RenderGraph\ResourceStage\ViewportStage.h" />
     <ClInclude Include="RenderGraph\Stage.h" />
@@ -149,7 +151,6 @@
     <ClInclude Include="Renderer\ImGuiRenderer.h" />
     <ClInclude Include="Renderer\Renderer.h" />
     <ClInclude Include="Texture3D.h" />
-    <ClInclude Include="RenderGraph\ComputeStage\3D-Stable-Fluids\Texture3DTest.h" />
     <ClInclude Include="Utils\CircularQueue.h" />
     <ClInclude Include="Utils\Clk.h" />
     <ClInclude Include="pch.h" />
@@ -157,8 +158,10 @@
   <ItemGroup>
     <ClCompile Include="EntryPoint.cpp" />
     <ClCompile Include="Game.cpp" />
+    <ClCompile Include="Initializer3DStage.cpp" />
     <ClCompile Include="Platform\Input.cpp" />
     <ClCompile Include="Platform\Win32.cpp" />
+    <ClCompile Include="RenderGraph\ResourceStage\Pressure3D1DStage.cpp" />
     <ClCompile Include="RenderGraph\ComputeStage\2D-Stable-Fluids\Advection2DStage.cpp" />
     <ClCompile Include="RenderGraph\ComputeStage\2D-Stable-Fluids\Divergence2DStage.cpp" />
     <ClCompile Include="RenderGraph\ComputeStage\2D-Stable-Fluids\GradientSubtract2DStage.cpp" />
@@ -173,6 +176,7 @@
     <ClCompile Include="RenderGraph\ComputeStage\3D-Stable-Fluids\Poisson3D2DStage.cpp" />
     <ClCompile Include="RenderGraph\ComputeStage\3D-Stable-Fluids\Poisson3D4DStage.cpp" />
     <ClCompile Include="RenderGraph\ComputeStage\3D-Stable-Fluids\Sourcing3DStage.cpp" />
+    <ClCompile Include="RenderGraph\ComputeStage\3D-Stable-Fluids\Texture3DTest.cpp" />
     <ClCompile Include="RenderGraph\ComputeStage\Compute2DStage.cpp" />
     <ClCompile Include="RenderGraph\ComputeStage\Compute3DStage.cpp" />
     <ClCompile Include="RenderGraph\ComputeStage\Initializer2DStage.cpp" />
@@ -187,8 +191,7 @@
     <ClCompile Include="RenderGraph\NodeManager.cpp" />
     <ClCompile Include="RenderGraph\RenderGraph.cpp" />
     <ClCompile Include="RenderGraph\ResourceStage\BackBufferStage.cpp" />
-    <ClCompile Include="RenderGraph\ResourceStage\Pressure1DStage.cpp" />
-    <ClCompile Include="RenderGraph\ResourceStage\Pressure2DStage.cpp" />
+    <ClCompile Include="RenderGraph\ResourceStage\Pressure2D1DStage.cpp" />
     <ClCompile Include="RenderGraph\ResourceStage\ResourceStage.cpp" />
     <ClCompile Include="RenderGraph\ResourceStage\ViewportStage.cpp" />
     <ClCompile Include="RenderGraph\Stage.cpp" />
@@ -205,7 +208,6 @@
     <ClCompile Include="Renderer\ImGuiRenderer.cpp" />
     <ClCompile Include="Renderer\Renderer.cpp" />
     <ClCompile Include="Texture3D.cpp" />
-    <ClCompile Include="RenderGraph\ComputeStage\3D-Stable-Fluids\Texture3DTest.cpp" />
     <ClCompile Include="Utils\CircularQueue.cpp" />
     <ClCompile Include="Utils\Clk.cpp" />
     <ClCompile Include="pch.cpp">

@@ -8,23 +8,12 @@ Texture2D previous : register(t0);
 
 Texture3D volume_tex : register(t1);
 
-Texture2D front_faces : register(t2);
-Texture2D back_faces  : register(t3);
-
-Texture2D front_texcoord : register(t4);
-Texture2D back_texcoord  : register(t5);
+Texture2D front_texcoord : register(t2);
+Texture2D back_texcoord  : register(t3);
 
 SamplerState sampler0 : register(s0);
 SamplerState sampler1 : register(s1);
 SamplerState sampler2 : register(s2);
-
-cbuffer mvp : register(b0)
-{
-    matrix m;
-    matrix mv;
-    matrix mvp;
-    float4 cam_pos;
-};
 
 //cbuffer Constants : register(b1) {
 //    int step_size;
@@ -33,47 +22,37 @@ cbuffer mvp : register(b0)
 
 float4 main(PS_IN input) : SV_Target
 {
-    //const float3 front = front_faces.Load(input.sv_pos);
-    //const float3 back  = back_faces.Load(input.sv_pos);
-    //const float  len   = length(back - front);
-    //const float  len   = length(front - cam_pos.xyz);
-    //if (len < 1e-2)
-    //    return float4(0.0f, 0.0f, 0.0f, 1.0f);
-
-    //const float3 ray_dir = back - front / len;
-    //const float3 ray_dir = front - cam_pos / len;
-
     const float3 front_uvw = front_texcoord.Load(input.sv_pos);
     const float3 back_uvw  = back_texcoord.Load(input.sv_pos);
     const float  uvw_len   = length(back_uvw - front_uvw);
-    const float3 uvw_dir   = back_uvw - front_uvw / uvw_len;
+    if (uvw_len < 0.01)
+        return float4(0.0f, 0.0f, 0.0f, 1.0f);
+    const float3 uvw_dir   = (back_uvw - front_uvw) / uvw_len;
     
-    //float3 cur_pos = front;
     float3 cur_uvw = front_uvw;
 
-    float4 dest = 0.0f;
-    float4 src = 0.0f;
+    float4 dest_color = 0.0f;
+    float4 src_color = 0.0f;
 
-    //float3 step = ray_dir * step_size;
-    //float3 step = ray_dir * (len / 100.0f);
-    float3 step_uvw = uvw_dir * (uvw_len / 100.0f);
+    const float step_size = 0.02;
+    float3 step_uvw = uvw_dir * step_size;
 
     //for (int i = 0; i < iterations; ++i) {
-    for (int i = 0; i < 102; ++i) { 
-        src = volume_tex.Sample(sampler1, cur_uvw);
+    [loop]
+    for (int i = 0; i < 52; ++i) { 
+        src_color = volume_tex.Sample(sampler1, cur_uvw);
 
-        dest.rgb += (1.0f - dest.a) * (src.rgb * src.a);
-        dest.a += src.a * (1.0f - dest.a);
+        dest_color.rgb += (1.0f - dest_color.a) * src_color.rgb * src_color.a;
+        dest_color.a   += (1.0f - dest_color.a) * src_color.a;
 
-        if (dest.a >= 0.99f)
+        if (dest_color.a >= 0.95f)
             break;
 
-        //cur_pos += step;
         cur_uvw += step_uvw;
 
         if (cur_uvw.x > 1.0f || cur_uvw.y > 1.0f || cur_uvw.z > 1.0f)
             break;
     }
 
-    return dest + previous.Load(input.sv_pos);
+    return dest_color + previous.Load(input.sv_pos);
 }

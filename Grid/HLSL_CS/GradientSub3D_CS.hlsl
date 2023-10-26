@@ -3,7 +3,7 @@ RWTexture3D<float>  x_in       : register(u0);
 RWTexture3D<float3> sub_target : register(u1);
 RWTexture3D<float3> result     : register(u2);
 
-[numthreads(16, 8, 8)]
+[numthreads(8, 8, 8)]
 void main( uint3 DTid : SV_DispatchThreadID )
 {
     uint width;

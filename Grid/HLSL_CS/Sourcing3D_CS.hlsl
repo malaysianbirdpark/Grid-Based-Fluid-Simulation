@@ -6,27 +6,36 @@ RWTexture3D<float4> quantity : register(u1);
 
 cbuffer color : register(b0) {
 	float3 dir;
-	float  color_scale;
 	float  speed;
 	float4 color;
+	float  color_scale;
 }
 
-[numthreads(16, 8, 8)]
+[numthreads(8, 8, 8)]
 void main(uint3 DTid : SV_DispatchThreadID )
 {
 	uint width;
 	uint height;
 	uint depth;
-	quantity_in.GetDimensions(width, height, depth);
+	quantity.GetDimensions(width, height, depth);
 
 	velocity[DTid.xyz].xyz = velocity_in[DTid.xyz].xyz;
     quantity[DTid.xyz] = quantity_in[DTid.xyz];
 
-	// circle at the center
-	if (DTid.x < width && DTid.y < height && DTid.z < depth) {
-        if ((DTid.x - (width / 2)) * (DTid.x - (width / 2)) + (DTid.y - (height / 2)) * (DTid.y - (height / 2)) + (DTid.z - (depth / 2)) * (DTid.z - (depth / 2)) <= 1600) {
-            velocity[DTid.xyz].xyz += normalize(float3(dir.xyz)) * speed;
-            quantity[DTid.xyz] += color * color_scale;
-        }
+	//const float x = DTid.x - (width / 2);
+	//const float y = DTid.y - (height / 2);
+	//const float z = DTid.z - (depth / 2);
+	//const float r = 50.0f;
+
+	//if (DTid.x < width && DTid.y < height && DTid.z < depth) {
+ //       if (x * x + y * y + z * z <= r * r) {
+ //           velocity[DTid.xyz].xyz += normalize(float3(dir.xyz)) * speed;
+ //           quantity[DTid.xyz] += color * color_scale;
+ //       }
+	//}
+
+	if (DTid.x <= 20.0f && DTid.y >= 50.0f && DTid.y <= 60.0f) {
+		velocity[DTid.xyz].xyz += normalize(float3(dir.xyz)) * speed;
+		quantity[DTid.xyz] += color * color_scale;
 	}
 }

@@ -123,7 +123,8 @@ void Renderer::BeginFrame()
 	_imguiContext->RSSetViewports(1u, &_viewport);
     _imguiContext->RSSetState(_rasterizerState.Get());
     _imguiContext->OMSetDepthStencilState(_dsDefault.Get(), 0u);
-    _imguiContext->OMSetRenderTargets(1u, _imguiRTV.GetAddressOf(), nullptr);
+    //_imguiContext->OMSetRenderTargets(1u, _imguiRTV.GetAddressOf(), nullptr);
+    _imguiContext->OMSetRenderTargets(1u, _backBufferView.GetAddressOf(), nullptr);
 
     ImGuiRenderer::BeginFrame();
 }
@@ -132,7 +133,7 @@ void Renderer::EndFrame()
 {
     ImGuiRenderer::EndFrame();
 
-    _imguiContext->CopyResource(_backBuffers.Get(), _imguiBuffer.Get());
+    //_imguiContext->CopyResource(_backBuffers.Get(), _imguiBuffer.Get());
 
     static std::array<ID3D11CommandList*, 2> cmd_lists{};
     _defaultContext->FinishCommandList(FALSE, &cmd_lists[0]);
@@ -245,7 +246,6 @@ void Renderer::InitSamplers()
         sd.AddressU = D3D11_TEXTURE_ADDRESS_CLAMP;
         sd.AddressV = D3D11_TEXTURE_ADDRESS_CLAMP;
         sd.AddressW = D3D11_TEXTURE_ADDRESS_CLAMP;
-
         sd.BorderColor[0] = 1.0f;
         sd.BorderColor[1] = 0.0f;
         sd.BorderColor[2] = 0.0f;
@@ -266,7 +266,6 @@ void Renderer::InitSamplers()
         sd.AddressU = D3D11_TEXTURE_ADDRESS_CLAMP;
         sd.AddressV = D3D11_TEXTURE_ADDRESS_CLAMP;
         sd.AddressW = D3D11_TEXTURE_ADDRESS_CLAMP;
-
         sd.BorderColor[0] = 0.0f;
         sd.BorderColor[1] = 0.0f;
         sd.BorderColor[2] = 0.0f;

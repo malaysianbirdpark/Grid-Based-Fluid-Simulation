@@ -6,7 +6,6 @@ class Transform
         //DirectX::XMFLOAT4X4 _mit;
         DirectX::XMFLOAT4X4 _mv;
         DirectX::XMFLOAT4X4 _mvp;
-        DirectX::XMFLOAT4 _camPos;
     };
 public:
     Transform(

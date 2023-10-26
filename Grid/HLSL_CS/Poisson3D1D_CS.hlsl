@@ -8,7 +8,7 @@ cbuffer constants : register(b2) {
 	float r_beta;
 };
 
-[numthreads(16, 8, 8)]
+[numthreads(8, 8, 8)]
 void main( uint3 DTid : SV_DispatchThreadID )
 {
 	uint width;

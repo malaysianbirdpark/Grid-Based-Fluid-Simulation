@@ -13,58 +13,71 @@
 #include "Transform.h"
 #include "Input.h"
 #include "Clk.h"
-
-#include "Sphere.h"
-
-#include "RenderObject.h"
-#include "Transform.h"
 #include "PipelineStateObject.h"
-#include "PSTextures.h"
 
-#include "DrawStage.h"
-#include "BackBufferStage.h"
 #include "ViewportStage.h"
-#include "Sourcing2DStage.h"
 #include "CopyStage.h"
-#include "Advection2DStage.h"
-#include "CBFluid.h"
-#include "CBTimestep.h"
-#include "Pressure1DStage.h"
-#include "Pressure2DStage.h"
-#include "Poisson2D1DStage.h"
-#include "Poisson2D2DStage.h"
-#include "Poisson2D4DStage.h"
-#include "CBPoisson.h"
-#include "Divergence2DStage.h"
-#include "GradientSubtract2DStage.h"
-#include "Initializer2DStage.h"
-#include "CBViscosity.h"
 
 #include "VolumeCube.h"
 #include "DrawVolumeStage.h"
 #include "Texture3DTest.h"
+#include "Sourcing3DStage.h"
+#include "Advection3DStage.h"
+#include "CBFluid.h"
+#include "CBTimestep.h"
+#include "Initializer3DStage.h"
+#include "Pressure3D1DStage.h"
+#include "CBPoisson.h"
+#include "Divergence3DStage.h"
+#include "Poisson3D1DStage.h"
+#include "GradientSubtract3DStage.h"
 
 Game::Game() 
 {
 	int constexpr width{ 1920 };
 	int constexpr height{ 1080 };
+
 	gViewportInfo.width = 640;
 	gViewportInfo.height = 640;
 	gViewportInfo.depth = 640;
+
+	gSimulationInfo.width = 128;
+	gSimulationInfo.height = 128;
+	gSimulationInfo.depth = 128;
+
 	Win32::Init(width, height);
 	Renderer::Init(width, height, gWindowInfo.hWnd);
 	Camera::Init();
 
 	Clk::Init();
 
-	_renderGraph.AddStage(std::move(std::make_shared<Texture3DTest>()));
+	_renderGraph.AddStage(std::move(std::make_shared<CBFluid>()));
+	_renderGraph.AddStage(std::move(std::make_shared<Sourcing3DStage>()));
+
+	_renderGraph.AddStage(std::move(std::make_shared<CBTimestep>()));
+	_renderGraph.AddStage(std::move(std::make_shared<Advection3DStage>()));
+
 	_renderGraph.AddStage(std::move(std::make_shared<DrawVolumeStage>(Renderer::Context())));
 	_renderGraph.AddStage(std::move(std::make_shared<CopyStage>()));
 	_renderGraph.AddStage(std::move(std::make_shared<ViewportStage>()));
 
-	_renderGraph.Link(0, 256, 1, 1);
-	_renderGraph.Link(1, 257, 2, 2);
-	_renderGraph.Link(2, 258, 3, 3);
+	_renderGraph.AddStage(std::move(std::make_shared<Initializer3DStage>()));
+	_renderGraph.AddStage(std::move(std::make_shared<Pressure3D1DStage>()));
+	_renderGraph.AddStage(std::move(std::make_shared<CBPoisson>(Renderer::Context())));
+	_renderGraph.AddStage(std::move(std::make_shared<Divergence3DStage>()));
+	_renderGraph.AddStage(std::move(std::make_shared<Poisson3D1DStage>()));
+	_renderGraph.AddStage(std::move(std::make_shared<GradientSubtract3DStage>()));
+
+	_renderGraph.Link(0, 256, 1, 0);
+	_renderGraph.Link(2, 259, 3, 3);
+	_renderGraph.Link(1, 257, 3, 4);
+	_renderGraph.Link(1, 258, 3, 5);
+	_renderGraph.Link(3, 260, 1, 1);
+	_renderGraph.Link(3, 261, 1, 2);
+
+	//_renderGraph.Link(3, 261, 4, 7);
+	//_renderGraph.Link(4, 262, 5, 8);
+	//_renderGraph.Link(5, 263, 6, 9);
 
 	ImNodes::LoadCurrentEditorStateFromIniFile("imnodes_state.ini");
 }

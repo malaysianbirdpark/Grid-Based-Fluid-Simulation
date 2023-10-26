@@ -23,7 +23,6 @@ Transform::Transform(ID3D11DeviceContext& context, DirectX::FXMMATRIX model)
     //XMStoreFloat4x4(&_transform._mit, XMMatrixInverse(nullptr, model));
     XMStoreFloat4x4(&_transform._mv, XMMatrixTranspose(XMMatrixMultiply(model, Camera::GetView())));
     XMStoreFloat4x4(&_transform._mvp, XMMatrixTranspose(XMMatrixMultiply(XMMatrixMultiply(model, Camera::GetView()), Renderer::GetProj())));
-    XMStoreFloat4(&_transform._camPos, Camera::GetPos());
     sd.pSysMem = &_transform;
 
     pDevice->CreateBuffer(&bd, &sd, _resource.ReleaseAndGetAddressOf());
@@ -48,7 +47,6 @@ void Transform::Update(ID3D11DeviceContext& context)
     //XMStoreFloat4x4(&_transform._mit, XMMatrixInverse(nullptr, model));
     XMStoreFloat4x4(&_transform._mv, XMMatrixTranspose(XMMatrixMultiply(model, Camera::GetView())));
     XMStoreFloat4x4(&_transform._mvp, XMMatrixTranspose(XMMatrixMultiply(XMMatrixMultiply(model, Camera::GetView()), Renderer::GetProj())));
-    XMStoreFloat4(&_transform._camPos, Camera::GetPos());
 
     D3D11_MAPPED_SUBRESOURCE msr{};
     context.Map(
@@ -65,5 +63,4 @@ void Transform::Update(ID3D11DeviceContext& context)
 void Transform::Bind(ID3D11DeviceContext& context) const
 {
     context.VSSetConstantBuffers(0u, 1u, _resource.GetAddressOf());
-    context.PSSetConstantBuffers(0u, 1u, _resource.GetAddressOf());
 }

@@ -61,3 +61,9 @@ inline struct _ViewportInfo {
 	int32_t height{};
 	int32_t depth{};
 } gViewportInfo;
+
+inline struct _SimulationInfo {
+	int32_t width{};
+	int32_t height{};
+	int32_t depth{};
+} gSimulationInfo;

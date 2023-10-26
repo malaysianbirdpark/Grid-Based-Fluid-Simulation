@@ -56,9 +56,6 @@ Sourcing2DStage::Sourcing2DStage()
 
     _quantityOutID = NodeManager::IssueOutgoingAttrID();
     _outgoing[_quantityOutID] = -1;
-	Microsoft::WRL::ComPtr<ID3D11Texture2D>           _quantityUnorm;
-	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> _quantityUnormSR;
-	Microsoft::WRL::ComPtr<ID3D11UnorderedAccessView> _quantityUnormView;
     _attrNames[_quantityOutID] = { "Quantity out" };
 
     std::string _path{ "./CSO/Vector4DUnorm_CS.cso" };
@@ -123,12 +120,10 @@ void Sourcing2DStage::Run(ID3D11DeviceContext& context) {
 
 void Sourcing2DStage::Consume(ID3D11Resource* resource, int32_t attribute_id)
 {
-    if (resource) {
-        if (attribute_id == _velocityInID)
-            pDevice->CreateShaderResourceView(resource, nullptr, _srv[0].ReleaseAndGetAddressOf());
-        else if (attribute_id == _quantityInID)
-            pDevice->CreateShaderResourceView(resource, nullptr, _srv[1].ReleaseAndGetAddressOf());
-    }
+	if (attribute_id == _velocityInID)
+		pDevice->CreateShaderResourceView(resource, nullptr, _srv[0].ReleaseAndGetAddressOf());
+	else if (attribute_id == _quantityInID)
+		pDevice->CreateShaderResourceView(resource, nullptr, _srv[1].ReleaseAndGetAddressOf());
 }
 
 ID3D11Resource* Sourcing2DStage::Expose(int32_t attribute_id)

@@ -7,10 +7,21 @@ void main( uint3 DTid : SV_DispatchThreadID ) {
 	uint depth;
 	target.GetDimensions(width, height, depth);
 
-	if (DTid.z >= 200 && DTid.z <= 300)
-		target[DTid.xyz] = float4(0.0f, 1.0f, 0.0f, 0.05f);
-	else
-		target[DTid.xyz] = float4(0.0f, 0.0f, 0.0f, 0.0f);
+	if (DTid.x >= 200 && DTid.x <= 400 && DTid.y >= 200 && DTid.y <= 400) {
+		if (DTid.z <= 200)
+			target[DTid.xyz] = float4(1.0f, 0.0f, 0.0f, 0.05f);
+		else if (DTid.z > 200 && DTid.z <= 400)
+			target[DTid.xyz] = float4(0.0f, 1.0f, 0.0f, 0.05f);
+		else if (DTid.z > 400 && DTid.z <= 600)
+			target[DTid.xyz] = float4(0.0f, 0.0f, 1.0f, 0.05f);
+		else
+			target[DTid.xyz] = float4(1.0f, 1.0f, 1.0f, 0.17f);
+	}
+
+	//if (DTid.z <= 300)
+	//	target[DTid.xyz] = float4(0.0f, 1.0f, 0.0f, 0.05f);
+	//else
+	//	target[DTid.xyz] = float4(0.0f, 0.0f, 1.0f, 0.01f);
 
 	//if (DTid.z >= 200 && DTid.z <= 300)
 	//	target[DTid.xyz] = float4(0.0f, 1.0f, 0.0f, 0.05f);
