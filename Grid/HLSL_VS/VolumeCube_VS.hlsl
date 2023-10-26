@@ -4,25 +4,25 @@ struct VS_IN {
 };
 
 struct VS_OUT {
-    float4 view_pos  : POSITION;
-    float3 uvw       : TEXCOORD;
-    float4 sv_pos    : SV_POSITION;
+    float4 view_pos : POSITION;
+    float3 uvw      : TEXCOORD;
+    float4 sv_pos   : SV_POSITION;
 };
 
 cbuffer mvp : register(b0)
 {
     matrix m;
     matrix mv;
-    matrix mvi;
     matrix mvp;
+    float4 cam_pos;
 };
 
 VS_OUT main(VS_IN input)
 {
 	VS_OUT output;
 
-    output.view_pos  = mul(float4(input.pos, 1.0f), mv);
-    output.uvw = mul(float4(input.uvw, 1.0f), mv);
+    output.view_pos  = mul(float4(input.pos, 1.0f), m);
+    output.uvw       = input.uvw;
     output.sv_pos    = mul(float4(input.pos, 1.0f), mvp);
 
     return output;

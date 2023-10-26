@@ -115,6 +115,8 @@ void Renderer::BeginFrame()
     _defaultContext->ClearDepthStencilView(_dsv.Get(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0u);
 
     _defaultContext->PSSetSamplers(0u, 1u, _samplerLinear.GetAddressOf());
+    _defaultContext->PSSetSamplers(1u, 1u, _samplerPoint.GetAddressOf());
+    _defaultContext->PSSetSamplers(2u, 1u, _yeah.GetAddressOf());
     _defaultContext->CSSetSamplers(0u, 1u, _samplerLinear.GetAddressOf());
     _defaultContext->CSSetSamplers(1u, 1u, _samplerPoint.GetAddressOf());
 
@@ -243,6 +245,7 @@ void Renderer::InitSamplers()
         sd.AddressU = D3D11_TEXTURE_ADDRESS_CLAMP;
         sd.AddressV = D3D11_TEXTURE_ADDRESS_CLAMP;
         sd.AddressW = D3D11_TEXTURE_ADDRESS_CLAMP;
+
         sd.BorderColor[0] = 1.0f;
         sd.BorderColor[1] = 0.0f;
         sd.BorderColor[2] = 0.0f;
@@ -263,6 +266,7 @@ void Renderer::InitSamplers()
         sd.AddressU = D3D11_TEXTURE_ADDRESS_CLAMP;
         sd.AddressV = D3D11_TEXTURE_ADDRESS_CLAMP;
         sd.AddressW = D3D11_TEXTURE_ADDRESS_CLAMP;
+
         sd.BorderColor[0] = 0.0f;
         sd.BorderColor[1] = 0.0f;
         sd.BorderColor[2] = 0.0f;
@@ -274,6 +278,20 @@ void Renderer::InitSamplers()
         sd.MaxLOD = 0.0f;
 
         pDevice->CreateSamplerState(&sd, _samplerPoint.ReleaseAndGetAddressOf());
+    }
+
+    {
+        D3D11_SAMPLER_DESC sd{};
+        sd.Filter = D3D11_FILTER_ANISOTROPIC;
+        sd.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
+        sd.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
+        sd.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
+        sd.MaxAnisotropy = D3D11_REQ_MAXANISOTROPY;
+        sd.MipLODBias = 0.0f;
+        sd.MinLOD = 0.0f;
+        sd.MaxLOD = D3D11_FLOAT32_MAX;
+
+        pDevice->CreateSamplerState(&sd, _yeah.ReleaseAndGetAddressOf());
     }
 }
 

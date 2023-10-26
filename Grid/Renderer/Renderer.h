@@ -44,5 +44,6 @@ private:
 
     inline static Microsoft::WRL::ComPtr<ID3D11SamplerState>        _samplerLinear;
     inline static Microsoft::WRL::ComPtr<ID3D11SamplerState>        _samplerPoint;
+    inline static Microsoft::WRL::ComPtr<ID3D11SamplerState>        _yeah;
 };
  
