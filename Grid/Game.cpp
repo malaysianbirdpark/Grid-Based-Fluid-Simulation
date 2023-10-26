@@ -41,9 +41,9 @@ Game::Game()
 	gViewportInfo.height = 640;
 	gViewportInfo.depth = 640;
 
-	gSimulationInfo.width = 128;
-	gSimulationInfo.height = 128;
-	gSimulationInfo.depth = 128;
+	gSimulationInfo.width = 320;
+	gSimulationInfo.height = 320;
+	gSimulationInfo.depth = 320;
 
 	Win32::Init(width, height);
 	Renderer::Init(width, height, gWindowInfo.hWnd);
@@ -72,12 +72,23 @@ Game::Game()
 	_renderGraph.Link(2, 259, 3, 3);
 	_renderGraph.Link(1, 257, 3, 4);
 	_renderGraph.Link(1, 258, 3, 5);
-	_renderGraph.Link(3, 260, 1, 1);
-	_renderGraph.Link(3, 261, 1, 2);
 
-	//_renderGraph.Link(3, 261, 4, 7);
-	//_renderGraph.Link(4, 262, 5, 8);
-	//_renderGraph.Link(5, 263, 6, 9);
+	_renderGraph.Link(7, 265, 8, 10);
+	_renderGraph.Link(8, 266, 11, 12);
+
+	_renderGraph.Link(3, 260, 10, 11);
+	_renderGraph.Link(10, 268, 11, 13);
+
+	_renderGraph.Link(9, 267, 11, 14);
+
+	_renderGraph.Link(11, 269, 12, 15);
+	_renderGraph.Link(3, 260, 12, 16);
+	_renderGraph.Link(12, 270, 1, 1);
+
+	_renderGraph.Link(3, 261, 1, 2);
+	_renderGraph.Link(3, 261, 4, 7);
+	_renderGraph.Link(4, 262, 5, 8);
+	_renderGraph.Link(5, 263, 6, 9);
 
 	ImNodes::LoadCurrentEditorStateFromIniFile("imnodes_state.ini");
 }

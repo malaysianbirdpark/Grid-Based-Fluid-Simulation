@@ -34,8 +34,10 @@ void main(uint3 DTid : SV_DispatchThreadID )
  //       }
 	//}
 
+    //velocity[DTid.xyz].xyz += float3(1.0f, 0.0f, 0.0f) * 0.065f;
 	if (DTid.x <= 20.0f && DTid.y >= 50.0f && DTid.y <= 60.0f) {
-		velocity[DTid.xyz].xyz += normalize(float3(dir.xyz)) * speed;
+		//velocity[DTid.xyz].xyz += normalize(float3(dir.xyz)) * speed;
+        velocity[DTid.xyz].xyz += float3(1.0f, 0.0f, 0.0f) * 0.0045f;
 		quantity[DTid.xyz] += color * color_scale;
 	}
 }

@@ -7,7 +7,7 @@
 #include "NodeManager.h"
 
 GradientSubtract3DStage::GradientSubtract3DStage()
-	: Compute3DStage{"3D-GradientSubtract", "./CSO/GradientSub3D_CS.cso", 32, 32, 1}
+	: Compute3DStage{"3D-GradientSubtract", "./CSO/GradientSub3D_CS.cso", 8, 8, 8}
 {
     _uav.resize(3);
     _srv.resize(1);
@@ -41,6 +41,10 @@ GradientSubtract3DStage::GradientSubtract3DStage()
     _resultID = NodeManager::IssueOutgoingAttrID();
     _outgoing[_resultID] = -1;
     _attrNames[_resultID] = { "Result" };
+}
+
+void GradientSubtract3DStage::Run(ID3D11DeviceContext& context) {
+    Compute3DStage::Run(context);
 }
 
 void GradientSubtract3DStage::Consume(ID3D11Resource* resource, int32_t attribute_id)

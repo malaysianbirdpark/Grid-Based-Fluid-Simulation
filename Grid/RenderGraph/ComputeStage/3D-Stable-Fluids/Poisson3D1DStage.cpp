@@ -7,7 +7,7 @@
 #include "NodeManager.h"
 
 Poisson3D1DStage::Poisson3D1DStage()
-    : Compute3DStage{"3D1D-Poisson Solver", "./CSO/Poisson3D1D_CS.cso", 32, 32, 1}
+    : Compute3DStage{"3D1D-Poisson Solver", "./CSO/Poisson3D1D_CS.cso", 8, 8, 8}
 {
     _uav.resize(2);
     _srv.resize(3);
