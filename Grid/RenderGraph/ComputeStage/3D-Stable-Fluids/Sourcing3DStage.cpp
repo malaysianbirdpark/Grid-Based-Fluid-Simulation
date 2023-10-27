@@ -22,11 +22,11 @@ Sourcing3DStage::Sourcing3DStage()
     desc.Depth = gSimulationInfo.depth;
 	desc.MipLevels = 1u;
 
-	desc.Format = DXGI_FORMAT_R11G11B10_FLOAT;
+	desc.Format = DXGI_FORMAT_R16G16B16A16_FLOAT;
     pDevice->CreateTexture3D(&desc, nullptr, _resource[0].ReleaseAndGetAddressOf());
     pDevice->CreateUnorderedAccessView(_resource[0].Get(), nullptr, _uav[0].ReleaseAndGetAddressOf());
 
-	desc.Format = DXGI_FORMAT_R16G16B16A16_FLOAT;
+	desc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
     pDevice->CreateTexture3D(&desc, nullptr, _resource[1].ReleaseAndGetAddressOf());
     pDevice->CreateUnorderedAccessView(_resource[1].Get(), nullptr, _uav[1].ReleaseAndGetAddressOf());
 

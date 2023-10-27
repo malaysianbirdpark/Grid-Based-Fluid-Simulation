@@ -145,7 +145,7 @@ void Renderer::EndFrame()
     cmd_lists[0]->Release();
     cmd_lists[1]->Release();
 
-    _swapChain->Present(1u, 0u);
+    _swapChain->Present(0u, 0u);
 }
 
 DirectX::XMMATRIX Renderer::GetProj()

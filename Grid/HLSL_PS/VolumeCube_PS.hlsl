@@ -25,7 +25,7 @@ float4 main(PS_IN input) : SV_Target
     const float3 front_uvw = front_texcoord.Load(input.sv_pos);
     const float3 back_uvw  = back_texcoord.Load(input.sv_pos);
     const float  uvw_len   = length(back_uvw - front_uvw);
-    if (uvw_len < 0.01)
+    if (uvw_len < 0.02)
         return float4(0.0f, 0.0f, 0.0f, 1.0f);
     const float3 uvw_dir   = (back_uvw - front_uvw) / uvw_len;
     
@@ -37,9 +37,9 @@ float4 main(PS_IN input) : SV_Target
     const float step_size = 0.02;
     float3 step_uvw = uvw_dir * step_size;
 
-    //for (int i = 0; i < iterations; ++i) {
+    const int iterations = (uvw_len / 0.02f) + 1;
     [loop]
-    for (int i = 0; i < 52; ++i) { 
+    for (int i = 0; i < iterations; ++i) { 
         src_color = volume_tex.Sample(sampler1, cur_uvw);
 
         dest_color.rgb += (1.0f - dest_color.a) * src_color.rgb * src_color.a;

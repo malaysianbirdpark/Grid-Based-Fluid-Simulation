@@ -6,7 +6,7 @@ class CBPoisson final : public ConstantBufferStage
 {
 	struct Constants {
 		float alpha{-1.0f};
-		float r_beta{1.0f/6};
+		float r_beta{1.0f/6.0f};
 		float pad[2]{};
 	};
 

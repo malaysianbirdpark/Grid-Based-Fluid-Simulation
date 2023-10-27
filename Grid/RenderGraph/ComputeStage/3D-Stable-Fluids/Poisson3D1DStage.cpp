@@ -20,7 +20,7 @@ Poisson3D1DStage::Poisson3D1DStage()
 	desc.BindFlags = D3D11_BIND_UNORDERED_ACCESS | D3D11_BIND_SHADER_RESOURCE;
 	desc.Usage = D3D11_USAGE_DEFAULT;
 	desc.CPUAccessFlags = 0u;
-	desc.Format = DXGI_FORMAT_R16_FLOAT;
+    desc.Format = DXGI_FORMAT_R16_FLOAT;
 	desc.Width = gSimulationInfo.width;
 	desc.Height = gSimulationInfo.height;
 	desc.Depth = gSimulationInfo.depth;

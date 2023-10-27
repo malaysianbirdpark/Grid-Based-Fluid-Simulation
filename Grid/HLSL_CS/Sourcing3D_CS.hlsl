@@ -1,8 +1,8 @@
-Texture3D<float3> velocity_in : register(s0);
-Texture3D<float4> quantity_in : register(s1);
+Texture3D<min16float3> velocity_in : register(s0);
+Texture3D<unorm float4> quantity_in : register(s1);
 
-RWTexture3D<float3> velocity : register(u0);
-RWTexture3D<float4> quantity : register(u1);
+RWTexture3D<min16float3> velocity : register(u0);
+RWTexture3D<unorm float4> quantity : register(u1);
 
 cbuffer color : register(b0) {
 	float3 dir;
@@ -19,25 +19,19 @@ void main(uint3 DTid : SV_DispatchThreadID )
 	uint depth;
 	quantity.GetDimensions(width, height, depth);
 
-	velocity[DTid.xyz].xyz = velocity_in[DTid.xyz].xyz;
-    quantity[DTid.xyz] = quantity_in[DTid.xyz];
+	velocity[DTid.xyz] = velocity_in[DTid.xyz];
+	quantity[DTid.xyz] = quantity_in[DTid.xyz];
 
-	//const float x = DTid.x - (width / 2);
-	//const float y = DTid.y - (height / 2);
-	//const float z = DTid.z - (depth / 2);
-	//const float r = 50.0f;
-
-	//if (DTid.x < width && DTid.y < height && DTid.z < depth) {
- //       if (x * x + y * y + z * z <= r * r) {
- //           velocity[DTid.xyz].xyz += normalize(float3(dir.xyz)) * speed;
- //           quantity[DTid.xyz] += color * color_scale;
- //       }
-	//}
-
-    //velocity[DTid.xyz].xyz += float3(1.0f, 0.0f, 0.0f) * 0.065f;
-	if (DTid.x <= 20.0f && DTid.y >= 50.0f && DTid.y <= 60.0f) {
+	if (DTid.x == 0 || DTid.y == 0 || DTid.z == 0) {
+		//velocity[DTid.xyz] = 0.0f;
+	}
+	else if (DTid.x >= width - 1 || DTid.y >= height - 1 || DTid.z >= depth - 1) {
+		velocity[DTid.xyz] = min16float3(-2.0f, 5.0f, 0.0f);
+	}
+	else if (DTid.x > 0.0f && DTid.x <= 4.0f && DTid.y >= 10.0f && DTid.y <= 20.0f) {
 		//velocity[DTid.xyz].xyz += normalize(float3(dir.xyz)) * speed;
-        velocity[DTid.xyz].xyz += float3(1.0f, 0.0f, 0.0f) * 0.0045f;
-		quantity[DTid.xyz] += color * color_scale;
+		velocity[DTid.xyz] += min16float3(1.0f, 0.0f, 0.0f) * 0.15f;
+		//quantity[DTid.xyz] += color * color_scale;
+		quantity[DTid.xyz] += float4(1.0f, 1.0f, 1.0f, 0.3f) * 0.1f;
 	}
 }

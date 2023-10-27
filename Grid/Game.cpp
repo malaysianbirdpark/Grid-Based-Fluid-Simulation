@@ -41,9 +41,9 @@ Game::Game()
 	gViewportInfo.height = 640;
 	gViewportInfo.depth = 640;
 
-	gSimulationInfo.width = 320;
-	gSimulationInfo.height = 320;
-	gSimulationInfo.depth = 320;
+	gSimulationInfo.width = 64;
+	gSimulationInfo.height = 64;
+	gSimulationInfo.depth = 64;
 
 	Win32::Init(width, height);
 	Renderer::Init(width, height, gWindowInfo.hWnd);
