@@ -108,7 +108,8 @@ void Renderer::BeginFrame()
     _defaultContext->RSSetViewports(1u, &_viewport);
     _defaultContext->RSSetState(_rasterizerState.Get());
     _defaultContext->OMSetDepthStencilState(_dsDefault.Get(), 0u);
-    _defaultContext->OMSetBlendState(_bsDefault.Get(), nullptr, 0xFFFFFFFFu);
+    //_defaultContext->OMSetBlendState(_bsDefault.Get(), nullptr, 0xFFFFFFFFu);
+    //_defaultContext->OMSetBlendState(nullptr, nullptr, 0u);
 
     _defaultContext->OMSetRenderTargets(1u, _backBufferView.GetAddressOf(), _dsv.Get());
     _defaultContext->ClearRenderTargetView(_backBufferView.Get(), clear_color);
@@ -123,6 +124,7 @@ void Renderer::BeginFrame()
 	_imguiContext->RSSetViewports(1u, &_viewport);
     _imguiContext->RSSetState(_rasterizerState.Get());
     _imguiContext->OMSetDepthStencilState(_dsDefault.Get(), 0u);
+    //_imguiContext->OMSetBlendState(nullptr, nullptr, 0u);
     //_imguiContext->OMSetRenderTargets(1u, _imguiRTV.GetAddressOf(), nullptr);
     _imguiContext->OMSetRenderTargets(1u, _backBufferView.GetAddressOf(), nullptr);
 
@@ -282,9 +284,9 @@ void Renderer::InitSamplers()
     {
         D3D11_SAMPLER_DESC sd{};
         sd.Filter = D3D11_FILTER_ANISOTROPIC;
-        sd.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
-        sd.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
-        sd.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
+        sd.AddressU = D3D11_TEXTURE_ADDRESS_CLAMP;
+        sd.AddressV = D3D11_TEXTURE_ADDRESS_CLAMP;
+        sd.AddressW = D3D11_TEXTURE_ADDRESS_CLAMP;
         sd.MaxAnisotropy = D3D11_REQ_MAXANISOTROPY;
         sd.MipLODBias = 0.0f;
         sd.MinLOD = 0.0f;

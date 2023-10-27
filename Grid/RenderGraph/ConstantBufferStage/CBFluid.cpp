@@ -61,16 +61,18 @@ void CBFluid::Update()
         ImGui::Text("Color");
         ImGui::RadioButton("Random Color", &color_mode, 0); ImGui::SameLine();
         ImGui::RadioButton("Fixed Color", &color_mode, 1); 
-        ImGui::DragFloat("Color Scale", &_data._colorScale, 0.01f, 0.0f, 2.0f);
+        ImGui::DragFloat("Color Scale", &_data._colorScale, 0.01f, 0.0f, 50.0f);
         if (color_mode == 1)
             ImGui::ColorPicker3("Fluid Color", &_data._color.x);
 
         ImGui::Text("Velocity");
         ImGui::RadioButton("Random Direction", &velocity_mode, 0); ImGui::SameLine();
         ImGui::RadioButton("Fixed Direction", &velocity_mode, 1); 
-        ImGui::DragFloat("Speed", &_data._speed, 0.01f, 0.0f, 2.0f);
+        ImGui::DragFloat("Speed", &_data._speed, 0.01f, 0.0f, 10.0f);
         if (velocity_mode == 1) 
-            ImGui::DragFloat2("Fluid Velocity", &_data._velocityDir.x, 0.005f, -1.0f, 1.0f);
+            ImGui::DragFloat3("Fluid Dir", &_data._velocityDir.x, 0.005f, -1.0f, 1.0f);
+
+        ImGui::DragFloat("Dissipation", &_data._dissipation, 0.00001f, 0.0f, 1.0f, "%.5f");
 
         ImGui::End();
     }
@@ -89,7 +91,8 @@ void CBFluid::Update()
     if (velocity_mode == 0) {
 		DirectX::XMVECTOR const random_velocity{
 			static_cast<float>(std::rand() - (RAND_MAX >> 1)) / (RAND_MAX >> 2),
-			static_cast<float>(std::rand() - (RAND_MAX >> 1)) / (RAND_MAX >> 2),
+			//static_cast<float>(std::rand() - (RAND_MAX >> 1)) / (RAND_MAX >> 2),
+            1.0f,
 			static_cast<float>(std::rand() - (RAND_MAX >> 1)) / (RAND_MAX >> 2),
             0.0f
         };

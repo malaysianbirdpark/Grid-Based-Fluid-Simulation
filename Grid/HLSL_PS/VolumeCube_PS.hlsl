@@ -25,8 +25,8 @@ float4 main(PS_IN input) : SV_Target
     const float3 front_uvw = front_texcoord.Load(input.sv_pos);
     const float3 back_uvw  = back_texcoord.Load(input.sv_pos);
     const float  uvw_len   = length(back_uvw - front_uvw);
-    if (uvw_len < 0.02)
-        return float4(0.0f, 0.0f, 0.0f, 1.0f);
+    if (uvw_len <= 0.005)
+        return float4(0.0f, 0.0f, 0.0f, 0.0f);
     const float3 uvw_dir   = (back_uvw - front_uvw) / uvw_len;
     
     float3 cur_uvw = front_uvw;
@@ -34,13 +34,13 @@ float4 main(PS_IN input) : SV_Target
     float4 dest_color = 0.0f;
     float4 src_color = 0.0f;
 
-    const float step_size = 0.02;
+    const float step_size = 0.01f;
     float3 step_uvw = uvw_dir * step_size;
 
-    const int iterations = (uvw_len / 0.02f) + 1;
+    const int iterations = (uvw_len / step_size) + 1;
     [loop]
     for (int i = 0; i < iterations; ++i) { 
-        src_color = volume_tex.Sample(sampler1, cur_uvw);
+        src_color = volume_tex.Sample(sampler2, cur_uvw);
 
         dest_color.rgb += (1.0f - dest_color.a) * src_color.rgb * src_color.a;
         dest_color.a   += (1.0f - dest_color.a) * src_color.a;
@@ -54,5 +54,6 @@ float4 main(PS_IN input) : SV_Target
             break;
     }
 
-    return dest_color + previous.Load(input.sv_pos);
+    //return dest_color + previous.Load(input.sv_pos);
+    return float4(dest_color.rgb, 1.0f);
 }

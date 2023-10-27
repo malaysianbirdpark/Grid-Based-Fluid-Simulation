@@ -22,7 +22,7 @@ Sourcing3DStage::Sourcing3DStage()
     desc.Depth = gSimulationInfo.depth;
 	desc.MipLevels = 1u;
 
-	desc.Format = DXGI_FORMAT_R16G16B16A16_FLOAT;
+	desc.Format = DXGI_FORMAT_R11G11B10_FLOAT;
     pDevice->CreateTexture3D(&desc, nullptr, _resource[0].ReleaseAndGetAddressOf());
     pDevice->CreateUnorderedAccessView(_resource[0].Get(), nullptr, _uav[0].ReleaseAndGetAddressOf());
 

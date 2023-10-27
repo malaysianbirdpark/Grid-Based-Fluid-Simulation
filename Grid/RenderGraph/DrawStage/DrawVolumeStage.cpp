@@ -61,7 +61,7 @@ void DrawVolumeStage::Run(ID3D11DeviceContext& context)
 
     context.RSSetViewports(1u, &_vp);
     context.OMSetDepthStencilState(_ds.Get(), 0u);
-    context.OMSetBlendState(nullptr, nullptr, 0xFFFFFFFFu);
+    //context.OMSetBlendState(nullptr, nullptr, 0xFFFFFFFFu);
 
     // draw front faces
     context.RSSetState(_rs.Get());

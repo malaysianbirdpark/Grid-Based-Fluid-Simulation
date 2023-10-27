@@ -9,6 +9,7 @@ cbuffer color : register(b0) {
 	float  speed;
 	float4 color;
 	float  color_scale;
+	float  dissipation;
 }
 
 [numthreads(8, 8, 8)]
@@ -23,15 +24,24 @@ void main(uint3 DTid : SV_DispatchThreadID )
 	quantity[DTid.xyz] = quantity_in[DTid.xyz];
 
 	if (DTid.x == 0 || DTid.y == 0 || DTid.z == 0) {
-		//velocity[DTid.xyz] = 0.0f;
+		velocity[DTid.xyz] = 0.0f;
+		quantity[DTid.xyz] = 0.0f;
 	}
 	else if (DTid.x >= width - 1 || DTid.y >= height - 1 || DTid.z >= depth - 1) {
-		velocity[DTid.xyz] = min16float3(-2.0f, 5.0f, 0.0f);
+		velocity[DTid.xyz] = 0.0f;
+		quantity[DTid.xyz] = 0.0f;
 	}
-	else if (DTid.x > 0.0f && DTid.x <= 4.0f && DTid.y >= 10.0f && DTid.y <= 20.0f) {
-		//velocity[DTid.xyz].xyz += normalize(float3(dir.xyz)) * speed;
-		velocity[DTid.xyz] += min16float3(1.0f, 0.0f, 0.0f) * 0.15f;
-		//quantity[DTid.xyz] += color * color_scale;
-		quantity[DTid.xyz] += float4(1.0f, 1.0f, 1.0f, 0.3f) * 0.1f;
+	else if (DTid.y > 0.0f && DTid.y <= 2.0f && DTid.z >= 20.0f && DTid.z <= 40.0f && DTid.x >= 20.0f && DTid.x <= 40.0f) {
+		velocity[DTid.xyz].xyz = normalize(float3(dir.xyz)) * speed;
+		quantity[DTid.xyz] = float4(color.xyz * color_scale, 0.4f);
 	}
+	quantity[DTid.xyz] -= dissipation;
+
+	//if (quantity[DTid.xyz].x > 0.0015f && quantity[DTid.xyz].y > 0.0015f && quantity[DTid.xyz].z > 0.0015f) {
+	//	//quantity[DTid.xyz] = max(float4(quantity[DTid.xyz] - 0.0001f), float4(0.0f, 0.0f, 0.0f, 0.1f));
+	//	quantity[DTid.xyz] = quantity[DTid.xyz] - 0.0015f;
+	//}
+	//else {
+	//	quantity[DTid.xyz] = 0.0f;
+	//}
 }

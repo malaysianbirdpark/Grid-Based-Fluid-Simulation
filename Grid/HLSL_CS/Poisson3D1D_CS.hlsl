@@ -17,11 +17,11 @@ void main( uint3 DTid : SV_DispatchThreadID )
 	x_in.GetDimensions(width, height, depth);
 
 	if (DTid.x == 0 || DTid.y == 0 || DTid.z == 0) {
-        x_out[DTid.xyz] = 0.500f;
+        x_out[DTid.xyz] = 0.010f;
 		return;
     }
 	else if (DTid.x >= width - 1 || DTid.y >= height - 1 || DTid.z >= depth - 1) {
-        x_out[DTid.xyz] = 0.500f;
+        x_out[DTid.xyz] = 0.010f;
 		return;
 	}
 

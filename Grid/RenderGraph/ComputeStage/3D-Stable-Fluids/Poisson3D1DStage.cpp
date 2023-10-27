@@ -49,7 +49,7 @@ Poisson3D1DStage::Poisson3D1DStage()
 
 void Poisson3D1DStage::Run(ID3D11DeviceContext& context)
 {
-    for (auto i {0}; i != 31; ++i) {
+    for (auto i {0}; i != 21; ++i) {
         context.OMSetRenderTargets(0u, nullptr, nullptr);
         context.CSSetShaderResources(0u, 1u, _srv[i & 0b1].GetAddressOf());
         context.CSSetShaderResources(1u, 1u, _srv[2].GetAddressOf());

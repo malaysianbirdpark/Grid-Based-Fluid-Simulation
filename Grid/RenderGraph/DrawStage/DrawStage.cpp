@@ -58,7 +58,7 @@ void DrawStage::Run(ID3D11DeviceContext& context)
     context.RSSetState(_rs.Get());
     context.OMSetDepthStencilState(_ds.Get(), 0u);
     //context.OMSetBlendState(_bs.Get(), nullptr, 0xFFFFFFFFu);
-    context.OMSetBlendState(nullptr, nullptr, 0xFFFFFFFFu);
+    //context.OMSetBlendState(nullptr, nullptr, 0xFFFFFFFFu);
 
     context.OMSetRenderTargets(1u, _resultRTV.GetAddressOf(), _dsv.Get());
     context.ClearRenderTargetView(_resultRTV.Get(), clear_color);
