@@ -20,10 +20,10 @@ void main( uint3 DTid : SV_DispatchThreadID )
         x_out[DTid.xyz] = 0.010f;
 		return;
     }
-	else if (DTid.x >= width - 1 || DTid.y >= height - 1 || DTid.z >= depth - 1) {
-        x_out[DTid.xyz] = 0.010f;
-		return;
-	}
+	//else if (DTid.x >= width - 1 || DTid.y >= height - 1 || DTid.z >= depth - 1) {
+ //       x_out[DTid.xyz] = 0.010f;
+	//	return;
+	//}
 
     const min16float right  = x_in[uint3(min(DTid.x + 1, width - 1), DTid.y, DTid.z)];
     const min16float left   = x_in[uint3(max(DTid.x - 1, 0), DTid.y, DTid.z)];

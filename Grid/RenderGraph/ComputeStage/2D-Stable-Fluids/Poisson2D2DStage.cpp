@@ -2,7 +2,6 @@
 #include "Poisson2D2DStage.h"
 
 #include <d3dcompiler.h>
-#include <iostream>
 
 #include "imnodes.h"
 #include "NodeManager.h"

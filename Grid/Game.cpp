@@ -30,7 +30,9 @@
 #include "CBPoisson.h"
 #include "Divergence3DStage.h"
 #include "Poisson3D1DStage.h"
+#include "Poisson3D3DStage.h"
 #include "GradientSubtract3DStage.h"
+#include "CBViscosity.h"
 
 Game::Game() 
 {
@@ -61,6 +63,9 @@ Game::Game()
 	_renderGraph.AddStage(std::move(std::make_shared<CopyStage>()));
 	_renderGraph.AddStage(std::move(std::make_shared<ViewportStage>()));
 
+	_renderGraph.AddStage(std::move(std::make_shared<CBViscosity>(Renderer::Context())));
+	_renderGraph.AddStage(std::move(std::make_shared<Poisson3D3DStage>()));
+
 	_renderGraph.AddStage(std::move(std::make_shared<Initializer3DStage>()));
 	_renderGraph.AddStage(std::move(std::make_shared<Pressure3D1DStage>()));
 	_renderGraph.AddStage(std::move(std::make_shared<CBPoisson>(Renderer::Context())));
@@ -69,26 +74,28 @@ Game::Game()
 	_renderGraph.AddStage(std::move(std::make_shared<GradientSubtract3DStage>()));
 
 	_renderGraph.Link(0, 256, 1, 0);
-	_renderGraph.Link(2, 259, 3, 3);
 	_renderGraph.Link(1, 257, 3, 4);
 	_renderGraph.Link(1, 258, 3, 5);
 
-	_renderGraph.Link(7, 265, 8, 10);
-	_renderGraph.Link(8, 266, 11, 12);
+	_renderGraph.Link(2, 259, 3, 3);
+	_renderGraph.Link(3, 260, 8, 10);
+	_renderGraph.Link(3, 260, 8, 11);
+	_renderGraph.Link(7, 265, 8, 12);
+	_renderGraph.Link(8, 266, 12, 14);
 
-	_renderGraph.Link(3, 260, 10, 11);
-	_renderGraph.Link(10, 268, 11, 13);
+	_renderGraph.Link(9, 267, 10, 13);
+	_renderGraph.Link(10, 268, 13, 15);
+	_renderGraph.Link(12, 270, 13, 16);
+	_renderGraph.Link(11, 269, 13, 17);
 
-	_renderGraph.Link(9, 267, 11, 14);
+	_renderGraph.Link(13, 271, 14, 18);
+	_renderGraph.Link(8, 266, 14, 19);
+	_renderGraph.Link(14, 272, 1, 1);
 
-	_renderGraph.Link(11, 269, 12, 15);
-	_renderGraph.Link(3, 260, 12, 16);
-	_renderGraph.Link(12, 270, 1, 1);
-
-	_renderGraph.Link(3, 261, 1, 2);
 	_renderGraph.Link(3, 261, 4, 7);
 	_renderGraph.Link(4, 262, 5, 8);
 	_renderGraph.Link(5, 263, 6, 9);
+	_renderGraph.Link(3, 261, 1, 2);
 
 	ImNodes::LoadCurrentEditorStateFromIniFile("imnodes_state.ini");
 }

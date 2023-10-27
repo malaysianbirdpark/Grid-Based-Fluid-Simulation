@@ -60,5 +60,5 @@ void CBViscosity::Update()
     }
     _data.dt = 1.0f / ImGui::GetIO().Framerate;
     _data.alpha = 1.0f / (_data.viscosity * _data.dt);
-    _data.r_beta = 1.0f / (4.0f + _data.alpha);
+    _data.r_beta = 1.0f / (6.0f + _data.alpha);
 }

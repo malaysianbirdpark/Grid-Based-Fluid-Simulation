@@ -85,7 +85,7 @@
     <ClInclude Include="RenderGraph\ComputeStage\3D-Stable-Fluids\Poisson3D1DStage.h">
       <Filter>RenderGraph\ComputeStage\3D-Stable-Fluids</Filter>
     </ClInclude>
-    <ClInclude Include="RenderGraph\ComputeStage\3D-Stable-Fluids\Poisson3D2DStage.h">
+    <ClInclude Include="RenderGraph\ComputeStage\3D-Stable-Fluids\Poisson3D3DStage.h">
       <Filter>RenderGraph\ComputeStage\3D-Stable-Fluids</Filter>
     </ClInclude>
     <ClInclude Include="RenderGraph\ComputeStage\3D-Stable-Fluids\Poisson3D4DStage.h">
@@ -240,7 +240,7 @@
     <ClCompile Include="RenderGraph\ComputeStage\3D-Stable-Fluids\Poisson3D1DStage.cpp">
       <Filter>RenderGraph\ComputeStage\3D-Stable-Fluids</Filter>
     </ClCompile>
-    <ClCompile Include="RenderGraph\ComputeStage\3D-Stable-Fluids\Poisson3D2DStage.cpp">
+    <ClCompile Include="RenderGraph\ComputeStage\3D-Stable-Fluids\Poisson3D3DStage.cpp">
       <Filter>RenderGraph\ComputeStage\3D-Stable-Fluids</Filter>
     </ClCompile>
     <ClCompile Include="RenderGraph\ComputeStage\3D-Stable-Fluids\Poisson3D4DStage.cpp">
