@@ -32,7 +32,7 @@ void CBViscosity::Run(ID3D11DeviceContext& context)
 {
     Update();
     Upload(context);
-    context.CSSetConstantBuffers(3u, 1u, _buffer.GetAddressOf());
+    context.CSSetConstantBuffers(2u, 1u, _buffer.GetAddressOf());
 }
 
 void CBViscosity::Upload(ID3D11DeviceContext& context)
@@ -53,7 +53,7 @@ void CBViscosity::Update()
 {
     if (ImNodes::IsNodeSelected(_id)) {
         ImGui::Begin("Viscosity Editor");
-        ImGui::DragFloat("Viscosity", &_data.viscosity, 0.005f, 0.0015f, 10.0f);
+        ImGui::DragFloat("Viscosity", &_data.viscosity, 0.005f, 0.0015f, 50.0f);
         ImGui::Text("Alpha: %f", _data.alpha);
         ImGui::Text("Beta: %f", 1.0f / _data.r_beta);
         ImGui::End();

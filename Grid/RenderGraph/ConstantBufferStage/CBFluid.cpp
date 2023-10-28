@@ -90,10 +90,12 @@ void CBFluid::Update()
 
     if (velocity_mode == 0) {
 		DirectX::XMVECTOR const random_velocity{
-			static_cast<float>(std::rand() - (RAND_MAX >> 1)) / (RAND_MAX >> 2),
+			//static_cast<float>(std::rand() - (RAND_MAX >> 1)) / (RAND_MAX >> 2),
+            0.0f,
 			//static_cast<float>(std::rand() - (RAND_MAX >> 1)) / (RAND_MAX >> 2),
             1.0f,
-			static_cast<float>(std::rand() - (RAND_MAX >> 1)) / (RAND_MAX >> 2),
+			//static_cast<float>(std::rand() - (RAND_MAX >> 1)) / (RAND_MAX >> 2),
+            0.0f,
             0.0f
         };
 

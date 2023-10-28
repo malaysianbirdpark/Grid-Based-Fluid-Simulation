@@ -25,7 +25,7 @@ float4 main(PS_IN input) : SV_Target
     const float3 front_uvw = front_texcoord.Load(input.sv_pos);
     const float3 back_uvw  = back_texcoord.Load(input.sv_pos);
     const float  uvw_len   = length(back_uvw - front_uvw);
-    if (uvw_len <= 0.005)
+    if (uvw_len <= 0.01)
         return float4(0.0f, 0.0f, 0.0f, 0.0f);
     const float3 uvw_dir   = (back_uvw - front_uvw) / uvw_len;
     

@@ -17,12 +17,12 @@ Divergence3DStage::Divergence3DStage()
 	desc.BindFlags = D3D11_BIND_UNORDERED_ACCESS | D3D11_BIND_SHADER_RESOURCE;
 	desc.Usage = D3D11_USAGE_DEFAULT;
 	desc.CPUAccessFlags = 0u;
-	desc.Format = DXGI_FORMAT_R16_FLOAT;
 	desc.Width = gSimulationInfo.width;
 	desc.Height = gSimulationInfo.height;
 	desc.Depth = gSimulationInfo.depth;
 	desc.MipLevels = 1u;
 
+	desc.Format = DXGI_FORMAT_R16_FLOAT;
     pDevice->CreateTexture3D(&desc, nullptr, _resource[0].ReleaseAndGetAddressOf());
     pDevice->CreateUnorderedAccessView(_resource[0].Get(), nullptr, _uav[0].ReleaseAndGetAddressOf());
 

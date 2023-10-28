@@ -23,25 +23,13 @@ void main(uint3 DTid : SV_DispatchThreadID )
 	velocity[DTid.xyz] = velocity_in[DTid.xyz];
 	quantity[DTid.xyz] = quantity_in[DTid.xyz];
 
-	if (DTid.x == 0 || DTid.y == 0 || DTid.z == 0) {
-		velocity[DTid.xyz] = 0.0f;
-		quantity[DTid.xyz] = 0.0f;
+	if (DTid.y > 2.0f && DTid.y <= 3.0f && DTid.z >= 50.0f && DTid.z <= 70.0f && DTid.x >= 50.0f && DTid.x <= 70.0f) {
+		velocity[DTid.xyz].xyz = normalize(min16float3(dir.xyz)) * speed;
+		quantity[DTid.xyz] = min16float4(color.xyz * color_scale, 0.4f);
 	}
-	else if (DTid.x >= width - 1 || DTid.y >= height - 1 || DTid.z >= depth - 1) {
-		velocity[DTid.xyz] = 0.0f;
-		quantity[DTid.xyz] = 0.0f;
-	}
-	else if (DTid.y > 0.0f && DTid.y <= 2.0f && DTid.z >= 20.0f && DTid.z <= 40.0f && DTid.x >= 20.0f && DTid.x <= 40.0f) {
-		velocity[DTid.xyz].xyz = normalize(float3(dir.xyz)) * speed;
-		quantity[DTid.xyz] = float4(color.xyz * color_scale, 0.4f);
-	}
-	quantity[DTid.xyz] -= dissipation;
+    quantity[DTid.xyz] -= dissipation;
 
-	//if (quantity[DTid.xyz].x > 0.0015f && quantity[DTid.xyz].y > 0.0015f && quantity[DTid.xyz].z > 0.0015f) {
-	//	//quantity[DTid.xyz] = max(float4(quantity[DTid.xyz] - 0.0001f), float4(0.0f, 0.0f, 0.0f, 0.1f));
-	//	quantity[DTid.xyz] = quantity[DTid.xyz] - 0.0015f;
-	//}
-	//else {
-	//	quantity[DTid.xyz] = 0.0f;
-	//}
+	if (velocity[DTid.xyz].x <= 0.001f && velocity[DTid.xyz].y <= 0.001f && velocity[DTid.xyz].z <= 0.001f) {
+        quantity[DTid.xyz] = 0.0f;
+    }
 }

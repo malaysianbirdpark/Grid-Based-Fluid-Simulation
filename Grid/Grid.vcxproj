@@ -101,7 +101,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Game.h" />
-    <ClInclude Include="Initializer3DStage.h" />
+    <ClInclude Include="RenderGraph\ComputeStage\3D-Stable-Fluids\Initializer3DStage.h" />
     <ClInclude Include="Platform\Input.h" />
     <ClInclude Include="Platform\Win32.h" />
     <ClInclude Include="RenderGraph\ResourceStage\Pressure3D1DStage.h" />
@@ -158,7 +158,7 @@
   <ItemGroup>
     <ClCompile Include="EntryPoint.cpp" />
     <ClCompile Include="Game.cpp" />
-    <ClCompile Include="Initializer3DStage.cpp" />
+    <ClCompile Include="RenderGraph\ComputeStage\3D-Stable-Fluids\Initializer3DStage.cpp" />
     <ClCompile Include="Platform\Input.cpp" />
     <ClCompile Include="Platform\Win32.cpp" />
     <ClCompile Include="RenderGraph\ResourceStage\Pressure3D1DStage.cpp" />

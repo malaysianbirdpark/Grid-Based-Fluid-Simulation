@@ -16,10 +16,10 @@ void main( uint3 DTid : SV_DispatchThreadID )
 	uint depth;
 	x_in.GetDimensions(width, height, depth);
 
-	if (DTid.x == 0 || DTid.y == 0 || DTid.z == 0) {
-        x_out[DTid.xyz] = 0.010f;
-		return;
-    }
+	//if (DTid.x == 0 || DTid.y == 0 || DTid.z == 0) {
+ //       x_out[DTid.xyz] = 0.010f;
+	//	return;
+ //   }
 	//else if (DTid.x >= width - 1 || DTid.y >= height - 1 || DTid.z >= depth - 1) {
  //       x_out[DTid.xyz] = 0.010f;
 	//	return;
@@ -32,5 +32,5 @@ void main( uint3 DTid : SV_DispatchThreadID )
     const min16float front  = x_in[uint3(DTid.x, DTid.y, min(DTid.z + 1, depth - 1))];
     const min16float behind = x_in[uint3(DTid.x, DTid.y, max(DTid.z - 1, 0))];
 
-	x_out[DTid.xyz] = (up + down + left + right + front + behind + alpha * b_in[DTid.xyz]) * r_beta;
+	x_out[DTid.xyz] = (up + down + left + right + front + behind - b_in[DTid.xyz]) * 0.1666667f;
 }

@@ -20,12 +20,12 @@ Poisson3D1DStage::Poisson3D1DStage()
 	desc.BindFlags = D3D11_BIND_UNORDERED_ACCESS | D3D11_BIND_SHADER_RESOURCE;
 	desc.Usage = D3D11_USAGE_DEFAULT;
 	desc.CPUAccessFlags = 0u;
-    desc.Format = DXGI_FORMAT_R16_FLOAT;
 	desc.Width = gSimulationInfo.width;
 	desc.Height = gSimulationInfo.height;
 	desc.Depth = gSimulationInfo.depth;
 	desc.MipLevels = 1u;
 
+    desc.Format = DXGI_FORMAT_R16_FLOAT;
     pDevice->CreateTexture3D(&desc, nullptr, _resource[0].ReleaseAndGetAddressOf());
     pDevice->CreateUnorderedAccessView(_resource[0].Get(), nullptr, _uav[1].ReleaseAndGetAddressOf());
     pDevice->CreateShaderResourceView(_resource[0].Get(), nullptr, _srv[1].ReleaseAndGetAddressOf());
@@ -49,7 +49,7 @@ Poisson3D1DStage::Poisson3D1DStage()
 
 void Poisson3D1DStage::Run(ID3D11DeviceContext& context)
 {
-    for (auto i {0}; i != 21; ++i) {
+    for (auto i {0}; i != 41; ++i) {
         context.OMSetRenderTargets(0u, nullptr, nullptr);
         context.CSSetShaderResources(0u, 1u, _srv[i & 0b1].GetAddressOf());
         context.CSSetShaderResources(1u, 1u, _srv[2].GetAddressOf());

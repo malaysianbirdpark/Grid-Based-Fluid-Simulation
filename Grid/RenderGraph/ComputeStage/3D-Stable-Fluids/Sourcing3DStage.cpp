@@ -7,9 +7,9 @@ Sourcing3DStage::Sourcing3DStage()
 	: Compute3DStage{"3D-Sourcing", "./CSO/Sourcing3D_CS.cso", 8, 8, 8}
 {
     _uav.resize(2);
-    _srv.resize(4);
+    _srv.resize(2);
     _nullUav.resize(2);
-    _nullSrv.resize(4);
+    _nullSrv.resize(2);
 
     _resource.resize(2);
 
@@ -22,7 +22,7 @@ Sourcing3DStage::Sourcing3DStage()
     desc.Depth = gSimulationInfo.depth;
 	desc.MipLevels = 1u;
 
-	desc.Format = DXGI_FORMAT_R11G11B10_FLOAT;
+	desc.Format = DXGI_FORMAT_R16G16B16A16_FLOAT;
     pDevice->CreateTexture3D(&desc, nullptr, _resource[0].ReleaseAndGetAddressOf());
     pDevice->CreateUnorderedAccessView(_resource[0].Get(), nullptr, _uav[0].ReleaseAndGetAddressOf());
 

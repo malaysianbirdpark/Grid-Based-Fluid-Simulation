@@ -196,7 +196,7 @@
     </ClInclude>
     <ClInclude Include="pch.h" />
     <ClInclude Include="RenderGraph\ResourceStage\Pressure3D1DStage.h" />
-    <ClInclude Include="Initializer3DStage.h" />
+    <ClInclude Include="RenderGraph\ComputeStage\3D-Stable-Fluids\Initializer3DStage.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EntryPoint.cpp" />
@@ -352,7 +352,7 @@
     <ClCompile Include="pch.cpp" />
     <ClCompile Include="temp.cpp" />
     <ClCompile Include="RenderGraph\ResourceStage\Pressure3D1DStage.cpp" />
-    <ClCompile Include="Initializer3DStage.cpp" />
+    <ClCompile Include="RenderGraph\ComputeStage\3D-Stable-Fluids\Initializer3DStage.cpp" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="HLSL_CS\3DTextureTest_CS.hlsl">

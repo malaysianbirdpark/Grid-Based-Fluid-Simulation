@@ -89,6 +89,9 @@ void DrawVolumeStage::Run(ID3D11DeviceContext& context)
 
     // Draw Volume
     DrawStage::Run(context);
+
+    static ID3D11ShaderResourceView* null_srv[1] {nullptr};
+    context.PSSetShaderResources(0u, 1u, null_srv);
 }
 
 void DrawVolumeStage::Consume(ID3D11Resource* resource, int32_t attribute_id)
