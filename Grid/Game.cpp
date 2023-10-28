@@ -33,6 +33,7 @@
 #include "Poisson3D3DStage.h"
 #include "GradientSubtract3DStage.h"
 #include "CBViscosity.h"
+#include "MCAdvection3DStage.h"
 
 Game::Game() 
 {
@@ -57,7 +58,7 @@ Game::Game()
 	_renderGraph.AddStage(std::move(std::make_shared<Sourcing3DStage>()));
 
 	_renderGraph.AddStage(std::move(std::make_shared<CBTimestep>()));
-	_renderGraph.AddStage(std::move(std::make_shared<Advection3DStage>()));
+	_renderGraph.AddStage(std::move(std::make_shared<MCAdvection3DStage>()));
 
 	_renderGraph.AddStage(std::move(std::make_shared<DrawVolumeStage>(Renderer::Context())));
 	_renderGraph.AddStage(std::move(std::make_shared<CopyStage>()));

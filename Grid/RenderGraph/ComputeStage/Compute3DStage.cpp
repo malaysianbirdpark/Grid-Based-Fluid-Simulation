@@ -10,21 +10,24 @@ Compute3DStage::Compute3DStage(char const* name, char const* compute_shader_path
     : _name{name}, _groupX{ group_x }, _groupY{ group_y }, _groupZ{ group_z }
 {
     std::string _path{ compute_shader_path };
-    std::wstring p(_path.length(), L' ');
-    std::ranges::copy(_path, p.begin());
 
-    Microsoft::WRL::ComPtr<ID3DBlob> pBlob;
-    D3DReadFileToBlob(
-        p.c_str(),
-        pBlob.ReleaseAndGetAddressOf()
-    );
+    if (_path != "") {
+        std::wstring p(_path.length(), L' ');
+        std::ranges::copy(_path, p.begin());
 
-    pDevice->CreateComputeShader(
-        pBlob->GetBufferPointer(), 
-        pBlob->GetBufferSize(),
-        nullptr,
-        _cs.ReleaseAndGetAddressOf()
-    );
+        Microsoft::WRL::ComPtr<ID3DBlob> pBlob;
+        D3DReadFileToBlob(
+            p.c_str(),
+            pBlob.ReleaseAndGetAddressOf()
+        );
+
+        pDevice->CreateComputeShader(
+            pBlob->GetBufferPointer(), 
+            pBlob->GetBufferSize(),
+            nullptr,
+            _cs.ReleaseAndGetAddressOf()
+        );
+    }
 }
 
 void Compute3DStage::Run(ID3D11DeviceContext& context) {
