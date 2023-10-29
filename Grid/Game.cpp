@@ -31,7 +31,7 @@
 #include "Divergence3DStage.h"
 #include "Poisson3D1DStage.h"
 #include "Poisson3D3DStage.h"
-#include "GradientSubtract3DStage.h"
+#include "PressureProjection3DStage.h"
 #include "CBViscosity.h"
 #include "MCAdvection3DStage.h"
 
@@ -69,7 +69,7 @@ Game::Game()
 	_renderGraph.AddStage(std::move(std::make_shared<CBPoisson>(Renderer::Context())));
 	_renderGraph.AddStage(std::move(std::make_shared<Divergence3DStage>()));
 	_renderGraph.AddStage(std::move(std::make_shared<Poisson3D1DStage>()));
-	_renderGraph.AddStage(std::move(std::make_shared<GradientSubtract3DStage>()));
+	_renderGraph.AddStage(std::move(std::make_shared<PressureProjection3DStage>()));
 
 	_renderGraph.Link(0, 256, 1, 0);
 

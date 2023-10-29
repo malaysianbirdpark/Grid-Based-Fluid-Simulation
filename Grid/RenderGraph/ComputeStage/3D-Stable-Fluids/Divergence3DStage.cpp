@@ -6,7 +6,7 @@
 Divergence3DStage::Divergence3DStage()
 	: Compute3DStage{"3D-Divergence", "./CSO/Divergence3D_CS.cso", 8, 8, 8}
 {
-    _uav.resize(2);
+    _uav.resize(1);
     _srv.resize(1);
     _nullUav.resize(5);
     _nullSrv.resize(5);
@@ -38,7 +38,7 @@ Divergence3DStage::Divergence3DStage()
 void Divergence3DStage::Consume(ID3D11Resource* resource, int32_t attribute_id)
 {
     if (attribute_id == _xInID)
-        pDevice->CreateUnorderedAccessView(resource, nullptr, _uav[1].ReleaseAndGetAddressOf());
+        pDevice->CreateShaderResourceView(resource, nullptr, _srv[0].ReleaseAndGetAddressOf());
 }
 
 ID3D11Resource* Divergence3DStage::Expose(int32_t attribute_id)

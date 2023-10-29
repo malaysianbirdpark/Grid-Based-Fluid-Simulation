@@ -7,7 +7,7 @@
 #include "NodeManager.h"
 
 Poisson3D1DStage::Poisson3D1DStage()
-    : Compute3DStage{"3D1D-Poisson Solver", "./CSO/Poisson3D1D_CS.cso", 8, 8, 8}
+    : Compute3DStage{"3D1D-Poisson", "./CSO/Poisson3D1D_CS.cso", 8, 8, 8}
 {
     _uav.resize(2);
     _srv.resize(3);
@@ -45,12 +45,29 @@ Poisson3D1DStage::Poisson3D1DStage()
     _xOutID = NodeManager::IssueOutgoingAttrID();
     _outgoing[_xOutID] = -1;
     _attrNames[_xOutID] = { "new x" };
+
+    std::string _path{"./CSO/BoundaryCondition3D_CS.cso"};
+    std::wstring p(_path.length(), L' ');
+    std::ranges::copy(_path, p.begin());
+
+    Microsoft::WRL::ComPtr<ID3DBlob> pBlob;
+    D3DReadFileToBlob(
+        p.c_str(),
+        pBlob.ReleaseAndGetAddressOf()
+    );
+
+    pDevice->CreateComputeShader(
+        pBlob->GetBufferPointer(), 
+        pBlob->GetBufferSize(),
+        nullptr,
+        _bcCS.ReleaseAndGetAddressOf()
+    );
 }
 
 void Poisson3D1DStage::Run(ID3D11DeviceContext& context)
 {
-    for (auto i {0}; i != 41; ++i) {
-        context.OMSetRenderTargets(0u, nullptr, nullptr);
+    context.OMSetRenderTargets(0u, nullptr, nullptr);
+    for (auto i {0}; i != 40; ++i) {
         context.CSSetShaderResources(0u, 1u, _srv[i & 0b1].GetAddressOf());
         context.CSSetShaderResources(1u, 1u, _srv[2].GetAddressOf());
         context.CSSetUnorderedAccessViews(0u, 1u, _uav[!(i & 0b1)].GetAddressOf(), nullptr);
@@ -61,6 +78,21 @@ void Poisson3D1DStage::Run(ID3D11DeviceContext& context)
             static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.depth) / _groupZ)) 
         );
         SetBarrier(context);
+    }
+
+    context.CSSetUnorderedAccessViews(0u, 1u, _uav[0].GetAddressOf(), nullptr);
+    context.CSSetShader(_bcCS.Get(), nullptr, 0u);
+    context.Dispatch(
+        static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.width) / _groupX)),
+        static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.height) / _groupY)), 
+        static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.depth) / _groupZ)) 
+    );
+    SetBarrier(context);
+
+    if (_uav[0].Get()) {
+        ID3D11Resource* src {nullptr};
+        _uav[0]->GetResource(&src);
+        context.CopyResource(_resource[0].Get(), src);
     }
 }
 
