@@ -20,17 +20,36 @@ void main(uint3 DTid : SV_DispatchThreadID )
 	uint depth;
 	quantity.GetDimensions(width, height, depth);
 
-	if (DTid.x == 0 || DTid.y == 0 || DTid.z == 0 || DTid.x == width - 1 || DTid.y == height - 1 || DTid.z == depth - 1) {
-        quantity[DTid.xyz] = 0.0f;
-        return;
-    }
+	//if (DTid.x == 0 || DTid.y == 0 || DTid.z == 0 || DTid.x == width - 1 || DTid.y == height - 1 || DTid.z == depth - 1) {
+ //       quantity[DTid.xyz] = 0.0f;
+ //       return;
+ //   }
 
-	velocity[DTid.xyz] = velocity_in[DTid.xyz] + min16float3(0.0f, 0.001f, 0.0f);
+	velocity[DTid.xyz] = velocity_in[DTid.xyz] + min16float3(0.0f, 0.008f, 0.0f);
 	quantity[DTid.xyz] = quantity_in[DTid.xyz];
 
-	if (DTid.y > 2.0f && DTid.y <= 3.0f && DTid.z >= 50.0f && DTid.z <= 70.0f && DTid.x >= 50.0f && DTid.x <= 70.0f) {
-		velocity[DTid.xyz].xyz += normalize(min16float3(dir.xyz)) * speed;
-		quantity[DTid.xyz] += min16float4(color.xyz * color_scale, 0.4f);
+	const min16float r = min16float(width) / 32;
+	if (DTid.y > height - 3 && DTid.y <= height - 2) {
+		const min16float x = DTid.x - (min16float(width) / 2.0f);
+		const min16float z = DTid.z - (min16float(depth) / 2.0f);
+
+		if (x * x + z * z <= r * r) {
+			velocity[DTid.xyz].xyz += normalize(min16float3(dir.xyz)) * speed;
+			quantity[DTid.xyz] += min16float4(color.xyz * color_scale, 0.1f);
+		}
 	}
-    quantity[DTid.xyz] -= dissipation;
+
+	//if (DTid.y > 124.0f && DTid.y <= 126.0f && DTid.z >= 50.0f && DTid.z <= 70.0f && DTid.x >= 50.0f && DTid.x <= 70.0f) {
+	//	if (DTid.x >= 60 && DTid.x <= 65 && DTid.z >= 60 && DTid.z <= 65) {
+	//		velocity[DTid.xyz].xyz += normalize(min16float3(dir.xyz)) * speed * 2.0f;
+	//	}
+	//	else {
+	//		velocity[DTid.xyz].xyz += normalize(min16float3(dir.xyz)) * speed * 0.5f;
+	//	}
+	//	quantity[DTid.xyz] += min16float4(color.xyz * color_scale, 0.2f);
+	//}
+
+	//if (length(velocity[DTid.xyz].xyz) < 0.03f)
+	//	quantity[DTid.xyz] = 0.0f;
+		//quantity[DTid.xyz] = clamp(quantity[DTid.xyz] - dissipation, 0.0f, 1.0f);
 }

@@ -76,6 +76,9 @@
     <ClInclude Include="RenderGraph\ComputeStage\3D-Stable-Fluids\Advection3DStage.h">
       <Filter>RenderGraph\ComputeStage\3D-Stable-Fluids</Filter>
     </ClInclude>
+    <ClInclude Include="RenderGraph\ComputeStage\3D-Stable-Fluids\Diffusion3DStage.h">
+      <Filter>RenderGraph\ComputeStage\3D-Stable-Fluids</Filter>
+    </ClInclude>
     <ClInclude Include="RenderGraph\ComputeStage\3D-Stable-Fluids\Divergence3DStage.h">
       <Filter>RenderGraph\ComputeStage\3D-Stable-Fluids</Filter>
     </ClInclude>
@@ -86,9 +89,6 @@
       <Filter>RenderGraph\ComputeStage\3D-Stable-Fluids</Filter>
     </ClInclude>
     <ClInclude Include="RenderGraph\ComputeStage\3D-Stable-Fluids\Poisson3D1DStage.h">
-      <Filter>RenderGraph\ComputeStage\3D-Stable-Fluids</Filter>
-    </ClInclude>
-    <ClInclude Include="RenderGraph\ComputeStage\3D-Stable-Fluids\Poisson3D3DStage.h">
       <Filter>RenderGraph\ComputeStage\3D-Stable-Fluids</Filter>
     </ClInclude>
     <ClInclude Include="RenderGraph\ComputeStage\3D-Stable-Fluids\Poisson3D4DStage.h">
@@ -238,6 +238,9 @@
     <ClCompile Include="RenderGraph\ComputeStage\3D-Stable-Fluids\Advection3DStage.cpp">
       <Filter>RenderGraph\ComputeStage\3D-Stable-Fluids</Filter>
     </ClCompile>
+    <ClCompile Include="RenderGraph\ComputeStage\3D-Stable-Fluids\Diffusion3DStage.cpp">
+      <Filter>RenderGraph\ComputeStage\3D-Stable-Fluids</Filter>
+    </ClCompile>
     <ClCompile Include="RenderGraph\ComputeStage\3D-Stable-Fluids\Divergence3DStage.cpp">
       <Filter>RenderGraph\ComputeStage\3D-Stable-Fluids</Filter>
     </ClCompile>
@@ -248,9 +251,6 @@
       <Filter>RenderGraph\ComputeStage\3D-Stable-Fluids</Filter>
     </ClCompile>
     <ClCompile Include="RenderGraph\ComputeStage\3D-Stable-Fluids\Poisson3D1DStage.cpp">
-      <Filter>RenderGraph\ComputeStage\3D-Stable-Fluids</Filter>
-    </ClCompile>
-    <ClCompile Include="RenderGraph\ComputeStage\3D-Stable-Fluids\Poisson3D3DStage.cpp">
       <Filter>RenderGraph\ComputeStage\3D-Stable-Fluids</Filter>
     </ClCompile>
     <ClCompile Include="RenderGraph\ComputeStage\3D-Stable-Fluids\Poisson3D4DStage.cpp">
@@ -378,6 +378,9 @@
     <FxCompile Include="HLSL_CS\BoundaryCondition3D_CS.hlsl">
       <Filter>HLSL_CS</Filter>
     </FxCompile>
+    <FxCompile Include="HLSL_CS\Diffusion3D_CS.hlsl">
+      <Filter>HLSL_CS</Filter>
+    </FxCompile>
     <FxCompile Include="HLSL_CS\Divergence2D_CS.hlsl">
       <Filter>HLSL_CS</Filter>
     </FxCompile>
@@ -409,9 +412,6 @@
       <Filter>HLSL_CS</Filter>
     </FxCompile>
     <FxCompile Include="HLSL_CS\Poisson3D1D_CS.hlsl">
-      <Filter>HLSL_CS</Filter>
-    </FxCompile>
-    <FxCompile Include="HLSL_CS\Poisson3D3D_CS.hlsl">
       <Filter>HLSL_CS</Filter>
     </FxCompile>
     <FxCompile Include="HLSL_CS\Poisson3D4D_CS.hlsl">

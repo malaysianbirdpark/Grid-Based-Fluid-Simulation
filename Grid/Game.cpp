@@ -30,7 +30,7 @@
 #include "CBPoisson.h"
 #include "Divergence3DStage.h"
 #include "Poisson3D1DStage.h"
-#include "Poisson3D3DStage.h"
+#include "Diffusion3DStage.h"
 #include "PressureProjection3DStage.h"
 #include "CBViscosity.h"
 #include "MCAdvection3DStage.h"
@@ -59,6 +59,7 @@ Game::Game()
 
 	_renderGraph.AddStage(std::move(std::make_shared<CBTimestep>()));
 	_renderGraph.AddStage(std::move(std::make_shared<MCAdvection3DStage>()));
+	//_renderGraph.AddStage(std::move(std::make_shared<Advection3DStage>()));
 
 	_renderGraph.AddStage(std::move(std::make_shared<DrawVolumeStage>(Renderer::Context())));
 	_renderGraph.AddStage(std::move(std::make_shared<CopyStage>()));
@@ -70,6 +71,9 @@ Game::Game()
 	_renderGraph.AddStage(std::move(std::make_shared<Divergence3DStage>()));
 	_renderGraph.AddStage(std::move(std::make_shared<Poisson3D1DStage>()));
 	_renderGraph.AddStage(std::move(std::make_shared<PressureProjection3DStage>()));
+
+	//_renderGraph.AddStage(std::move(std::make_shared<CBViscosity>(Renderer::Context())));
+	//_renderGraph.AddStage(std::move(std::make_shared<Diffusion3DStage>()));
 
 	_renderGraph.Link(0, 256, 1, 0);
 
@@ -83,10 +87,17 @@ Game::Game()
 	_renderGraph.Link(10, 268, 11, 13);
 	_renderGraph.Link(9, 267, 11, 14);
 
+	//_renderGraph.Link(13, 271, 14, 18);
+	//_renderGraph.Link(3, 261, 14, 17);
+	//_renderGraph.Link(14, 272, 4, 7);
+	//_renderGraph.Link(4, 262, 5, 8);
+	//_renderGraph.Link(5, 263, 6, 9);
+	//_renderGraph.Link(14, 272, 1, 2);
+
 	_renderGraph.Link(3, 261, 4, 7);
+	_renderGraph.Link(3, 261, 1, 2);
 	_renderGraph.Link(4, 262, 5, 8);
 	_renderGraph.Link(5, 263, 6, 9);
-	_renderGraph.Link(3, 261, 1, 2);
 
 	_renderGraph.Link(11, 269, 12, 15);
 	_renderGraph.Link(3, 260, 12, 16);

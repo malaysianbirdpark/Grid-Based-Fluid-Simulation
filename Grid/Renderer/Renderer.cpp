@@ -120,6 +120,7 @@ void Renderer::BeginFrame()
     _defaultContext->PSSetSamplers(2u, 1u, _yeah.GetAddressOf());
     _defaultContext->CSSetSamplers(0u, 1u, _samplerLinear.GetAddressOf());
     _defaultContext->CSSetSamplers(1u, 1u, _samplerPoint.GetAddressOf());
+    _defaultContext->CSSetSamplers(2u, 1u, _yeah.GetAddressOf());
 
 	_imguiContext->RSSetViewports(1u, &_viewport);
     _imguiContext->RSSetState(_rasterizerState.Get());

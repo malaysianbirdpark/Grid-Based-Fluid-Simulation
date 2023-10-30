@@ -7,7 +7,7 @@
 #include "NodeManager.h"
 
 Advection3DStage::Advection3DStage()
-    : Compute3DStage{ "3D-Advection", "./CSO/Advection3D_CS.cso", 8, 8, 8 }
+    : Compute3DStage{ "3D-Advection", "./CSO/FirstAdvection3D_CS.cso", 8, 8, 8 }
 {
     _uav.resize(2);
     _srv.resize(4);
