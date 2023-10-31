@@ -30,9 +30,14 @@ void main(uint3 DTid : SV_DispatchThreadID )
 
 		if (x * x + z * z <= r * r) {
 			velocity[DTid.xyz].xyz = normalize(min16float3(dir.xyz)) * speed;
-			quantity[DTid.xyz] = min16float4(color.xyz * color_scale, 0.3f);
+			quantity[DTid.xyz] = min16float4(color.xyz * color_scale, 0.35f);
 		}
 	}
+
+	//if (DTid.y > 40 && DTid.y < height - 1) {
+	//	velocity[DTid.xyz].xyz = normalize(min16float3(dir.xyz)) * speed;
+	//	quantity[DTid.xyz] = min16float4(color.xyz * color_scale, 0.4f);
+	//}
 
 	//if (DTid.y > 124.0f && DTid.y <= 126.0f && DTid.z >= 50.0f && DTid.z <= 70.0f && DTid.x >= 50.0f && DTid.x <= 70.0f) {
 	//	if (DTid.x >= 60 && DTid.x <= 65 && DTid.z >= 60 && DTid.z <= 65) {

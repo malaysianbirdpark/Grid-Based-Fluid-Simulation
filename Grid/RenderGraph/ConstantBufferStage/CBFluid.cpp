@@ -68,7 +68,7 @@ void CBFluid::Update()
         ImGui::Text("Velocity");
         ImGui::RadioButton("Random Direction", &velocity_mode, 0); ImGui::SameLine();
         ImGui::RadioButton("Fixed Direction", &velocity_mode, 1); 
-        ImGui::DragFloat("Speed", &_data._speed, 0.01f, 0.0f, 10.0f);
+        ImGui::DragFloat("Speed", &_data._speed, 0.01f, 0.0f, 100.0f);
         if (velocity_mode == 1) 
             ImGui::DragFloat3("Fluid Dir", &_data._velocityDir.x, 0.005f, -1.0f, 1.0f);
 

@@ -42,29 +42,7 @@ float4 main(PS_IN input) : SV_Target
 
     [loop]
     for (int i = 0; i < iterations; ++i) { 
-        //const float3 a = cur_uvw + float3(-hs, -hs, -hs);
-        //const float3 b = cur_uvw + float3(-hs, -hs,  hs);
-        //const float4 m1 = (volume_tex.SampleLevel(sampler2, a, 0.0f) + volume_tex.SampleLevel(sampler2, b, 0.0f)) * 0.5f;
-
-        //const float3 c = cur_uvw + float3(-hs,  hs, -hs);
-        //const float3 d = cur_uvw + float3(-hs,  hs,  hs);
-        //const float4 m2 = (volume_tex.SampleLevel(sampler2, c, 0.0f) + volume_tex.SampleLevel(sampler2, d, 0.0f)) * 0.5f;
-
-        //const float4 m3 = (m1 + m2) * 0.5f;
-
-        //const float3 e = cur_uvw + float3( hs, -hs, -hs);
-        //const float3 f = cur_uvw + float3( hs, -hs,  hs);
-        //const float4 n1 = (volume_tex.SampleLevel(sampler2, e, 0.0f) + volume_tex.SampleLevel(sampler2, f, 0.0f)) * 0.5f;
-
-        //const float3 g = cur_uvw + float3( hs,  hs, -hs);
-        //const float3 h = cur_uvw + float3( hs,  hs,  hs);
-        //const float4 n2 = (volume_tex.SampleLevel(sampler2, g, 0.0f) + volume_tex.SampleLevel(sampler2, h, 0.0f)) * 0.5f;
-
-        //const float4 n3 = (n1 + n2) * 0.5f;
-
-        //src_color = (m3 + n3) * 0.5f;
-
-        src_color = (volume_tex.Sample(sampler0, cur_uvw) + volume_tex.Sample(sampler0, cur_uvw + (step_uvw * 0.5f))) * 0.5f;
+        src_color = (volume_tex.Sample(sampler2, cur_uvw) + volume_tex.Sample(sampler2, cur_uvw + (step_uvw * 0.5f))) * 0.5f;
 
         dest_color.rgb += (1.0f - dest_color.a) * src_color.rgb * src_color.a;
         dest_color.a   += (1.0f - dest_color.a) * src_color.a;

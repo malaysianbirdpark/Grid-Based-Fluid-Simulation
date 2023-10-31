@@ -6,7 +6,3 @@ class DrawSceneStage final : public DrawStage {
 public: explicit DrawSceneStage();
 public: virtual ~DrawSceneStage() override = default;
 };
-
-class SceneGraph {
-
-};

@@ -28,7 +28,7 @@ void main( uint3 DTid : SV_DispatchThreadID ) {
     min16float3 dr = min16float3((1.0f / width), (1.0f / height), (1.0f / depth));
 
     const min16float3 pos = (DTid.xyz + 0.5f) * dr;
-    const min16float3 target = (pos - velocity_n.SampleLevel(sampler1, pos, 0.0f).xyz * dt);
+    min16float3 target = (pos - velocity_n.SampleLevel(sampler1, pos, 0.0f).xyz * dt);
 
     //dr *= 0.5f;
 
@@ -55,9 +55,9 @@ void main( uint3 DTid : SV_DispatchThreadID ) {
     //const min16float3 vel_min = min(min(min(min(min(min(min(vels[0], vels[1]), vels[2]), vels[3]), vels[4]), vels[5]), vels[6]), vels[7]);
     //const min16float3 vel_max = max(max(max(max(max(max(max(vels[0], vels[1]), vels[2]), vels[3]), vels[4]), vels[5]), vels[6]), vels[7]);
     const min16float3 vel_final = velocity_n_1_hat.SampleLevel(sampler0, target, 0.0f) + 
-                                  0.5f * (velocity_n.SampleLevel(sampler0, pos, 0.0f) - velocity_n_hat.SampleLevel(sampler0, pos, 0.0f));
+                                  0.5f * (velocity_n.SampleLevel(sampler1, pos, 0.0f) - velocity_n_hat.SampleLevel(sampler1, pos, 0.0f));
     const unorm float4 q_final = quantity_n_1_hat.SampleLevel(sampler0, target, 0.0f) + 
-                                 0.5f * (quantity_n.SampleLevel(sampler0, pos, 0.0f) - quantity_n_hat.SampleLevel(sampler0, pos, 0.0f));
+                                 0.5f * (quantity_n.SampleLevel(sampler1, pos, 0.0f) - quantity_n_hat.SampleLevel(sampler1, pos, 0.0f));
     //vel_final = max(min(vel_final, vel_max), vel_min);
 
     //const min16float3 quantity_target = pos - vel_final * dt;

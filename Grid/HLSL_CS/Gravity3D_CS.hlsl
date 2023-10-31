@@ -9,5 +9,6 @@ cbuffer constants : register(b1) {
 [numthreads(8, 8, 8)]
 void main( uint3 DTid : SV_DispatchThreadID )
 {
-	velocity_out[DTid.xyz] = velocity_in[DTid.xyz] + min16float3(0.0f, 0.8f, 0.0f) * dt;
+	if (DTid.x > 1 && DTid.x < 126 && DTid.y > 1 && DTid.y < 126 && DTid.z > 1 && DTid.z < 126)
+		velocity_out[DTid.xyz] = velocity_in[DTid.xyz] + min16float3(0.0f, 0.8f, 0.0f) * dt;
 }

@@ -153,6 +153,7 @@
     <ClInclude Include="Renderer\Camera.h" />
     <ClInclude Include="Renderer\ImGuiRenderer.h" />
     <ClInclude Include="Renderer\Renderer.h" />
+    <ClInclude Include="RenderGraph\DrawStage\SceneGraph.h" />
     <ClInclude Include="Texture3D.h" />
     <ClInclude Include="Utils\CircularQueue.h" />
     <ClInclude Include="Utils\Clk.h" />
@@ -213,6 +214,7 @@
     <ClCompile Include="Renderer\Camera.cpp" />
     <ClCompile Include="Renderer\ImGuiRenderer.cpp" />
     <ClCompile Include="Renderer\Renderer.cpp" />
+    <ClCompile Include="RenderGraph\DrawStage\SceneGraph.cpp" />
     <ClCompile Include="Texture3D.cpp" />
     <ClCompile Include="Utils\CircularQueue.cpp" />
     <ClCompile Include="Utils\Clk.cpp" />
