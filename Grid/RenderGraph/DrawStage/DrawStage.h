@@ -30,12 +30,12 @@ protected: std::shared_ptr<RenderObject> _object;
 protected: std::vector<std::unique_ptr<class PipelineStateObject>> _pso;
 
 // input
-protected: Microsoft::WRL::ComPtr<ID3D11ShaderResourceView>   _previous;
+protected: Microsoft::WRL::ComPtr<ID3D11ShaderResourceView>  _previous;
 
 // result
-private:   Microsoft::WRL::ComPtr<ID3D11Texture2D>            _resultBuffer;
-private:   Microsoft::WRL::ComPtr<ID3D11ShaderResourceView>   _resultSRV;
-protected: Microsoft::WRL::ComPtr<ID3D11RenderTargetView>     _resultRTV;
+private:   Microsoft::WRL::ComPtr<ID3D11Texture2D>           _resultBuffer;
+private:   Microsoft::WRL::ComPtr<ID3D11ShaderResourceView>  _resultSRV;
+protected: Microsoft::WRL::ComPtr<ID3D11RenderTargetView>    _resultRTV;
 
 protected: Microsoft::WRL::ComPtr<ID3D11RasterizerState>    _rs;
 

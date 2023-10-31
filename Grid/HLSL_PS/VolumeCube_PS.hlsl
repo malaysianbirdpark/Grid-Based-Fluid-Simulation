@@ -64,7 +64,7 @@ float4 main(PS_IN input) : SV_Target
 
         //src_color = (m3 + n3) * 0.5f;
 
-        src_color = (volume_tex.Sample(sampler0, cur_uvw) + volume_tex.Sample(sampler0, cur_uvw + step_uvw)) * 0.5f;
+        src_color = (volume_tex.Sample(sampler0, cur_uvw) + volume_tex.Sample(sampler0, cur_uvw + (step_uvw * 0.5f))) * 0.5f;
 
         dest_color.rgb += (1.0f - dest_color.a) * src_color.rgb * src_color.a;
         dest_color.a   += (1.0f - dest_color.a) * src_color.a;

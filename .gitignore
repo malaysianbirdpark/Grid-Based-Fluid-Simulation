@@ -1,6 +1,8 @@
-bin/
-bin-int/
-packages/
+bin/**
+bin-int/**
+lib/**
+**.ilk
+packages/**
 **/x64/
 .vs/
 **/Assets/

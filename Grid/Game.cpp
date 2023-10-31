@@ -34,6 +34,7 @@
 #include "PressureProjection3DStage.h"
 #include "CBViscosity.h"
 #include "MCAdvection3DStage.h"
+#include "ExternalForces3DStage.h"
 
 Game::Game() 
 {
@@ -75,6 +76,8 @@ Game::Game()
 	//_renderGraph.AddStage(std::move(std::make_shared<CBViscosity>(Renderer::Context())));
 	//_renderGraph.AddStage(std::move(std::make_shared<Diffusion3DStage>()));
 
+	_renderGraph.AddStage(std::move(std::make_shared<ExternalForces3DStage>()));
+
 	_renderGraph.Link(0, 256, 1, 0);
 
 	_renderGraph.Link(1, 257, 3, 4);
@@ -83,7 +86,8 @@ Game::Game()
 
 	_renderGraph.Link(7, 265, 8, 10);
 	_renderGraph.Link(8, 266, 11, 12);
-	_renderGraph.Link(3, 260, 10, 11);
+	_renderGraph.Link(3, 260, 13, 17);
+	_renderGraph.Link(13, 271, 10, 11);
 	_renderGraph.Link(10, 268, 11, 13);
 	_renderGraph.Link(9, 267, 11, 14);
 
@@ -100,7 +104,7 @@ Game::Game()
 	_renderGraph.Link(5, 263, 6, 9);
 
 	_renderGraph.Link(11, 269, 12, 15);
-	_renderGraph.Link(3, 260, 12, 16);
+	_renderGraph.Link(13, 271, 12, 16);
 
 	_renderGraph.Link(12, 270, 1, 1);
 

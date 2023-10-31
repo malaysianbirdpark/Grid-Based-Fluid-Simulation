@@ -20,22 +20,17 @@ void main(uint3 DTid : SV_DispatchThreadID )
 	uint depth;
 	quantity.GetDimensions(width, height, depth);
 
-	//if (DTid.x == 0 || DTid.y == 0 || DTid.z == 0 || DTid.x == width - 1 || DTid.y == height - 1 || DTid.z == depth - 1) {
- //       quantity[DTid.xyz] = 0.0f;
- //       return;
- //   }
-
-	velocity[DTid.xyz] = velocity_in[DTid.xyz] + min16float3(0.0f, 0.008f, 0.0f);
+	velocity[DTid.xyz] = velocity_in[DTid.xyz];
 	quantity[DTid.xyz] = quantity_in[DTid.xyz];
 
 	const min16float r = min16float(width) / 32;
-	if (DTid.y > height - 3 && DTid.y <= height - 2) {
+	if (DTid.y > height - 32 && DTid.y <= height - 30) {
 		const min16float x = DTid.x - (min16float(width) / 2.0f);
 		const min16float z = DTid.z - (min16float(depth) / 2.0f);
 
 		if (x * x + z * z <= r * r) {
-			velocity[DTid.xyz].xyz += normalize(min16float3(dir.xyz)) * speed;
-			quantity[DTid.xyz] += min16float4(color.xyz * color_scale, 0.1f);
+			velocity[DTid.xyz].xyz = normalize(min16float3(dir.xyz)) * speed;
+			quantity[DTid.xyz] = min16float4(color.xyz * color_scale, 0.3f);
 		}
 	}
 

@@ -59,7 +59,7 @@
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>.;3rd_party;Assets;CSO;HLSL_CS;HLSL_PS;HLSL_VS;Platform;Renderer;RenderGraph;RenderObject;Utils;Assets\Textures;RenderGraph\ComputeStage;RenderGraph\ConstantBufferStage;RenderGraph\DrawStage;RenderGraph\PixelStage;RenderGraph\ResourceStage;RenderGraph\VertexStage;RenderGraph\ComputeStage\2D-Stable-Fluids;RenderGraph\ComputeStage\3D-Stable-Fluids;..\3rd_party;..\3rd_party\ImGui;..\3rd_party\ImGui\backends;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.;3rd_party;Assets;CSO;HLSL_CS;HLSL_PS;HLSL_VS;Platform;Renderer;RenderGraph;RenderObject;Utils;Assets\Textures;RenderGraph\ComputeStage;RenderGraph\ConstantBufferStage;RenderGraph\DrawStage;RenderGraph\PixelStage;RenderGraph\ResourceStage;RenderGraph\VertexStage;RenderGraph\ComputeStage\2D-Stable-Fluids;RenderGraph\ComputeStage\3D-Stable-Fluids;..\3rd_party;..\3rd_party\ImGui;..\3rd_party\ImGui\backends;..\3rd_party\assimp-master\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
@@ -70,8 +70,8 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>d3d11.lib;dxgi.lib;dxguid.lib;D3DCompiler.lib;DirectXTK.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>..\3rd_party\DirectXTK-main\Bin\Desktop_2019\x64\Debug;..\bin\Debug-windows-x86_64\ImGui;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>d3d11.lib;dxgi.lib;dxguid.lib;D3DCompiler.lib;DirectXTK.lib;assimp-vc142-mtd.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>..\3rd_party\DirectXTK-main\Bin\Desktop_2019\x64\Debug;..\bin\Debug-windows-x86_64\ImGui;..\3rd_party\assimp-master\lib\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -80,7 +80,7 @@
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>.;3rd_party;Assets;CSO;HLSL_CS;HLSL_PS;HLSL_VS;Platform;Renderer;RenderGraph;RenderObject;Utils;Assets\Textures;RenderGraph\ComputeStage;RenderGraph\ConstantBufferStage;RenderGraph\DrawStage;RenderGraph\PixelStage;RenderGraph\ResourceStage;RenderGraph\VertexStage;RenderGraph\ComputeStage\2D-Stable-Fluids;RenderGraph\ComputeStage\3D-Stable-Fluids;..\3rd_party;..\3rd_party\ImGui;..\3rd_party\ImGui\backends;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.;3rd_party;Assets;CSO;HLSL_CS;HLSL_PS;HLSL_VS;Platform;Renderer;RenderGraph;RenderObject;Utils;Assets\Textures;RenderGraph\ComputeStage;RenderGraph\ConstantBufferStage;RenderGraph\DrawStage;RenderGraph\PixelStage;RenderGraph\ResourceStage;RenderGraph\VertexStage;RenderGraph\ComputeStage\2D-Stable-Fluids;RenderGraph\ComputeStage\3D-Stable-Fluids;..\3rd_party;..\3rd_party\ImGui;..\3rd_party\ImGui\backends;..\3rd_party\assimp-master\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -95,8 +95,8 @@
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>d3d11.lib;dxgi.lib;dxguid.lib;D3DCompiler.lib;DirectXTK.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>..\3rd_party\DirectXTK-main\Bin\Desktop_2019\x64\Release;..\bin\Release-windows-x86_64\ImGui;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>d3d11.lib;dxgi.lib;dxguid.lib;D3DCompiler.lib;DirectXTK.lib;assimp-vc142-mt.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>..\3rd_party\DirectXTK-main\Bin\Desktop_2019\x64\Release;..\bin\Release-windows-x86_64\ImGui;..\3rd_party\assimp-master\lib\Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -113,6 +113,7 @@
     <ClInclude Include="RenderGraph\ComputeStage\3D-Stable-Fluids\Advection3DStage.h" />
     <ClInclude Include="RenderGraph\ComputeStage\3D-Stable-Fluids\Diffusion3DStage.h" />
     <ClInclude Include="RenderGraph\ComputeStage\3D-Stable-Fluids\Divergence3DStage.h" />
+    <ClInclude Include="RenderGraph\ComputeStage\3D-Stable-Fluids\ExternalForces3DStage.h" />
     <ClInclude Include="RenderGraph\ComputeStage\3D-Stable-Fluids\Initializer3DStage.h" />
     <ClInclude Include="RenderGraph\ComputeStage\3D-Stable-Fluids\MCAdvection3DStage.h" />
     <ClInclude Include="RenderGraph\ComputeStage\3D-Stable-Fluids\Poisson3D1DStage.h" />
@@ -129,6 +130,7 @@
     <ClInclude Include="RenderGraph\ConstantBufferStage\CBViscosity.h" />
     <ClInclude Include="RenderGraph\ConstantBufferStage\ConstantBufferStage.h" />
     <ClInclude Include="RenderGraph\CopyStage.h" />
+    <ClInclude Include="RenderGraph\DrawStage\DrawSceneStage.h" />
     <ClInclude Include="RenderGraph\DrawStage\DrawStage.h" />
     <ClInclude Include="RenderGraph\DrawStage\DrawVolumeStage.h" />
     <ClInclude Include="RenderGraph\NodeManager.h" />
@@ -171,6 +173,7 @@
     <ClCompile Include="RenderGraph\ComputeStage\3D-Stable-Fluids\Advection3DStage.cpp" />
     <ClCompile Include="RenderGraph\ComputeStage\3D-Stable-Fluids\Diffusion3DStage.cpp" />
     <ClCompile Include="RenderGraph\ComputeStage\3D-Stable-Fluids\Divergence3DStage.cpp" />
+    <ClCompile Include="RenderGraph\ComputeStage\3D-Stable-Fluids\ExternalForces3DStage.cpp" />
     <ClCompile Include="RenderGraph\ComputeStage\3D-Stable-Fluids\Initializer3DStage.cpp" />
     <ClCompile Include="RenderGraph\ComputeStage\3D-Stable-Fluids\MCAdvection3DStage.cpp" />
     <ClCompile Include="RenderGraph\ComputeStage\3D-Stable-Fluids\Poisson3D1DStage.cpp" />
@@ -187,6 +190,7 @@
     <ClCompile Include="RenderGraph\ConstantBufferStage\CBViscosity.cpp" />
     <ClCompile Include="RenderGraph\ConstantBufferStage\ConstantBufferStage.cpp" />
     <ClCompile Include="RenderGraph\CopyStage.cpp" />
+    <ClCompile Include="RenderGraph\DrawStage\DrawSceneStage.cpp" />
     <ClCompile Include="RenderGraph\DrawStage\DrawStage.cpp" />
     <ClCompile Include="RenderGraph\DrawStage\DrawVolumeStage.cpp" />
     <ClCompile Include="RenderGraph\NodeManager.cpp" />
@@ -236,6 +240,12 @@
       <EntryPointName>main</EntryPointName>
       <ObjectFileOutput>../Grid/CSO/BoundaryCondition3D_CS.cso</ObjectFileOutput>
     </FxCompile>
+    <FxCompile Include="HLSL_CS\Buoyancy3D_CS.hlsl">
+      <ShaderType>Compute</ShaderType>
+      <ShaderModel>5.0</ShaderModel>
+      <EntryPointName>main</EntryPointName>
+      <ObjectFileOutput>../Grid/CSO/Buoyancy3D_CS.cso</ObjectFileOutput>
+    </FxCompile>
     <FxCompile Include="HLSL_CS\Diffusion3D_CS.hlsl">
       <ShaderType>Compute</ShaderType>
       <ShaderModel>5.0</ShaderModel>
@@ -265,6 +275,12 @@
       <ShaderModel>5.0</ShaderModel>
       <EntryPointName>main</EntryPointName>
       <ObjectFileOutput>../Grid/CSO/GradientSub2D_CS.cso</ObjectFileOutput>
+    </FxCompile>
+    <FxCompile Include="HLSL_CS\Gravity3D_CS.hlsl">
+      <ShaderType>Compute</ShaderType>
+      <ShaderModel>5.0</ShaderModel>
+      <EntryPointName>main</EntryPointName>
+      <ObjectFileOutput>../Grid/CSO/Gravity3D_CS.cso</ObjectFileOutput>
     </FxCompile>
     <FxCompile Include="HLSL_CS\Initializer2D_CS.hlsl">
       <ShaderType>Compute</ShaderType>
