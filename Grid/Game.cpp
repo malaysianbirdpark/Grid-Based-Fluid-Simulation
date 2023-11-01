@@ -36,14 +36,20 @@
 #include "MCAdvection3DStage.h"
 #include "ExternalForces3DStage.h"
 
+#include "DrawSceneStage.h"
+#include "PipelineStateObject.h"
+
 Game::Game() 
 {
 	int constexpr width{ 1920 };
 	int constexpr height{ 1080 };
 
-	gViewportInfo.width = 640;
-	gViewportInfo.height = 640;
-	gViewportInfo.depth = 640;
+	gWindowInfo.width = 1920;
+	gWindowInfo.height = 1080;
+
+	gViewportInfo.width = 720;
+	gViewportInfo.height = 480;
+	gViewportInfo.depth = 480;
 
 	gSimulationInfo.width = 128;
 	gSimulationInfo.height = 128;
@@ -55,6 +61,8 @@ Game::Game()
 
 	Clk::Init();
 
+	_renderGraph.AddStage(std::move(std::make_shared<DrawSceneStage>(Renderer::Context(), "Scene")));
+
 	_renderGraph.AddStage(std::move(std::make_shared<CBFluid>()));
 	_renderGraph.AddStage(std::move(std::make_shared<Sourcing3DStage>()));
 
@@ -62,51 +70,54 @@ Game::Game()
 	_renderGraph.AddStage(std::move(std::make_shared<MCAdvection3DStage>()));
 	//_renderGraph.AddStage(std::move(std::make_shared<Advection3DStage>()));
 
-	_renderGraph.AddStage(std::move(std::make_shared<DrawVolumeStage>(Renderer::Context())));
-	_renderGraph.AddStage(std::move(std::make_shared<CopyStage>()));
-	_renderGraph.AddStage(std::move(std::make_shared<ViewportStage>()));
+	_renderGraph.AddStage(std::move(std::make_shared<ExternalForces3DStage>()));
 
 	_renderGraph.AddStage(std::move(std::make_shared<Initializer3DStage>()));
 	_renderGraph.AddStage(std::move(std::make_shared<Pressure3D1DStage>()));
 	_renderGraph.AddStage(std::move(std::make_shared<CBPoisson>(Renderer::Context())));
 	_renderGraph.AddStage(std::move(std::make_shared<Divergence3DStage>()));
 	_renderGraph.AddStage(std::move(std::make_shared<Poisson3D1DStage>()));
+
 	_renderGraph.AddStage(std::move(std::make_shared<PressureProjection3DStage>()));
 
 	//_renderGraph.AddStage(std::move(std::make_shared<CBViscosity>(Renderer::Context())));
 	//_renderGraph.AddStage(std::move(std::make_shared<Diffusion3DStage>()));
 
-	_renderGraph.AddStage(std::move(std::make_shared<ExternalForces3DStage>()));
+	_renderGraph.AddStage(std::move(std::make_shared<DrawVolumeStage>(Renderer::Context())));
+	_renderGraph.AddStage(std::move(std::make_shared<CopyStage>()));
+	_renderGraph.AddStage(std::move(std::make_shared<ViewportStage>()));
 
-	_renderGraph.Link(0, 256, 1, 0);
+	_renderGraph.Link(0, 256, 12, 15);
 
-	_renderGraph.Link(1, 257, 3, 4);
-	_renderGraph.Link(1, 258, 3, 5);
-	_renderGraph.Link(2, 259, 3, 3);
+	_renderGraph.Link(1, 257, 2, 1);
 
-	_renderGraph.Link(7, 265, 8, 10);
-	_renderGraph.Link(8, 266, 11, 12);
-	_renderGraph.Link(3, 260, 13, 17);
-	_renderGraph.Link(13, 271, 10, 11);
+	_renderGraph.Link(2, 258, 4, 5);
+	_renderGraph.Link(2, 259, 4, 6);
+
+	_renderGraph.Link(3, 260, 4, 4);
+
+	_renderGraph.Link(4, 261, 5, 7);
+	_renderGraph.Link(4, 262, 12, 16);
+	_renderGraph.Link(4, 262, 2, 3);
+
+	_renderGraph.Link(5, 263, 9, 9);
+	_renderGraph.Link(5, 263, 11, 14);
+
+	_renderGraph.Link(6, 264, 7, 8);
+
+	_renderGraph.Link(7, 265, 10, 10);
+
+	_renderGraph.Link(8, 266, 10, 12);
+
+	_renderGraph.Link(9, 267, 10, 11);
+
 	_renderGraph.Link(10, 268, 11, 13);
-	_renderGraph.Link(9, 267, 11, 14);
 
-	//_renderGraph.Link(13, 271, 14, 18);
-	//_renderGraph.Link(3, 261, 14, 17);
-	//_renderGraph.Link(14, 272, 4, 7);
-	//_renderGraph.Link(4, 262, 5, 8);
-	//_renderGraph.Link(5, 263, 6, 9);
-	//_renderGraph.Link(14, 272, 1, 2);
+	_renderGraph.Link(11, 269, 2, 2);
 
-	_renderGraph.Link(3, 261, 4, 7);
-	_renderGraph.Link(3, 261, 1, 2);
-	_renderGraph.Link(4, 262, 5, 8);
-	_renderGraph.Link(5, 263, 6, 9);
+	_renderGraph.Link(12, 270, 13, 17);
 
-	_renderGraph.Link(11, 269, 12, 15);
-	_renderGraph.Link(13, 271, 12, 16);
-
-	_renderGraph.Link(12, 270, 1, 1);
+	_renderGraph.Link(13, 271, 14, 18);
 
 	ImNodes::LoadCurrentEditorStateFromIniFile("imnodes_state.ini");
 }
@@ -126,8 +137,7 @@ int Game::Run()
 		auto const dt{ Clk::Mark() };
 
 		ProcessInput(dt);
-		Update(dt);
-		Render();
+		Render(dt);
 	}
 }
 
@@ -160,9 +170,10 @@ void Game::Update(float const dt)
 	_renderGraph.Update(Renderer::Context());
 }
 
-void Game::Render()
+void Game::Render(float const dt)
 {
 	Renderer::BeginFrame();
 	_renderGraph.Run(Renderer::Context());
+	Update(dt);
 	Renderer::EndFrame();
 }

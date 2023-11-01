@@ -96,7 +96,7 @@ void Renderer::Init(int width, int height, HWND native_wnd)
     pDevice = _device.Get();
 
     InitRS();
-    InitDS(width, height);
+    InitDS();
     InitBS();
     InitSamplers();
 }
@@ -107,13 +107,14 @@ void Renderer::BeginFrame()
 
     _defaultContext->RSSetViewports(1u, &_viewport);
     _defaultContext->RSSetState(_rasterizerState.Get());
-    _defaultContext->OMSetDepthStencilState(_dsDefault.Get(), 0u);
+    _defaultContext->OMSetDepthStencilState(_imguiDS.Get(), 0u);
     //_defaultContext->OMSetBlendState(_bsDefault.Get(), nullptr, 0xFFFFFFFFu);
     //_defaultContext->OMSetBlendState(nullptr, nullptr, 0u);
 
-    _defaultContext->OMSetRenderTargets(1u, _backBufferView.GetAddressOf(), _dsv.Get());
+    _defaultContext->OMSetRenderTargets(1u, _backBufferView.GetAddressOf(), _imguiDSV.Get());
     _defaultContext->ClearRenderTargetView(_backBufferView.Get(), clear_color);
-    _defaultContext->ClearDepthStencilView(_dsv.Get(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0u);
+    _defaultContext->ClearDepthStencilView(_imguiDSV.Get(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0u);
+    _defaultContext->ClearDepthStencilView(_gDSV.Get(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0u);
 
     _defaultContext->PSSetSamplers(0u, 1u, _samplerLinear.GetAddressOf());
     _defaultContext->PSSetSamplers(1u, 1u, _samplerPoint.GetAddressOf());
@@ -124,10 +125,10 @@ void Renderer::BeginFrame()
 
 	_imguiContext->RSSetViewports(1u, &_viewport);
     _imguiContext->RSSetState(_rasterizerState.Get());
-    _imguiContext->OMSetDepthStencilState(_dsDefault.Get(), 0u);
+    _imguiContext->OMSetDepthStencilState(_imguiDS.Get(), 0u);
     //_imguiContext->OMSetBlendState(nullptr, nullptr, 0u);
     //_imguiContext->OMSetRenderTargets(1u, _imguiRTV.GetAddressOf(), nullptr);
-    _imguiContext->OMSetRenderTargets(1u, _backBufferView.GetAddressOf(), nullptr);
+    _imguiContext->OMSetRenderTargets(1u, _backBufferView.GetAddressOf(), _imguiDSV.Get());
 
     ImGuiRenderer::BeginFrame();
 }
@@ -135,8 +136,6 @@ void Renderer::BeginFrame()
 void Renderer::EndFrame()
 {
     ImGuiRenderer::EndFrame();
-
-    //_imguiContext->CopyResource(_backBuffers.Get(), _imguiBuffer.Get());
 
     static std::array<ID3D11CommandList*, 2> cmd_lists{};
     _defaultContext->FinishCommandList(FALSE, &cmd_lists[0]);
@@ -187,34 +186,65 @@ void Renderer::InitRS()
     }
 }
 
-void Renderer::InitDS(int width, int height)
+void Renderer::InitDS()
 {
-    // default
+    // global
     {
-        D3D11_DEPTH_STENCIL_DESC desc{ CD3D11_DEPTH_STENCIL_DESC{CD3D11_DEFAULT{}} };
+		{
+			D3D11_DEPTH_STENCIL_DESC desc{ CD3D11_DEPTH_STENCIL_DESC{CD3D11_DEFAULT{}} };
 
-        Device().CreateDepthStencilState(&desc, _dsDefault.ReleaseAndGetAddressOf());
+			Device().CreateDepthStencilState(&desc, _gDS.ReleaseAndGetAddressOf());
+		}
+
+		D3D11_TEXTURE2D_DESC descDepth{};
+		descDepth.Usage = D3D11_USAGE_DEFAULT;
+		descDepth.BindFlags = D3D11_BIND_DEPTH_STENCIL;
+		descDepth.Width = gViewportInfo.width;
+		descDepth.Height = gViewportInfo.height;
+		descDepth.MipLevels = 1u;
+		descDepth.ArraySize = 1u;
+		descDepth.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
+		descDepth.SampleDesc.Count = 1;
+		descDepth.SampleDesc.Quality = 0;
+
+		Microsoft::WRL::ComPtr<ID3D11Texture2D> _ds;
+		Device().CreateTexture2D(&descDepth, nullptr, _ds.ReleaseAndGetAddressOf());
+
+		D3D11_DEPTH_STENCIL_VIEW_DESC desc_dsv{};
+		desc_dsv.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
+		desc_dsv.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
+		desc_dsv.Texture2D.MipSlice = 0u;
+		Device().CreateDepthStencilView(_ds.Get(), &desc_dsv, _gDSV.ReleaseAndGetAddressOf());
     }
 
-    D3D11_TEXTURE2D_DESC descDepth{};
-    descDepth.Usage = D3D11_USAGE_DEFAULT;
-    descDepth.BindFlags = D3D11_BIND_DEPTH_STENCIL;
-    descDepth.Width = width;
-    descDepth.Height = height;
-    descDepth.MipLevels = 1u;
-    descDepth.ArraySize = 1u;
-    descDepth.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
-    descDepth.SampleDesc.Count = 1;
-    descDepth.SampleDesc.Quality = 0;
+    // imgui
+    {
+		{
+			D3D11_DEPTH_STENCIL_DESC desc{ CD3D11_DEPTH_STENCIL_DESC{CD3D11_DEFAULT{}} };
 
-    Microsoft::WRL::ComPtr<ID3D11Texture2D> _ds;
-    Device().CreateTexture2D(&descDepth, nullptr, _ds.ReleaseAndGetAddressOf());
+			Device().CreateDepthStencilState(&desc, _imguiDS.ReleaseAndGetAddressOf());
+		}
 
-    D3D11_DEPTH_STENCIL_VIEW_DESC desc_dsv{};
-    desc_dsv.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
-    desc_dsv.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
-    desc_dsv.Texture2D.MipSlice = 0u;
-    Device().CreateDepthStencilView(_ds.Get(), &desc_dsv, _dsv.ReleaseAndGetAddressOf());
+		D3D11_TEXTURE2D_DESC descDepth{};
+		descDepth.Usage = D3D11_USAGE_DEFAULT;
+		descDepth.BindFlags = D3D11_BIND_DEPTH_STENCIL;
+		descDepth.Width = gWindowInfo.width;
+		descDepth.Height = gWindowInfo.height;
+		descDepth.MipLevels = 1u;
+		descDepth.ArraySize = 1u;
+		descDepth.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
+		descDepth.SampleDesc.Count = 1;
+		descDepth.SampleDesc.Quality = 0;
+
+		Microsoft::WRL::ComPtr<ID3D11Texture2D> _ds;
+		Device().CreateTexture2D(&descDepth, nullptr, _ds.ReleaseAndGetAddressOf());
+
+		D3D11_DEPTH_STENCIL_VIEW_DESC desc_dsv{};
+		desc_dsv.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
+		desc_dsv.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
+		desc_dsv.Texture2D.MipSlice = 0u;
+		Device().CreateDepthStencilView(_ds.Get(), &desc_dsv, _imguiDSV.ReleaseAndGetAddressOf());
+    }
 }
 
 void Renderer::InitBS()
@@ -222,12 +252,12 @@ void Renderer::InitBS()
     // Default
     {
         D3D11_BLEND_DESC desc{};
-        desc.AlphaToCoverageEnable = true;
+        desc.AlphaToCoverageEnable = false;
         desc.IndependentBlendEnable = false;
 
         desc.RenderTarget[0].BlendEnable = true;
-        desc.RenderTarget[0].SrcBlend = D3D11_BLEND_SRC_ALPHA;
-        desc.RenderTarget[0].DestBlend = D3D11_BLEND_INV_SRC_ALPHA;
+        desc.RenderTarget[0].SrcBlend = D3D11_BLEND_ZERO;
+        desc.RenderTarget[0].DestBlend = D3D11_BLEND_ONE;
         desc.RenderTarget[0].BlendOp = D3D11_BLEND_OP_ADD;
 
         desc.RenderTarget[0].SrcBlendAlpha = D3D11_BLEND_ZERO;

@@ -4,12 +4,10 @@ struct PS_IN {
     float4 sv_pos    : SV_Position;
 };
 
-Texture2D previous : register(t0);
+Texture3D volume_tex : register(t0);
 
-Texture3D volume_tex : register(t1);
-
-Texture2D front_texcoord : register(t2);
-Texture2D back_texcoord  : register(t3);
+Texture2D front_texcoord : register(t1);
+Texture2D back_texcoord  : register(t2);
 
 SamplerState sampler0 : register(s0);
 SamplerState sampler1 : register(s1);
@@ -60,7 +58,6 @@ float4 main(PS_IN input) : SV_Target
         }
     }
 
-    //return dest_color + previous.Load(input.sv_pos);
     //return float4(dest_color.rgb, 1.0f);
     return dest_color;
 }

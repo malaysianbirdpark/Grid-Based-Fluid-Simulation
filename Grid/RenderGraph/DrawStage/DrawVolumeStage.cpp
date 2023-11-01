@@ -49,6 +49,15 @@ DrawVolumeStage::DrawVolumeStage(ID3D11DeviceContext& context)
 		pDevice->CreateRenderTargetView(_backFacesUvwBuffer.Get(), nullptr, _backFacesUvwRTV.ReleaseAndGetAddressOf());
     }
 
+    InitRS();
+    InitDS();
+    InitBS();
+
+    _pso.push_back(std::move(std::make_unique<PipelineStateObject>()));
+	_pso.back()->SetVertexShader("./CSO/VolumeCube_VS.cso");
+	_pso.back()->SetInputLayout(_object->GetInputElementDest());
+	_pso.back()->SetPixelShader("./CSO/VolumeCube_PS.cso");
+
     _pso.push_back(std::move(std::make_unique<PipelineStateObject>()));
 	_pso.back()->SetVertexShader("./CSO/VolumeCube_VS.cso");
 	_pso.back()->SetInputLayout(_object->GetInputElementDest());
@@ -82,13 +91,35 @@ void DrawVolumeStage::Run(ID3D11DeviceContext& context)
 	_object->Draw(context);
 
     // Set Shader Resources
-    context.OMSetRenderTargets(1u, _resultRTV.GetAddressOf(), _dsv.Get());
+    context.OMSetRenderTargets(1u, _resultRTV.GetAddressOf(), _gDSV.Get());
     static ID3D11ShaderResourceView* srv[3]{ _volumeTexView.Get(), _frontFacesUvwSRV.Get(), _backFacesUvwSRV.Get() };
     srv[0] = _volumeTexView.Get();
-    context.PSSetShaderResources(1u, 3u, &srv[0]);
+    context.PSSetShaderResources(0u, 3u, &srv[0]);
 
     // Draw Volume
-    DrawStage::Run(context);
+    context.RSSetViewports(1u, &_vp);
+    context.RSSetState(_rs.Get());
+    context.OMSetDepthStencilState(_gDS.Get(), 0u);
+    context.OMSetBlendState(_bsAlpha.Get(), nullptr, 0xFFFFFFFFu);
+    //context.OMSetBlendState(nullptr, nullptr, 0xFFFFFFFFu);
+
+    context.ClearRenderTargetView(_resultRTV.Get(), clear_color);
+
+    // Copy Previous Frame
+    if (_previous.Get())
+    {
+        ID3D11Resource* previous{ nullptr };
+        _previous->GetResource(&previous);
+
+        ID3D11Resource* cur{ nullptr };
+        _resultRTV->GetResource(&cur);
+
+		context.CopyResource(cur, previous);
+    }
+
+    _pso.front()->Bind(context);
+
+	_object->Draw(context);
 
     static ID3D11ShaderResourceView* null_srv[1] {nullptr};
     context.PSSetShaderResources(0u, 1u, null_srv);
@@ -100,4 +131,28 @@ void DrawVolumeStage::Consume(ID3D11Resource* resource, int32_t attribute_id)
         pDevice->CreateShaderResourceView(resource, nullptr, _previous.ReleaseAndGetAddressOf());
     else if (attribute_id == _volumeTexID)
         pDevice->CreateShaderResourceView(resource, nullptr, _volumeTexView.ReleaseAndGetAddressOf());
+}
+
+void DrawVolumeStage::InitBS()
+{
+    // Alpha Blending
+    {
+        D3D11_BLEND_DESC desc{ CD3D11_BLEND_DESC{} };
+        desc.AlphaToCoverageEnable = false;
+        desc.IndependentBlendEnable = false;
+
+        desc.RenderTarget[0].BlendEnable = true;
+        desc.RenderTarget[0].SrcBlend = D3D11_BLEND_SRC_ALPHA;
+        desc.RenderTarget[0].DestBlend = D3D11_BLEND_INV_SRC_ALPHA;
+        desc.RenderTarget[0].BlendOp = D3D11_BLEND_OP_ADD;
+
+        desc.RenderTarget[0].SrcBlendAlpha = D3D11_BLEND_SRC_ALPHA;
+        desc.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_INV_SRC_ALPHA;
+        desc.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_ADD;
+
+        desc.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
+
+        pDevice->CreateBlendState(&desc, _bsAlpha.ReleaseAndGetAddressOf());
+    }
+
 }

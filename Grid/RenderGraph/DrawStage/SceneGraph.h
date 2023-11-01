@@ -4,6 +4,7 @@
 #include <string>
 #include <unordered_map>
 #include <bitset>
+#include <memory>
 
 #include "assimp/cimport.h"
 #include "assimp/scene.h"
@@ -16,6 +17,7 @@ enum class ShaderResourceTypes {
     NormalMap,
     EmissiveMap,
     OcclusionMap,
+    ThicknessMap,
 };
 
 struct SceneTransformParameters {
@@ -32,17 +34,20 @@ class AssimpMaterial {
     friend class SceneGraph;
 public:
     explicit AssimpMaterial();
+    void     Bind(ID3D11DeviceContext& context);
     void     AddOrRelplaceTexture(ID3D11DeviceContext& context, ShaderResourceTypes type, char const* path);
 private:
     DirectX::XMFLOAT4  _emissiveColor{};
     DirectX::XMFLOAT4  _albedoColor{};
     DirectX::XMFLOAT4  _roughness{};
+    DirectX::XMFLOAT4  _attenuationColor{};
     float              _transparencyFactor{};
+    float              _attenuationDistance{};
+    float              _thicknessFactor{};
     float              _alphaTest{};
     float              _metallicFactor{};
 
     std::vector<Microsoft::WRL::ComPtr<ID3D11ShaderResourceView>> _srs;
-    std::bitset<16>                                               _textureTypes;
 };
 
 class AssimpMesh {
@@ -64,6 +69,7 @@ private:
     Microsoft::WRL::ComPtr<ID3D11Buffer>  _indexBuffer;
     D3D11_PRIMITIVE_TOPOLOGY              _topology;
     UINT                                  _indexCount;
+    UINT                                  _stride;
 };
 
 struct SceneNode {
@@ -77,10 +83,13 @@ struct SceneNode {
 };
 
 class SceneGraph {
+    friend class DrawSceneStage;
     static constexpr int MAX_NODE_LEVEL{ 20 };
 public:
-    SceneGraph(ID3D11DeviceContext& context, char const* path, char const* tag);
+    explicit SceneGraph() = default;
+    explicit SceneGraph(ID3D11DeviceContext& context, char const* path, char const* tag);
 
+    void                                    Init(ID3D11DeviceContext& context, char const* path, char const* tag);
     void                                    MarkAsTransformed(int32_t node);
 
     SceneNode&                              GetNodeAt(int32_t node);

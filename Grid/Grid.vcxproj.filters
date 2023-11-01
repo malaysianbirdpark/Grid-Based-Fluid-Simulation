@@ -456,7 +456,10 @@
     <FxCompile Include="HLSL_CS\Vector4DUnorm_CS.hlsl">
       <Filter>HLSL_CS</Filter>
     </FxCompile>
-    <FxCompile Include="HLSL_PS\VolumeCubeFaces_PS.hlsl">
+    <FxCompile Include="HLSL_PS\DrawUV_PS.hlsl">
+      <Filter>HLSL_PS</Filter>
+    </FxCompile>
+    <FxCompile Include="HLSL_PS\SolidTex_PS.hlsl">
       <Filter>HLSL_PS</Filter>
     </FxCompile>
     <FxCompile Include="HLSL_PS\VolumeCube_PS.hlsl">
@@ -465,16 +468,13 @@
     <FxCompile Include="HLSL_PS\spherePS.hlsl">
       <Filter>HLSL_PS</Filter>
     </FxCompile>
-    <FxCompile Include="HLSL_PS\testPS.hlsl">
-      <Filter>HLSL_PS</Filter>
+    <FxCompile Include="HLSL_VS\SolidTex_VS.hlsl">
+      <Filter>HLSL_VS</Filter>
     </FxCompile>
     <FxCompile Include="HLSL_VS\VolumeCube_VS.hlsl">
       <Filter>HLSL_VS</Filter>
     </FxCompile>
     <FxCompile Include="HLSL_VS\sphereVS.hlsl">
-      <Filter>HLSL_VS</Filter>
-    </FxCompile>
-    <FxCompile Include="HLSL_VS\testVS.hlsl">
       <Filter>HLSL_VS</Filter>
     </FxCompile>
   </ItemGroup>

@@ -67,3 +67,6 @@ inline struct _SimulationInfo {
 	int32_t height{};
 	int32_t depth{};
 } gSimulationInfo;
+
+inline Microsoft::WRL::ComPtr<ID3D11DepthStencilState> _gDS;
+inline Microsoft::WRL::ComPtr<ID3D11DepthStencilView>  _gDSV;

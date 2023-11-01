@@ -8,6 +8,41 @@
 
 #include "NodeManager.h"
 
+DrawStage::DrawStage(char const* name)
+    : _name{name}
+{
+    _inputID = NodeManager::IssueIncomingAttrID();
+    _incoming[_inputID] = -1;
+    _attrNames[_inputID] = { "Previous" };
+
+    _resultID = NodeManager::IssueOutgoingAttrID();
+    _outgoing[_resultID] = -1;
+    _attrNames[_resultID] = { "Result" };
+
+	auto desc {CD3D11_TEXTURE2D_DESC{}};
+	desc.BindFlags = D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE;
+	desc.Usage = D3D11_USAGE_DEFAULT;
+	desc.CPUAccessFlags = 0u;
+	desc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+	desc.Width = gViewportInfo.width;
+	desc.Height = gViewportInfo.height;
+	desc.MipLevels = 1u;
+	desc.ArraySize = 1u;
+	desc.SampleDesc.Count = 1;
+	desc.SampleDesc.Quality = 0;
+
+    pDevice->CreateTexture2D(&desc, nullptr, _resultBuffer.ReleaseAndGetAddressOf());
+    pDevice->CreateShaderResourceView(_resultBuffer.Get(), nullptr, _resultSRV.ReleaseAndGetAddressOf());
+    pDevice->CreateRenderTargetView(_resultBuffer.Get(), nullptr, _resultRTV.ReleaseAndGetAddressOf());
+
+    _vp.Width = static_cast<float>(gViewportInfo.width);
+    _vp.Height = static_cast<float>(gViewportInfo.height);
+    _vp.MinDepth = 0.0f;
+    _vp.MaxDepth = 1.0f;
+    _vp.TopLeftX = 0.0f;
+    _vp.TopLeftY = 0.0f;
+}
+
 DrawStage::DrawStage(char const* name, std::shared_ptr<RenderObject> object)
 	: _name{name}, _object{object}
 {
@@ -41,15 +76,6 @@ DrawStage::DrawStage(char const* name, std::shared_ptr<RenderObject> object)
     _vp.MaxDepth = 1.0f;
     _vp.TopLeftX = 0.0f;
     _vp.TopLeftY = 0.0f;
-
-    _pso.push_back(std::move(std::make_unique<PipelineStateObject>()));
-	_pso.back()->SetVertexShader("./CSO/VolumeCube_VS.cso");
-	_pso.back()->SetInputLayout(_object->GetInputElementDest());
-	_pso.back()->SetPixelShader("./CSO/VolumeCube_PS.cso");
-
-    InitRS();
-    InitDS();
-    InitBS();
 }
 
 void DrawStage::Run(ID3D11DeviceContext& context)
@@ -57,8 +83,7 @@ void DrawStage::Run(ID3D11DeviceContext& context)
     context.RSSetViewports(1u, &_vp);
     context.RSSetState(_rs.Get());
     context.OMSetDepthStencilState(_ds.Get(), 0u);
-    //context.OMSetBlendState(_bs.Get(), nullptr, 0xFFFFFFFFu);
-    //context.OMSetBlendState(nullptr, nullptr, 0xFFFFFFFFu);
+    context.OMSetBlendState(_bs.Get(), nullptr, 0xFFFFFFFFu);
 
     context.OMSetRenderTargets(1u, _resultRTV.GetAddressOf(), _dsv.Get());
     context.ClearRenderTargetView(_resultRTV.Get(), clear_color);

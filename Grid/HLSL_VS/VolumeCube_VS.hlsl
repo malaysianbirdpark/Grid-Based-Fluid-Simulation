@@ -12,9 +12,9 @@ struct VS_OUT {
 cbuffer mvp : register(b0)
 {
     matrix m;
+    matrix mit;
     matrix mv;
     matrix mvp;
-    float4 cam_pos;
 };
 
 VS_OUT main(VS_IN input)
