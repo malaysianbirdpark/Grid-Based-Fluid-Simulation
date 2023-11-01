@@ -276,9 +276,9 @@ void Renderer::InitSamplers()
         D3D11_SAMPLER_DESC sd{};
         sd.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
         sd.ComparisonFunc = D3D11_COMPARISON_NEVER;
-        sd.AddressU = D3D11_TEXTURE_ADDRESS_MIRROR_ONCE;
-        sd.AddressV = D3D11_TEXTURE_ADDRESS_MIRROR_ONCE;
-        sd.AddressW = D3D11_TEXTURE_ADDRESS_MIRROR_ONCE;
+        sd.AddressU = D3D11_TEXTURE_ADDRESS_CLAMP;
+        sd.AddressV = D3D11_TEXTURE_ADDRESS_CLAMP;
+        sd.AddressW = D3D11_TEXTURE_ADDRESS_CLAMP;
         sd.BorderColor[0] = 0.0f;
         sd.BorderColor[1] = 0.0f;
         sd.BorderColor[2] = 0.0f;
@@ -296,9 +296,9 @@ void Renderer::InitSamplers()
         D3D11_SAMPLER_DESC sd{};
         sd.Filter = D3D11_FILTER_MIN_MAG_MIP_POINT;
         sd.ComparisonFunc = D3D11_COMPARISON_NEVER;
-        sd.AddressU = D3D11_TEXTURE_ADDRESS_MIRROR_ONCE;
-        sd.AddressV = D3D11_TEXTURE_ADDRESS_MIRROR_ONCE;
-        sd.AddressW = D3D11_TEXTURE_ADDRESS_MIRROR_ONCE;
+        sd.AddressU = D3D11_TEXTURE_ADDRESS_CLAMP;
+        sd.AddressV = D3D11_TEXTURE_ADDRESS_CLAMP;
+        sd.AddressW = D3D11_TEXTURE_ADDRESS_CLAMP;
         sd.BorderColor[0] = 0.0f;
         sd.BorderColor[1] = 0.0f;
         sd.BorderColor[2] = 0.0f;
@@ -315,9 +315,9 @@ void Renderer::InitSamplers()
     {
         D3D11_SAMPLER_DESC sd{};
         sd.Filter = D3D11_FILTER_ANISOTROPIC;
-        sd.AddressU = D3D11_TEXTURE_ADDRESS_CLAMP;
-        sd.AddressV = D3D11_TEXTURE_ADDRESS_CLAMP;
-        sd.AddressW = D3D11_TEXTURE_ADDRESS_CLAMP;
+        sd.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
+        sd.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
+        sd.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
         sd.MaxAnisotropy = D3D11_REQ_MAXANISOTROPY;
         sd.MipLODBias = 0.0f;
         sd.MinLOD = 0.0f;

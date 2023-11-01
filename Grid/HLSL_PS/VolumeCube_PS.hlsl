@@ -32,14 +32,18 @@ float4 main(PS_IN input) : SV_Target
     float4 dest_color = 0.0f;
     float4 src_color = 0.0f;
 
-    const float step_size = 0.01f;
-    float3 step_uvw = uvw_dir * step_size;
-    const float hs = step_size * 1.0f;
+    //const float step_size = 0.01f;
+    //float3 step_uvw = uvw_dir * step_size;
 
-    const int iterations = (uvw_len / step_size) + 1;
+    //const int iterations = (uvw_len / step_size) + 1;
+
+    const int iterations = 50;
+
+    const float step_size = uvw_len / iterations;
+    float3 step_uvw = uvw_dir * step_size;
 
     [loop]
-    for (int i = 0; i < iterations; ++i) { 
+    for (int i = 0; i < iterations + 1; ++i) { 
         src_color = (volume_tex.Sample(sampler2, cur_uvw) + volume_tex.Sample(sampler2, cur_uvw + (step_uvw * 0.5f))) * 0.5f;
 
         dest_color.rgb += (1.0f - dest_color.a) * src_color.rgb * src_color.a;

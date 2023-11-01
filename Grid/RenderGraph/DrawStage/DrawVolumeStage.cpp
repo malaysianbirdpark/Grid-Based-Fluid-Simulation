@@ -61,7 +61,7 @@ DrawVolumeStage::DrawVolumeStage(ID3D11DeviceContext& context)
     _pso.push_back(std::move(std::make_unique<PipelineStateObject>()));
 	_pso.back()->SetVertexShader("./CSO/VolumeCube_VS.cso");
 	_pso.back()->SetInputLayout(_object->GetInputElementDest());
-	_pso.back()->SetPixelShader("./CSO/VolumeCubeFaces_PS.cso");
+	_pso.back()->SetPixelShader("./CSO/DrawUV_PS.cso");
 }
 
 void DrawVolumeStage::Run(ID3D11DeviceContext& context)

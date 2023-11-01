@@ -30,10 +30,10 @@ DrawSceneStage::DrawSceneStage(ID3D11DeviceContext& context, char const* name)
 	_pso.back()->SetInputLayout(input_elem_desc);
 	_pso.back()->SetPixelShader("./CSO/SolidTex_PS.cso");
 
-    _pso.push_back(std::move(std::make_unique<PipelineStateObject>()));
-	_pso.back()->SetVertexShader("./CSO/SolidTex_VS.cso");
-	_pso.back()->SetInputLayout(input_elem_desc);
-	_pso.back()->SetPixelShader("./CSO/GLTFVolume_PS.cso");
+ //   _pso.push_back(std::move(std::make_unique<PipelineStateObject>()));
+	//_pso.back()->SetVertexShader("./CSO/SolidTex_VS.cso");
+	//_pso.back()->SetInputLayout(input_elem_desc);
+	//_pso.back()->SetPixelShader("./CSO/SolidTex_PS.cso");
 
     InitRS();
     InitDS();

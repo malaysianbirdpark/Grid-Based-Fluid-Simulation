@@ -477,5 +477,6 @@
     <FxCompile Include="HLSL_VS\sphereVS.hlsl">
       <Filter>HLSL_VS</Filter>
     </FxCompile>
+    <FxCompile Include="HLSL_PS\VolumeModel_PS.hlsl" />
   </ItemGroup>
 </Project>

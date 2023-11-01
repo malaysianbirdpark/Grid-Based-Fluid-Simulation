@@ -386,6 +386,10 @@
       <EntryPointName>main</EntryPointName>
       <ObjectFileOutput>../Grid/CSO/spherePS.cso</ObjectFileOutput>
     </FxCompile>
+    <FxCompile Include="HLSL_PS\VolumeModel_PS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+    </FxCompile>
     <FxCompile Include="HLSL_VS\SolidTex_VS.hlsl">
       <ShaderType>Vertex</ShaderType>
       <ShaderModel>5.0</ShaderModel>

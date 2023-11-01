@@ -35,12 +35,12 @@ void main(uint3 DTid : SV_DispatchThreadID)
             down = center; obstacle_velocity.y = 0.0f; velocity_mask.y = 0.0f;
         }
         if (DTid.y + 1 == height - 1) {
-            up = center; obstacle_velocity.y = 0.0f; velocity_mask.y = 0.0f;
+            up = center; obstacle_velocity.y = -1.0f; velocity_mask.y = 0.0f;
         }
         if (DTid.z - 1 == 0) {
-            behind = center; obstacle_velocity.z = 0.0f; velocity_mask.z = 0.0f;
+            behind = center; obstacle_velocity.z = 1.0f; velocity_mask.z = 0.0f;
         }
-        if (DTid.z + 1 == 0) {
+        if (DTid.z + 1 == depth - 1) {
             front = center; obstacle_velocity.z = 0.0f; velocity_mask.z = 0.0f;
         }
 

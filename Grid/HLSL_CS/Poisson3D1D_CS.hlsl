@@ -16,7 +16,8 @@ void main( uint3 DTid : SV_DispatchThreadID )
 	uint depth;
 	x_in.GetDimensions(width, height, depth);
 
-	if (DTid.x > 0 && DTid.x < width - 1 && DTid.y > 0 && DTid.y < height - 1 && DTid.z > 0 && DTid.z < depth - 1) {
+	//if (DTid.x > 0 && DTid.x < width - 1 && DTid.y > 0 && DTid.y < height - 1 && DTid.z > 0 && DTid.z < depth - 1) 
+	{
 		const min16float center = x_in[DTid.xyz];
 
 		const min16float right  = DTid.x + 1 != width - 1  ? x_in[uint3(DTid.x + 1, DTid.y, DTid.z)] : center;
