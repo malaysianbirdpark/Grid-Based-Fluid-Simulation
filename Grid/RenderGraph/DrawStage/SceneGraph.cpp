@@ -4,14 +4,16 @@
 #include <queue>
 #include <filesystem>
 
+#include "DirectXTK-main\Inc\DDSTextureLoader.h"
+
 SceneGraph::SceneGraph(ID3D11DeviceContext& context, char const* path, char const* tag)
 {
     unsigned constexpr flags{
-		aiProcess_FlipUVs |
-		aiProcess_GenUVCoords |
-		aiProcess_GenNormals |
-		aiProcess_CalcTangentSpace |
-		aiProcess_Triangulate |
+		aiProcess_FlipUVs               |
+		aiProcess_GenUVCoords           |
+		aiProcess_GenNormals            |
+		aiProcess_CalcTangentSpace      |
+		aiProcess_Triangulate           |
 		aiProcess_JoinIdenticalVertices |
 		aiProcess_ImproveCacheLocality
     };
@@ -184,22 +186,14 @@ int32_t SceneGraph::ParseNode(int32_t parent_id, int32_t level, aiScene const* a
 
 AssimpMesh SceneGraph::ParseMesh(aiMesh const* ai_mesh)
 {
-    std::string vertex_attribute{};
-    if (ai_mesh->HasPositions())
-        vertex_attribute += "1p";
-    if (ai_mesh->HasNormals())
-        vertex_attribute += "1n";
-    if (ai_mesh->HasTangentsAndBitangents())
-        vertex_attribute += "1t";
-    if (ai_mesh->HasTextureCoords(0u))
-        vertex_attribute += "1uv";
-
-    auto [vertex_buffer, index_buffer] {ParseVertexData(ai_mesh, vertex_attribute)};
+    UINT index_count;
+    auto [vertex_buffer, index_buffer] {ParseVertexData(ai_mesh, index_count)};
 
     return {
-        vertex_buffer,
-        index_buffer,
+        std::move(vertex_buffer),
+        std::move(index_buffer),
         D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST,
+        index_count
     };
 }
 
@@ -271,39 +265,11 @@ AssimpMaterial SceneGraph::ParseMaterial(ID3D11DeviceContext& context, aiMateria
     aiTextureMapMode texture_map_mode[2]{ aiTextureMapMode_Wrap, aiTextureMapMode_Wrap };
     uint32_t texture_flags{ 0u };
 
-    // Emissive Map
-    if (aiGetMaterialTexture(ai_material, aiTextureType_EMISSIVE, 0u, &ai_path, &mapping, &uv_index, &blend, &texture_op, texture_map_mode, &texture_flags) == AI_SUCCESS) {
-        auto const final_path{ process_ai_path(base_path, ai_path.C_Str()) };
-
-        result.AddOrRelplaceTexture(context, ShaderResourceTypes::EmissiveMap, final_path.c_str());
-    }
-
     // Diffuse Map
     if (aiGetMaterialTexture(ai_material, aiTextureType_DIFFUSE, 0u, &ai_path, &mapping, &uv_index, &blend, &texture_op, texture_map_mode, &texture_flags) == AI_SUCCESS) {
         auto const final_path{ process_ai_path(base_path, ai_path.C_Str()) };
 
         result.AddOrRelplaceTexture(context, ShaderResourceTypes::DiffuseMap, final_path.c_str());
-    }
-
-    // Specular Map
-    if (aiGetMaterialTexture(ai_material, aiTextureType_SPECULAR, 0u, &ai_path, &mapping, &uv_index, &blend, &texture_op, texture_map_mode, &texture_flags) == AI_SUCCESS) {
-        auto const final_path{ process_ai_path(base_path, ai_path.C_Str()) };
-
-        result.AddOrRelplaceTexture(context, ShaderResourceTypes::SpecularMap, final_path.c_str());
-    }
-
-    // Normal Map
-    if (aiGetMaterialTexture(ai_material, aiTextureType_NORMALS, 0u, &ai_path, &mapping, &uv_index, &blend, &texture_op, texture_map_mode, &texture_flags) == AI_SUCCESS) {
-        auto const final_path{ process_ai_path(base_path, ai_path.C_Str()) };
-
-        result.AddOrRelplaceTexture(context, ShaderResourceTypes::NormalMap, final_path.c_str());
-    }
-
-    // Height Map
-    if (aiGetMaterialTexture(ai_material, aiTextureType_HEIGHT, 0u, &ai_path, &mapping, &uv_index, &blend, &texture_op, texture_map_mode, &texture_flags) == AI_SUCCESS) {
-        auto const final_path{ process_ai_path(base_path, ai_path.C_Str()) };
-
-        result.AddOrRelplaceTexture(context, ShaderResourceTypes::HeightMap, final_path.c_str());
     }
 
     // Metallic
@@ -320,26 +286,71 @@ AssimpMaterial SceneGraph::ParseMaterial(ID3D11DeviceContext& context, aiMateria
         result.AddOrRelplaceTexture(context, ShaderResourceTypes::RoughnessMap, final_path.c_str());
     }
 
+    // Normal Map
+    if (aiGetMaterialTexture(ai_material, aiTextureType_NORMALS, 0u, &ai_path, &mapping, &uv_index, &blend, &texture_op, texture_map_mode, &texture_flags) == AI_SUCCESS) {
+        auto const final_path{ process_ai_path(base_path, ai_path.C_Str()) };
+
+        result.AddOrRelplaceTexture(context, ShaderResourceTypes::NormalMap, final_path.c_str());
+    }
+
+    // Emissive Map
+    if (aiGetMaterialTexture(ai_material, aiTextureType_EMISSIVE, 0u, &ai_path, &mapping, &uv_index, &blend, &texture_op, texture_map_mode, &texture_flags) == AI_SUCCESS) {
+        auto const final_path{ process_ai_path(base_path, ai_path.C_Str()) };
+
+        result.AddOrRelplaceTexture(context, ShaderResourceTypes::EmissiveMap, final_path.c_str());
+    }
+
     // AO
     if (aiGetMaterialTexture(ai_material, aiTextureType_AMBIENT_OCCLUSION, 0u, &ai_path, &mapping, &uv_index, &blend, &texture_op, texture_map_mode, &texture_flags) == AI_SUCCESS) {
         auto const final_path{ process_ai_path(base_path, ai_path.C_Str()) };
 
-        result.AddOrRelplaceTexture(context, ShaderResourceTypes::AOMap, final_path.c_str());
-    }
-
-    //Opacity Map
-    if (aiGetMaterialTexture(ai_material, aiTextureType_OPACITY, 0u, &ai_path, &mapping, &uv_index, &blend, &texture_op, texture_map_mode, &texture_flags) == AI_SUCCESS) {
-        auto const final_path {process_ai_path(base_path, ai_path.C_Str())};
-
-        result.AddOrRelplaceTexture(context, ShaderResourceTypes::OpacityMap, final_path.c_str());
+        result.AddOrRelplaceTexture(context, ShaderResourceTypes::OcclusionMap, final_path.c_str());
     }
 
     return result;
 }
 
-std::pair<Microsoft::WRL::ComPtr<ID3D11Buffer>, Microsoft::WRL::ComPtr<ID3D11Buffer>> SceneGraph::ParseVertexData(aiMesh const* ai_mesh)
+std::pair<Microsoft::WRL::ComPtr<ID3D11Buffer>, Microsoft::WRL::ComPtr<ID3D11Buffer>> SceneGraph::ParseVertexData(aiMesh const* ai_mesh, UINT& index_count)
 {
-    auto const buffer{ D3D11VertexAttribute::GetBuffer(ai_mesh, vertex_format) };
+    using namespace DirectX;
+
+    struct VertexType {
+        XMFLOAT3 _pos;
+        XMFLOAT3 _normal;
+        XMFLOAT3 _tan;
+        XMFLOAT3 _bitan;
+        XMFLOAT2 _uv2;
+    };
+
+    std::vector<VertexType> vertices;
+    vertices.reserve(ai_mesh->mNumVertices);
+
+    for (auto i{ size_t{} }; i != ai_mesh->mNumVertices; ++i) {
+        vertices.emplace_back(
+			*reinterpret_cast<XMFLOAT3*>(&ai_mesh->mVertices[i]),
+			*reinterpret_cast<XMFLOAT3*>(&ai_mesh->mNormals[i]),
+			*reinterpret_cast<XMFLOAT3*>(&ai_mesh->mTangents[i]),
+			*reinterpret_cast<XMFLOAT3*>(&ai_mesh->mBitangents[i]),
+			*reinterpret_cast<XMFLOAT2*>(&ai_mesh->mTextureCoords[0][i])
+        );
+    }
+
+    // vertex buffer
+    Microsoft::WRL::ComPtr<ID3D11Buffer> vertex_buffer;
+    {
+        D3D11_BUFFER_DESC bd{};
+        bd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+        bd.Usage = D3D11_USAGE_IMMUTABLE;
+        bd.CPUAccessFlags = 0u;
+        bd.MiscFlags = 0u;
+        bd.ByteWidth = static_cast<UINT>(sizeof(VertexType) * vertices.size());
+        bd.StructureByteStride = sizeof(VertexType);
+
+        D3D11_SUBRESOURCE_DATA sd{};
+        sd.pSysMem = vertices.data();
+
+        pDevice->CreateBuffer(&bd, &sd, vertex_buffer.ReleaseAndGetAddressOf());
+    }
 
     std::vector<uint32_t> indices;
     indices.reserve(ai_mesh->mNumFaces * 3);
@@ -350,10 +361,26 @@ std::pair<Microsoft::WRL::ComPtr<ID3D11Buffer>, Microsoft::WRL::ComPtr<ID3D11Buf
         indices.push_back(face.mIndices[2]);
     }
 
-    auto vertex_buffer{ D3D11MeshDataHolder::ResolveVertexBuffer(device, D3D11VertexAttribute::GetStride(vertex_format), buffer.size(), buffer.data(), ai_mesh->mName.C_Str()) };
-    auto index_buffer{ D3D11MeshDataHolder::ResolveIndexBuffer(device, indices.data(), indices.size(), ai_mesh->mName.C_Str()) };
+    // index buffer
+    Microsoft::WRL::ComPtr<ID3D11Buffer> index_buffer;
+    {
+        index_count = static_cast<UINT>(indices.size());
 
-    return { vertex_buffer, index_buffer };
+        D3D11_BUFFER_DESC bd{};
+        bd.BindFlags = D3D11_BIND_INDEX_BUFFER;
+        bd.Usage = D3D11_USAGE_IMMUTABLE;
+        bd.CPUAccessFlags = 0u;
+        bd.MiscFlags = 0u;
+        bd.ByteWidth = static_cast<UINT>(indices.size() * sizeof(uint16_t));
+        bd.StructureByteStride = sizeof(uint16_t);
+
+        D3D11_SUBRESOURCE_DATA sd{};
+        sd.pSysMem = indices.data();
+
+        pDevice->CreateBuffer(&bd, &sd, index_buffer.ReleaseAndGetAddressOf());
+    }
+
+    return { std::move(vertex_buffer), std::move(index_buffer) };
 }
 
 int32_t SceneGraph::AddNode(int32_t parent_id, int32_t level, DirectX::XMMATRIX const& local_transform)
@@ -416,26 +443,41 @@ std::string process_ai_path(char const* base_path, char const* ai_path)
     return result.string();
 }
 
-void AssimpMaterial::AddOrRelplaceTexture(ID3D11DeviceContext& context, ShaderResourceTypes type, char const* path)
+AssimpMaterial::AssimpMaterial()
 {
-    auto const target_id{ static_cast<int>(type) };
-    if (_textureTypes.test(target_id)) {
-        for (auto& sr : _srs) {
-            if (auto const type_id{ std::visit(GetShaderResourceTypeID{}, sr) }; type_id == target_id) {
-                std::swap(sr, _srs.back());
-                _srs.pop_back();
-                break;
-            }
-        }
-    }
-    else {
-        _textureTypes.set(target_id);
-    }
-    _srs.push_back(D3D11ShaderResourceHolder::Resolve(device, context, type, path));
+    _srs.resize(6);
 }
 
-AssimpMesh::AssimpMesh(Microsoft::WRL::ComPtr<ID3D11Buffer>&& vertex_buffer, Microsoft::WRL::ComPtr<ID3D11Buffer>&& index_buffer, D3D11_PRIMITIVE_TOPOLOGY topology)
-    : _vertexBuffer{std::move(vertex_buffer)}, _indexBuffer{std::move(index_buffer)}, _topology{topology}
+void AssimpMaterial::AddOrRelplaceTexture(ID3D11DeviceContext& context, ShaderResourceTypes type, char const* path)
+{
+    Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> _srv;
+
+    std::string _path{ path };
+	std::wstring p(_path.length(), L' ');
+    std::ranges::copy(_path, p.begin());
+
+    auto alphaMode{ DirectX::DDS_ALPHA_MODE_STRAIGHT };
+
+    DirectX::CreateDDSTextureFromFileEx(
+        pDevice,
+        p.c_str(),
+        0,
+        D3D11_USAGE_DEFAULT,
+        D3D11_BIND_SHADER_RESOURCE | D3D11_BIND_RENDER_TARGET,
+        D3D11_CPU_ACCESS_READ,
+        D3D11_RESOURCE_MISC_GENERATE_MIPS,
+        DirectX::DDS_LOADER_DEFAULT,
+        nullptr,
+        _srv.ReleaseAndGetAddressOf(),
+        &alphaMode
+    );
+    context.GenerateMips(_srv.Get());
+
+    _srs.push_back(std::move(_srv));
+}
+
+AssimpMesh::AssimpMesh(Microsoft::WRL::ComPtr<ID3D11Buffer>&& vertex_buffer, Microsoft::WRL::ComPtr<ID3D11Buffer>&& index_buffer, D3D11_PRIMITIVE_TOPOLOGY topology, UINT index_count)
+    : _vertexBuffer{std::move(vertex_buffer)}, _indexBuffer{std::move(index_buffer)}, _topology{topology}, _indexCount{index_count}
 {
 }
 

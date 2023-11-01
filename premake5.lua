@@ -36,7 +36,6 @@ project "Grid"
         "3rd_party/",
         "3rd_party/ImGui/",
         "3rd_party/ImGui/backends/",
-        "3rd_party/assimp-master/include/"
     }
 
     floatingpoint "Fast"
@@ -75,12 +74,10 @@ project "Grid"
             "D3DCompiler",
             "DirectXTK",
             "ImGui",
-            "assimp-vc142-mtd",
         }
         libdirs {
             "3rd_party/DirectXTK-main/Bin/Desktop_2019/x64/Debug",
             "bin/Debug-windows-x86_64/ImGui",
-            "3rd_party/assimp-master/lib/Debug",
         }
         buildoptions "/MDd"
         optimize "Debug"
@@ -95,12 +92,10 @@ project "Grid"
             "D3DCompiler",
             "DirectXTK",
             "ImGui",
-            "assimp-vc142-mt",
         }
         libdirs {
             "3rd_party/DirectXTK-main/Bin/Desktop_2019/x64/Release",
             "bin/Release-windows-x86_64/ImGui",
-            "3rd_party/assimp-master/lib/Release",
         }
         buildoptions "/MD"
         optimize "Speed"

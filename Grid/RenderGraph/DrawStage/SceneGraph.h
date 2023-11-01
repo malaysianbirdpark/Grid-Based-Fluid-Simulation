@@ -10,15 +10,12 @@
 #include "assimp/postprocess.h"
 
 enum class ShaderResourceTypes {
-    EmissiveMap,
     DiffuseMap,
-    SpecularMap,
-    NormalMap,
-    HeightMap,
     MetallicMap,
     RoughnessMap,
-    AOMap,
-    OpacityMap,
+    NormalMap,
+    EmissiveMap,
+    OcclusionMap,
 };
 
 struct SceneTransformParameters {
@@ -34,7 +31,7 @@ struct SceneTransformParameters {
 class AssimpMaterial {
     friend class SceneGraph;
 public:
-    explicit AssimpMaterial() = default;
+    explicit AssimpMaterial();
     void     AddOrRelplaceTexture(ID3D11DeviceContext& context, ShaderResourceTypes type, char const* path);
 private:
     DirectX::XMFLOAT4  _emissiveColor{};
@@ -44,7 +41,8 @@ private:
     float              _alphaTest{};
     float              _metallicFactor{};
 
-    std::bitset<16>    _textureTypes;
+    std::vector<Microsoft::WRL::ComPtr<ID3D11ShaderResourceView>> _srs;
+    std::bitset<16>                                               _textureTypes;
 };
 
 class AssimpMesh {
@@ -54,7 +52,8 @@ public:
     AssimpMesh(
         Microsoft::WRL::ComPtr<ID3D11Buffer>&& vertex_buffer,
         Microsoft::WRL::ComPtr<ID3D11Buffer>&& index_buffer,
-        D3D11_PRIMITIVE_TOPOLOGY topology
+        D3D11_PRIMITIVE_TOPOLOGY topology,
+        UINT index_count
     );
 
     void Bind(ID3D11DeviceContext & context) const;
@@ -82,23 +81,23 @@ class SceneGraph {
 public:
     SceneGraph(ID3D11DeviceContext& context, char const* path, char const* tag);
 
-    void                      MarkAsTransformed(int32_t node);
+    void                                    MarkAsTransformed(int32_t node);
 
-    SceneNode&                GetNodeAt(int32_t node);
-    SceneTransformParameters& GetTransformParamAt(int32_t node);
-    char const*               GetNameAt(int32_t node);
+    SceneNode&                              GetNodeAt(int32_t node);
+    SceneTransformParameters&               GetTransformParamAt(int32_t node);
+    char const*                             GetNameAt(int32_t node);
 
-    void                      Update();
+    void                                    Update();
 private:
-    void                                  RecalculateGlobalTransforms();
+    void                                    RecalculateGlobalTransforms();
 private:
-    int32_t                               ParseNode(int32_t parent_id, int32_t level, aiScene const* ai_scene, aiNode const* ai_node);
-    [[nodiscard]] static AssimpMesh       ParseMesh(aiMesh const* ai_mesh);
-    [[nodiscard]] static AssimpMaterial   ParseMaterial(ID3D11DeviceContext& context, aiMaterial const* ai_material, char const* base_path);
+    int32_t                                 ParseNode(int32_t parent_id, int32_t level, aiScene const* ai_scene, aiNode const* ai_node);
+    [[nodiscard]] static AssimpMesh         ParseMesh(aiMesh const* ai_mesh);
+    [[nodiscard]] static AssimpMaterial     ParseMaterial(ID3D11DeviceContext& context, aiMaterial const* ai_material, char const* base_path);
     using VertexData = std::pair<Microsoft::WRL::ComPtr<ID3D11Buffer>, Microsoft::WRL::ComPtr<ID3D11Buffer>>;
-    [[nodiscard]] static VertexData       ParseVertexData(aiMesh const* ai_mesh);
+    [[nodiscard]] static VertexData         ParseVertexData(aiMesh const* ai_mesh, UINT& index_count);
 private:
-    int32_t                               AddNode(int32_t parent_id, int32_t level, DirectX::XMMATRIX const& local_transform = DirectX::XMMatrixIdentity());
+    int32_t                                 AddNode(int32_t parent_id, int32_t level, DirectX::XMMATRIX const& local_transform = DirectX::XMMatrixIdentity());
 private:
     std::vector<AssimpMesh>                 _mesh{};
     std::vector<AssimpMaterial>             _material{};

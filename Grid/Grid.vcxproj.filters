@@ -142,6 +142,9 @@
     <ClInclude Include="RenderGraph\DrawStage\DrawVolumeStage.h">
       <Filter>RenderGraph\DrawStage</Filter>
     </ClInclude>
+    <ClInclude Include="RenderGraph\DrawStage\SceneGraph.h">
+      <Filter>RenderGraph\DrawStage</Filter>
+    </ClInclude>
     <ClInclude Include="RenderGraph\NodeManager.h">
       <Filter>RenderGraph</Filter>
     </ClInclude>
@@ -210,7 +213,6 @@
       <Filter>Utils</Filter>
     </ClInclude>
     <ClInclude Include="pch.h" />
-    <ClInclude Include="RenderGraph\DrawStage\SceneGraph.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EntryPoint.cpp" />
@@ -311,6 +313,9 @@
     <ClCompile Include="RenderGraph\DrawStage\DrawVolumeStage.cpp">
       <Filter>RenderGraph\DrawStage</Filter>
     </ClCompile>
+    <ClCompile Include="RenderGraph\DrawStage\SceneGraph.cpp">
+      <Filter>RenderGraph\DrawStage</Filter>
+    </ClCompile>
     <ClCompile Include="RenderGraph\NodeManager.cpp">
       <Filter>RenderGraph</Filter>
     </ClCompile>
@@ -380,7 +385,6 @@
     </ClCompile>
     <ClCompile Include="pch.cpp" />
     <ClCompile Include="temp.cpp" />
-    <ClCompile Include="RenderGraph\DrawStage\SceneGraph.cpp" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="HLSL_CS\3DTextureTest_CS.hlsl">
