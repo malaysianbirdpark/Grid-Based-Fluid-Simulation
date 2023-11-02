@@ -4,7 +4,7 @@ struct PS_IN {
     float4 sv_pos    : SV_Position;
 };
 
-Texture3D volume_tex : register(t0);
+Texture3D<min16float4> volume_tex : register(t0);
 
 Texture2D front_texcoord : register(t1);
 Texture2D back_texcoord  : register(t2);
@@ -30,24 +30,27 @@ float4 main(PS_IN input) : SV_Target
     float3 cur_uvw = front_uvw;
 
     float4 dest_color = 0.0f;
-    float4 src_color = 0.0f;
+    float src = 0.0f;
 
     //const float step_size = 0.01f;
     //float3 step_uvw = uvw_dir * step_size;
 
     //const int iterations = (uvw_len / step_size) + 1;
 
-    const int iterations = 50;
+    static const int iterations = 50;
+    static const float att = 0.15f;
 
     const float step_size = uvw_len / iterations;
     float3 step_uvw = uvw_dir * step_size;
 
     [loop]
     for (int i = 0; i < iterations + 1; ++i) { 
-        src_color = (volume_tex.Sample(sampler2, cur_uvw) + volume_tex.Sample(sampler2, cur_uvw + (step_uvw * 0.5f))) * 0.5f;
-
-        dest_color.rgb += (1.0f - dest_color.a) * src_color.rgb * src_color.a;
-        dest_color.a   += (1.0f - dest_color.a) * src_color.a;
+        src = (volume_tex.Sample(sampler2, cur_uvw).a + volume_tex.Sample(sampler2, cur_uvw + (step_uvw * 0.5f)).a) * 0.5f;
+ 
+        if (src > 1e-3) {
+			dest_color.rgb += (1.0f - dest_color.a) * src * float3(0.0f, 1.0f, 0.0f) * att;
+			dest_color.a   += (1.0f - dest_color.a) * att;
+        }
 
         if (dest_color.a >= 0.99f)
             break;
@@ -55,8 +58,8 @@ float4 main(PS_IN input) : SV_Target
         cur_uvw += step_uvw;
 
         if (cur_uvw.x > 1.0f || cur_uvw.y > 1.0f || cur_uvw.z > 1.0f) {
-			dest_color.rgb += (1.0f - dest_color.a) * src_color.rgb * src_color.a * ((step_size - length(cur_uvw - back_uvw)) / step_size);
-			dest_color.a   += (1.0f - dest_color.a) * src_color.a;
+			//dest_color.rgb += (1.0f - dest_color.a) * src_color.rgb * src_color.a * ((step_size - length(cur_uvw - back_uvw)) / step_size);
+			//dest_color.a   += (1.0f - dest_color.a) * src_color.a;
 
             break;
         }

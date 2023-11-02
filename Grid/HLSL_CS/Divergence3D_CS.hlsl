@@ -1,4 +1,4 @@
-Texture3D<min16float3> x_in : register(t0);
+Texture3D<min16float4> x_in : register(t0);
 
 RWTexture3D<min16float> div : register(u0);
 

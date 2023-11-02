@@ -87,38 +87,6 @@ Game::Game()
 	_renderGraph.AddStage(std::move(std::make_shared<CopyStage>()));
 	_renderGraph.AddStage(std::move(std::make_shared<ViewportStage>()));
 
-	_renderGraph.Link(0, 256, 12, 15);
-
-	_renderGraph.Link(1, 257, 2, 1);
-
-	_renderGraph.Link(2, 258, 4, 5);
-	_renderGraph.Link(2, 259, 4, 6);
-
-	_renderGraph.Link(3, 260, 4, 4);
-
-	_renderGraph.Link(4, 261, 5, 7);
-	_renderGraph.Link(4, 262, 12, 16);
-	_renderGraph.Link(4, 262, 2, 3);
-
-	_renderGraph.Link(5, 263, 9, 9);
-	_renderGraph.Link(5, 263, 11, 14);
-
-	_renderGraph.Link(6, 264, 7, 8);
-
-	_renderGraph.Link(7, 265, 10, 10);
-
-	_renderGraph.Link(8, 266, 10, 12);
-
-	_renderGraph.Link(9, 267, 10, 11);
-
-	_renderGraph.Link(10, 268, 11, 13);
-
-	_renderGraph.Link(11, 269, 2, 2);
-
-	_renderGraph.Link(12, 270, 13, 17);
-
-	_renderGraph.Link(13, 271, 14, 18);
-
 	ImNodes::LoadCurrentEditorStateFromIniFile("imnodes_state.ini");
 }
 

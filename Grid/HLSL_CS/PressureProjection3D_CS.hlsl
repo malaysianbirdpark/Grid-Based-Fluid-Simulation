@@ -1,7 +1,7 @@
 Texture3D<min16float>  x_in       : register(t0);
-Texture3D<min16float3> sub_target : register(t1);
+Texture3D<min16float4> sub_target : register(t1);
 
-RWTexture3D<min16float3> result     : register(u0);
+RWTexture3D<min16float4> result     : register(u0);
 
 [numthreads(8, 8, 8)]
 void main(uint3 DTid : SV_DispatchThreadID)
@@ -44,9 +44,9 @@ void main(uint3 DTid : SV_DispatchThreadID)
             front = center; obstacle_velocity.z = 0.0f; velocity_mask.z = 0.0f;
         }
 
-        result[DTid.xyz].xyz = (sub_target[DTid.xyz].xyz - min16float3(right - left, up - down, front - behind) * 0.5f) * velocity_mask + obstacle_velocity;
+        result[DTid.xyz] = min16float4((sub_target[DTid.xyz].xyz - min16float3(right - left, up - down, front - behind) * 0.5f) * velocity_mask + obstacle_velocity, sub_target[DTid.xyz].w);
     }
     else {
-        result[DTid.xyz].xyz = 0.0f;
+        result[DTid.xyz] = min16float4(0.0f, 0.0f, 0.0f, sub_target[DTid.xyz].w);
     }
 }
