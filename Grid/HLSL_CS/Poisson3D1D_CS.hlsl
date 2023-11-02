@@ -20,12 +20,12 @@ void main( uint3 DTid : SV_DispatchThreadID )
 	{
 		const min16float center = x_in[DTid.xyz];
 
-		const min16float right  = DTid.x + 1 != width - 1  ? x_in[uint3(DTid.x + 1, DTid.y, DTid.z)] : center;
-		const min16float left   = DTid.x - 1 != 0          ? x_in[uint3(DTid.x - 1, DTid.y, DTid.z)] : center;
-		const min16float up     = DTid.y + 1 != height - 1 ? x_in[uint3(DTid.x, DTid.y + 1, DTid.z)] : center;
-		const min16float down   = DTid.y - 1 != 0          ? x_in[uint3(DTid.x, DTid.y - 1, DTid.z)] : center;
-		const min16float front  = DTid.z + 1 != depth - 1  ? x_in[uint3(DTid.x, DTid.y, DTid.z + 1)] : center;
-		const min16float behind = DTid.z - 1 != 0          ? x_in[uint3(DTid.x, DTid.y, DTid.z - 1)] : center;
+		const min16float right  = DTid.x + 1 < width - 1  ? x_in[uint3(DTid.x + 1, DTid.y, DTid.z)] : center;
+		const min16float left   = DTid.x - 1 > 0          ? x_in[uint3(DTid.x - 1, DTid.y, DTid.z)] : center;
+		const min16float up     = DTid.y + 1 < height - 1 ? x_in[uint3(DTid.x, DTid.y + 1, DTid.z)] : center;
+		const min16float down   = DTid.y - 1 > 0          ? x_in[uint3(DTid.x, DTid.y - 1, DTid.z)] : center;
+		const min16float front  = DTid.z + 1 < depth - 1  ? x_in[uint3(DTid.x, DTid.y, DTid.z + 1)] : center;
+		const min16float behind = DTid.z - 1 > 0          ? x_in[uint3(DTid.x, DTid.y, DTid.z - 1)] : center;
 
 		x_out[DTid.xyz] = (up + down + left + right + front + behind - div[DTid.xyz]) * 0.1666667f;
 	}
