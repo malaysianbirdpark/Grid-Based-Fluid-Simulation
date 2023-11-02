@@ -1,8 +1,8 @@
 Texture3D<min16float3> velocity_in : register(t0);
-Texture3D<unorm float4> quantity_in : register(t1);
+Texture3D              quantity_in : register(t1);
 
 RWTexture3D<min16float3> velocity : register(u0);
-RWTexture3D<unorm float4> quantity : register(u1);
+RWTexture3D<float4>    quantity : register(u1);
 
 cbuffer color : register(b0) {
 	float3 dir;

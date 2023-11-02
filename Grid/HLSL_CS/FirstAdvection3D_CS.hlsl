@@ -1,8 +1,8 @@
 Texture3D<min16float3> velocity_in : register(t0);
-Texture3D<unorm float4> quantity_in : register(t1);
+Texture3D              quantity_in : register(t1);
 
 RWTexture3D<min16float3> velocity_out : register(u0);
-RWTexture3D<unorm float4> quantity_out : register(u1);
+RWTexture3D<float4>      quantity_out : register(u1);
 
 SamplerState sampler0 : register(s0);
 SamplerState sampler1 : register(s1);
