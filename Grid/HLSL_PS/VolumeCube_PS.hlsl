@@ -48,7 +48,7 @@ float4 main(PS_IN input) : SV_Target
         src = (volume_tex.Sample(sampler2, cur_uvw).a + volume_tex.Sample(sampler2, cur_uvw + (step_uvw * 0.5f)).a) * 0.5f;
  
         if (src > 1e-2) {
-			dest_color.rgb += (1.0f - dest_color.a) * src * float3(0.0f, 1.0f, 0.0f) * att;
+			dest_color.rgb += (1.0f - dest_color.a) * float3(0.0f, 1.0f, 0.0f) * att;
 			dest_color.a   += (1.0f - dest_color.a) * att;
         }
 

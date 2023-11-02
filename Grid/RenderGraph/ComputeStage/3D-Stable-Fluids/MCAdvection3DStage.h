@@ -17,7 +17,5 @@ private:
 	int32_t _cbTimestepID{};
 	int32_t _velocityInID{};
 	int32_t _velocityOutID{};
-	int32_t _quantityInID{};
-	int32_t _quantityOutID{};
 };
 

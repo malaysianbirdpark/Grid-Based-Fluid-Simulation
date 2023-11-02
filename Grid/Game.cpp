@@ -67,8 +67,8 @@ Game::Game()
 	_renderGraph.AddStage(std::move(std::make_shared<Sourcing3DStage>()));
 
 	_renderGraph.AddStage(std::move(std::make_shared<CBTimestep>()));
-	//_renderGraph.AddStage(std::move(std::make_shared<MCAdvection3DStage>()));
-	_renderGraph.AddStage(std::move(std::make_shared<Advection3DStage>()));
+	_renderGraph.AddStage(std::move(std::make_shared<MCAdvection3DStage>()));
+	//_renderGraph.AddStage(std::move(std::make_shared<Advection3DStage>()));
 
 	_renderGraph.AddStage(std::move(std::make_shared<ExternalForces3DStage>()));
 
