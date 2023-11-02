@@ -1,6 +1,6 @@
-Texture3D<min16float3> velocity_in : register(t0);
+Texture3D<min16float4> velocity_in : register(t0);
 
-RWTexture3D<min16float3> velocity_out : register(u0);
+RWTexture3D<min16float4> velocity_out : register(u0);
 
 cbuffer constants : register(b1) {
 	min16float dt;

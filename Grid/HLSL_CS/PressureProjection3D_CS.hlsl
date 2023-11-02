@@ -3,6 +3,8 @@ Texture3D<min16float4> sub_target : register(t1);
 
 RWTexture3D<min16float4> result     : register(u0);
 
+SamplerState sampler1 : register(s1);
+
 [numthreads(8, 8, 8)]
 void main(uint3 DTid : SV_DispatchThreadID)
 {
@@ -11,6 +13,8 @@ void main(uint3 DTid : SV_DispatchThreadID)
     uint depth;
     x_in.GetDimensions(width, height, depth);
 
+    const min16float3 dr = min16float3((1.0f / width), (1.0f / height), (1.0f / depth));
+
     if (DTid.x > 0 && DTid.x < width - 1 && DTid.y > 0 && DTid.y < height - 1 && DTid.z > 0 && DTid.z < depth - 1)
     {
         const min16float center = x_in[DTid.xyz];
@@ -18,12 +22,21 @@ void main(uint3 DTid : SV_DispatchThreadID)
         min16float3 obstacle_velocity = 0.0f;
         min16float3 velocity_mask     = 1.0f;
 
-        min16float right  = x_in[uint3(DTid.x + 1, DTid.y, DTid.z)];
-        min16float left   = x_in[uint3(DTid.x - 1, DTid.y, DTid.z)];
-        min16float up     = x_in[uint3(DTid.x, DTid.y + 1, DTid.z)];
-        min16float down   = x_in[uint3(DTid.x, DTid.y - 1, DTid.z)];
-        min16float front  = x_in[uint3(DTid.x, DTid.y, DTid.z + 1)];
-        min16float behind = x_in[uint3(DTid.x, DTid.y, DTid.z - 1)];
+        //min16float right  = x_in[uint3(DTid.x + 1, DTid.y, DTid.z)];
+        //min16float left   = x_in[uint3(DTid.x - 1, DTid.y, DTid.z)];
+        //min16float up     = x_in[uint3(DTid.x, DTid.y + 1, DTid.z)];
+        //min16float down   = x_in[uint3(DTid.x, DTid.y - 1, DTid.z)];
+        //min16float front  = x_in[uint3(DTid.x, DTid.y, DTid.z + 1)];
+        //min16float behind = x_in[uint3(DTid.x, DTid.y, DTid.z - 1)];
+
+        min16float right = x_in.SampleLevel(sampler1, (min16float3(DTid.x + 1, DTid.y, DTid.z) + 0.5f) * dr, 0.0f);
+        min16float left = x_in.SampleLevel(sampler1, (min16float3(DTid.x - 1, DTid.y, DTid.z) + 0.5f) * dr, 0.0f);
+
+        min16float up = x_in.SampleLevel(sampler1, (min16float3(DTid.x, DTid.y + 1, DTid.z) + 0.5f) * dr, 0.0f);
+        min16float down = x_in.SampleLevel(sampler1, (min16float3(DTid.x, DTid.y - 1, DTid.z) + 0.5f) * dr, 0.0f);
+
+        min16float front = x_in.SampleLevel(sampler1, (min16float3(DTid.x, DTid.y, DTid.z + 1) + 0.5f) * dr, 0.0f);
+        min16float behind = x_in.SampleLevel(sampler1, (min16float3(DTid.x, DTid.y, DTid.z - 1) + 0.5f) * dr, 0.0f);
 
         if (DTid.x - 1 == 0) {
             left = center; obstacle_velocity.x = 0.0f; velocity_mask.x = 0.0f;

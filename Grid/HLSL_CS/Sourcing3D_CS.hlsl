@@ -25,6 +25,7 @@ void main(uint3 DTid : SV_DispatchThreadID)
 		const min16float z = DTid.z - (min16float(depth) / 2.0f);
 
 		if (x * x + z * z <= r * r)
-			velocity[DTid.xyz] = min16float4(normalize(min16float3(dir.xyz)) * speed, density_scale);
+			//velocity[DTid.xyz] = min16float4(normalize(min16float3(dir.xyz)) * speed, density_scale);
+			velocity[DTid.xyz] = min16float4(normalize(min16float3(dir.xyz)) * speed, 20000.0f);
 	}
 }
