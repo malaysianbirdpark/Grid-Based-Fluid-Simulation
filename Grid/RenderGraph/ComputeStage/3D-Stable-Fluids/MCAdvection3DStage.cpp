@@ -31,7 +31,7 @@ MCAdvection3DStage::MCAdvection3DStage()
     pDevice->CreateUnorderedAccessView(_resource[0].Get(), nullptr, _uav[2].ReleaseAndGetAddressOf());
     pDevice->CreateShaderResourceView(_resource[0].Get(), nullptr, _srv[2].ReleaseAndGetAddressOf());
 
-	desc.Format = DXGI_FORMAT_R16_FLOAT;
+	desc.Format = DXGI_FORMAT_R16G16B16A16_FLOAT;
     pDevice->CreateTexture3D(&desc, nullptr, _resource[1].ReleaseAndGetAddressOf());
     pDevice->CreateUnorderedAccessView(_resource[1].Get(), nullptr, _uav[3].ReleaseAndGetAddressOf());
     pDevice->CreateShaderResourceView(_resource[1].Get(), nullptr, _srv[3].ReleaseAndGetAddressOf());
@@ -42,7 +42,7 @@ MCAdvection3DStage::MCAdvection3DStage()
     pDevice->CreateUnorderedAccessView(_resource[2].Get(), nullptr, _uav[4].ReleaseAndGetAddressOf());
     pDevice->CreateShaderResourceView(_resource[2].Get(), nullptr, _srv[4].ReleaseAndGetAddressOf());
 
-	desc.Format = DXGI_FORMAT_R16_FLOAT;
+	desc.Format = DXGI_FORMAT_R16G16B16A16_FLOAT;
     pDevice->CreateTexture3D(&desc, nullptr, _resource[3].ReleaseAndGetAddressOf());
     pDevice->CreateUnorderedAccessView(_resource[3].Get(), nullptr, _uav[5].ReleaseAndGetAddressOf());
     pDevice->CreateShaderResourceView(_resource[3].Get(), nullptr, _srv[5].ReleaseAndGetAddressOf());
@@ -52,7 +52,7 @@ MCAdvection3DStage::MCAdvection3DStage()
     pDevice->CreateTexture3D(&desc, nullptr, _resource[4].ReleaseAndGetAddressOf());
     pDevice->CreateUnorderedAccessView(_resource[4].Get(), nullptr, _uav[6].ReleaseAndGetAddressOf());
 
-	desc.Format = DXGI_FORMAT_R16_FLOAT;
+	desc.Format = DXGI_FORMAT_R16G16B16A16_FLOAT;
     pDevice->CreateTexture3D(&desc, nullptr, _resource[5].ReleaseAndGetAddressOf());
     pDevice->CreateUnorderedAccessView(_resource[5].Get(), nullptr, _uav[7].ReleaseAndGetAddressOf());
 
@@ -64,13 +64,13 @@ MCAdvection3DStage::MCAdvection3DStage()
     _outgoing[_velocityOutID] = -1;
     _attrNames[_velocityOutID] = { "Velocity out" };
 
-    _densityInID = NodeManager::IssueIncomingAttrID();
-    _incoming[_densityInID] = -1;
-    _attrNames[_densityInID] = { "Density in" };
+    _quantityInID = NodeManager::IssueIncomingAttrID();
+    _incoming[_quantityInID] = -1;
+    _attrNames[_quantityInID] = { "Density in" };
 
-    _densityOutID = NodeManager::IssueOutgoingAttrID();
-    _outgoing[_densityOutID] = -1;
-    _attrNames[_densityOutID] = { "Density out" };
+    _quantityOutID = NodeManager::IssueOutgoingAttrID();
+    _outgoing[_quantityOutID] = -1;
+    _attrNames[_quantityOutID] = { "Density out" };
 
     {
         std::string _path{"./CSO/FirstAdvection3D_CS.cso"};
@@ -171,7 +171,7 @@ void MCAdvection3DStage::Consume(ID3D11Resource* resource, int32_t attribute_id)
 {
     if (attribute_id == _velocityInID)
         pDevice->CreateShaderResourceView(resource, nullptr, _srv[0].ReleaseAndGetAddressOf());
-    else if (attribute_id == _densityInID)
+    else if (attribute_id == _quantityInID)
         pDevice->CreateShaderResourceView(resource, nullptr, _srv[1].ReleaseAndGetAddressOf());
 }
 
@@ -179,7 +179,7 @@ ID3D11Resource* MCAdvection3DStage::Expose(int32_t attribute_id)
 {
     if (attribute_id == _velocityOutID)
         return static_cast<ID3D11Resource*>(_resource[4].Get());
-    else if (attribute_id == _densityOutID)
+    else if (attribute_id == _quantityOutID)
         return static_cast<ID3D11Resource*>(_resource[5].Get());
     return nullptr;
 }

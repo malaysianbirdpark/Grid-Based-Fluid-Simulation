@@ -58,7 +58,7 @@ Poisson3D1DStage::Poisson3D1DStage()
 			pBlob->GetBufferPointer(), 
 			pBlob->GetBufferSize(),
 			nullptr,
-			_bcCS.ReleaseAndGetAddressOf()
+			_initCS.ReleaseAndGetAddressOf()
 		);
     }
 

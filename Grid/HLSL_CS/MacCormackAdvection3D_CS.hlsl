@@ -1,14 +1,14 @@
 Texture3D<min16float3> velocity_n : register(t0);
-Texture3D<min16float>  density_n : register(t1);
+Texture3D<min16float2> quantity_n : register(t1);
 
 Texture3D<min16float3> velocity_n_1_hat : register(t2);
-Texture3D<min16float>  density_n_1_hat : register(t3);
+Texture3D<min16float2> quantity_n_1_hat : register(t3);
 
 Texture3D<min16float3> velocity_n_hat : register(t4);
-Texture3D<min16float>  density_n_hat : register(t5);
+Texture3D<min16float2> quantity_n_hat : register(t5);
 
 RWTexture3D<min16float3> velocity_n_1 : register(u0);
-RWTexture3D<min16float>  density_n_1 : register(u1);
+RWTexture3D<min16float2> quantity_n_1 : register(u1);
 
 SamplerState sampler0 : register(s0);
 SamplerState sampler1 : register(s1);
@@ -28,10 +28,28 @@ void main( uint3 DTid : SV_DispatchThreadID ) {
 	if (DTid.x > 0 && DTid.x < width - 1 && DTid.y > 0 && DTid.y < height - 1 && DTid.z > 0 && DTid.z < depth - 1) {
 		min16float3 dr = min16float3((1.0f / width), (1.0f / height), (1.0f / depth));
 
-		const min16float3 pos    = (DTid.xyz + 0.5f) * dr;
-		const min16float3 mid    = pos - 0.5f * velocity_n.SampleLevel(sampler1, pos, 0.0f).xyz * dt;
-		const min16float3 target = pos - velocity_n.SampleLevel(sampler1, mid, 0.0f).xyz * dt;
-		//const min16float3 target = pos - velocity_n.SampleLevel(sampler1, pos, 0.0f).xyz * dt;
+		//const min16float3 pos    = (DTid.xyz + 0.5f) * dr;
+		//const min16float3 k1     = pos - velocity_n.SampleLevel(sampler0, pos, 0.0f).xyz * dt;
+		//const min16float3 k2     = pos - 0.5f  * velocity_n.SampleLevel(sampler0, k1, 0.0f).xyz * dt;
+		//const min16float3 k3     = pos - 0.75f * velocity_n.SampleLevel(sampler0, k2, 0.0f).xyz * dt;
+		//const min16float3 target =
+		//	pos - (0.2222222f * velocity_n.SampleLevel(sampler0, k1, 0.0f).xyz +
+		//		   0.3333333f * velocity_n.SampleLevel(sampler0, k2, 0.0f).xyz +
+		//		   0.4444444f * velocity_n.SampleLevel(sampler0, k3, 0.0f).xyz) * dt;
+
+		min16float3 pos = min16float3(DTid.xyz);
+		min16float3 k1 = pos - velocity_n.SampleLevel(sampler0, (pos + 0.5f) * dr, 0.0f).xyz * dt;
+		k1 = (k1 + 0.5f) * dr;
+		min16float3 k2 = pos - 0.5f  * velocity_n.SampleLevel(sampler0, k1, 0.0f).xyz * dt;
+		k2 = (k2 + 0.5f) * dr;
+		min16float3 k3 = pos - 0.75f * velocity_n.SampleLevel(sampler0, k2, 0.0f).xyz * dt;
+		k3 = (k3 + 0.5f) * dr;
+
+		const min16float3 target =
+			((pos - (0.2222222f * velocity_n.SampleLevel(sampler0, k1, 0.0f).xyz +
+			     	 0.3333333f * velocity_n.SampleLevel(sampler0, k2, 0.0f).xyz +
+				     0.4444444f * velocity_n.SampleLevel(sampler0, k3, 0.0f).xyz) * dt) + 0.5f) * dr;
+        pos = (pos + 0.5f) * dr;
 
         dr *= 0.5f;
 
@@ -48,26 +66,26 @@ void main( uint3 DTid : SV_DispatchThreadID ) {
         const min16float3 vel_min = min(min(min(min(min(min(min(vels[0], vels[1]), vels[2]), vels[3]), vels[4]), vels[5]), vels[6]), vels[7]);
         const min16float3 vel_max = max(max(max(max(max(max(max(vels[0], vels[1]), vels[2]), vels[3]), vels[4]), vels[5]), vels[6]), vels[7]);
 		min16float3 vel_final = velocity_n_1_hat.SampleLevel(sampler0, target, 0.0f) +
-			0.5f * (velocity_n.SampleLevel(sampler0, pos, 0.0f) - velocity_n_hat.SampleLevel(sampler0, pos, 0.0f));
+			0.5f * (velocity_n.SampleLevel(sampler1, pos, 0.0f) - velocity_n_hat.SampleLevel(sampler1, pos, 0.0f));
         vel_final = max(min(vel_final, vel_max), vel_min);
 
-        min16float d[8];
-        d[0] = density_n.SampleLevel(sampler0, target + min16float3(-dr.x, -dr.y, -dr.z), 0.0f);
-        d[1] = density_n.SampleLevel(sampler0, target + min16float3(-dr.x, -dr.y,  dr.z), 0.0f);
-        d[2] = density_n.SampleLevel(sampler0, target + min16float3(-dr.x,  dr.y, -dr.z), 0.0f);
-        d[3] = density_n.SampleLevel(sampler0, target + min16float3(-dr.x,  dr.y,  dr.z), 0.0f);
-        d[4] = density_n.SampleLevel(sampler0, target + min16float3( dr.x, -dr.y, -dr.z), 0.0f);
-        d[5] = density_n.SampleLevel(sampler0, target + min16float3( dr.x, -dr.y,  dr.z), 0.0f);
-        d[6] = density_n.SampleLevel(sampler0, target + min16float3( dr.x,  dr.y, -dr.z), 0.0f);
-        d[7] = density_n.SampleLevel(sampler0, target + min16float3( dr.x,  dr.y,  dr.z), 0.0f);
+        min16float2 q[8];
+        q[0] = quantity_n.SampleLevel(sampler0, target + min16float3(-dr.x, -dr.y, -dr.z), 0.0f);
+        q[1] = quantity_n.SampleLevel(sampler0, target + min16float3(-dr.x, -dr.y,  dr.z), 0.0f);
+        q[2] = quantity_n.SampleLevel(sampler0, target + min16float3(-dr.x,  dr.y, -dr.z), 0.0f);
+        q[3] = quantity_n.SampleLevel(sampler0, target + min16float3(-dr.x,  dr.y,  dr.z), 0.0f);
+        q[4] = quantity_n.SampleLevel(sampler0, target + min16float3( dr.x, -dr.y, -dr.z), 0.0f);
+        q[5] = quantity_n.SampleLevel(sampler0, target + min16float3( dr.x, -dr.y,  dr.z), 0.0f);
+        q[6] = quantity_n.SampleLevel(sampler0, target + min16float3( dr.x,  dr.y, -dr.z), 0.0f);
+        q[7] = quantity_n.SampleLevel(sampler0, target + min16float3( dr.x,  dr.y,  dr.z), 0.0f);
 
-        const min16float3 d_min = min(min(min(min(min(min(min(d[0], d[1]), d[2]), d[3]), d[4]), d[5]), d[6]), d[7]);
-        const min16float3 d_max = max(max(max(max(max(max(max(d[0], d[1]), d[2]), d[3]), d[4]), d[5]), d[6]), d[7]);
-		min16float3 density_final = density_n_1_hat.SampleLevel(sampler0, target, 0.0f) +
-			0.5f * (density_n.SampleLevel(sampler0, pos, 0.0f) - density_n_hat.SampleLevel(sampler0, pos, 0.0f));
-        vel_final = max(min(vel_final, vel_max), vel_min);
+        const min16float2 q_min = min(min(min(min(min(min(min(q[0], q[1]), q[2]), q[3]), q[4]), q[5]), q[6]), q[7]);
+        const min16float2 q_max = max(max(max(max(max(max(max(q[0], q[1]), q[2]), q[3]), q[4]), q[5]), q[6]), q[7]);
+		min16float2 q_final = quantity_n_1_hat.SampleLevel(sampler0, target, 0.0f) +
+			0.5f * (quantity_n.SampleLevel(sampler1, pos, 0.0f) - quantity_n_hat.SampleLevel(sampler1, pos, 0.0f));
+        q_final = max(min(q_final, q_max), q_min);
 
 		velocity_n_1[DTid.xyz] = vel_final;
-        density_n_1[DTid.xyz] = density_final;
+        quantity_n_1[DTid.xyz] = q_final;
 	}
 }
