@@ -35,6 +35,7 @@ protected: UINT _groupX{};
 protected: UINT _groupY{};
 protected: UINT _groupZ{};
 
+public:  virtual void Update();
 public:  virtual void Run(ID3D11DeviceContext& context);
 public:  void RenderNode() const;
 public:  virtual void Consume(ID3D11Resource* resource, int32_t attribute_id) = 0;

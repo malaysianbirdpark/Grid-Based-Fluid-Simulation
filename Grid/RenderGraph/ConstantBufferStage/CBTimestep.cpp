@@ -7,11 +7,7 @@
 CBTimestep::CBTimestep()
 	: ConstantBufferStage{"Timestep"}
 {
-    _csID = NodeManager::IssueOutgoingAttrID();
-    _outgoing[_csID] = -1;
-    _attrNames[_csID] = { "Linked CS" };
-
-    _data._dt = 0.1f;
+    _data._dt = 0.016666f;
 
     D3D11_BUFFER_DESC bd{};
     bd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
@@ -29,7 +25,6 @@ CBTimestep::CBTimestep()
 
 void CBTimestep::Run(ID3D11DeviceContext& context)
 {
-    Update();
     Upload(context);
 	context.CSSetConstantBuffers(1u, 1u, _buffer.GetAddressOf());
 }
@@ -51,5 +46,5 @@ void CBTimestep::Upload(ID3D11DeviceContext& context)
 void CBTimestep::Update()
 {
     //_data._dt = 1.0f / ImGui::GetIO().Framerate;
-    _data._dt = 0.0166f;
+    _data._dt = 0.01666f;
 }

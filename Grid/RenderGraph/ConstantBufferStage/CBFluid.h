@@ -22,7 +22,6 @@ public: virtual void Update() override;
 
 private: int32_t color_mode{};
 private: int32_t velocity_mode{};
-private: int32_t _csID{};
 private: Constants _data;
 };
 

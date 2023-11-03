@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Compute3DStage.h"
+#include "CBTimestep.h"
 
 class MCAdvection3DStage final : public Compute3DStage
 {
@@ -14,8 +15,11 @@ private:
 	Microsoft::WRL::ComPtr<ID3D11ComputeShader> _reverseAdvectionCS;
 	Microsoft::WRL::ComPtr<ID3D11ComputeShader> _MCAdvectionCS;
 
-	int32_t _cbTimestepID{};
 	int32_t _velocityInID{};
 	int32_t _velocityOutID{};
+	int32_t _densityInID{};
+	int32_t _densityOutID{};
+
+	CBTimestep _ts{};
 };
 

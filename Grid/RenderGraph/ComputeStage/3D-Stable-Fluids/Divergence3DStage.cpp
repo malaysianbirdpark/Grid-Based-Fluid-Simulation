@@ -8,8 +8,8 @@ Divergence3DStage::Divergence3DStage()
 {
     _uav.resize(1);
     _srv.resize(1);
-    _nullUav.resize(5);
-    _nullSrv.resize(5);
+    _nullUav.resize(1);
+    _nullSrv.resize(1);
 
     _resource.resize(1);
 

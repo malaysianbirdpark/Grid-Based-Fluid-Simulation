@@ -11,10 +11,6 @@
 CBFluid::CBFluid()
 	: ConstantBufferStage{"Fluid Values"}
 {
-    _csID = NodeManager::IssueOutgoingAttrID();
-    _outgoing[_csID] = -1;
-    _attrNames[_csID] = { "Linked CS" };
-
     DirectX::XMStoreFloat4(&_data._color, DirectX::XMVECTOR{});
 
     D3D11_BUFFER_DESC bd{};
@@ -56,26 +52,24 @@ void CBFluid::Upload(ID3D11DeviceContext& context)
 
 void CBFluid::Update()
 {
-    if (ImNodes::IsNodeSelected(_id)) {
-        ImGui::Begin("Fluid Editor");
-        ImGui::Text("Color");
-        ImGui::RadioButton("Random Color", &color_mode, 0); ImGui::SameLine();
-        ImGui::RadioButton("Fixed Color", &color_mode, 1); 
-        ImGui::DragFloat("Color Scale", &_data._colorScale, 0.01f, 0.0f, 50.0f);
-        if (color_mode == 1)
-            ImGui::ColorPicker3("Fluid Color", &_data._color.x);
+	ImGui::Begin("Fluid Editor");
+	ImGui::Text("Color");
+	ImGui::RadioButton("Random Color", &color_mode, 0); ImGui::SameLine();
+	ImGui::RadioButton("Fixed Color", &color_mode, 1); 
+	ImGui::DragFloat("Color Scale", &_data._colorScale, 0.01f, 0.0f, 50.0f);
+	if (color_mode == 1)
+		ImGui::ColorPicker3("Fluid Color", &_data._color.x);
 
-        ImGui::Text("Velocity");
-        ImGui::RadioButton("Random Direction", &velocity_mode, 0); ImGui::SameLine();
-        ImGui::RadioButton("Fixed Direction", &velocity_mode, 1); 
-        ImGui::DragFloat("Speed", &_data._speed, 0.01f, 0.0f, 100.0f);
-        if (velocity_mode == 1) 
-            ImGui::DragFloat3("Fluid Dir", &_data._velocityDir.x, 0.005f, -1.0f, 1.0f);
+	ImGui::Text("Velocity");
+	ImGui::RadioButton("Random Direction", &velocity_mode, 0); ImGui::SameLine();
+	ImGui::RadioButton("Fixed Direction", &velocity_mode, 1); 
+	ImGui::DragFloat("Speed", &_data._speed, 0.01f, 0.0f, 100.0f);
+	if (velocity_mode == 1) 
+		ImGui::DragFloat3("Fluid Dir", &_data._velocityDir.x, 0.005f, -1.0f, 1.0f);
 
-        ImGui::DragFloat("Dissipation", &_data._dissipation, 0.00001f, 0.0f, 1.0f, "%.5f");
+	ImGui::DragFloat("Dissipation", &_data._dissipation, 0.00001f, 0.0f, 1.0f, "%.5f");
 
-        ImGui::End();
-    }
+	ImGui::End();
 
     if (color_mode == 0) {
         DirectX::PackedVector::XMCOLOR const random_color {

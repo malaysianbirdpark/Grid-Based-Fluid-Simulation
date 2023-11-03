@@ -30,6 +30,10 @@ Compute3DStage::Compute3DStage(char const* name, char const* compute_shader_path
     }
 }
 
+void Compute3DStage::Update()
+{
+}
+
 void Compute3DStage::Run(ID3D11DeviceContext& context) {
     context.OMSetRenderTargets(0u, nullptr, nullptr);
 	context.CSSetShaderResources(0u, static_cast<UINT>(_srv.size()), _srv[0].GetAddressOf());

@@ -4,7 +4,7 @@ struct PS_IN {
     float4 sv_pos    : SV_Position;
 };
 
-Texture3D<min16float4> volume_tex : register(t0);
+Texture3D<min16float> volume_tex : register(t0);
 
 Texture2D front_texcoord : register(t1);
 Texture2D back_texcoord  : register(t2);
@@ -45,9 +45,9 @@ float4 main(PS_IN input) : SV_Target
 
     [loop]
     for (int i = 0; i < iterations + 1; ++i) { 
-        src = (volume_tex.Sample(sampler2, cur_uvw).a + volume_tex.Sample(sampler2, cur_uvw + (step_uvw * 0.5f)).a) * 0.5f;
+        src = (volume_tex.Sample(sampler2, cur_uvw) + volume_tex.Sample(sampler2, cur_uvw + (step_uvw * 0.5f))) * 0.5f;
  
-        if (src > 1e-2) {
+        if (src > 1e-3) {
 			dest_color.rgb += (1.0f - dest_color.a) * float3(0.0f, 1.0f, 0.0f) * att;
 			dest_color.a   += (1.0f - dest_color.a) * att;
         }

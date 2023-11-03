@@ -29,17 +29,17 @@ PressureProjection3DStage::PressureProjection3DStage()
     pDevice->CreateTexture3D(&desc, nullptr, _resource[0].ReleaseAndGetAddressOf());
     pDevice->CreateUnorderedAccessView(_resource[0].Get(), nullptr, _uav[0].ReleaseAndGetAddressOf());
 
-    _xInID = NodeManager::IssueIncomingAttrID();
-    _incoming[_xInID] = -1;
-    _attrNames[_xInID] = { "x in" };
+    _pInID = NodeManager::IssueIncomingAttrID();
+    _incoming[_pInID] = -1;
+    _attrNames[_pInID] = { "Pressure in" };
 
-    _subTargetID = NodeManager::IssueIncomingAttrID();
-    _incoming[_subTargetID] = -1;
-    _attrNames[_subTargetID] = { "Subtract target" };
+    _velocityInID = NodeManager::IssueIncomingAttrID();
+    _incoming[_velocityInID] = -1;
+    _attrNames[_velocityInID] = { "Velocity In" };
 
-    _resultID = NodeManager::IssueOutgoingAttrID();
-    _outgoing[_resultID] = -1;
-    _attrNames[_resultID] = { "Result" };
+    _velocityOutID = NodeManager::IssueOutgoingAttrID();
+    _outgoing[_velocityOutID] = -1;
+    _attrNames[_velocityOutID] = { "Velocity Out" };
 }
 
 void PressureProjection3DStage::Run(ID3D11DeviceContext& context) {
@@ -48,15 +48,15 @@ void PressureProjection3DStage::Run(ID3D11DeviceContext& context) {
 
 void PressureProjection3DStage::Consume(ID3D11Resource* resource, int32_t attribute_id)
 {
-    if (attribute_id == _xInID)
+    if (attribute_id == _pInID)
         pDevice->CreateShaderResourceView(resource, nullptr, _srv[0].ReleaseAndGetAddressOf());
-    else if (attribute_id == _subTargetID)
+    else if (attribute_id == _velocityInID)
         pDevice->CreateShaderResourceView(resource, nullptr, _srv[1].ReleaseAndGetAddressOf());
 }
 
 ID3D11Resource* PressureProjection3DStage::Expose(int32_t attribute_id)
 {
-    if (attribute_id == _resultID)
+    if (attribute_id == _velocityOutID)
         return static_cast<ID3D11Resource*>(_resource[0].Get());
 	return nullptr;
 }

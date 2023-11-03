@@ -40,7 +40,7 @@ namespace Stage {
 		Update(ID3D11DeviceContext& context) : _context{ context } {}
 		void operator() (std::shared_ptr<DrawStage> const& stage) const { stage->Update(_context); }
 		void operator() (std::shared_ptr<Compute2DStage> const& stage) const {}
-		void operator() (std::shared_ptr<Compute3DStage> const& stage) const {}
+		void operator() (std::shared_ptr<Compute3DStage> const& stage) const { stage->Update();  }
 		void operator() (std::shared_ptr<ResourceStage> const& stage) const {}
 		void operator() (std::shared_ptr<CopyStage> const& stage) const {}
 		void operator() (std::shared_ptr<ConstantBufferStage> const& stage) const {}

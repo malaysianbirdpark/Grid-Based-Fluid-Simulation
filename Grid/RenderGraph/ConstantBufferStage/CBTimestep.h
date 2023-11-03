@@ -17,6 +17,5 @@ public: virtual void Upload(ID3D11DeviceContext& context) override;
 public: virtual void Update() override;
 
 private: Constants _data;
-private: int32_t _csID{};
 };
 
