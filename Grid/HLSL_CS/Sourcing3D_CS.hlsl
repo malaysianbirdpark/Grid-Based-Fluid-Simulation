@@ -20,9 +20,9 @@ void main(uint3 DTid : SV_DispatchThreadID)
 	velocity_in.GetDimensions(width, height, depth);
 
 	velocity[DTid.xyz] = velocity_in[DTid.xyz];
-    quantity[DTid.xyz] = max(quantity_in[DTid.xyz] - min16float2(0.0015f, 0.0007f), 0.0f);
+    quantity[DTid.xyz] = quantity_in[DTid.xyz];
 
-	const min16float r = min16float(width) / 32;
+	const min16float r = min16float(width) / 16;
 	if (DTid.y > height - 51 && DTid.y <= height - 50) {
 		const min16float x = DTid.x - (min16float(width) / 2.0f);
 		const min16float z = DTid.z - (min16float(depth) / 2.0f);
@@ -31,5 +31,8 @@ void main(uint3 DTid : SV_DispatchThreadID)
 			velocity[DTid.xyz] += normalize(min16float3(dir.xyz)) * speed;
 			quantity[DTid.xyz] += min16float2(10.0f, 880.0f);
 		}
+	}
+	else {
+        quantity[DTid.xyz] = max(quantity_in[DTid.xyz] - min16float2(0.0015f, 0.0007f), 0.0f);
 	}
 }

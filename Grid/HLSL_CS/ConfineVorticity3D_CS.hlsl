@@ -29,7 +29,7 @@ void main( uint3 DTid : SV_DispatchThreadID )
 		
 		const min16float3 n = normalize(t);
 		const min16float3 w = vorticity[DTid.xyz];
-		const min16float3 f = 3.5f * cross(n, w);
+		const min16float3 f = 5.5f * cross(n, w);
 
         velocity[DTid.xyz] += f * dt;
     }
