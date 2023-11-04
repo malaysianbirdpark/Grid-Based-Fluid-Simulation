@@ -23,14 +23,14 @@ void main( uint3 DTid : SV_DispatchThreadID )
 	const uint3 front  = DTid.z + 1 < depth - 1  ? uint3(DTid.xy, DTid.z + 1) : DTid.xyz;
 	const uint3 behind = DTid.z - 1 > 0          ? uint3(DTid.xy, DTid.z - 1) : DTid.xyz;
 
-	const min16float Fz_y = (velocity[up].z - velocity[down].z) * 0.5f;
-	const min16float Fy_z = (velocity[front].y - velocity[behind].y) * 0.5f;
+	const min16float Fz_y = (velocity[up].z  - velocity[down].z);
+	const min16float Fy_z = (velocity[front].y - velocity[behind].y);
 
-	const min16float Fx_z = (velocity[front].x - velocity[behind].x) * 0.5f;
-	const min16float Fz_x = (velocity[right].z - velocity[left].z) * 0.5f;
+	const min16float Fx_z = (velocity[front].x - velocity[behind].x);
+	const min16float Fz_x = (velocity[right].z - velocity[left].z);
 
-	const min16float Fy_x = (velocity[right].y - velocity[left].y) * 0.5f;
-	const min16float Fx_y = (velocity[up].x - velocity[down].x) * 0.5f;
+	const min16float Fy_x = (velocity[right].y - velocity[left].y);
+	const min16float Fx_y = (velocity[up].x - velocity[down].x);
 
-	vorticity[DTid.xyz] = min16float3(Fz_y - Fy_z, Fx_z - Fz_x, Fy_x - Fx_y);
+    vorticity[DTid.xyz] = min16float3(Fz_y - Fy_z, Fx_z - Fz_x, Fy_x - Fx_y) * 0.5f;
 }

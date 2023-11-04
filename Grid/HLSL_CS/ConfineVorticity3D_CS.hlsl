@@ -15,19 +15,22 @@ void main( uint3 DTid : SV_DispatchThreadID )
     velocity.GetDimensions(width, height, depth);
 
 	if (DTid.x > 1 && DTid.y > 1 && DTid.z > 1 && DTid.x < width - 2 && DTid.y < height - 2 && DTid.z < depth - 2) {
-        min16float right  = length(vorticity[uint3(DTid.x + 1, DTid.y, DTid.z)]);
-        min16float left   = length(vorticity[uint3(DTid.x - 1, DTid.y, DTid.z)]);
-        min16float up     = length(vorticity[uint3(DTid.x, DTid.y + 1, DTid.z)]);
-        min16float down   = length(vorticity[uint3(DTid.x, DTid.y - 1, DTid.z)]);
-        min16float front  = length(vorticity[uint3(DTid.x, DTid.y, DTid.z + 1)]);
-        min16float behind = length(vorticity[uint3(DTid.x, DTid.y, DTid.z - 1)]);
+        const min16float right  = length(vorticity[uint3(DTid.x + 1, DTid.y, DTid.z)]);
+        const min16float left   = length(vorticity[uint3(DTid.x - 1, DTid.y, DTid.z)]);
+        const min16float up     = length(vorticity[uint3(DTid.x, DTid.y + 1, DTid.z)]);
+        const min16float down   = length(vorticity[uint3(DTid.x, DTid.y - 1, DTid.z)]);
+        const min16float front  = length(vorticity[uint3(DTid.x, DTid.y, DTid.z + 1)]);
+        const min16float behind = length(vorticity[uint3(DTid.x, DTid.y, DTid.z - 1)]);
 
-        const min16float3 t = min16float3(right - left, up - down, front - behind);
+        const min16float3 t = min16float3(right - left, up - down, front - behind) * 0.5f;
+
+        if (length(t) < 1e-4)
+            return;
 		
 		const min16float3 n = normalize(t);
-		const min16float3 v = velocity[DTid.xyz];
-		const min16float3 f = 1e-1 * cross(n, v);
+		const min16float3 w = vorticity[DTid.xyz];
+		const min16float3 f = 3.5f * cross(n, w);
 
-		velocity[DTid.xyz] += f * dt;
-	}
+        velocity[DTid.xyz] += f * dt;
+    }
 }

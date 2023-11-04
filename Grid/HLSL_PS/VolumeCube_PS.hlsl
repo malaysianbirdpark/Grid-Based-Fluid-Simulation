@@ -38,17 +38,17 @@ float4 main(PS_IN input) : SV_Target
     //const int iterations = (uvw_len / step_size) + 1;
 
     static const int iterations = 50;
-    static const float att = 0.01f;
+    static const float att = 0.1f;
 
     const float step_size = uvw_len / iterations;
-    float3 step_uvw = uvw_dir * step_size;
+    const float3 step_uvw = uvw_dir * step_size;
 
     [loop]
     for (int i = 0; i < iterations + 1; ++i) { 
         src = (volume_tex.Sample(sampler2, cur_uvw).r + volume_tex.Sample(sampler2, cur_uvw + (step_uvw * 0.5f)).r) * 0.5f;
  
         if (src > 1e-2) {
-			dest_color.rgb += (1.0f - dest_color.a) * (unorm float)(src) * float3(0.0f, 1.0f, 0.0f);
+			dest_color.rgb += (1.0f - dest_color.a) * (unorm float)(src) * float3(0.0f, 1.0f, 0.0f) * att;
 			dest_color.a   += (1.0f - dest_color.a) * (unorm float)(src) * att;
         }
 

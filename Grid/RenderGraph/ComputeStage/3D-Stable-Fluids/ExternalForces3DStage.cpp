@@ -36,12 +36,6 @@ ExternalForces3DStage::ExternalForces3DStage()
     pDevice->CreateUnorderedAccessView(_resource[1].Get(), nullptr, _uav[1].ReleaseAndGetAddressOf());
     pDevice->CreateShaderResourceView(_resource[1].Get(), nullptr, _srv[3].ReleaseAndGetAddressOf());
 
-    // intermediate velocity;
-	desc.Format = DXGI_FORMAT_R16G16B16A16_FLOAT;
-    pDevice->CreateTexture3D(&desc, nullptr, _resource[2].ReleaseAndGetAddressOf());
-    pDevice->CreateUnorderedAccessView(_resource[2].Get(), nullptr, _uav[2].ReleaseAndGetAddressOf());
-    pDevice->CreateShaderResourceView(_resource[2].Get(), nullptr, _srv[4].ReleaseAndGetAddressOf());
-
     _velocityInID = NodeManager::IssueIncomingAttrID();
     _incoming[_velocityInID] = -1;
     _attrNames[_velocityInID] = { "Velocity in" };
@@ -147,7 +141,7 @@ void ExternalForces3DStage::Run(ID3D11DeviceContext& context)
 
     // calculate and apply buoyancy
     context.CSSetShaderResources(0u, 2u, _srv[0].GetAddressOf());
-    context.CSSetUnorderedAccessViews(0u, 1u, _uav[2].GetAddressOf(), nullptr);
+    context.CSSetUnorderedAccessViews(0u, 1u, _uav[0].GetAddressOf(), nullptr);
     context.CSSetShader(_buoyancyCS.Get(), nullptr, 0u);
     context.Dispatch(
         static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.width) / _groupX)),
@@ -157,7 +151,7 @@ void ExternalForces3DStage::Run(ID3D11DeviceContext& context)
     SetBarrier(context);
 
     // calculate vorticity
-    context.CSSetShaderResources(0u, 1u, _srv[4].GetAddressOf());
+    context.CSSetShaderResources(0u, 1u, _srv[2].GetAddressOf());
     context.CSSetUnorderedAccessViews(0u, 1u, _uav[1].GetAddressOf(), nullptr);
     context.CSSetShader(_vorticityCS.Get(), nullptr, 0u);
     context.Dispatch(
