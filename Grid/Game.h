@@ -12,5 +12,7 @@ private: void      ProcessInput(float const dt);
 private: void      Update(float const dt);
 private: void      Render(float const dt);
 private:
-	RenderGraph _renderGraph;
+	RenderGraph _smoke;
+	RenderGraph _water;
+    std::unique_ptr<class DirLight> _dirLight{};
 };

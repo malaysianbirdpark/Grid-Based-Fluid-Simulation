@@ -3,11 +3,6 @@ Texture3D<min16float> div : register(t1);
 
 RWTexture3D<min16float> x_out : register(u0);
 
-cbuffer constants : register(b2) {
-	min16float alpha;
-	min16float r_beta;
-};
-
 SamplerState sampler1 : register(s1);
 
 [numthreads(8, 8, 8)]

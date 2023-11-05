@@ -12,9 +12,9 @@
 
 enum class ShaderResourceTypes {
     DiffuseMap,
+    NormalMap,
     MetallicMap,
     RoughnessMap,
-    NormalMap,
     EmissiveMap,
     OcclusionMap,
     ThicknessMap,

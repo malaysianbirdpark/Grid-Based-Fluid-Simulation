@@ -59,7 +59,7 @@
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>.;3rd_party;Assets;CSO;HLSL_CS;HLSL_PS;HLSL_VS;Platform;Renderer;RenderGraph;RenderObject;Utils;Assets\DragonAttenuation;Assets\Textures;Assets\DragonAttenuation\Textures;RenderGraph\ComputeStage;RenderGraph\ConstantBufferStage;RenderGraph\DrawStage;RenderGraph\PixelStage;RenderGraph\ResourceStage;RenderGraph\VertexStage;RenderGraph\ComputeStage\2D-Stable-Fluids;RenderGraph\ComputeStage\3D-Stable-Fluids;..\3rd_party;..\3rd_party\ImGui;..\3rd_party\ImGui\backends;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.;Assets;CSO;HLSL_CS;HLSL_PS;HLSL_VS;Platform;Renderer;RenderGraph;RenderObject;Utils;Assets\DragonAttenuation;Assets\Sponza;Assets\Textures;Assets\DragonAttenuation\Textures;Assets\Sponza\Textures;RenderGraph\ComputeStage;RenderGraph\ConstantBufferStage;RenderGraph\DrawStage;RenderGraph\ResourceStage;RenderGraph\ComputeStage\2D-Stable-Fluids;RenderGraph\ComputeStage\3D-Stable-Fluids;..\3rd_party;..\3rd_party\ImGui;..\3rd_party\ImGui\backends;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
@@ -80,7 +80,7 @@
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>.;3rd_party;Assets;CSO;HLSL_CS;HLSL_PS;HLSL_VS;Platform;Renderer;RenderGraph;RenderObject;Utils;Assets\DragonAttenuation;Assets\Textures;Assets\DragonAttenuation\Textures;RenderGraph\ComputeStage;RenderGraph\ConstantBufferStage;RenderGraph\DrawStage;RenderGraph\PixelStage;RenderGraph\ResourceStage;RenderGraph\VertexStage;RenderGraph\ComputeStage\2D-Stable-Fluids;RenderGraph\ComputeStage\3D-Stable-Fluids;..\3rd_party;..\3rd_party\ImGui;..\3rd_party\ImGui\backends;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.;Assets;CSO;HLSL_CS;HLSL_PS;HLSL_VS;Platform;Renderer;RenderGraph;RenderObject;Utils;Assets\DragonAttenuation;Assets\Sponza;Assets\Textures;Assets\DragonAttenuation\Textures;Assets\Sponza\Textures;RenderGraph\ComputeStage;RenderGraph\ConstantBufferStage;RenderGraph\DrawStage;RenderGraph\ResourceStage;RenderGraph\ComputeStage\2D-Stable-Fluids;RenderGraph\ComputeStage\3D-Stable-Fluids;..\3rd_party;..\3rd_party\ImGui;..\3rd_party\ImGui\backends;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -152,9 +152,9 @@
     <ClInclude Include="RenderObject\Triangle.h" />
     <ClInclude Include="RenderObject\VolumeCube.h" />
     <ClInclude Include="Renderer\Camera.h" />
+    <ClInclude Include="Renderer\DirLight.h" />
     <ClInclude Include="Renderer\ImGuiRenderer.h" />
     <ClInclude Include="Renderer\Renderer.h" />
-    <ClInclude Include="Texture3D.h" />
     <ClInclude Include="Utils\CircularQueue.h" />
     <ClInclude Include="Utils\Clk.h" />
     <ClInclude Include="pch.h" />
@@ -213,9 +213,9 @@
     <ClCompile Include="RenderObject\Triangle.cpp" />
     <ClCompile Include="RenderObject\VolumeCube.cpp" />
     <ClCompile Include="Renderer\Camera.cpp" />
+    <ClCompile Include="Renderer\DirLight.cpp" />
     <ClCompile Include="Renderer\ImGuiRenderer.cpp" />
     <ClCompile Include="Renderer\Renderer.cpp" />
-    <ClCompile Include="Texture3D.cpp" />
     <ClCompile Include="Utils\CircularQueue.cpp" />
     <ClCompile Include="Utils\Clk.cpp" />
     <ClCompile Include="pch.cpp">
@@ -356,11 +356,11 @@
       <EntryPointName>main</EntryPointName>
       <ObjectFileOutput>../Grid/CSO/Sourcing2D_CS.cso</ObjectFileOutput>
     </FxCompile>
-    <FxCompile Include="HLSL_CS\Sourcing3D_CS.hlsl">
+    <FxCompile Include="HLSL_CS\SourcingSmoke3D_CS.hlsl">
       <ShaderType>Compute</ShaderType>
       <ShaderModel>5.0</ShaderModel>
       <EntryPointName>main</EntryPointName>
-      <ObjectFileOutput>../Grid/CSO/Sourcing3D_CS.cso</ObjectFileOutput>
+      <ObjectFileOutput>../Grid/CSO/SourcingSmoke3D_CS.cso</ObjectFileOutput>
     </FxCompile>
     <FxCompile Include="HLSL_CS\Vector4DUnorm_CS.hlsl">
       <ShaderType>Compute</ShaderType>
@@ -379,6 +379,12 @@
       <ShaderModel>5.0</ShaderModel>
       <EntryPointName>main</EntryPointName>
       <ObjectFileOutput>../Grid/CSO/DrawUV_PS.cso</ObjectFileOutput>
+    </FxCompile>
+    <FxCompile Include="HLSL_PS\Phong_PS.hlsl">
+      <ShaderType>Pixel</ShaderType>
+      <ShaderModel>5.0</ShaderModel>
+      <EntryPointName>main</EntryPointName>
+      <ObjectFileOutput>../Grid/CSO/Phong_PS.cso</ObjectFileOutput>
     </FxCompile>
     <FxCompile Include="HLSL_PS\SolidTex_PS.hlsl">
       <ShaderType>Pixel</ShaderType>
@@ -403,6 +409,12 @@
       <ShaderModel>5.0</ShaderModel>
       <EntryPointName>main</EntryPointName>
       <ObjectFileOutput>../Grid/CSO/spherePS.cso</ObjectFileOutput>
+    </FxCompile>
+    <FxCompile Include="HLSL_VS\Phong_VS.hlsl">
+      <ShaderType>Vertex</ShaderType>
+      <ShaderModel>5.0</ShaderModel>
+      <EntryPointName>main</EntryPointName>
+      <ObjectFileOutput>../Grid/CSO/Phong_VS.cso</ObjectFileOutput>
     </FxCompile>
     <FxCompile Include="HLSL_VS\SolidTex_VS.hlsl">
       <ShaderType>Vertex</ShaderType>

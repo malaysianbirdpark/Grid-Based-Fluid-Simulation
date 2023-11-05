@@ -30,20 +30,21 @@ float4 main(PS_IN input) : SV_Target
     const float3 front_uvw = front_texcoord.Load(input.sv_pos);
     const float3 back_uvw  = back_texcoord.Load(input.sv_pos);
     const float  uvw_len   = length(back_uvw - front_uvw);
-    if (uvw_len < 0.01)
-        return float4(0.0f, 0.0f, 0.0f, 0.0f);
     const float3 uvw_dir   = (back_uvw - front_uvw) / uvw_len;
     
     float3 cur_uvw = front_uvw;
 
     static const int iterations = 50;
-    static const float3 albedo = float3(10.0f, 7.0f, 4.0f);
+    static const float3 albedo = float3(0.0f, 10.0f, 0.0f);
 
     float4 dest_color = float4(0.0f, 0.0f, 0.0f, 1.0f);
     float src = 0.0f;
 
     const float step_size = uvw_len / iterations;
     const float3 step_uvw = uvw_dir * step_size;
+
+    if (uvw_len < step_size)
+        return float4(0.0f, 0.0f, 0.0f, 0.0f);
 
     [loop]
     for (int i = 0; i < iterations + 1; ++i) { 
@@ -67,9 +68,10 @@ float4 main(PS_IN input) : SV_Target
 
         src = lerp(int_val_0, int_val_1, 0.5f);
  
+        static const float absorption_coeff = 1.0f;
         if (src > 1e-3) {
             const float prev_visibility = dest_color.a;
-            dest_color.a   *= exp(-(src * 0.01f) * step_size);
+            dest_color.a   *= exp(-(src * absorption_coeff) * step_size);
             const float absorption = prev_visibility - dest_color.a;
             dest_color.rgb += absorption * albedo * src;
         }
@@ -83,5 +85,6 @@ float4 main(PS_IN input) : SV_Target
             break;
     }
 
+    dest_color.a = 1.0f - dest_color.a;
     return dest_color;
 }

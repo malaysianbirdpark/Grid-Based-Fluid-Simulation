@@ -314,6 +314,13 @@ AssimpMaterial SceneGraph::ParseMaterial(ID3D11DeviceContext& context, aiMateria
         result.AddOrRelplaceTexture(context, ShaderResourceTypes::DiffuseMap, final_path.c_str());
     }
 
+    // Normal Map
+    if (aiGetMaterialTexture(ai_material, aiTextureType_NORMALS, 0u, &ai_path, &mapping, &uv_index, &blend, &texture_op, texture_map_mode, &texture_flags) == AI_SUCCESS) {
+        auto const final_path{ process_ai_path(base_path, ai_path.C_Str()) };
+
+        result.AddOrRelplaceTexture(context, ShaderResourceTypes::NormalMap, final_path.c_str());
+    }
+
     // Metallic
     if (aiGetMaterialTexture(ai_material, aiTextureType_METALNESS, 0u, &ai_path, &mapping, &uv_index, &blend, &texture_op, texture_map_mode, &texture_flags) == AI_SUCCESS) {
         auto const final_path{ process_ai_path(base_path, ai_path.C_Str()) };
@@ -326,13 +333,6 @@ AssimpMaterial SceneGraph::ParseMaterial(ID3D11DeviceContext& context, aiMateria
         auto const final_path{ process_ai_path(base_path, ai_path.C_Str()) };
 
         result.AddOrRelplaceTexture(context, ShaderResourceTypes::RoughnessMap, final_path.c_str());
-    }
-
-    // Normal Map
-    if (aiGetMaterialTexture(ai_material, aiTextureType_NORMALS, 0u, &ai_path, &mapping, &uv_index, &blend, &texture_op, texture_map_mode, &texture_flags) == AI_SUCCESS) {
-        auto const final_path{ process_ai_path(base_path, ai_path.C_Str()) };
-
-        result.AddOrRelplaceTexture(context, ShaderResourceTypes::NormalMap, final_path.c_str());
     }
 
     // Emissive Map

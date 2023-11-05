@@ -11,7 +11,7 @@
 DrawSceneStage::DrawSceneStage(ID3D11DeviceContext& context, char const* name)
 	: DrawStage{name}
 {
-    _scene.Init(context, "./Assets/DragonAttenuation/DragonAttenuation.gltf", "Dragon");
+    _scene.Init(context, "./Assets/Sponza/Sponza.gltf", "Sponza");
     _transform = std::make_unique<Transform>(context, DirectX::XMMatrixIdentity());
 
     _stack.resize(_scene._tree.size());
@@ -26,9 +26,9 @@ DrawSceneStage::DrawSceneStage(ID3D11DeviceContext& context, char const* name)
     };
 
     _pso.push_back(std::move(std::make_unique<PipelineStateObject>()));
-	_pso.back()->SetVertexShader("./CSO/SolidTex_VS.cso");
+	_pso.back()->SetVertexShader("./CSO/Phong_VS.cso");
 	_pso.back()->SetInputLayout(input_elem_desc);
-	_pso.back()->SetPixelShader("./CSO/SolidTex_PS.cso");
+	_pso.back()->SetPixelShader("./CSO/Phong_PS.cso");
 
  //   _pso.push_back(std::move(std::make_unique<PipelineStateObject>()));
 	//_pso.back()->SetVertexShader("./CSO/SolidTex_VS.cso");
@@ -75,8 +75,8 @@ void DrawSceneStage::Run(ID3D11DeviceContext& context)
 
             auto& mesh{ _scene._mesh[_scene._nodeId_to_meshId[node]] };
             mesh.Bind(context);
-    //        if (_scene._nodeId_to_materialId.contains(node)) 
-				//_scene._material[_scene._nodeId_to_materialId[node]].Bind(context);
+            if (_scene._nodeId_to_materialId.contains(node)) 
+				_scene._material[_scene._nodeId_to_materialId[node]].Bind(context);
 			context.DrawIndexedInstanced(mesh.GetIndexCount(), 1u, 0u, 0u, 0u);
         }
 

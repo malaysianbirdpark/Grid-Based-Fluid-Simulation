@@ -1,5 +1,5 @@
 struct PS_IN {
-    float4 view_pos : POSITION;
+    float4 view_pos  : POSITION;
     float3 normal    : NORMAL;
     float3 tangent   : TANGENT;
     float3 binormal  : BINORMAL;
@@ -19,7 +19,8 @@ PS_OUT main(PS_IN input)
 {
     PS_OUT output;
 
-    output.color = float4(albedo.Sample(sampler2, input.uv).rgb, 1.0f);
+    const float alpha = 1.0f - albedo.Sample(sampler2, input.uv).r;
+    output.color = float4(1.0f, 1.0f, 1.0f, alpha);
 
     return output;
 }

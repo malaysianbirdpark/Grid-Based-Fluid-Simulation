@@ -5,8 +5,10 @@
 #include <string>
 #include <d3dcompiler.h>
 
+#include "Camera.h"
 #include "ImGuiRenderer.h"
 
+#include "DirLight.h"
 
 void Renderer::Init(int width, int height, HWND native_wnd)
 {
@@ -104,6 +106,8 @@ void Renderer::Init(int width, int height, HWND native_wnd)
 void Renderer::BeginFrame()
 {
 	static float constexpr clear_color[4]{ 0.0f, 0.0f, 0.0f, 1.0f };
+
+    Camera::Run(*_defaultContext.Get());
 
     _defaultContext->RSSetViewports(1u, &_viewport);
     _defaultContext->RSSetState(_rasterizerState.Get());

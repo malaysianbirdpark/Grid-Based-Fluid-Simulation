@@ -38,6 +38,7 @@
 
 #include "DrawSceneStage.h"
 #include "PipelineStateObject.h"
+#include "DirLight.h"
 
 Game::Game() 
 {
@@ -61,49 +62,51 @@ Game::Game()
 
 	Clk::Init();
 
-	_renderGraph.AddStage(std::move(std::make_shared<DrawSceneStage>(Renderer::Context(), "Scene")));
+    _dirLight = std::make_unique<DirLight>();
 
-	_renderGraph.AddStage(std::move(std::make_shared<Sourcing3DStage>()));
+	_smoke.AddStage(std::move(std::make_shared<DrawSceneStage>(Renderer::Context(), "Scene")));
 
-	_renderGraph.AddStage(std::move(std::make_shared<MCAdvection3DStage>()));
-	//_renderGraph.AddStage(std::move(std::make_shared<Advection3DStage>()));
+	_smoke.AddStage(std::move(std::make_shared<Sourcing3DStage>()));
 
-	_renderGraph.AddStage(std::move(std::make_shared<ExternalForces3DStage>()));
+	_smoke.AddStage(std::move(std::make_shared<MCAdvection3DStage>()));
+	//_smoke.AddStage(std::move(std::make_shared<Advection3DStage>()));
 
-	_renderGraph.AddStage(std::move(std::make_shared<Divergence3DStage>()));
-	_renderGraph.AddStage(std::move(std::make_shared<Poisson3D1DStage>()));
+	_smoke.AddStage(std::move(std::make_shared<ExternalForces3DStage>()));
 
-	_renderGraph.AddStage(std::move(std::make_shared<PressureProjection3DStage>()));
+	_smoke.AddStage(std::move(std::make_shared<Divergence3DStage>()));
+	_smoke.AddStage(std::move(std::make_shared<Poisson3D1DStage>()));
 
-	//_renderGraph.AddStage(std::move(std::make_shared<CBViscosity>(Renderer::Context())));
-	//_renderGraph.AddStage(std::move(std::make_shared<Diffusion3DStage>()));
+	_smoke.AddStage(std::move(std::make_shared<PressureProjection3DStage>()));
 
-	_renderGraph.AddStage(std::move(std::make_shared<DrawVolumeStage>(Renderer::Context())));
-	_renderGraph.AddStage(std::move(std::make_shared<CopyStage>()));
-	_renderGraph.AddStage(std::move(std::make_shared<ViewportStage>()));
+	//_smoke.AddStage(std::move(std::make_shared<CBViscosity>(Renderer::Context())));
+	//_smoke.AddStage(std::move(std::make_shared<Diffusion3DStage>()));
 
-	_renderGraph.Link(0, 256, 7, 11);
+	_smoke.AddStage(std::move(std::make_shared<DrawVolumeStage>(Renderer::Context())));
+	_smoke.AddStage(std::move(std::make_shared<CopyStage>()));
+	_smoke.AddStage(std::move(std::make_shared<ViewportStage>()));
 
-	_renderGraph.Link(1, 257, 2, 3);
-	_renderGraph.Link(1, 258, 2, 4);
+	_smoke.Link(0, 256, 7, 11);
 
-	_renderGraph.Link(2, 259, 3, 5);
-	_renderGraph.Link(2, 260, 3, 6);
-	_renderGraph.Link(2, 260, 7, 12);
-	_renderGraph.Link(2, 260, 1, 2);
+	_smoke.Link(1, 257, 2, 3);
+	_smoke.Link(1, 258, 2, 4);
 
-	_renderGraph.Link(3, 261, 4, 7);
-	_renderGraph.Link(3, 261, 6, 10);
+	_smoke.Link(2, 259, 3, 5);
+	_smoke.Link(2, 260, 3, 6);
+	_smoke.Link(2, 260, 7, 12);
+	_smoke.Link(2, 260, 1, 2);
 
-	_renderGraph.Link(4, 262, 5, 8);
+	_smoke.Link(3, 261, 4, 7);
+	_smoke.Link(3, 261, 6, 10);
 
-	_renderGraph.Link(5, 263, 6, 9);
+	_smoke.Link(4, 262, 5, 8);
 
-	_renderGraph.Link(6, 264, 1, 1);
+	_smoke.Link(5, 263, 6, 9);
 
-	_renderGraph.Link(7, 265, 8, 13);
+	_smoke.Link(6, 264, 1, 1);
 
-	_renderGraph.Link(8, 266, 9, 14);
+	_smoke.Link(7, 265, 8, 13);
+
+	_smoke.Link(8, 266, 9, 14);
 
 	ImNodes::LoadCurrentEditorStateFromIniFile("imnodes_state.ini");
 }
@@ -153,13 +156,14 @@ void Game::ProcessInput(float const dt)
 
 void Game::Update(float const dt)
 {
-	_renderGraph.Update(Renderer::Context());
+	_smoke.Update(Renderer::Context());
 }
 
 void Game::Render(float const dt)
 {
 	Renderer::BeginFrame();
-	_renderGraph.Run(Renderer::Context());
+    _dirLight->Run(Renderer::Context());
+	_smoke.Run(Renderer::Context());
 	Update(dt);
 	Renderer::EndFrame();
 }

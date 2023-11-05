@@ -199,13 +199,15 @@
     <ClInclude Include="Renderer\Camera.h">
       <Filter>Renderer</Filter>
     </ClInclude>
+    <ClInclude Include="Renderer\DirLight.h">
+      <Filter>Renderer</Filter>
+    </ClInclude>
     <ClInclude Include="Renderer\ImGuiRenderer.h">
       <Filter>Renderer</Filter>
     </ClInclude>
     <ClInclude Include="Renderer\Renderer.h">
       <Filter>Renderer</Filter>
     </ClInclude>
-    <ClInclude Include="Texture3D.h" />
     <ClInclude Include="Utils\CircularQueue.h">
       <Filter>Utils</Filter>
     </ClInclude>
@@ -370,13 +372,15 @@
     <ClCompile Include="Renderer\Camera.cpp">
       <Filter>Renderer</Filter>
     </ClCompile>
+    <ClCompile Include="Renderer\DirLight.cpp">
+      <Filter>Renderer</Filter>
+    </ClCompile>
     <ClCompile Include="Renderer\ImGuiRenderer.cpp">
       <Filter>Renderer</Filter>
     </ClCompile>
     <ClCompile Include="Renderer\Renderer.cpp">
       <Filter>Renderer</Filter>
     </ClCompile>
-    <ClCompile Include="Texture3D.cpp" />
     <ClCompile Include="Utils\CircularQueue.cpp">
       <Filter>Utils</Filter>
     </ClCompile>
@@ -453,7 +457,7 @@
     <FxCompile Include="HLSL_CS\Sourcing2D_CS.hlsl">
       <Filter>HLSL_CS</Filter>
     </FxCompile>
-    <FxCompile Include="HLSL_CS\Sourcing3D_CS.hlsl">
+    <FxCompile Include="HLSL_CS\SourcingSmoke3D_CS.hlsl">
       <Filter>HLSL_CS</Filter>
     </FxCompile>
     <FxCompile Include="HLSL_CS\Vector4DUnorm_CS.hlsl">
@@ -463,6 +467,9 @@
       <Filter>HLSL_CS</Filter>
     </FxCompile>
     <FxCompile Include="HLSL_PS\DrawUV_PS.hlsl">
+      <Filter>HLSL_PS</Filter>
+    </FxCompile>
+    <FxCompile Include="HLSL_PS\Phong_PS.hlsl">
       <Filter>HLSL_PS</Filter>
     </FxCompile>
     <FxCompile Include="HLSL_PS\SolidTex_PS.hlsl">
@@ -476,6 +483,9 @@
     </FxCompile>
     <FxCompile Include="HLSL_PS\spherePS.hlsl">
       <Filter>HLSL_PS</Filter>
+    </FxCompile>
+    <FxCompile Include="HLSL_VS\Phong_VS.hlsl">
+      <Filter>HLSL_VS</Filter>
     </FxCompile>
     <FxCompile Include="HLSL_VS\SolidTex_VS.hlsl">
       <Filter>HLSL_VS</Filter>
