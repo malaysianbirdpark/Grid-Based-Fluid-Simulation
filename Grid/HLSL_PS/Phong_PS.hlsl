@@ -21,11 +21,11 @@ cbuffer Camera : register(b0)
     float3 cam_pos;
 }
 
-cbuffer DirLight : register(b1)
+cbuffer PointLight : register(b2)
 {
-    float3 dl_dir;
-    float3 dl_color;
-    float  dl_intensity;
+    float3 pl_pos;
+    float3 pl_color;
+    float  pl_reciprocal_range;
 }
 
 float4 PhongAmbient(float3 normal)
@@ -65,18 +65,24 @@ PS_OUT main(PS_IN input)
     const float3 normal = normalize(mul(sampled_normal, tbn));
 
     const float3 to_camera = normalize(cam_pos.xyz - input.world_pos);
-    const float3 to_light = normalize(-dl_dir);
+    const float3 to_light = pl_pos - input.world_pos;
+    const float dist_to_light = length(to_light);
+    const float3 to_light_norm = to_light / dist_to_light;
 
     // ambient
     output.color = PhongAmbient(normal) * diffuse_color;
 
+    // attenuation
+    const float dist_to_light_norm = 1.0f - saturate(dist_to_light * pl_reciprocal_range);
+    const float att = dist_to_light_norm * dist_to_light_norm;
+
     // diffuse
-    output.color += PhongDiffuse(to_light, normal) * float4(dl_color, 1.0f) * diffuse_color * dl_intensity;
+    output.color += PhongDiffuse(to_light_norm, normal) * diffuse_color * float4(pl_color, 1.0f) * att;
 
     // specular
     static const float shininess = 100.0f;
     static const float4 specular_color = float4(1.0f, 1.0f, 1.0f, 1.0f);
-    output.color += PhongSpec(to_camera, normal, to_light, shininess) * float4(dl_color, 1.0f) * specular_color;
+    output.color += PhongSpec(to_camera, normal, to_light_norm, shininess) * specular_color * att;
 
     output.color = clamp(output.color, 0.0f, 0.995f);
 

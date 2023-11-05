@@ -215,6 +215,7 @@
       <Filter>Utils</Filter>
     </ClInclude>
     <ClInclude Include="pch.h" />
+    <ClInclude Include="Renderer\PointLight.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EntryPoint.cpp" />
@@ -389,6 +390,7 @@
     </ClCompile>
     <ClCompile Include="pch.cpp" />
     <ClCompile Include="temp.cpp" />
+    <ClCompile Include="Renderer\PointLight.cpp" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="HLSL_CS\3DTextureTest_CS.hlsl">

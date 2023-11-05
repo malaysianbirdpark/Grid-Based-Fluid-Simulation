@@ -14,5 +14,6 @@ private: void      Render(float const dt);
 private:
 	RenderGraph _smoke;
 	RenderGraph _water;
-    std::unique_ptr<class DirLight> _dirLight{};
+    std::unique_ptr<class DirLight>   _dirLight{};
+    std::unique_ptr<class PointLight> _pointLight{};
 };

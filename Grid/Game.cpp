@@ -39,6 +39,7 @@
 #include "DrawSceneStage.h"
 #include "PipelineStateObject.h"
 #include "DirLight.h"
+#include "PointLight.h"
 
 Game::Game() 
 {
@@ -63,6 +64,7 @@ Game::Game()
 	Clk::Init();
 
     _dirLight = std::make_unique<DirLight>();
+    _pointLight = std::make_unique<PointLight>();
 
 	_smoke.AddStage(std::move(std::make_shared<DrawSceneStage>(Renderer::Context(), "Scene")));
 
@@ -163,6 +165,7 @@ void Game::Render(float const dt)
 {
 	Renderer::BeginFrame();
     _dirLight->Run(Renderer::Context());
+    _pointLight->Run(Renderer::Context());
 	_smoke.Run(Renderer::Context());
 	Update(dt);
 	Renderer::EndFrame();

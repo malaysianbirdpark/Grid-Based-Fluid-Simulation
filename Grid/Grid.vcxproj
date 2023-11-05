@@ -103,6 +103,7 @@
     <ClInclude Include="Game.h" />
     <ClInclude Include="Platform\Input.h" />
     <ClInclude Include="Platform\Win32.h" />
+    <ClInclude Include="Renderer\PointLight.h" />
     <ClInclude Include="RenderGraph\ComputeStage\2D-Stable-Fluids\Advection2DStage.h" />
     <ClInclude Include="RenderGraph\ComputeStage\2D-Stable-Fluids\Divergence2DStage.h" />
     <ClInclude Include="RenderGraph\ComputeStage\2D-Stable-Fluids\GradientSubtract2DStage.h" />
@@ -164,6 +165,7 @@
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Platform\Input.cpp" />
     <ClCompile Include="Platform\Win32.cpp" />
+    <ClCompile Include="Renderer\PointLight.cpp" />
     <ClCompile Include="RenderGraph\ComputeStage\2D-Stable-Fluids\Advection2DStage.cpp" />
     <ClCompile Include="RenderGraph\ComputeStage\2D-Stable-Fluids\Divergence2DStage.cpp" />
     <ClCompile Include="RenderGraph\ComputeStage\2D-Stable-Fluids\GradientSubtract2DStage.cpp" />
