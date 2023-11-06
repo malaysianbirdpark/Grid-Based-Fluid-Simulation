@@ -24,6 +24,10 @@ cbuffer mvp : register(b0)
     matrix mvp;
 };
 
+cbuffer mip : register(b1) {
+    matrix mip;
+}
+
 VS_OUT main(VS_IN input)
 {
 	VS_OUT output;
@@ -33,7 +37,8 @@ VS_OUT main(VS_IN input)
     output.tangent = normalize(mul(input.tangent, (float3x3)m).xyz);
     output.binormal = normalize(mul(input.binormal, (float3x3)m).xyz);
     output.uv = input.uv;
-    output.sv_pos = mul(float4(input.pos, 1.0f), mvp);
+    //output.sv_pos = mul(float4(input.pos, 1.0f), mvp);
+    output.sv_pos    = mul(mul(float4(input.pos, 1.0f), m), mip);
 
     return output;
 }

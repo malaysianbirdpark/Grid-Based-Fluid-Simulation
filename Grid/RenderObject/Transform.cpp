@@ -106,7 +106,19 @@ void InverseTransform::Update(ID3D11DeviceContext& context)
     using namespace DirectX;
     auto const model{ XMLoadFloat4x4(&_model) };
     auto const proj{ XMLoadFloat4x4(&_proj) };
-    XMStoreFloat4x4(&_transform._mip, XMMatrixTranspose(XMMatrixMultiply(XMMatrixInverse(nullptr, model), proj)));
+    static auto view {DirectX::XMMatrixLookToLH({0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 1.0f}, {0.0f, 1.0f, 0.0f})};
+    XMStoreFloat4x4(
+        &_transform._mip, 
+        XMMatrixTranspose(
+            XMMatrixMultiply(
+                XMMatrixInverse(nullptr, model), 
+                XMMatrixMultiply(
+                    view,
+                    proj
+                )
+            )
+        )
+    );
 
     D3D11_MAPPED_SUBRESOURCE msr{};
     context.Map(

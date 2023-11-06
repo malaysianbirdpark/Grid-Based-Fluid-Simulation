@@ -27,7 +27,7 @@ struct SceneTransformParameters {
     float roll{};
     float pitch{};
     float yaw{};
-    float scale{ 5.0f };
+    float scale{5.0f};
 };
 
 class AssimpMaterial {

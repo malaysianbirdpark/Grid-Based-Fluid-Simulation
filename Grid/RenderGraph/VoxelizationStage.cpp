@@ -12,7 +12,8 @@ VoxelizationStage::VoxelizationStage(ID3D11DeviceContext& context)
     {
 		{
 			D3D11_DEPTH_STENCIL_DESC desc{ CD3D11_DEPTH_STENCIL_DESC{CD3D11_DEFAULT{}} };
-            desc.DepthEnable = FALSE;
+
+            desc.DepthEnable = TRUE;
             desc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ZERO;
             desc.DepthFunc = D3D11_COMPARISON_ALWAYS;
 
@@ -20,11 +21,15 @@ VoxelizationStage::VoxelizationStage(ID3D11DeviceContext& context)
             desc.StencilReadMask = D3D11_DEFAULT_STENCIL_READ_MASK;
             desc.StencilWriteMask = D3D11_DEFAULT_STENCIL_WRITE_MASK;
 
-            desc.FrontFace.StencilFunc = D3D11_COMPARISON_ALWAYS;
-            desc.BackFace.StencilFunc = D3D11_COMPARISON_ALWAYS;
-
+            desc.FrontFace.StencilFailOp = D3D11_STENCIL_OP_INCR;
+            desc.FrontFace.StencilDepthFailOp = D3D11_STENCIL_OP_INCR;
             desc.FrontFace.StencilPassOp = D3D11_STENCIL_OP_INCR;
+            desc.FrontFace.StencilFunc = D3D11_COMPARISON_ALWAYS;
+
+            desc.BackFace.StencilFailOp = D3D11_STENCIL_OP_DECR;
+            desc.BackFace.StencilDepthFailOp = D3D11_STENCIL_OP_DECR;
             desc.BackFace.StencilPassOp = D3D11_STENCIL_OP_DECR;
+            desc.BackFace.StencilFunc = D3D11_COMPARISON_ALWAYS;
 
 			pDevice->CreateDepthStencilState(&desc, _voxelDS.ReleaseAndGetAddressOf());
 		}
@@ -94,9 +99,9 @@ VoxelizationStage::VoxelizationStage(ID3D11DeviceContext& context)
 		D3D11_RASTERIZER_DESC rd{};
 
         rd.FillMode = D3D11_FILL_MODE::D3D11_FILL_SOLID;
-        rd.CullMode = D3D11_CULL_MODE::D3D11_CULL_BACK;
+        rd.CullMode = D3D11_CULL_MODE::D3D11_CULL_NONE;
         rd.FrontCounterClockwise = false;
-        rd.DepthClipEnable = false;
+        rd.DepthClipEnable = true;
         rd.MultisampleEnable = false;
 
         pDevice->CreateRasterizerState(&rd, _rs.ReleaseAndGetAddressOf());
@@ -111,25 +116,24 @@ void VoxelizationStage::Run(ID3D11DeviceContext& context)
 	_pso->Bind(context);
 
 	context.RSSetState(_rs.Get());
-    context.OMSetDepthStencilState(_voxelDS.Get(), 0u);
+    context.OMSetDepthStencilState(_voxelDS.Get(), 1u);
 
 	_inverseTransform->SetModel(DirectX::XMMatrixIdentity());
 
 	for (auto depth{ 0 }; depth != gSimulationInfo.depth; ++depth) {
 		_inverseTransform->SetProj(
-			DirectX::XMMatrixOrthographicLH(
-				1.0f,
-				1.0f,
+            DirectX::XMMatrixOrthographicOffCenterLH(
+                -0.5f, 0.5f, -0.5f, 0.5f,
 				static_cast<float>(depth) / gSimulationInfo.depth,
-				20000.0f
-			)
+                20000.0f
+            )
 		);
 		_inverseTransform->Update(context);
 		_inverseTransform->Bind(context);
 
 		context.OMSetRenderTargets(1u, _nullRTV.GetAddressOf(), _voxelDSV[depth].Get());
 		context.ClearRenderTargetView(_nullRTV.Get(), clear_color);
-		context.ClearDepthStencilView(_voxelDSV[depth].Get(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0.0f);
+		context.ClearDepthStencilView(_voxelDSV[depth].Get(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0u);
 
 		// draw target object
 		_targetScene->RawDraw(context);
