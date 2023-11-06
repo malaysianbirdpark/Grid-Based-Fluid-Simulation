@@ -7,7 +7,7 @@ struct VS_IN {
 };
 
 struct VS_OUT {
-    float4 world_pos  : POSITION;
+    float4 world_pos : POSITION;
     float3 normal    : NORMAL;
     float3 tangent   : TANGENT;
     float3 binormal  : BINORMAL;
@@ -20,6 +20,7 @@ cbuffer mvp : register(b0)
     matrix m;
     matrix mit;
     matrix mv;
+    matrix mp;
     matrix mvp;
 };
 

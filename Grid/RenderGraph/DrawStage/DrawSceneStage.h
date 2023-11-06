@@ -4,13 +4,11 @@
 #include "SceneGraph.h"
 
 class DrawSceneStage final : public DrawStage {
-// context -> temporary
-public: explicit DrawSceneStage(ID3D11DeviceContext& context, char const* name);
-public: virtual ~DrawSceneStage() override = default;
-public: virtual void Run(ID3D11DeviceContext& context) override;
-public: virtual void Update(ID3D11DeviceContext& context) override;
-private: virtual void InitRS() override;
-private: virtual void InitDS() override;
+public: explicit  DrawSceneStage(ID3D11DeviceContext& context, char const* name);
+public: virtual  ~DrawSceneStage() override = default;
+public: virtual  void Run(ID3D11DeviceContext& context) override;
+public: virtual  void Update(ID3D11DeviceContext& context) override;
+public: void     RawDraw(ID3D11DeviceContext& context);
 private: virtual void InitBS() override;
 private:
 	SceneGraph                        _scene{};

@@ -54,11 +54,18 @@ void Renderer::Init(int width, int height, HWND native_wnd)
     auto& context{ *_immContext.Get() };
     auto& swap_chain{ *_swapChain.Get() };
 
-    DirectX::XMStoreFloat4x4(&_proj, DirectX::XMMatrixPerspectiveFovLH(
-        70.0f,
-        static_cast<float>(gViewportInfo.width) / gViewportInfo.height,
-        0.01f,
-        200.0f
+    //DirectX::XMStoreFloat4x4(&_proj, DirectX::XMMatrixPerspectiveFovLH(
+    //    70.0f,
+    //    static_cast<float>(gViewportInfo.width) / gViewportInfo.height,
+    //    0.01f,
+    //    200.0f
+    //));
+
+    DirectX::XMStoreFloat4x4(&_proj, DirectX::XMMatrixOrthographicLH(
+        1.0f,
+        1.0f,
+        0.0f,
+		20000.0f
     ));
 
     swap_chain.GetBuffer(0u, IID_PPV_ARGS(_backBuffers.ReleaseAndGetAddressOf()));

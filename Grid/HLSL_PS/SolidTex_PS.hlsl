@@ -19,8 +19,7 @@ PS_OUT main(PS_IN input)
 {
     PS_OUT output;
 
-    const float alpha = 1.0f - albedo.Sample(sampler2, input.uv).r;
-    output.color = float4(1.0f, 1.0f, 1.0f, alpha);
+    output.color = albedo.Sample(sampler2, input.uv);
 
     return output;
 }

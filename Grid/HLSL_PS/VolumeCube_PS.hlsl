@@ -68,7 +68,7 @@ float4 main(PS_IN input) : SV_Target
 
         src = lerp(int_val_0, int_val_1, 0.5f);
  
-        static const float absorption_coeff = 1.0f;
+        static const float absorption_coeff = 0.2f;
         if (src > 1e-3) {
             const float prev_visibility = dest_color.a;
             dest_color.a   *= exp(-(src * absorption_coeff) * step_size);

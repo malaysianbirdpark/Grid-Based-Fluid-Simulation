@@ -169,6 +169,9 @@
     <ClInclude Include="RenderGraph\Stage.h">
       <Filter>RenderGraph</Filter>
     </ClInclude>
+    <ClInclude Include="RenderGraph\VoxelizationStage.h">
+      <Filter>RenderGraph</Filter>
+    </ClInclude>
     <ClInclude Include="RenderObject\Material.h">
       <Filter>RenderObject</Filter>
     </ClInclude>
@@ -205,6 +208,9 @@
     <ClInclude Include="Renderer\ImGuiRenderer.h">
       <Filter>Renderer</Filter>
     </ClInclude>
+    <ClInclude Include="Renderer\PointLight.h">
+      <Filter>Renderer</Filter>
+    </ClInclude>
     <ClInclude Include="Renderer\Renderer.h">
       <Filter>Renderer</Filter>
     </ClInclude>
@@ -215,7 +221,6 @@
       <Filter>Utils</Filter>
     </ClInclude>
     <ClInclude Include="pch.h" />
-    <ClInclude Include="Renderer\PointLight.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EntryPoint.cpp" />
@@ -343,6 +348,9 @@
     <ClCompile Include="RenderGraph\Stage.cpp">
       <Filter>RenderGraph</Filter>
     </ClCompile>
+    <ClCompile Include="RenderGraph\VoxelizationStage.cpp">
+      <Filter>RenderGraph</Filter>
+    </ClCompile>
     <ClCompile Include="RenderObject\Material.cpp">
       <Filter>RenderObject</Filter>
     </ClCompile>
@@ -379,6 +387,9 @@
     <ClCompile Include="Renderer\ImGuiRenderer.cpp">
       <Filter>Renderer</Filter>
     </ClCompile>
+    <ClCompile Include="Renderer\PointLight.cpp">
+      <Filter>Renderer</Filter>
+    </ClCompile>
     <ClCompile Include="Renderer\Renderer.cpp">
       <Filter>Renderer</Filter>
     </ClCompile>
@@ -390,7 +401,6 @@
     </ClCompile>
     <ClCompile Include="pch.cpp" />
     <ClCompile Include="temp.cpp" />
-    <ClCompile Include="Renderer\PointLight.cpp" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="HLSL_CS\3DTextureTest_CS.hlsl">
@@ -483,6 +493,9 @@
     <FxCompile Include="HLSL_PS\VolumeModel_PS.hlsl">
       <Filter>HLSL_PS</Filter>
     </FxCompile>
+    <FxCompile Include="HLSL_PS\Voxelization_PS.hlsl">
+      <Filter>HLSL_PS</Filter>
+    </FxCompile>
     <FxCompile Include="HLSL_PS\spherePS.hlsl">
       <Filter>HLSL_PS</Filter>
     </FxCompile>
@@ -493,6 +506,9 @@
       <Filter>HLSL_VS</Filter>
     </FxCompile>
     <FxCompile Include="HLSL_VS\VolumeCube_VS.hlsl">
+      <Filter>HLSL_VS</Filter>
+    </FxCompile>
+    <FxCompile Include="HLSL_VS\Voxelization_VS.hlsl">
       <Filter>HLSL_VS</Filter>
     </FxCompile>
     <FxCompile Include="HLSL_VS\sphereVS.hlsl">

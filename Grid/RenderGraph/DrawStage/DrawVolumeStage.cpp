@@ -14,19 +14,6 @@ DrawVolumeStage::DrawVolumeStage(ID3D11DeviceContext& context)
     _incoming[_volumeTexID] = -1;
     _attrNames[_volumeTexID] = { "Volume Texture" };
 
-    // draw back face
-    {
-		D3D11_RASTERIZER_DESC rd{};
-
-        rd.FillMode = D3D11_FILL_MODE::D3D11_FILL_SOLID;
-        rd.CullMode = D3D11_CULL_MODE::D3D11_CULL_FRONT;
-        rd.FrontCounterClockwise = false;
-        rd.DepthClipEnable = true;
-        rd.MultisampleEnable = false;
-
-        pDevice->CreateRasterizerState(&rd, _rsBack.ReleaseAndGetAddressOf());
-    }
-    
     {
 		auto desc {CD3D11_TEXTURE2D_DESC{}};
 		desc.BindFlags = D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE;
@@ -131,6 +118,24 @@ void DrawVolumeStage::Consume(ID3D11Resource* resource, int32_t attribute_id)
         pDevice->CreateShaderResourceView(resource, nullptr, _previous.ReleaseAndGetAddressOf());
     else if (attribute_id == _volumeTexID)
         pDevice->CreateShaderResourceView(resource, nullptr, _volumeTexView.ReleaseAndGetAddressOf());
+}
+
+void DrawVolumeStage::InitRS()
+{
+    DrawStage::InitRS();
+
+    // draw back face
+    {
+		D3D11_RASTERIZER_DESC rd{};
+
+        rd.FillMode = D3D11_FILL_MODE::D3D11_FILL_SOLID;
+        rd.CullMode = D3D11_CULL_MODE::D3D11_CULL_FRONT;
+        rd.FrontCounterClockwise = false;
+        rd.DepthClipEnable = true;
+        rd.MultisampleEnable = false;
+
+        pDevice->CreateRasterizerState(&rd, _rsBack.ReleaseAndGetAddressOf());
+    }
 }
 
 void DrawVolumeStage::InitBS()

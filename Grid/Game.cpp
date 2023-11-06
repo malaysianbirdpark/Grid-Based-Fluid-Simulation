@@ -41,6 +41,8 @@
 #include "DirLight.h"
 #include "PointLight.h"
 
+#include "VoxelizationStage.h"
+
 Game::Game() 
 {
 	int constexpr width{ 1920 };
@@ -53,9 +55,9 @@ Game::Game()
 	gViewportInfo.height = 480;
 	gViewportInfo.depth = 480;
 
-	gSimulationInfo.width = 128;
-	gSimulationInfo.height = 128;
-	gSimulationInfo.depth = 128;
+	gSimulationInfo.width = 64;
+	gSimulationInfo.height = 64;
+	gSimulationInfo.depth = 64;
 
 	Win32::Init(width, height);
 	Renderer::Init(width, height, gWindowInfo.hWnd);
@@ -66,7 +68,11 @@ Game::Game()
     _dirLight = std::make_unique<DirLight>();
     _pointLight = std::make_unique<PointLight>();
 
-	_smoke.AddStage(std::move(std::make_shared<DrawSceneStage>(Renderer::Context(), "Scene")));
+	_voxeler = std::make_unique<VoxelizationStage>(Renderer::Context());
+
+	std::shared_ptr<DrawSceneStage> _target{std::make_shared<DrawSceneStage>(Renderer::Context(), "Scene")};
+	_smoke.AddStage(_target);
+	_voxeler->AddTargetScene(_target);
 
 	_smoke.AddStage(std::move(std::make_shared<Sourcing3DStage>()));
 
@@ -109,6 +115,7 @@ Game::Game()
 	_smoke.Link(7, 265, 8, 13);
 
 	_smoke.Link(8, 266, 9, 14);
+
 
 	ImNodes::LoadCurrentEditorStateFromIniFile("imnodes_state.ini");
 }
@@ -167,6 +174,7 @@ void Game::Render(float const dt)
     _dirLight->Run(Renderer::Context());
     _pointLight->Run(Renderer::Context());
 	_smoke.Run(Renderer::Context());
+	_voxeler->Run(Renderer::Context());
 	Update(dt);
 	Renderer::EndFrame();
 }

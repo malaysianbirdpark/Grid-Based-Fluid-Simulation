@@ -9,14 +9,14 @@ VolumeCube::VolumeCube(ID3D11DeviceContext& context)
 	std::vector<Vertex> vertices;
 	vertices.resize(8);
 
-	vertices[0] = { {-1,  1, -1}, {0, 0, 0} };
-	vertices[1] = { { 1,  1, -1}, {1, 0, 0} };
-	vertices[2] = { { 1, -1, -1}, {1, 1, 0} };
-	vertices[3] = { {-1, -1, -1}, {0, 1, 0} };
-	vertices[4] = { {-1,  1,  1}, {0, 0, 1} };
-	vertices[5] = { { 1,  1,  1}, {1, 0, 1} };
-	vertices[6] = { { 1, -1,  1}, {1, 1, 1} };
-	vertices[7] = { {-1, -1,  1}, {0, 1, 1} };
+	vertices[0] = { {-0.5f,  0.5f,  0.0f}, {0, 0, 0} };
+	vertices[1] = { { 0.5f,  0.5f,  0.0f}, {1, 0, 0} };
+	vertices[2] = { { 0.5f, -0.5f,  0.0f}, {1, 1, 0} };
+	vertices[3] = { {-0.5f, -0.5f,  0.0f}, {0, 1, 0} };
+	vertices[4] = { {-0.5f,  0.5f,  1.0f}, {0, 0, 1} };
+	vertices[5] = { { 0.5f,  0.5f,  1.0f}, {1, 0, 1} };
+	vertices[6] = { { 0.5f, -0.5f,  1.0f}, {1, 1, 1} };
+	vertices[7] = { {-0.5f, -0.5f,  1.0f}, {0, 1, 1} };
 
 	std::vector<uint16_t> indices{
 		// front
@@ -35,7 +35,6 @@ VolumeCube::VolumeCube(ID3D11DeviceContext& context)
 	_mesh = std::make_unique<Mesh<Vertex>>(vertices, indices);
 
 	_transform = std::make_unique<Transform>(context, DirectX::XMMatrixIdentity());
-	//_transform->SetModel(DirectX::XMMatrixScaling(10.0f, 10.0f, 10.0f));
 }
 
 void VolumeCube::Update(ID3D11DeviceContext& context, float const dt)

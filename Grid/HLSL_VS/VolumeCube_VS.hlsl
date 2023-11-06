@@ -14,6 +14,7 @@ cbuffer mvp : register(b0)
     matrix m;
     matrix mit;
     matrix mv;
+    matrix mp;
     matrix mvp;
 };
 

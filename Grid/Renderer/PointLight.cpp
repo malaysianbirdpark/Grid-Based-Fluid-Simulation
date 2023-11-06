@@ -2,9 +2,9 @@
 #include "PointLight.h"
 
 PointLight::PointLight() {
-    DirectX::XMStoreFloat3(&_data._pos, DirectX::XMVECTOR{2.0f, 5.0f, 0.0f});
+    DirectX::XMStoreFloat3(&_data._pos, DirectX::XMVECTOR{2.0f, 5.0f, 1.0f});
     DirectX::XMStoreFloat3(&_data._color, DirectX::XMVECTOR{1.0f, 1.0f, 1.0f});
-    _data._reciprocal_range = 1.0f / 10.0f;
+    _data._reciprocal_range = 1.0f / 200.0f;
 
     D3D11_BUFFER_DESC bd{};
     bd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;

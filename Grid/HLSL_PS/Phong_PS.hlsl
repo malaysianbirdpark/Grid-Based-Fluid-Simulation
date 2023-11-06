@@ -53,6 +53,8 @@ float4 PhongSpec(const float3 to_camera, const float3 normal, const float3 to_li
 PS_OUT main(PS_IN input)
 {
     PS_OUT output;
+    output.color = float4(1.0f, 1.0f, 1.0f, 1.0f);
+	return output;
 
     const float4 diffuse_color = albedo_map.Sample(sampler2, input.uv);
 

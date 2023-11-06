@@ -59,7 +59,7 @@
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>.;Assets;CSO;HLSL_CS;HLSL_PS;HLSL_VS;Platform;Renderer;RenderGraph;RenderObject;Utils;Assets\DragonAttenuation;Assets\Sponza;Assets\Textures;Assets\DragonAttenuation\Textures;Assets\Sponza\Textures;RenderGraph\ComputeStage;RenderGraph\ConstantBufferStage;RenderGraph\DrawStage;RenderGraph\ResourceStage;RenderGraph\ComputeStage\2D-Stable-Fluids;RenderGraph\ComputeStage\3D-Stable-Fluids;..\3rd_party;..\3rd_party\ImGui;..\3rd_party\ImGui\backends;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.;3rd_party;Assets;CSO;HLSL_CS;HLSL_PS;HLSL_VS;Platform;Renderer;RenderGraph;RenderObject;Utils;Assets\ABeautifulGame;Assets\Avocado;Assets\BarramundiFish;Assets\DragonAttenuation;Assets\Sponza;Assets\Textures;Assets\ABeautifulGame\Textures;Assets\Avocado\Textures;Assets\BarramundiFish\Textures;Assets\DragonAttenuation\Textures;Assets\Sponza\Textures;RenderGraph\ComputeStage;RenderGraph\ConstantBufferStage;RenderGraph\DrawStage;RenderGraph\ResourceStage;RenderGraph\ComputeStage\2D-Stable-Fluids;RenderGraph\ComputeStage\3D-Stable-Fluids;..\3rd_party;..\3rd_party\ImGui;..\3rd_party\ImGui\backends;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
@@ -80,7 +80,7 @@
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>.;Assets;CSO;HLSL_CS;HLSL_PS;HLSL_VS;Platform;Renderer;RenderGraph;RenderObject;Utils;Assets\DragonAttenuation;Assets\Sponza;Assets\Textures;Assets\DragonAttenuation\Textures;Assets\Sponza\Textures;RenderGraph\ComputeStage;RenderGraph\ConstantBufferStage;RenderGraph\DrawStage;RenderGraph\ResourceStage;RenderGraph\ComputeStage\2D-Stable-Fluids;RenderGraph\ComputeStage\3D-Stable-Fluids;..\3rd_party;..\3rd_party\ImGui;..\3rd_party\ImGui\backends;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.;3rd_party;Assets;CSO;HLSL_CS;HLSL_PS;HLSL_VS;Platform;Renderer;RenderGraph;RenderObject;Utils;Assets\ABeautifulGame;Assets\Avocado;Assets\BarramundiFish;Assets\DragonAttenuation;Assets\Sponza;Assets\Textures;Assets\ABeautifulGame\Textures;Assets\Avocado\Textures;Assets\BarramundiFish\Textures;Assets\DragonAttenuation\Textures;Assets\Sponza\Textures;RenderGraph\ComputeStage;RenderGraph\ConstantBufferStage;RenderGraph\DrawStage;RenderGraph\ResourceStage;RenderGraph\ComputeStage\2D-Stable-Fluids;RenderGraph\ComputeStage\3D-Stable-Fluids;..\3rd_party;..\3rd_party\ImGui;..\3rd_party\ImGui\backends;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -103,7 +103,6 @@
     <ClInclude Include="Game.h" />
     <ClInclude Include="Platform\Input.h" />
     <ClInclude Include="Platform\Win32.h" />
-    <ClInclude Include="Renderer\PointLight.h" />
     <ClInclude Include="RenderGraph\ComputeStage\2D-Stable-Fluids\Advection2DStage.h" />
     <ClInclude Include="RenderGraph\ComputeStage\2D-Stable-Fluids\Divergence2DStage.h" />
     <ClInclude Include="RenderGraph\ComputeStage\2D-Stable-Fluids\GradientSubtract2DStage.h" />
@@ -143,6 +142,7 @@
     <ClInclude Include="RenderGraph\ResourceStage\ResourceStage.h" />
     <ClInclude Include="RenderGraph\ResourceStage\ViewportStage.h" />
     <ClInclude Include="RenderGraph\Stage.h" />
+    <ClInclude Include="RenderGraph\VoxelizationStage.h" />
     <ClInclude Include="RenderObject\Material.h" />
     <ClInclude Include="RenderObject\Mesh.h" />
     <ClInclude Include="RenderObject\PSTextures.h" />
@@ -155,6 +155,7 @@
     <ClInclude Include="Renderer\Camera.h" />
     <ClInclude Include="Renderer\DirLight.h" />
     <ClInclude Include="Renderer\ImGuiRenderer.h" />
+    <ClInclude Include="Renderer\PointLight.h" />
     <ClInclude Include="Renderer\Renderer.h" />
     <ClInclude Include="Utils\CircularQueue.h" />
     <ClInclude Include="Utils\Clk.h" />
@@ -165,7 +166,6 @@
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Platform\Input.cpp" />
     <ClCompile Include="Platform\Win32.cpp" />
-    <ClCompile Include="Renderer\PointLight.cpp" />
     <ClCompile Include="RenderGraph\ComputeStage\2D-Stable-Fluids\Advection2DStage.cpp" />
     <ClCompile Include="RenderGraph\ComputeStage\2D-Stable-Fluids\Divergence2DStage.cpp" />
     <ClCompile Include="RenderGraph\ComputeStage\2D-Stable-Fluids\GradientSubtract2DStage.cpp" />
@@ -205,6 +205,7 @@
     <ClCompile Include="RenderGraph\ResourceStage\ResourceStage.cpp" />
     <ClCompile Include="RenderGraph\ResourceStage\ViewportStage.cpp" />
     <ClCompile Include="RenderGraph\Stage.cpp" />
+    <ClCompile Include="RenderGraph\VoxelizationStage.cpp" />
     <ClCompile Include="RenderObject\Material.cpp" />
     <ClCompile Include="RenderObject\Mesh.cpp" />
     <ClCompile Include="RenderObject\PSTextures.cpp" />
@@ -217,6 +218,7 @@
     <ClCompile Include="Renderer\Camera.cpp" />
     <ClCompile Include="Renderer\DirLight.cpp" />
     <ClCompile Include="Renderer\ImGuiRenderer.cpp" />
+    <ClCompile Include="Renderer\PointLight.cpp" />
     <ClCompile Include="Renderer\Renderer.cpp" />
     <ClCompile Include="Utils\CircularQueue.cpp" />
     <ClCompile Include="Utils\Clk.cpp" />
@@ -406,6 +408,12 @@
       <EntryPointName>main</EntryPointName>
       <ObjectFileOutput>../Grid/CSO/VolumeModel_PS.cso</ObjectFileOutput>
     </FxCompile>
+    <FxCompile Include="HLSL_PS\Voxelization_PS.hlsl">
+      <ShaderType>Pixel</ShaderType>
+      <ShaderModel>5.0</ShaderModel>
+      <EntryPointName>main</EntryPointName>
+      <ObjectFileOutput>../Grid/CSO/Voxelization_PS.cso</ObjectFileOutput>
+    </FxCompile>
     <FxCompile Include="HLSL_PS\spherePS.hlsl">
       <ShaderType>Pixel</ShaderType>
       <ShaderModel>5.0</ShaderModel>
@@ -429,6 +437,12 @@
       <ShaderModel>5.0</ShaderModel>
       <EntryPointName>main</EntryPointName>
       <ObjectFileOutput>../Grid/CSO/VolumeCube_VS.cso</ObjectFileOutput>
+    </FxCompile>
+    <FxCompile Include="HLSL_VS\Voxelization_VS.hlsl">
+      <ShaderType>Vertex</ShaderType>
+      <ShaderModel>5.0</ShaderModel>
+      <EntryPointName>main</EntryPointName>
+      <ObjectFileOutput>../Grid/CSO/Voxelization_VS.cso</ObjectFileOutput>
     </FxCompile>
     <FxCompile Include="HLSL_VS\sphereVS.hlsl">
       <ShaderType>Vertex</ShaderType>
