@@ -20,12 +20,24 @@ private:
     Microsoft::WRL::ComPtr<ID3D11ShaderResourceView>             _dsvSRV;
 
 	Microsoft::WRL::ComPtr<ID3D11RenderTargetView>               _voxelRTV;
-    Microsoft::WRL::ComPtr<ID3D11UnorderedAccessView>            _voxelUAV;
     Microsoft::WRL::ComPtr<ID3D11ShaderResourceView>             _voxelSRV;
+    Microsoft::WRL::ComPtr<ID3D11UnorderedAccessView>            _voxelUAV;
 
     Microsoft::WRL::ComPtr<ID3D11ComputeShader>                  _boundingBoxCS;
+private:
+    std::vector<Microsoft::WRL::ComPtr<ID3D11RenderTargetView>>  _prevVpRTV;
+    Microsoft::WRL::ComPtr<ID3D11ShaderResourceView>             _prevVpSRV;
+    Microsoft::WRL::ComPtr<ID3D11UnorderedAccessView>            _prevVpUAV;
 
-	std::unique_ptr<class PipelineStateObject>                   _pso;
+    std::vector<Microsoft::WRL::ComPtr<ID3D11RenderTargetView>>  _curVpRTV;
+    Microsoft::WRL::ComPtr<ID3D11ShaderResourceView>             _curVpSRV;
+    Microsoft::WRL::ComPtr<ID3D11UnorderedAccessView>            _curVpUAV;
+
+    Microsoft::WRL::ComPtr<ID3D11ShaderResourceView>             _velocitySRV;
+    Microsoft::WRL::ComPtr<ID3D11UnorderedAccessView>            _velocityUAV;
+private:
+	std::unique_ptr<class PipelineStateObject>                   _obstaclePSO;
+	std::unique_ptr<class PipelineStateObject>                   _vertexPosPSO;
 
 	std::shared_ptr<class DrawSceneStage>                        _targetScene;
 	std::shared_ptr<class DrawVolumeStage>                       _targetVolume;

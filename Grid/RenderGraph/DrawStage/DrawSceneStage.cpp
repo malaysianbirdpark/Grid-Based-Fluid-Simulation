@@ -74,8 +74,8 @@ void DrawSceneStage::Run(ID3D11DeviceContext& context)
 
             auto& mesh{ _scene._mesh[_scene._nodeId_to_meshId[node]] };
             mesh.Bind(context);
-            if (_scene._nodeId_to_materialId.contains(node)) 
-				_scene._material[_scene._nodeId_to_materialId[node]].Bind(context);
+    //        if (_scene._nodeId_to_materialId.contains(node)) 
+				//_scene._material[_scene._nodeId_to_materialId[node]].Bind(context);
 			context.DrawIndexedInstanced(mesh.GetIndexCount(), 1u, 0u, 0u, 0u);
         }
 
@@ -95,8 +95,30 @@ void DrawSceneStage::Update(ID3D11DeviceContext& context)
 {
     if (ImNodes::IsNodeSelected(_id)) {
         ImGui::Begin("Scene Editor");
+        int interacted{};
+
+        auto& transform{ _scene.GetTransformParamAt(0) };
+
+        ImGui::Text("Position");
+        interacted += ImGui::SliderFloat("X", &transform.x, -20.0f, 20.0f);
+        interacted += ImGui::SliderFloat("Y", &transform.y, -20.0f, 20.0f);
+        interacted += ImGui::SliderFloat("Z", &transform.z, -20.0f, 20.0f);
+
+        ImGui::Text("Rotation");
+        interacted += ImGui::SliderAngle("Roll", &transform.roll, -180.0f, 180.0f);
+        interacted += ImGui::SliderAngle("Pitch", &transform.pitch, -180.0f, 180.0f);
+        interacted += ImGui::SliderAngle("Yaw", &transform.yaw, -180.0f, 180.0f);
+
+        ImGui::Text("Scaling");
+        interacted += ImGui::SliderFloat("Scale", &transform.scale, 0.1f, 10.0f);
+
+        if (interacted > 0)
+            _scene.MarkAsTransformed(0);
+
         ImGui::End();
     }
+
+    _scene.Update();
 }
 
 void DrawSceneStage::RawDraw(ID3D11DeviceContext& context)

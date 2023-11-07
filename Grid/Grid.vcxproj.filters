@@ -478,6 +478,9 @@
     <FxCompile Include="HLSL_CS\Vector4DUnorm_CS.hlsl">
       <Filter>HLSL_CS</Filter>
     </FxCompile>
+    <FxCompile Include="HLSL_CS\VertexPos_CS.hlsl">
+      <Filter>HLSL_CS</Filter>
+    </FxCompile>
     <FxCompile Include="HLSL_CS\Vorticity3D_CS.hlsl">
       <Filter>HLSL_CS</Filter>
     </FxCompile>
@@ -488,6 +491,9 @@
       <Filter>HLSL_PS</Filter>
     </FxCompile>
     <FxCompile Include="HLSL_PS\SolidTex_PS.hlsl">
+      <Filter>HLSL_PS</Filter>
+    </FxCompile>
+    <FxCompile Include="HLSL_PS\VertexPos_PS.hlsl">
       <Filter>HLSL_PS</Filter>
     </FxCompile>
     <FxCompile Include="HLSL_PS\VolumeCube_PS.hlsl">
@@ -506,6 +512,9 @@
       <Filter>HLSL_VS</Filter>
     </FxCompile>
     <FxCompile Include="HLSL_VS\SolidTex_VS.hlsl">
+      <Filter>HLSL_VS</Filter>
+    </FxCompile>
+    <FxCompile Include="HLSL_VS\VertexPos_VS.hlsl">
       <Filter>HLSL_VS</Filter>
     </FxCompile>
     <FxCompile Include="HLSL_VS\VolumeCube_VS.hlsl">

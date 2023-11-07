@@ -7,6 +7,7 @@ struct VS_IN {
 };
 
 struct VS_OUT {
+    float4 world_pos : POSITION;
     float4 sv_pos    : SV_POSITION;
 };
 
@@ -26,6 +27,7 @@ VS_OUT main(VS_IN input)
 {
 	VS_OUT output;
 
+    output.world_pos = mul(float4(input.pos, 1.0f), m);
     output.sv_pos = mul(mul(float4(input.pos, 1.0f), m), mip);
 
     return output;

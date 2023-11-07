@@ -7,7 +7,7 @@ struct VS_IN {
 };
 
 struct VS_OUT {
-    float4 view_pos : POSITION;
+    float4 world_pos : POSITION;
     float3 normal    : NORMAL;
     float3 tangent   : TANGENT;
     float3 binormal  : BINORMAL;
@@ -19,7 +19,6 @@ cbuffer mvp : register(b0)
 {
     matrix m;
     matrix mit;
-    matrix mv;
     matrix mvp;
 };
 
@@ -27,7 +26,7 @@ VS_OUT main(VS_IN input)
 {
 	VS_OUT output;
 
-    output.view_pos = mul(float4(input.pos, 1.0f), mv);
+    output.world_pos = mul(float4(input.pos, 1.0f), m);
     output.normal = normalize(mul(input.normal, (float3x3)mit).xyz);
     output.tangent = normalize(mul(input.tangent, (float3x3)m).xyz);
     output.binormal = normalize(mul(input.binormal, (float3x3)m).xyz);

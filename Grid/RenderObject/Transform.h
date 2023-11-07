@@ -4,8 +4,6 @@ class Transform
     struct Data {
         DirectX::XMFLOAT4X4 _m;
         DirectX::XMFLOAT4X4 _mit;
-        DirectX::XMFLOAT4X4 _mv;
-        DirectX::XMFLOAT4X4 _mp;
         DirectX::XMFLOAT4X4 _mvp;
     };
 public:

@@ -5,7 +5,7 @@
 #include <filesystem>
 
 #include "DirectXTK-main\Inc\DDSTextureLoader.h"
-
+#include <d3dcompiler.h>
 
 struct VertexType {
 	DirectX::XMFLOAT3 _pos;
@@ -86,7 +86,6 @@ void SceneGraph::Init(ID3D11DeviceContext& context, char const* path, char const
     _nodeNames[0] = { tag };
     MarkAsTransformed(0);
     RecalculateGlobalTransforms();
-
 }
 
 void SceneGraph::MarkAsTransformed(int32_t node)
@@ -111,6 +110,12 @@ SceneTransformParameters& SceneGraph::GetTransformParamAt(int32_t node)
 char const* SceneGraph::GetNameAt(int32_t node)
 {
     return _nodeNames[_nodeId_to_namesId.at(node)].c_str();
+}
+
+Microsoft::WRL::ComPtr<ID3D11Buffer> SceneGraph::GetVertexBufferAt(int32_t node)
+{
+    if (_nodeId_to_meshId.contains(node))
+        return _mesh[_nodeId_to_meshId[node]]._vertexBuffer;
 }
 
 void SceneGraph::Update()
@@ -202,13 +207,17 @@ int32_t SceneGraph::ParseNode(int32_t parent_id, int32_t level, aiScene const* a
 
 AssimpMesh SceneGraph::ParseMesh(aiMesh const* ai_mesh)
 {
+    UINT vertex_count;
     UINT index_count;
-    auto [vertex_buffer, index_buffer] {ParseVertexData(ai_mesh, index_count)};
+    auto [vertex_buffer, prev, cur, index_buffer] {ParseVertexData(ai_mesh, vertex_count, index_count)};
 
     return {
         std::move(vertex_buffer),
+        std::move(prev),
+        std::move(cur),
         std::move(index_buffer),
         D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST,
+        vertex_count,
         index_count
     };
 }
@@ -359,7 +368,7 @@ AssimpMaterial SceneGraph::ParseMaterial(ID3D11DeviceContext& context, aiMateria
     return result;
 }
 
-std::pair<Microsoft::WRL::ComPtr<ID3D11Buffer>, Microsoft::WRL::ComPtr<ID3D11Buffer>> SceneGraph::ParseVertexData(aiMesh const* ai_mesh, UINT& index_count)
+SceneGraph::VertexData SceneGraph::ParseVertexData(aiMesh const* ai_mesh, UINT& vertex_count, UINT& index_count)
 {
     using namespace DirectX;
 
@@ -375,12 +384,13 @@ std::pair<Microsoft::WRL::ComPtr<ID3D11Buffer>, Microsoft::WRL::ComPtr<ID3D11Buf
 			*reinterpret_cast<XMFLOAT2*>(&ai_mesh->mTextureCoords[0][i])
         );
     }
+    vertex_count = vertices.size();
 
     // vertex buffer
     Microsoft::WRL::ComPtr<ID3D11Buffer> vertex_buffer;
     {
         D3D11_BUFFER_DESC bd{};
-        bd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+        bd.BindFlags = D3D11_BIND_VERTEX_BUFFER | D3D11_BIND_SHADER_RESOURCE;
         bd.Usage = D3D11_USAGE_IMMUTABLE;
         bd.CPUAccessFlags = 0u;
         bd.MiscFlags = 0u;
@@ -391,6 +401,38 @@ std::pair<Microsoft::WRL::ComPtr<ID3D11Buffer>, Microsoft::WRL::ComPtr<ID3D11Buf
         sd.pSysMem = vertices.data();
 
         pDevice->CreateBuffer(&bd, &sd, vertex_buffer.ReleaseAndGetAddressOf());
+    }
+
+    Microsoft::WRL::ComPtr<ID3D11Buffer> prev;
+    {
+        D3D11_BUFFER_DESC bd{};
+        bd.BindFlags = D3D11_BIND_UNORDERED_ACCESS;
+        bd.Usage = D3D11_USAGE_DEFAULT;
+        bd.CPUAccessFlags = 0u;
+        bd.MiscFlags = 0u;
+        bd.ByteWidth = static_cast<UINT>(sizeof(VertexType) * vertices.size());
+        bd.StructureByteStride = sizeof(VertexType);
+
+        D3D11_SUBRESOURCE_DATA sd{};
+        sd.pSysMem = vertices.data();
+
+        pDevice->CreateBuffer(&bd, &sd, prev.ReleaseAndGetAddressOf());
+    }
+
+    Microsoft::WRL::ComPtr<ID3D11Buffer> cur;
+    {
+        D3D11_BUFFER_DESC bd{};
+        bd.BindFlags = D3D11_BIND_UNORDERED_ACCESS;
+        bd.Usage = D3D11_USAGE_DEFAULT;
+        bd.CPUAccessFlags = 0u;
+        bd.MiscFlags = 0u;
+        bd.ByteWidth = static_cast<UINT>(sizeof(VertexType) * vertices.size());
+        bd.StructureByteStride = sizeof(VertexType);
+
+        D3D11_SUBRESOURCE_DATA sd{};
+        sd.pSysMem = vertices.data();
+
+        pDevice->CreateBuffer(&bd, &sd, cur.ReleaseAndGetAddressOf());
     }
 
     std::vector<uint32_t> indices;
@@ -421,7 +463,10 @@ std::pair<Microsoft::WRL::ComPtr<ID3D11Buffer>, Microsoft::WRL::ComPtr<ID3D11Buf
         pDevice->CreateBuffer(&bd, &sd, index_buffer.ReleaseAndGetAddressOf());
     }
 
-    return { std::move(vertex_buffer), std::move(index_buffer) };
+    return { std::move(vertex_buffer), 
+             std::move(prev),
+             std::move(cur),
+             std::move(index_buffer) };
 }
 
 int32_t SceneGraph::AddNode(int32_t parent_id, int32_t level, DirectX::XMMATRIX const& local_transform)
@@ -520,9 +565,47 @@ void AssimpMaterial::AddOrRelplaceTexture(ID3D11DeviceContext& context, ShaderRe
     context.GenerateMips(_srs.back().Get());
 }
 
-AssimpMesh::AssimpMesh(Microsoft::WRL::ComPtr<ID3D11Buffer>&& vertex_buffer, Microsoft::WRL::ComPtr<ID3D11Buffer>&& index_buffer, D3D11_PRIMITIVE_TOPOLOGY topology, UINT index_count)
-    : _vertexBuffer{std::move(vertex_buffer)}, _indexBuffer{std::move(index_buffer)}, _topology{topology}, _indexCount{index_count}, _stride{sizeof(VertexType)}
+AssimpMesh::AssimpMesh(Microsoft::WRL::ComPtr<ID3D11Buffer>&& vertex_buffer, 
+                       Microsoft::WRL::ComPtr<ID3D11Buffer>&& prev, 
+                       Microsoft::WRL::ComPtr<ID3D11Buffer>&& cur, 
+                       Microsoft::WRL::ComPtr<ID3D11Buffer>&& index_buffer, 
+                       D3D11_PRIMITIVE_TOPOLOGY topology, UINT vertex_count, UINT index_count)
+    : _vertexBuffer{std::move(vertex_buffer)}, _prev{std::move(prev)}, _cur{std::move(cur)}, 
+      _indexBuffer{std::move(index_buffer)}, _topology{topology}, _indexCount{index_count}, _stride{sizeof(VertexType)}
 {
+    {
+        std::string _path{"./CSO/VertexPos_CS.cso"};
+        std::wstring p(_path.length(), L' ');
+        std::ranges::copy(_path, p.begin());
+
+        Microsoft::WRL::ComPtr<ID3DBlob> pBlob;
+        D3DReadFileToBlob(
+            p.c_str(),
+            pBlob.ReleaseAndGetAddressOf()
+        );
+
+        pDevice->CreateComputeShader(
+            pBlob->GetBufferPointer(), 
+            pBlob->GetBufferSize(),
+            nullptr,
+            _vertexPosCS.ReleaseAndGetAddressOf()
+        );
+    }
+
+    D3D11_SHADER_RESOURCE_VIEW_DESC srv_desc{ CD3D11_SHADER_RESOURCE_VIEW_DESC{} };
+    srv_desc.Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
+    srv_desc.ViewDimension = D3D11_SRV_DIMENSION_BUFFER;
+    srv_desc.Buffer.ElementOffset;
+    srv_desc.Buffer.ElementWidth;
+    srv_desc.Buffer.FirstElement;
+    srv_desc.Buffer.NumElements;
+    pDevice->CreateShaderResourceView(_vertexBuffer.Get(), &srv_desc, _vertexSRV.ReleaseAndGetAddressOf());
+
+    D3D11_UNORDERED_ACCESS_VIEW_DESC uav_desc{ CD3D11_UNORDERED_ACCESS_VIEW_DESC{} };
+    uav_desc.Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
+    uav_desc.ViewDimension = D3D11_UAV_DIMENSION_BUFFER;
+    pDevice->CreateUnorderedAccessView(_prev.Get(), &uav_desc, _prevUAV.ReleaseAndGetAddressOf());
+    pDevice->CreateUnorderedAccessView(_cur.Get(), &uav_desc, _curUAV.ReleaseAndGetAddressOf());
 }
 
 void AssimpMesh::Bind(ID3D11DeviceContext& context) const
@@ -531,6 +614,25 @@ void AssimpMesh::Bind(ID3D11DeviceContext& context) const
     context.IASetPrimitiveTopology(_topology);
     context.IASetVertexBuffers(0u, 1u, _vertexBuffer.GetAddressOf(), &_stride, &offset);
     context.IASetIndexBuffer(_indexBuffer.Get(), DXGI_FORMAT_R32_UINT, 0u);
+}
+
+void AssimpMesh::CalcVertexPos(ID3D11DeviceContext & context)
+{
+    static ID3D11UnorderedAccessView* uav[2]{ _prevUAV.Get(), _curUAV.Get() };
+	context.OMSetRenderTargets(0u, nullptr, nullptr);
+    context.CSSetShaderResources(0u, 1u, _vertexSRV.GetAddressOf());
+    context.CSSetUnorderedAccessViews(0u, 2u, uav, nullptr);
+    context.CSSetShader(_vertexPosCS.Get(), nullptr, 0u);
+    context.Dispatch(
+        static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.width) / 8)),
+        static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.height) / 8)),
+        static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.depth) / 8))
+    );
+
+	static ID3D11ShaderResourceView* const barrier0[1]{ nullptr };
+	static ID3D11UnorderedAccessView* const barrier1[1]{ nullptr };
+    context.CSSetShaderResources(0u, 1u, barrier0);
+    context.CSSetUnorderedAccessViews(0u, 1u, barrier1, nullptr);
 }
 
 UINT AssimpMesh::GetIndexCount() const

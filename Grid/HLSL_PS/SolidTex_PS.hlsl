@@ -1,5 +1,5 @@
 struct PS_IN {
-    float4 view_pos  : POSITION;
+    float4 world_pos  : POSITION;
     float3 normal    : NORMAL;
     float3 tangent   : TANGENT;
     float3 binormal  : BINORMAL;

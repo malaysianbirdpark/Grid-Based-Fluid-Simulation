@@ -378,6 +378,12 @@
       <EntryPointName>main</EntryPointName>
       <ObjectFileOutput>../Grid/CSO/Vector4DUnorm_CS.cso</ObjectFileOutput>
     </FxCompile>
+    <FxCompile Include="HLSL_CS\VertexPos_CS.hlsl">
+      <ShaderType>Compute</ShaderType>
+      <ShaderModel>5.0</ShaderModel>
+      <EntryPointName>main</EntryPointName>
+      <ObjectFileOutput>../Grid/CSO/VertexPos_CS.cso</ObjectFileOutput>
+    </FxCompile>
     <FxCompile Include="HLSL_CS\Vorticity3D_CS.hlsl">
       <ShaderType>Compute</ShaderType>
       <ShaderModel>5.0</ShaderModel>
@@ -401,6 +407,12 @@
       <ShaderModel>5.0</ShaderModel>
       <EntryPointName>main</EntryPointName>
       <ObjectFileOutput>../Grid/CSO/SolidTex_PS.cso</ObjectFileOutput>
+    </FxCompile>
+    <FxCompile Include="HLSL_PS\VertexPos_PS.hlsl">
+      <ShaderType>Pixel</ShaderType>
+      <ShaderModel>5.0</ShaderModel>
+      <EntryPointName>main</EntryPointName>
+      <ObjectFileOutput>../Grid/CSO/VertexPos_PS.cso</ObjectFileOutput>
     </FxCompile>
     <FxCompile Include="HLSL_PS\VolumeCube_PS.hlsl">
       <ShaderType>Pixel</ShaderType>
@@ -437,6 +449,12 @@
       <ShaderModel>5.0</ShaderModel>
       <EntryPointName>main</EntryPointName>
       <ObjectFileOutput>../Grid/CSO/SolidTex_VS.cso</ObjectFileOutput>
+    </FxCompile>
+    <FxCompile Include="HLSL_VS\VertexPos_VS.hlsl">
+      <ShaderType>Vertex</ShaderType>
+      <ShaderModel>5.0</ShaderModel>
+      <EntryPointName>main</EntryPointName>
+      <ObjectFileOutput>../Grid/CSO/VertexPos_VS.cso</ObjectFileOutput>
     </FxCompile>
     <FxCompile Include="HLSL_VS\VolumeCube_VS.hlsl">
       <ShaderType>Vertex</ShaderType>

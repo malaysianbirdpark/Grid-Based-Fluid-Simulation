@@ -21,11 +21,11 @@ enum class ShaderResourceTypes {
 struct SceneTransformParameters {
     float x{};
     float y{};
-    float z{0.11f};
+    float z{};
     float roll{};
     float pitch{};
     float yaw{};
-    float scale{3.0f};
+    float scale{1.0f};
 };
 
 class AssimpMaterial {
@@ -54,20 +54,33 @@ public:
     AssimpMesh() = default;
     AssimpMesh(
         Microsoft::WRL::ComPtr<ID3D11Buffer>&& vertex_buffer,
+        Microsoft::WRL::ComPtr<ID3D11Buffer>&& prev,
+        Microsoft::WRL::ComPtr<ID3D11Buffer>&& cur,
         Microsoft::WRL::ComPtr<ID3D11Buffer>&& index_buffer,
         D3D11_PRIMITIVE_TOPOLOGY topology,
+        UINT vertex_count,
         UINT index_count
     );
 
     void Bind(ID3D11DeviceContext & context) const;
+    void CalcVertexPos(ID3D11DeviceContext & context);
 
     [[nodiscard]] UINT GetIndexCount() const;
 private:
     Microsoft::WRL::ComPtr<ID3D11Buffer>  _vertexBuffer;
+    Microsoft::WRL::ComPtr<ID3D11Buffer>  _prev;
+    Microsoft::WRL::ComPtr<ID3D11Buffer>  _cur;
+
+    Microsoft::WRL::ComPtr<ID3D11ComputeShader>       _vertexPosCS;
+    Microsoft::WRL::ComPtr<ID3D11ShaderResourceView>  _vertexSRV;
+    Microsoft::WRL::ComPtr<ID3D11UnorderedAccessView> _prevUAV;
+    Microsoft::WRL::ComPtr<ID3D11UnorderedAccessView> _curUAV;
+
     Microsoft::WRL::ComPtr<ID3D11Buffer>  _indexBuffer;
     D3D11_PRIMITIVE_TOPOLOGY              _topology;
     UINT                                  _indexCount;
     UINT                                  _stride;
+
 };
 
 struct SceneNode {
@@ -83,6 +96,11 @@ struct SceneNode {
 class SceneGraph {
     friend class DrawSceneStage;
     static constexpr int MAX_NODE_LEVEL{ 20 };
+
+    using VertexData = std::tuple<Microsoft::WRL::ComPtr<ID3D11Buffer>, 
+                                  Microsoft::WRL::ComPtr<ID3D11Buffer>, 
+                                  Microsoft::WRL::ComPtr<ID3D11Buffer>, 
+                                  Microsoft::WRL::ComPtr<ID3D11Buffer>>;
 public:
     explicit SceneGraph() = default;
     explicit SceneGraph(ID3D11DeviceContext& context, char const* path, char const* tag);
@@ -94,6 +112,8 @@ public:
     SceneTransformParameters&               GetTransformParamAt(int32_t node);
     char const*                             GetNameAt(int32_t node);
 
+    Microsoft::WRL::ComPtr<ID3D11Buffer>    GetVertexBufferAt(int32_t node);
+
     void                                    Update();
 private:
     void                                    RecalculateGlobalTransforms();
@@ -101,8 +121,7 @@ private:
     int32_t                                 ParseNode(int32_t parent_id, int32_t level, aiScene const* ai_scene, aiNode const* ai_node);
     [[nodiscard]] static AssimpMesh         ParseMesh(aiMesh const* ai_mesh);
     [[nodiscard]] static AssimpMaterial     ParseMaterial(ID3D11DeviceContext& context, aiMaterial const* ai_material, char const* base_path);
-    using VertexData = std::pair<Microsoft::WRL::ComPtr<ID3D11Buffer>, Microsoft::WRL::ComPtr<ID3D11Buffer>>;
-    [[nodiscard]] static VertexData         ParseVertexData(aiMesh const* ai_mesh, UINT& index_count);
+    [[nodiscard]] static VertexData         ParseVertexData(aiMesh const* ai_mesh, UINT& vertex_count, UINT& index_count);
 private:
     int32_t                                 AddNode(int32_t parent_id, int32_t level, DirectX::XMMATRIX const& local_transform = DirectX::XMMatrixIdentity());
 private:

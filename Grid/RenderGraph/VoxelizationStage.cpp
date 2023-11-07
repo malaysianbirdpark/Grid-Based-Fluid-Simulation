@@ -116,10 +116,10 @@ VoxelizationStage::VoxelizationStage(ID3D11DeviceContext& context)
 			{"TEXCOORD", 0u, DXGI_FORMAT_R32G32_FLOAT, 0u, sizeof(DirectX::XMFLOAT3) * 4, D3D11_INPUT_PER_VERTEX_DATA, 0u},
 		};
 
-		_pso = std::make_unique<PipelineStateObject>();
-		_pso->SetVertexShader("./CSO/Voxelization_VS.cso");
-		_pso->SetInputLayout(input_elem_desc);
-		_pso->SetPixelShader("./CSO/Voxelization_PS.cso");
+		_obstaclePSO = std::make_unique<PipelineStateObject>();
+		_obstaclePSO->SetVertexShader("./CSO/Voxelization_VS.cso");
+		_obstaclePSO->SetInputLayout(input_elem_desc);
+		_obstaclePSO->SetPixelShader("./CSO/Voxelization_PS.cso");
 	}
 
     // no culling
@@ -156,20 +156,81 @@ VoxelizationStage::VoxelizationStage(ID3D11DeviceContext& context)
             _boundingBoxCS.ReleaseAndGetAddressOf()
         );
     }
+
+	// Velocity Calculation
+	{
+		Microsoft::WRL::ComPtr<ID3D11Texture2D> _prevTex;
+		Microsoft::WRL::ComPtr<ID3D11Texture2D> _curTex;
+		Microsoft::WRL::ComPtr<ID3D11Texture2D> _velocityTex;
+		D3D11_TEXTURE2D_DESC desc{};
+		desc.Usage = D3D11_USAGE_DEFAULT;
+		desc.BindFlags = D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE | D3D11_BIND_UNORDERED_ACCESS;
+		desc.Width = gSimulationInfo.width;
+		desc.Height = gSimulationInfo.height;
+		desc.MipLevels = 1u;
+		desc.ArraySize = gSimulationInfo.depth;
+		desc.CPUAccessFlags = 0u;
+		desc.SampleDesc.Count = 1u;
+		desc.SampleDesc.Quality = 0u;
+
+		desc.Format = DXGI_FORMAT_R16G16B16A16_FLOAT;
+		pDevice->CreateTexture2D(&desc, nullptr, _prevTex.ReleaseAndGetAddressOf());
+		pDevice->CreateTexture2D(&desc, nullptr, _curTex.ReleaseAndGetAddressOf());
+		pDevice->CreateTexture2D(&desc, nullptr, _velocityTex.ReleaseAndGetAddressOf());
+
+		_prevVpRTV.resize(gSimulationInfo.depth);
+		_curVpRTV.resize(gSimulationInfo.depth);
+
+		D3D11_RENDER_TARGET_VIEW_DESC rtv_desc{};
+		rtv_desc.Format = DXGI_FORMAT_R16G16B16A16_FLOAT;
+		rtv_desc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2DARRAY;
+		rtv_desc.Texture2DArray.MipSlice = 0u;
+		rtv_desc.Texture2DArray.ArraySize = 1u;
+		for (uint32_t i{ 0 }; i != gSimulationInfo.depth; ++i) {
+			rtv_desc.Texture2DArray.FirstArraySlice = static_cast<UINT>(i);
+			pDevice->CreateRenderTargetView(_prevTex.Get(), &rtv_desc, _prevVpRTV[i].ReleaseAndGetAddressOf());
+			pDevice->CreateRenderTargetView(_curTex.Get(), &rtv_desc, _curVpRTV[i].ReleaseAndGetAddressOf());
+		}
+
+		pDevice->CreateShaderResourceView(_prevTex.Get(), nullptr, _prevVpSRV.ReleaseAndGetAddressOf());
+		pDevice->CreateUnorderedAccessView(_prevTex.Get(), nullptr, _prevVpUAV.ReleaseAndGetAddressOf());
+
+		pDevice->CreateShaderResourceView(_curTex.Get(), nullptr, _curVpSRV.ReleaseAndGetAddressOf());
+		pDevice->CreateUnorderedAccessView(_curTex.Get(), nullptr, _curVpUAV.ReleaseAndGetAddressOf());
+
+		pDevice->CreateShaderResourceView(_velocityTex.Get(), nullptr, _velocitySRV.ReleaseAndGetAddressOf());
+		pDevice->CreateUnorderedAccessView(_velocityTex.Get(), nullptr, _velocityUAV.ReleaseAndGetAddressOf());
+	}
+
+	{
+		std::vector<D3D11_INPUT_ELEMENT_DESC> input_elem_desc{
+			{"POSITION", 0u, DXGI_FORMAT_R32G32B32_FLOAT, 0u, 0u, D3D11_INPUT_PER_VERTEX_DATA, 0u},
+			{"NORMAL", 0u, DXGI_FORMAT_R32G32B32_FLOAT, 0u, sizeof(DirectX::XMFLOAT3), D3D11_INPUT_PER_VERTEX_DATA, 0u},
+			{"TANGENT", 0u, DXGI_FORMAT_R32G32B32_FLOAT, 0u, sizeof(DirectX::XMFLOAT3) * 2, D3D11_INPUT_PER_VERTEX_DATA, 0u},
+			{"BINORMAL", 0u, DXGI_FORMAT_R32G32B32_FLOAT, 0u, sizeof(DirectX::XMFLOAT3) * 3, D3D11_INPUT_PER_VERTEX_DATA, 0u},
+			{"TEXCOORD", 0u, DXGI_FORMAT_R32G32_FLOAT, 0u, sizeof(DirectX::XMFLOAT3) * 4, D3D11_INPUT_PER_VERTEX_DATA, 0u},
+		};
+
+		_vertexPosPSO = std::make_unique<PipelineStateObject>();
+		_vertexPosPSO->SetVertexShader("./CSO/VertexPos_VS.cso");
+		_vertexPosPSO->SetInputLayout(input_elem_desc);
+		_vertexPosPSO->SetPixelShader("./CSO/VertexPos_PS.cso");
+	}
 }
 
 void VoxelizationStage::Run(ID3D11DeviceContext& context)
 {
 	static float constexpr clear_color[4]{ 0.0f, 0.0f, 0.0f, 0.0f };
-	_pso->Bind(context);
 
 	context.RSSetViewports(1u, &_vp);
     context.OMSetDepthStencilState(_voxelDS.Get(), 1u);
 
 	_inverseTransform->SetModel(DirectX::XMMatrixIdentity());
 
-	for (auto depth{ 0 }; depth != gSimulationInfo.depth; ++depth)
+	// Obstacle
+	for (auto depth{ 0 }; depth != gSimulationInfo.depth; ++depth) {
 		context.ClearDepthStencilView(_voxelDSV[depth].Get(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0u);
+	}
 
 	context.RSSetState(_rs.Get());
 	for (auto depth{ 0 }; depth != gSimulationInfo.depth; ++depth) {
@@ -183,9 +244,10 @@ void VoxelizationStage::Run(ID3D11DeviceContext& context)
 		_inverseTransform->Update(context);
 		_inverseTransform->Bind(context);
 
-		context.OMSetRenderTargets(1u, _voxelRTV.GetAddressOf(), _voxelDSV[depth].Get());
 
 		// draw target object
+		context.OMSetRenderTargets(1u, _voxelRTV.GetAddressOf(), _voxelDSV[depth].Get());
+		_obstaclePSO->Bind(context);
 		_targetScene->RawDraw(context);
 	}
 
