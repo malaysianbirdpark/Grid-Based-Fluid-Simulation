@@ -74,8 +74,6 @@ Game::Game()
 	_smoke.AddStage(_target);
 	_voxeler->AddTargetScene(_target);
 
-	_hell = std::make_unique<InverseTransform>(Renderer::Context());
-
 	_smoke.AddStage(std::move(std::make_shared<Sourcing3DStage>()));
 
 	_smoke.AddStage(std::move(std::make_shared<MCAdvection3DStage>()));
@@ -117,7 +115,6 @@ Game::Game()
 	_smoke.Link(7, 265, 8, 13);
 
 	_smoke.Link(8, 266, 9, 14);
-
 
 	ImNodes::LoadCurrentEditorStateFromIniFile("imnodes_state.ini");
 }
@@ -174,21 +171,11 @@ void Game::Render(float const dt)
 {
 	Renderer::BeginFrame();
 
-	_hell->SetModel(DirectX::XMMatrixIdentity());
-    _hell->SetProj(
-        DirectX::XMMatrixOrthographicOffCenterLH(
-            -0.5f, 0.5f, -0.5f, 0.5f,
-			0.0f,
-            20000.0f
-        )
-    );
-    _hell->Update(Renderer::Context());
-    _hell->Bind(Renderer::Context());
+	_voxeler->Run(Renderer::Context());
 
     _dirLight->Run(Renderer::Context());
     _pointLight->Run(Renderer::Context());
 	_smoke.Run(Renderer::Context());
-	_voxeler->Run(Renderer::Context());
 	Update(dt);
 	Renderer::EndFrame();
 }

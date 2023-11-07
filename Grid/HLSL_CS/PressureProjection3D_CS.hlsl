@@ -15,7 +15,7 @@ void main(uint3 DTid : SV_DispatchThreadID)
     uint depth;
     p.GetDimensions(width, height, depth);
 
-    if (obstacle[DTid.xyz].a <= 0.9f)
+    if (obstacle[DTid.xyz].r <= 0.9f)
     {
         const min16float center = p[DTid.xyz];
 
@@ -29,22 +29,22 @@ void main(uint3 DTid : SV_DispatchThreadID)
         min16float front  = p[uint3(DTid.x, DTid.y, DTid.z + 1)];
         min16float behind = p[uint3(DTid.x, DTid.y, DTid.z - 1)];
 
-        if (obstacle[uint3(DTid.x - 1, DTid.y, DTid.z)].w > 0.9f) {
+        if (obstacle[uint3(DTid.x - 1, DTid.y, DTid.z)].r > 0.9f) {
             left = center; obstacle_velocity.x = 0.0f; velocity_mask.x = 0.0f;
         }
-        if (obstacle[uint3(DTid.x + 1, DTid.y, DTid.z)].w > 0.9f) {
+        if (obstacle[uint3(DTid.x + 1, DTid.y, DTid.z)].r > 0.9f) {
             right = center; obstacle_velocity.x = 0.0f; velocity_mask.x = 0.0f;
         }
-        if (obstacle[uint3(DTid.x, DTid.y - 1, DTid.z)].w > 0.9f) {
+        if (obstacle[uint3(DTid.x, DTid.y - 1, DTid.z)].r > 0.9f) {
             down = center; obstacle_velocity.y = 0.0f; velocity_mask.y = 0.0f;
         }
-        if (obstacle[uint3(DTid.x, DTid.y + 1, DTid.z)].w > 0.9f) {
+        if (obstacle[uint3(DTid.x, DTid.y + 1, DTid.z)].r > 0.9f) {
             up = center; obstacle_velocity.y = 0.0f; velocity_mask.y = 0.0f;
         }
-        if (obstacle[uint3(DTid.x, DTid.y, DTid.z - 1)].w > 0.9f) {
+        if (obstacle[uint3(DTid.x, DTid.y, DTid.z - 1)].r > 0.9f) {
             behind = center; obstacle_velocity.z = 0.0f; velocity_mask.z = 0.0f;
         }
-        if (obstacle[uint3(DTid.x, DTid.y, DTid.z + 1)].w > 0.9f) {
+        if (obstacle[uint3(DTid.x, DTid.y, DTid.z + 1)].r > 0.9f) {
             front = center; obstacle_velocity.z = 0.0f; velocity_mask.z = 0.0f;
         }
 

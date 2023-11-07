@@ -246,6 +246,12 @@
       <EntryPointName>main</EntryPointName>
       <ObjectFileOutput>../Grid/CSO/BoundaryCondition3D_CS.cso</ObjectFileOutput>
     </FxCompile>
+    <FxCompile Include="HLSL_CS\BoundingBox3D_CS.hlsl">
+      <ShaderType>Compute</ShaderType>
+      <ShaderModel>5.0</ShaderModel>
+      <EntryPointName>main</EntryPointName>
+      <ObjectFileOutput>../Grid/CSO/BoundingBox3D_CS.cso</ObjectFileOutput>
+    </FxCompile>
     <FxCompile Include="HLSL_CS\Buoyancy3D_CS.hlsl">
       <ShaderType>Compute</ShaderType>
       <ShaderModel>5.0</ShaderModel>

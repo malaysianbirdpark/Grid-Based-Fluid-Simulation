@@ -27,7 +27,7 @@ void main( uint3 DTid : SV_DispatchThreadID ) {
     uint depth;
     velocity_n.GetDimensions(width, height, depth);
 
-	if (obstacle[DTid.xyz].w <= 0.9f) {
+	if (obstacle[DTid.xyz].r <= 0.9f) {
 		min16float3 dr = min16float3((1.0f / width), (1.0f / height), (1.0f / depth));
 
 		min16float3 pos = min16float3(DTid.xyz);

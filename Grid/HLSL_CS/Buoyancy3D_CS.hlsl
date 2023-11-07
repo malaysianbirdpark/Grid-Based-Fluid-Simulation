@@ -1,6 +1,8 @@
 Texture3D<min16float3> velocity_in : register(t0);
 Texture3D<min16float2> quantity_in : register(t1);
 
+Texture2DArray obstacle : register(t6);
+
 RWTexture3D<min16float3> velocity_out : register(u0);
 
 cbuffer constants : register(b1) {
@@ -21,7 +23,7 @@ void main( uint3 DTid : SV_DispatchThreadID )
     const min16float2 q = quantity_in[DTid.xyz];
     if (q.r > 1e-3)
     {
-        if (DTid.x > 1 && DTid.y > 1 && DTid.z > 1 && DTid.x < width - 2 && DTid.y < height - 2 && DTid.z < depth - 2)
+        if (obstacle[DTid.xyz].r <= 0.9f)
         {
             const min16float alpha = 0.0002f;
             const min16float beta = 0.0055f;

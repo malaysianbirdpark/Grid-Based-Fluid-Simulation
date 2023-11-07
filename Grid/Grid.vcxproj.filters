@@ -412,6 +412,9 @@
     <FxCompile Include="HLSL_CS\BoundaryCondition3D_CS.hlsl">
       <Filter>HLSL_CS</Filter>
     </FxCompile>
+    <FxCompile Include="HLSL_CS\BoundingBox3D_CS.hlsl">
+      <Filter>HLSL_CS</Filter>
+    </FxCompile>
     <FxCompile Include="HLSL_CS\Buoyancy3D_CS.hlsl">
       <Filter>HLSL_CS</Filter>
     </FxCompile>

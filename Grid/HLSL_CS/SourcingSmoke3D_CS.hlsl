@@ -24,7 +24,7 @@ void main(uint3 DTid : SV_DispatchThreadID)
 	velocity[DTid.xyz] = velocity_in[DTid.xyz];
     quantity[DTid.xyz] = quantity_in[DTid.xyz];
 
-    if (obstacle[DTid.xyz].w <= 0.9f) {
+    if (obstacle[DTid.xyz].r <= 0.9f) {
 		const min16float r = min16float(width) / 8;
 		if (DTid.y > height - 4 && DTid.y <= height - 2)
 		{

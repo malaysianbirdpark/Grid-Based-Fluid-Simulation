@@ -16,14 +16,14 @@ private:
 
 	Microsoft::WRL::ComPtr<ID3D11DepthStencilState>              _voxelDS;
     Microsoft::WRL::ComPtr<ID3D11Texture2D>                      _voxelDSB;
-	//std::vector<Microsoft::WRL::ComPtr<ID3D11DepthStencilView>>  _voxelDSV;
-	Microsoft::WRL::ComPtr<ID3D11DepthStencilView>               _voxelDSV;
+	std::vector<Microsoft::WRL::ComPtr<ID3D11DepthStencilView>>  _voxelDSV;
+    Microsoft::WRL::ComPtr<ID3D11ShaderResourceView>             _dsvSRV;
 
-
-	std::vector<Microsoft::WRL::ComPtr<ID3D11RenderTargetView>>  _voxelRTV;
+	Microsoft::WRL::ComPtr<ID3D11RenderTargetView>               _voxelRTV;
     Microsoft::WRL::ComPtr<ID3D11UnorderedAccessView>            _voxelUAV;
     Microsoft::WRL::ComPtr<ID3D11ShaderResourceView>             _voxelSRV;
 
+    Microsoft::WRL::ComPtr<ID3D11ComputeShader>                  _boundingBoxCS;
 
 	std::unique_ptr<class PipelineStateObject>                   _pso;
 

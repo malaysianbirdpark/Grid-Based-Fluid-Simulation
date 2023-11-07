@@ -17,5 +17,4 @@ private:
     std::unique_ptr<class DirLight>   _dirLight{};
     std::unique_ptr<class PointLight> _pointLight{};
     std::unique_ptr<class VoxelizationStage> _voxeler{};
-    std::unique_ptr<class InverseTransform> _hell{};
 };

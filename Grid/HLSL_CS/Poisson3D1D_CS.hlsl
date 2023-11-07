@@ -19,17 +19,17 @@ void main( uint3 DTid : SV_DispatchThreadID )
 		const min16float4 center = x_in[DTid.xyz]; 
 
 		const min16float right = 
-			obstacle[uint3(DTid.x + 1, DTid.y, DTid.z)].w <= 0.9f ? x_in[uint3(DTid.x + 1, DTid.y, DTid.z)] : center;
+			obstacle[uint3(DTid.x + 1, DTid.y, DTid.z)].r <= 0.9f ? x_in[uint3(DTid.x + 1, DTid.y, DTid.z)] : center;
 		const min16float left = 
-			obstacle[uint3(DTid.x - 1, DTid.y, DTid.z)].w <= 0.9f ? x_in[uint3(DTid.x - 1, DTid.y, DTid.z)] : center;
+			obstacle[uint3(DTid.x - 1, DTid.y, DTid.z)].r <= 0.9f ? x_in[uint3(DTid.x - 1, DTid.y, DTid.z)] : center;
 		const min16float up = 
-			obstacle[uint3(DTid.x, DTid.y + 1, DTid.z)].w <= 0.9f ? x_in[uint3(DTid.x, DTid.y + 1, DTid.z)] : center;
+			obstacle[uint3(DTid.x, DTid.y + 1, DTid.z)].r <= 0.9f ? x_in[uint3(DTid.x, DTid.y + 1, DTid.z)] : center;
 		const min16float down = 
-			obstacle[uint3(DTid.x, DTid.y - 1, DTid.z)].w <= 0.9f ? x_in[uint3(DTid.x, DTid.y - 1, DTid.z)] : center;
+			obstacle[uint3(DTid.x, DTid.y - 1, DTid.z)].r <= 0.9f ? x_in[uint3(DTid.x, DTid.y - 1, DTid.z)] : center;
 		const min16float front = 
-			obstacle[uint3(DTid.x, DTid.y, DTid.z + 1)].w <= 0.9f ? x_in[uint3(DTid.x, DTid.y, DTid.z + 1)] : center;
+			obstacle[uint3(DTid.x, DTid.y, DTid.z + 1)].r <= 0.9f ? x_in[uint3(DTid.x, DTid.y, DTid.z + 1)] : center;
 		const min16float behind = 
-			obstacle[uint3(DTid.x, DTid.y, DTid.z - 1)].w <= 0.9f ? x_in[uint3(DTid.x, DTid.y, DTid.z - 1)] : center;
+			obstacle[uint3(DTid.x, DTid.y, DTid.z - 1)].r <= 0.9f ? x_in[uint3(DTid.x, DTid.y, DTid.z - 1)] : center;
 
 		x_out[DTid.xyz] = (up + down + left + right + front + behind - div[DTid.xyz]) * 0.1666667f;
 	}

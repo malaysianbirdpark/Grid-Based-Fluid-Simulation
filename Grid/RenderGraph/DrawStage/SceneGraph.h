@@ -21,7 +21,7 @@ enum class ShaderResourceTypes {
 struct SceneTransformParameters {
     float x{};
     float y{};
-    float z{};
+    float z{0.11f};
     float roll{};
     float pitch{};
     float yaw{};
