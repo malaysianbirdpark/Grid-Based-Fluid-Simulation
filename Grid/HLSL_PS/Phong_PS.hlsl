@@ -12,7 +12,8 @@ struct PS_OUT {
 
 Texture2D albedo_map   : register(t0);
 Texture2D normal_map   : register(t1);
-Texture2D previous     : register(t2);
+Texture2D orm_map      : register(t2);
+Texture2D previous     : register(t3);
 
 SamplerState sampler2 : register(s2);
 
@@ -53,8 +54,6 @@ float4 PhongSpec(const float3 to_camera, const float3 normal, const float3 to_li
 PS_OUT main(PS_IN input)
 {
     PS_OUT output;
-    output.color = float4(1.0f, 1.0f, 1.0f, 1.0f);
-	return output;
 
     const float4 diffuse_color = albedo_map.Sample(sampler2, input.uv);
 

@@ -34,7 +34,7 @@ void Renderer::Init(int width, int height, HWND native_wnd)
     swap_chain_flag |= D3D11_CREATE_DEVICE_DEBUG;
 #endif
 
-    D3D_FEATURE_LEVEL feature_level[]{ D3D_FEATURE_LEVEL_11_1 };
+    D3D_FEATURE_LEVEL feature_level[]{ D3D_FEATURE_LEVEL_12_1 };
     ::D3D11CreateDeviceAndSwapChain(
         nullptr,
         D3D_DRIVER_TYPE_HARDWARE,
@@ -60,13 +60,6 @@ void Renderer::Init(int width, int height, HWND native_wnd)
         0.01f,
         200.0f
     ));
-
-  //  DirectX::XMStoreFloat4x4(&_proj, DirectX::XMMatrixOrthographicLH(
-  //      1.0f,
-  //      1.0f,
-  //      0.0f,
-		//20000.0f
-  //  ));
 
     swap_chain.GetBuffer(0u, IID_PPV_ARGS(_backBuffers.ReleaseAndGetAddressOf()));
     device.CreateRenderTargetView(_backBuffers.Get(), nullptr, _backBufferView.ReleaseAndGetAddressOf());

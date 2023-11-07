@@ -1,5 +1,5 @@
-Texture2D<float2> velocity_in : register(s0);
-Texture2D<float4> quantity_in : register(s1);
+Texture2D<float2> velocity_in : register(t0);
+Texture2D<float4> quantity_in : register(t1);
 
 RWTexture2D<float2> velocity : register(u0);
 RWTexture2D<float4> quantity : register(u1);

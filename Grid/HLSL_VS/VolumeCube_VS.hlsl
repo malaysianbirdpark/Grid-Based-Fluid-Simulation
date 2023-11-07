@@ -28,8 +28,7 @@ VS_OUT main(VS_IN input)
 
     output.view_pos  = mul(float4(input.pos, 1.0f), mv);
     output.uvw       = input.uvw;
-    //output.sv_pos    = mul(float4(input.pos, 1.0f), mvp);
-    output.sv_pos    = mul(mul(float4(input.pos, 1.0f), m), mip);
+    output.sv_pos    = mul(float4(input.pos, 1.0f), mvp);
 
     return output;
 }

@@ -7,6 +7,8 @@ Texture3D<min16float2> quantity_n_1_hat : register(t3);
 Texture3D<min16float3> velocity_n_hat : register(t4);
 Texture3D<min16float2> quantity_n_hat : register(t5);
 
+Texture2DArray obstacle : register(t6);
+
 RWTexture3D<min16float3> velocity_n_1 : register(u0);
 RWTexture3D<min16float2> quantity_n_1 : register(u1);
 
@@ -25,7 +27,7 @@ void main( uint3 DTid : SV_DispatchThreadID ) {
     uint depth;
     velocity_n.GetDimensions(width, height, depth);
 
-	if (DTid.x > 0 && DTid.x < width - 1 && DTid.y > 0 && DTid.y < height - 1 && DTid.z > 0 && DTid.z < depth - 1) {
+	if (obstacle[DTid.xyz].w <= 0.9f) {
 		min16float3 dr = min16float3((1.0f / width), (1.0f / height), (1.0f / depth));
 
 		min16float3 pos = min16float3(DTid.xyz);

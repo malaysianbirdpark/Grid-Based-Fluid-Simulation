@@ -321,18 +321,25 @@ AssimpMaterial SceneGraph::ParseMaterial(ID3D11DeviceContext& context, aiMateria
         result.AddOrRelplaceTexture(context, ShaderResourceTypes::NormalMap, final_path.c_str());
     }
 
+    // Occlusion
+    if (aiGetMaterialTexture(ai_material, aiTextureType_AMBIENT_OCCLUSION, 0u, &ai_path, &mapping, &uv_index, &blend, &texture_op, texture_map_mode, &texture_flags) == AI_SUCCESS) {
+        auto const final_path{ process_ai_path(base_path, ai_path.C_Str()) };
+
+        result.AddOrRelplaceTexture(context, ShaderResourceTypes::ORMMap, final_path.c_str());
+    }
+
     // Metallic
     if (aiGetMaterialTexture(ai_material, aiTextureType_METALNESS, 0u, &ai_path, &mapping, &uv_index, &blend, &texture_op, texture_map_mode, &texture_flags) == AI_SUCCESS) {
         auto const final_path{ process_ai_path(base_path, ai_path.C_Str()) };
 
-        result.AddOrRelplaceTexture(context, ShaderResourceTypes::MetallicMap, final_path.c_str());
+        result.AddOrRelplaceTexture(context, ShaderResourceTypes::ORMMap, final_path.c_str());
     }
 
     // Roughness
     if (aiGetMaterialTexture(ai_material, aiTextureType_DIFFUSE_ROUGHNESS, 0u, &ai_path, &mapping, &uv_index, &blend, &texture_op, texture_map_mode, &texture_flags) == AI_SUCCESS) {
         auto const final_path{ process_ai_path(base_path, ai_path.C_Str()) };
 
-        result.AddOrRelplaceTexture(context, ShaderResourceTypes::RoughnessMap, final_path.c_str());
+        result.AddOrRelplaceTexture(context, ShaderResourceTypes::ORMMap, final_path.c_str());
     }
 
     // Emissive Map
@@ -340,13 +347,6 @@ AssimpMaterial SceneGraph::ParseMaterial(ID3D11DeviceContext& context, aiMateria
         auto const final_path{ process_ai_path(base_path, ai_path.C_Str()) };
 
         result.AddOrRelplaceTexture(context, ShaderResourceTypes::EmissiveMap, final_path.c_str());
-    }
-
-    // Occlusion
-    if (aiGetMaterialTexture(ai_material, aiTextureType_AMBIENT_OCCLUSION, 0u, &ai_path, &mapping, &uv_index, &blend, &texture_op, texture_map_mode, &texture_flags) == AI_SUCCESS) {
-        auto const final_path{ process_ai_path(base_path, ai_path.C_Str()) };
-
-        result.AddOrRelplaceTexture(context, ShaderResourceTypes::OcclusionMap, final_path.c_str());
     }
 
     // Thinckness
