@@ -15,6 +15,8 @@ private:
 	Microsoft::WRL::ComPtr<ID3D11RasterizerState>                _rs;
 
 	Microsoft::WRL::ComPtr<ID3D11DepthStencilState>              _voxelDS;
+	Microsoft::WRL::ComPtr<ID3D11DepthStencilState>              _readDS;
+
     Microsoft::WRL::ComPtr<ID3D11Texture2D>                      _voxelDSB;
 	std::vector<Microsoft::WRL::ComPtr<ID3D11DepthStencilView>>  _voxelDSV;
     Microsoft::WRL::ComPtr<ID3D11ShaderResourceView>             _dsvSRV;
@@ -23,21 +25,14 @@ private:
     Microsoft::WRL::ComPtr<ID3D11ShaderResourceView>             _voxelSRV;
     Microsoft::WRL::ComPtr<ID3D11UnorderedAccessView>            _voxelUAV;
 
-    Microsoft::WRL::ComPtr<ID3D11ComputeShader>                  _boundingBoxCS;
-private:
-    std::vector<Microsoft::WRL::ComPtr<ID3D11RenderTargetView>>  _prevVpRTV;
-    Microsoft::WRL::ComPtr<ID3D11ShaderResourceView>             _prevVpSRV;
-    Microsoft::WRL::ComPtr<ID3D11UnorderedAccessView>            _prevVpUAV;
-
-    std::vector<Microsoft::WRL::ComPtr<ID3D11RenderTargetView>>  _curVpRTV;
-    Microsoft::WRL::ComPtr<ID3D11ShaderResourceView>             _curVpSRV;
-    Microsoft::WRL::ComPtr<ID3D11UnorderedAccessView>            _curVpUAV;
-
+	std::vector<Microsoft::WRL::ComPtr<ID3D11RenderTargetView>>  _velocityRTV;
     Microsoft::WRL::ComPtr<ID3D11ShaderResourceView>             _velocitySRV;
     Microsoft::WRL::ComPtr<ID3D11UnorderedAccessView>            _velocityUAV;
+
+    Microsoft::WRL::ComPtr<ID3D11ComputeShader>                  _boundingBoxCS;
 private:
 	std::unique_ptr<class PipelineStateObject>                   _obstaclePSO;
-	std::unique_ptr<class PipelineStateObject>                   _vertexPosPSO;
+	std::unique_ptr<class PipelineStateObject>                   _vertexVelocityPSO;
 
 	std::shared_ptr<class DrawSceneStage>                        _targetScene;
 	std::shared_ptr<class DrawVolumeStage>                       _targetVolume;

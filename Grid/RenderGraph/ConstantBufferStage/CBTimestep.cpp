@@ -27,6 +27,7 @@ void CBTimestep::Run(ID3D11DeviceContext& context)
 {
     Upload(context);
 	context.CSSetConstantBuffers(1u, 1u, _buffer.GetAddressOf());
+	context.VSSetConstantBuffers(2u, 1u, _buffer.GetAddressOf());
 }
 
 void CBTimestep::Upload(ID3D11DeviceContext& context)

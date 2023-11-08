@@ -4,6 +4,9 @@
     <Filter Include="HLSL_CS">
       <UniqueIdentifier>{2DFF7161-99DE-F0FC-A2F6-7BD30E55575E}</UniqueIdentifier>
     </Filter>
+    <Filter Include="HLSL_GS">
+      <UniqueIdentifier>{B1FF7161-1DDF-F0FC-26F7-7BD39255575E}</UniqueIdentifier>
+    </Filter>
     <Filter Include="HLSL_PS">
       <UniqueIdentifier>{DA007261-46E0-F0FC-4FF8-7BD3BB56575E}</UniqueIdentifier>
     </Filter>
@@ -484,6 +487,9 @@
     <FxCompile Include="HLSL_CS\Vorticity3D_CS.hlsl">
       <Filter>HLSL_CS</Filter>
     </FxCompile>
+    <FxCompile Include="HLSL_GS\VertexVelocity_GS.hlsl">
+      <Filter>HLSL_GS</Filter>
+    </FxCompile>
     <FxCompile Include="HLSL_PS\DrawUV_PS.hlsl">
       <Filter>HLSL_PS</Filter>
     </FxCompile>
@@ -493,7 +499,7 @@
     <FxCompile Include="HLSL_PS\SolidTex_PS.hlsl">
       <Filter>HLSL_PS</Filter>
     </FxCompile>
-    <FxCompile Include="HLSL_PS\VertexPos_PS.hlsl">
+    <FxCompile Include="HLSL_PS\VertexVelocity_PS.hlsl">
       <Filter>HLSL_PS</Filter>
     </FxCompile>
     <FxCompile Include="HLSL_PS\VolumeCube_PS.hlsl">
@@ -514,7 +520,7 @@
     <FxCompile Include="HLSL_VS\SolidTex_VS.hlsl">
       <Filter>HLSL_VS</Filter>
     </FxCompile>
-    <FxCompile Include="HLSL_VS\VertexPos_VS.hlsl">
+    <FxCompile Include="HLSL_VS\VertexVelocity_VS.hlsl">
       <Filter>HLSL_VS</Filter>
     </FxCompile>
     <FxCompile Include="HLSL_VS\VolumeCube_VS.hlsl">

@@ -26,7 +26,7 @@ void main( uint3 DTid : SV_DispatchThreadID )
         if (obstacle[DTid.xyz].r <= 0.9f)
         {
             const min16float alpha = 0.0002f;
-            const min16float beta = 0.0055f;
+            const min16float beta = 0.0155f;
             const min16float3 f_b = (alpha * -q.r + beta * (q.g - 288.0f)) * min16float3(0.0f, -1.0f, 0.0f);
             velocity_out[DTid.xyz] += f_b * dt;
         }

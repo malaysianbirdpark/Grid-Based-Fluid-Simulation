@@ -22,6 +22,7 @@ float4 main(PS_IN input) : SV_Target
 
     const float3 dr = float3((0.5f / width), (0.5f / height), (0.5f / depth));
 
+    const float3 pixel_pos = input.sv_pos.xyz + float3(0.5f, 0.5f, 0.0f);
     const float3 front_uvw = front_texcoord.Load(input.sv_pos);
     const float3 back_uvw  = back_texcoord.Load(input.sv_pos);
     const float  uvw_len   = length(back_uvw - front_uvw);

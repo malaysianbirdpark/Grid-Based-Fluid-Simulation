@@ -23,17 +23,14 @@ DrawSceneStage::DrawSceneStage(ID3D11DeviceContext& context, char const* name)
         {"TANGENT", 0u, DXGI_FORMAT_R32G32B32_FLOAT, 0u, sizeof(DirectX::XMFLOAT3) * 2, D3D11_INPUT_PER_VERTEX_DATA, 0u},
         {"BINORMAL", 0u, DXGI_FORMAT_R32G32B32_FLOAT, 0u, sizeof(DirectX::XMFLOAT3) * 3, D3D11_INPUT_PER_VERTEX_DATA, 0u},
         {"TEXCOORD", 0u, DXGI_FORMAT_R32G32_FLOAT, 0u, sizeof(DirectX::XMFLOAT3) * 4, D3D11_INPUT_PER_VERTEX_DATA, 0u},
+        {"PREV_POS", 0u, DXGI_FORMAT_R32G32B32_FLOAT, 1u, 0u, D3D11_INPUT_PER_VERTEX_DATA, 0u},
+        {"VELOCITY", 0u, DXGI_FORMAT_R32G32B32_FLOAT, 1u, sizeof(DirectX::XMFLOAT3), D3D11_INPUT_PER_VERTEX_DATA, 0u},
     };
 
     _pso.push_back(std::move(std::make_unique<PipelineStateObject>()));
 	_pso.back()->SetVertexShader("./CSO/Phong_VS.cso");
 	_pso.back()->SetInputLayout(input_elem_desc);
 	_pso.back()->SetPixelShader("./CSO/Phong_PS.cso");
-
- //   _pso.push_back(std::move(std::make_unique<PipelineStateObject>())); 
-	//_pso.back()->SetVertexShader("./CSO/SolidTex_VS.cso");
-	//_pso.back()->SetInputLayout(input_elem_desc);
-	//_pso.back()->SetPixelShader("./CSO/SolidTex_PS.cso");
 
     InitRS();
     InitDS();
@@ -76,7 +73,8 @@ void DrawSceneStage::Run(ID3D11DeviceContext& context)
             mesh.Bind(context);
     //        if (_scene._nodeId_to_materialId.contains(node)) 
 				//_scene._material[_scene._nodeId_to_materialId[node]].Bind(context);
-			context.DrawIndexedInstanced(mesh.GetIndexCount(), 1u, 0u, 0u, 0u);
+			//context.DrawIndexedInstanced(mesh.GetIndexCount(), 1u, 0u, 0u, 0u);
+			context.DrawIndexed(mesh.GetIndexCount(), 0u, 0u);
         }
 
         if ((_scene._tree[node]._firstChild != -1) && !_visited[_scene._tree[node]._firstChild]) {
@@ -142,8 +140,9 @@ void DrawSceneStage::RawDraw(ID3D11DeviceContext& context)
             _transform->Bind(context);
 
             auto& mesh{ _scene._mesh[_scene._nodeId_to_meshId[node]] };
-            mesh.Bind(context);
-			context.DrawIndexedInstanced(mesh.GetIndexCount(), 1u, 0u, 0u, 0u);
+            mesh.RawBind(context);
+			//context.DrawIndexedInstanced(mesh.GetIndexCount(), 1u, 0u, 0u, 0u);
+			context.DrawIndexed(mesh.GetIndexCount(), 0u, 0u);
         }
 
         if ((_scene._tree[node]._firstChild != -1) && !_visited[_scene._tree[node]._firstChild]) {

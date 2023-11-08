@@ -54,8 +54,7 @@ public:
     AssimpMesh() = default;
     AssimpMesh(
         Microsoft::WRL::ComPtr<ID3D11Buffer>&& vertex_buffer,
-        Microsoft::WRL::ComPtr<ID3D11Buffer>&& prev,
-        Microsoft::WRL::ComPtr<ID3D11Buffer>&& cur,
+        Microsoft::WRL::ComPtr<ID3D11Buffer>&& pos_buffer,
         Microsoft::WRL::ComPtr<ID3D11Buffer>&& index_buffer,
         D3D11_PRIMITIVE_TOPOLOGY topology,
         UINT vertex_count,
@@ -63,24 +62,16 @@ public:
     );
 
     void Bind(ID3D11DeviceContext & context) const;
-    void CalcVertexPos(ID3D11DeviceContext & context);
+    void RawBind(ID3D11DeviceContext & context) const;
 
     [[nodiscard]] UINT GetIndexCount() const;
 private:
     Microsoft::WRL::ComPtr<ID3D11Buffer>  _vertexBuffer;
-    Microsoft::WRL::ComPtr<ID3D11Buffer>  _prev;
-    Microsoft::WRL::ComPtr<ID3D11Buffer>  _cur;
-
-    Microsoft::WRL::ComPtr<ID3D11ComputeShader>       _vertexPosCS;
-    Microsoft::WRL::ComPtr<ID3D11ShaderResourceView>  _vertexSRV;
-    Microsoft::WRL::ComPtr<ID3D11UnorderedAccessView> _prevUAV;
-    Microsoft::WRL::ComPtr<ID3D11UnorderedAccessView> _curUAV;
-
+    Microsoft::WRL::ComPtr<ID3D11Buffer>  _posBuffer;
+    Microsoft::WRL::ComPtr<ID3D11Buffer>  _velocityBuffer;
     Microsoft::WRL::ComPtr<ID3D11Buffer>  _indexBuffer;
     D3D11_PRIMITIVE_TOPOLOGY              _topology;
     UINT                                  _indexCount;
-    UINT                                  _stride;
-
 };
 
 struct SceneNode {
@@ -98,8 +89,7 @@ class SceneGraph {
     static constexpr int MAX_NODE_LEVEL{ 20 };
 
     using VertexData = std::tuple<Microsoft::WRL::ComPtr<ID3D11Buffer>, 
-                                  Microsoft::WRL::ComPtr<ID3D11Buffer>, 
-                                  Microsoft::WRL::ComPtr<ID3D11Buffer>, 
+                                  Microsoft::WRL::ComPtr<ID3D11Buffer>,
                                   Microsoft::WRL::ComPtr<ID3D11Buffer>>;
 public:
     explicit SceneGraph() = default;
