@@ -28,7 +28,7 @@ void main(uint3 DTid : SV_DispatchThreadID)
 		if (DTid.y > height - 50 && DTid.y <= height - 2)
 		{
 			velocity[DTid.xyz] = 0.0f;
-			quantity[DTid.xyz] += min16float2(1000.0f, 0.0f) * speed;
+			quantity[DTid.xyz] += min16float2(100.0f, 0.0f) * speed;
 		}
     }
 }

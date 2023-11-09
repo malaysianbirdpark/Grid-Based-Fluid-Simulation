@@ -32,6 +32,7 @@ Sourcing3DStage::Sourcing3DStage()
     // quantity :
     // r : density
     // g : temperature
+    // b : signed distance
 	desc.Format = DXGI_FORMAT_R16G16B16A16_FLOAT;
     pDevice->CreateTexture3D(&desc, nullptr, _resource[1].ReleaseAndGetAddressOf());
     pDevice->CreateUnorderedAccessView(_resource[1].Get(), nullptr, _uav[1].ReleaseAndGetAddressOf());
