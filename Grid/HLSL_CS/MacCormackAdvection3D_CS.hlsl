@@ -7,7 +7,8 @@ Texture3D<min16float2> quantity_n_1_hat : register(t3);
 Texture3D<min16float3> velocity_n_hat : register(t4);
 Texture3D<min16float2> quantity_n_hat : register(t5);
 
-Texture2DArray obstacle : register(t6);
+Texture2DArray obstacle     : register(t6);
+Texture2DArray obstacle_vel : register(t7);
 
 RWTexture3D<min16float3> velocity_n_1 : register(u0);
 RWTexture3D<min16float2> quantity_n_1 : register(u1);
@@ -81,4 +82,9 @@ void main( uint3 DTid : SV_DispatchThreadID ) {
 		velocity_n_1[DTid.xyz] = vel_final;
         quantity_n_1[DTid.xyz] = q_final;
 	}
+    else {
+        velocity_n_1[DTid.xyz] = min16float3(-obstacle_vel[DTid.xyz].x, -obstacle_vel[DTid.xyz].y, -obstacle_vel[DTid.xyz].z) * 2.2f;
+        if (length(velocity_n_1[DTid.xyz]) <= 1e-5)
+            quantity_n_1[DTid.xyz] = 0.0f;
+    }
 }

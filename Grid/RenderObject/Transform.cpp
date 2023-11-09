@@ -61,6 +61,7 @@ void Transform::Update(ID3D11DeviceContext& context)
 void Transform::Bind(ID3D11DeviceContext& context) const
 {
     context.VSSetConstantBuffers(0u, 1u, _resource.GetAddressOf());
+    context.CSSetConstantBuffers(2u, 1u, _resource.GetAddressOf());
 }
 
 InverseTransform::InverseTransform(ID3D11DeviceContext& context)

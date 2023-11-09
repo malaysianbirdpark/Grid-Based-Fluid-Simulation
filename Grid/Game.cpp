@@ -42,6 +42,7 @@
 #include "PointLight.h"
 
 #include "VoxelizationStage.h"
+#include "CBVoxelization.h"
 
 Game::Game() 
 {

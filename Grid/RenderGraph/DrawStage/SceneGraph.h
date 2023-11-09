@@ -63,15 +63,23 @@ public:
 
     void Bind(ID3D11DeviceContext & context) const;
     void RawBind(ID3D11DeviceContext & context) const;
+    void CalculateVelocity(ID3D11DeviceContext& context) const;
 
     [[nodiscard]] UINT GetIndexCount() const;
 private:
     Microsoft::WRL::ComPtr<ID3D11Buffer>  _vertexBuffer;
     Microsoft::WRL::ComPtr<ID3D11Buffer>  _posBuffer;
-    Microsoft::WRL::ComPtr<ID3D11Buffer>  _velocityBuffer;
+
+    Microsoft::WRL::ComPtr<ID3D11Buffer>  _prevBuffer;
+
     Microsoft::WRL::ComPtr<ID3D11Buffer>  _indexBuffer;
     D3D11_PRIMITIVE_TOPOLOGY              _topology;
+    UINT                                  _vertexCount;
     UINT                                  _indexCount;
+
+    Microsoft::WRL::ComPtr<ID3D11UnorderedAccessView>  _verticesUAV;
+    Microsoft::WRL::ComPtr<ID3D11UnorderedAccessView>  _prevUAV;
+    inline static Microsoft::WRL::ComPtr<ID3D11ComputeShader> _vertexPosCS{ nullptr };
 };
 
 struct SceneNode {

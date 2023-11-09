@@ -48,6 +48,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="CBVoxelization.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="Platform\Input.h">
       <Filter>Platform</Filter>
@@ -226,6 +227,7 @@
     <ClInclude Include="pch.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="CBVoxelization.cpp" />
     <ClCompile Include="EntryPoint.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Platform\Input.cpp">
@@ -487,7 +489,7 @@
     <FxCompile Include="HLSL_CS\Vorticity3D_CS.hlsl">
       <Filter>HLSL_CS</Filter>
     </FxCompile>
-    <FxCompile Include="HLSL_GS\VertexVelocity_GS.hlsl">
+    <FxCompile Include="HLSL_GS\Voxelization_GS.hlsl">
       <Filter>HLSL_GS</Filter>
     </FxCompile>
     <FxCompile Include="HLSL_PS\DrawUV_PS.hlsl">

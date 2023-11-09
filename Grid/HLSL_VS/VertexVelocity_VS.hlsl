@@ -1,15 +1,11 @@
 struct VS_IN {
-    float3 pos      : POSITION;
-};
-
-struct VS_VEL {
-    float3 prev     : PREV_POS;
-    float3 velocity : VELOCITY;
+    float4 pos      : POSITION0;
+    float4 prev     : POSITION1;
 };
 
 struct VS_OUT {
-    float4 pos       : SV_POSITION;
     float3 velocity  : VELOCITY;
+    float4 pos       : SV_POSITION;
 };
 
 cbuffer mvp : register(b0)
@@ -24,12 +20,18 @@ cbuffer mip : register(b1)
     matrix mip;
 };
 
-VS_OUT main(VS_IN input, VS_VEL vel)
+cbuffer timestep : register(b2)
+{
+    float dt;
+};
+
+VS_OUT main(VS_IN input)
 {
 	VS_OUT output;
 
-    output.pos = mul(mul(float4(input.pos, 1.0f), m), mip);
-    output.velocity = vel.velocity;
+    const float4 pos = mul(input.pos, m);
+    output.pos = mul(pos, mip);
+    output.velocity = (input.prev.xyz - pos.xyz) * 60.0f;
 
     return output;
 }

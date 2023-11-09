@@ -2,12 +2,11 @@ struct PS_IN {
     float3 world_pos  : POSITION;
     float3 normal     : NORMAL;
     float3 tangent    : TANGENT;
-    float3 binormal   : BINORMAL;
     float2 uv         : TEXCOORD;
 };
 
 struct PS_OUT {
-    float4 color : SV_TARGET;
+    float4 color    : SV_TARGET0;
 };
 
 Texture2D albedo_map   : register(t0);

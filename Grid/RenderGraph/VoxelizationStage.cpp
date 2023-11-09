@@ -6,6 +6,8 @@
 #include "Transform.h"
 #include "PipelineStateObject.h"
 
+#include "CBVoxelization.h"
+
 #include <d3dcompiler.h>
 
 VoxelizationStage::VoxelizationStage(ID3D11DeviceContext& context)
@@ -48,25 +50,24 @@ VoxelizationStage::VoxelizationStage(ID3D11DeviceContext& context)
 
             desc.DepthEnable = TRUE;
             desc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
-            desc.DepthFunc = D3D11_COMPARISON_ALWAYS;
+            desc.DepthFunc = D3D11_COMPARISON_LESS;
 
             desc.StencilEnable = TRUE;
             desc.StencilReadMask = D3D11_DEFAULT_STENCIL_READ_MASK;
-			desc.StencilWriteMask = D3D11_DEFAULT_STENCIL_WRITE_MASK;
+            desc.StencilWriteMask = 0u;
 
             desc.FrontFace.StencilFailOp = D3D11_STENCIL_OP_KEEP;
             desc.FrontFace.StencilDepthFailOp = D3D11_STENCIL_OP_KEEP;
             desc.FrontFace.StencilPassOp = D3D11_STENCIL_OP_KEEP;
-            desc.FrontFace.StencilFunc = D3D11_COMPARISON_GREATER_EQUAL;
+            desc.FrontFace.StencilFunc = D3D11_COMPARISON_NOT_EQUAL;
 
             desc.BackFace.StencilFailOp = D3D11_STENCIL_OP_KEEP;
             desc.BackFace.StencilDepthFailOp = D3D11_STENCIL_OP_KEEP;
             desc.BackFace.StencilPassOp = D3D11_STENCIL_OP_KEEP;
-            desc.BackFace.StencilFunc = D3D11_COMPARISON_GREATER_EQUAL;
+            desc.BackFace.StencilFunc = D3D11_COMPARISON_NOT_EQUAL;
 
 			pDevice->CreateDepthStencilState(&desc, _readDS.ReleaseAndGetAddressOf());
 		}
-
 
 		D3D11_TEXTURE2D_DESC descDepth{};
 		descDepth.Usage = D3D11_USAGE_DEFAULT;
@@ -120,24 +121,20 @@ VoxelizationStage::VoxelizationStage(ID3D11DeviceContext& context)
 		desc.Format = DXGI_FORMAT_R8_UNORM;
 		pDevice->CreateTexture2D(&desc, nullptr, _voxelTex.ReleaseAndGetAddressOf());
 
-		D3D11_RENDER_TARGET_VIEW_DESC rtv_desc{};
-		rtv_desc.Format = DXGI_FORMAT_R8_UNORM;
-		rtv_desc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2D;
-		rtv_desc.Texture2D.MipSlice = 0u;
-		pDevice->CreateRenderTargetView(_voxelTex.Get(), &rtv_desc, _voxelRTV.ReleaseAndGetAddressOf());
-
 		pDevice->CreateShaderResourceView(_voxelTex.Get(), nullptr, _voxelSRV.ReleaseAndGetAddressOf());
 		pDevice->CreateUnorderedAccessView(_voxelTex.Get(), nullptr, _voxelUAV.ReleaseAndGetAddressOf());
 	}
 
 	{
 		std::vector<D3D11_INPUT_ELEMENT_DESC> input_elem_desc{
-			{"POSITION", 0u, DXGI_FORMAT_R32G32B32_FLOAT, 0u, 0u, D3D11_INPUT_PER_VERTEX_DATA, 0u}
+			{"POSITION", 0u, DXGI_FORMAT_R32G32B32A32_FLOAT, 0u, 0u, D3D11_INPUT_PER_VERTEX_DATA, 0u},
+			{"POSITION", 1u, DXGI_FORMAT_R32G32B32A32_FLOAT, 1u, 0u, D3D11_INPUT_PER_VERTEX_DATA, 0u},
 		};
 
 		_obstaclePSO = std::make_unique<PipelineStateObject>();
 		_obstaclePSO->SetVertexShader("./CSO/Voxelization_VS.cso");
 		_obstaclePSO->SetInputLayout(input_elem_desc);
+		//_obstaclePSO->SetGeometryShader("./CSO/Voxelization_GS.cso");
 		_obstaclePSO->SetPixelShader("./CSO/Voxelization_PS.cso");
 	}
 
@@ -211,17 +208,18 @@ VoxelizationStage::VoxelizationStage(ID3D11DeviceContext& context)
 
 	{
 		std::vector<D3D11_INPUT_ELEMENT_DESC> input_elem_desc{
-			{"POSITION", 0u, DXGI_FORMAT_R32G32B32_FLOAT, 0u, 0u, D3D11_INPUT_PER_VERTEX_DATA, 0u},
-			{"PREV_POS", 0u, DXGI_FORMAT_R32G32B32_FLOAT, 1u, 0u, D3D11_INPUT_PER_VERTEX_DATA, 0u},
-			{"VELOCITY", 0u, DXGI_FORMAT_R32G32B32_FLOAT, 1u, sizeof(DirectX::XMFLOAT3), D3D11_INPUT_PER_VERTEX_DATA, 0u}
+			{"POSITION", 0u, DXGI_FORMAT_R32G32B32A32_FLOAT, 0u, 0u, D3D11_INPUT_PER_VERTEX_DATA, 0u},
+			{"POSITION", 1u, DXGI_FORMAT_R32G32B32A32_FLOAT, 1u, 0u, D3D11_INPUT_PER_VERTEX_DATA, 0u},
 		};
 
 		_vertexVelocityPSO = std::make_unique<PipelineStateObject>();
 		_vertexVelocityPSO->SetVertexShader("./CSO/VertexVelocity_VS.cso");
 		_vertexVelocityPSO->SetInputLayout(input_elem_desc);
-		_vertexVelocityPSO->SetGeometryShader("./CSO/VertexVelocity_GS.cso");
+		//_vertexVelocityPSO->SetGeometryShader("./CSO/VertexVelocity_GS.cso");
 		_vertexVelocityPSO->SetPixelShader("./CSO/VertexVelocity_PS.cso");
 	}
+
+	_cb = std::make_unique<CBVoxelization>();
 }
 
 void VoxelizationStage::Run(ID3D11DeviceContext& context)
@@ -233,10 +231,13 @@ void VoxelizationStage::Run(ID3D11DeviceContext& context)
 
 	_inverseTransform->SetModel(DirectX::XMMatrixIdentity());
 
-	for (auto depth{ 0 }; depth != gSimulationInfo.depth; ++depth)
+	for (auto depth{ 0 }; depth != gSimulationInfo.depth; ++depth) {
+		context.ClearRenderTargetView(_velocityRTV[depth].Get(), clear_color);
 		context.ClearDepthStencilView(_voxelDSV[depth].Get(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0u);
+	}
 
 	// Obstacle
+	_obstaclePSO->Bind(context);
     context.OMSetDepthStencilState(_voxelDS.Get(), 1u);
 	for (auto depth{ 0 }; depth != gSimulationInfo.depth; ++depth) {
 		_inverseTransform->SetProj(
@@ -250,8 +251,7 @@ void VoxelizationStage::Run(ID3D11DeviceContext& context)
 		_inverseTransform->Bind(context);
 
 		// draw target object
-		context.OMSetRenderTargets(1u, _voxelRTV.GetAddressOf(), _voxelDSV[depth].Get());
-		_obstaclePSO->Bind(context);
+		context.OMSetRenderTargets(1u, _velocityRTV[depth].GetAddressOf(), _voxelDSV[depth].Get());
 		_targetScene->RawDraw(context);
 	}
 
@@ -270,26 +270,8 @@ void VoxelizationStage::Run(ID3D11DeviceContext& context)
     context.CSSetShaderResources(0u, 1u, barrier0);
     context.CSSetUnorderedAccessViews(0u, 1u, barrier1, nullptr);
 
-	context.CSSetShaderResources(6u, 1u, _voxelSRV.GetAddressOf());
-
-	// Calculate velocity
-    context.OMSetDepthStencilState(_readDS.Get(), 1u);
-	for (auto depth{ 0 }; depth != gSimulationInfo.depth; ++depth) {
-		_inverseTransform->SetProj(
-            DirectX::XMMatrixOrthographicOffCenterLH(
-                -0.5f, 0.5f, -0.5f, 0.5f,
-				static_cast<float>(depth) / gSimulationInfo.depth,
-                20000.0f
-            )
-		);
-		_inverseTransform->Update(context);
-		_inverseTransform->Bind(context);
-
-		// draw target object
-		context.OMSetRenderTargets(1u, _velocityRTV[depth].GetAddressOf(), _voxelDSV[depth].Get());
-		_vertexVelocityPSO->Bind(context);
-		_targetScene->RawDraw(context);
-	}
+	ID3D11ShaderResourceView* const voxels[2]{ _voxelSRV.Get(), _velocitySRV.Get() };
+	context.CSSetShaderResources(6u, 2u, voxels);
 }
 
 void VoxelizationStage::AddTargetScene(std::shared_ptr<class DrawSceneStage> target)

@@ -21,7 +21,6 @@ private:
 	std::vector<Microsoft::WRL::ComPtr<ID3D11DepthStencilView>>  _voxelDSV;
     Microsoft::WRL::ComPtr<ID3D11ShaderResourceView>             _dsvSRV;
 
-	Microsoft::WRL::ComPtr<ID3D11RenderTargetView>               _voxelRTV;
     Microsoft::WRL::ComPtr<ID3D11ShaderResourceView>             _voxelSRV;
     Microsoft::WRL::ComPtr<ID3D11UnorderedAccessView>            _voxelUAV;
 
@@ -38,5 +37,7 @@ private:
 	std::shared_ptr<class DrawVolumeStage>                       _targetVolume;
 
 	std::unique_ptr<class InverseTransform>                      _inverseTransform;
+
+	std::unique_ptr<class CBVoxelization>                        _cb;
 };
 

@@ -100,6 +100,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="CBVoxelization.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="Platform\Input.h" />
     <ClInclude Include="Platform\Win32.h" />
@@ -162,6 +163,7 @@
     <ClInclude Include="pch.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="CBVoxelization.cpp" />
     <ClCompile Include="EntryPoint.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Platform\Input.cpp" />
@@ -390,11 +392,11 @@
       <EntryPointName>main</EntryPointName>
       <ObjectFileOutput>../Grid/CSO/Vorticity3D_CS.cso</ObjectFileOutput>
     </FxCompile>
-    <FxCompile Include="HLSL_GS\VertexVelocity_GS.hlsl">
+    <FxCompile Include="HLSL_GS\Voxelization_GS.hlsl">
       <ShaderType>Geometry</ShaderType>
       <ShaderModel>5.0</ShaderModel>
       <EntryPointName>main</EntryPointName>
-      <ObjectFileOutput>../Grid/CSO/VertexVelocity_GS.cso</ObjectFileOutput>
+      <ObjectFileOutput>../Grid/CSO/Voxelization_GS.cso</ObjectFileOutput>
     </FxCompile>
     <FxCompile Include="HLSL_PS\DrawUV_PS.hlsl">
       <ShaderType>Pixel</ShaderType>

@@ -39,7 +39,7 @@ void main(uint3 DTid : SV_DispatchThreadID)
 		}
 		else
 		{
-			quantity[DTid.xyz] = max(quantity_in[DTid.xyz] - min16float2(0.0015f, 0.0007f), 0.0f);
+			quantity[DTid.xyz] = max(quantity_in[DTid.xyz] - min16float2(0.0025f, 0.007f), 0.0f);
 		}
     }
 }

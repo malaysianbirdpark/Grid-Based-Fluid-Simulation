@@ -1,4 +1,8 @@
-unorm float main() : SV_TARGET
+struct PS_IN {
+    float3 velocity    : VELOCITY;
+};
+
+float4 main(PS_IN input) : SV_TARGET
 {
-	return 1.0f;
+    return float4(-input.velocity.x, input.velocity.y, -input.velocity.z, 0.0f);
 }

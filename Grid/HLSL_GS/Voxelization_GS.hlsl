@@ -1,7 +1,7 @@
 struct GS_IN
 {
-    float4 pos       : SV_POSITION;
     float3 velocity  : VELOCITY;
+    float4 pos       : SV_POSITION;
 };
 
 struct GS_OUT {
@@ -10,9 +10,8 @@ struct GS_OUT {
     float4 pos         : SV_POSITION;
 };
 
-struct GS_INT_OUT {
+struct GS_INT {
     float3 velocity    : VELOCITY;
-    uint   slice_index : SV_RenderTargetArrayIndex;
     float2 pos         : POSITION;
 };
 
@@ -24,7 +23,7 @@ cbuffer slice_info : register(b0)
     uint  height;
 }
 
-void GetEdgePlaneIntersection(GS_IN vA, GS_IN vB, inout GS_INT_OUT intersections[2], inout int idx);
+void GetEdgePlaneIntersection(GS_IN vA, GS_IN vB, inout GS_INT intersections[2], inout int idx);
 
 [maxvertexcount(4)]
 void main(
@@ -38,7 +37,7 @@ void main(
     if ((slice_depth < min_z) || (slice_depth > max_z))     // This triangle doesn't intersect the slice.    
         return;
 
-    GS_INT_OUT intersections[2];
+    GS_INT intersections[2];
     for (int i = 0; i < 2; i++)
     {
         intersections[i].pos = 0;
@@ -71,7 +70,7 @@ void main(
     triStream.RestartStrip();
 }
 
-void GetEdgePlaneIntersection(GS_IN vA, GS_IN vB, inout GS_INT_OUT intersections[2], inout int idx)
+void GetEdgePlaneIntersection(GS_IN vA, GS_IN vB, inout GS_INT intersections[2], inout int idx)
 {
     float t = (slice_depth - vA.pos.z) / (vB.pos.z - vA.pos.z);
     if ((t < 0) || (t > 1))
