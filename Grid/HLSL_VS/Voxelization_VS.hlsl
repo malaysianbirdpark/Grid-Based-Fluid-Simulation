@@ -28,7 +28,7 @@ VS_OUT main(VS_IN input)
 
     const float4 pos = mul(input.pos, m);
     output.pos = mul(pos, mip);
-    output.velocity = (input.prev.xyz - pos.xyz) * 10000.0f;
+    output.velocity = (input.prev.xyz - pos.xyz) * 60.0f * 200.0f;
 
     return output;
 }

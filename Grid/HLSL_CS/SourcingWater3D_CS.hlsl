@@ -25,21 +25,10 @@ void main(uint3 DTid : SV_DispatchThreadID)
     quantity[DTid.xyz] = quantity_in[DTid.xyz];
 
     if (obstacle[DTid.xyz].r <= 0.9f) {
-		const min16float r = min16float(width) / 8;
-		if (DTid.y > height - 4 && DTid.y <= height - 2)
+		if (DTid.y > height - 50 && DTid.y <= height - 2)
 		{
-			const min16float x = DTid.x - (min16float(width) / 2.0f);
-			const min16float z = DTid.z - (min16float(depth) / 2.0f);
-
-			if (x * x + z * z <= r * r)
-			{
-				velocity[DTid.xyz] += normalize(min16float3(dir.xyz)) * speed;
-				quantity[DTid.xyz] += min16float2(20.0f, 880.0f);
-			}
-		}
-		else
-		{
-			quantity[DTid.xyz] = max(quantity_in[DTid.xyz] - min16float2(0.0025f, 0.007f), 0.0f);
+			velocity[DTid.xyz] = 0.0f;
+			quantity[DTid.xyz] += min16float2(1000.0f, 0.0f) * speed;
 		}
     }
 }

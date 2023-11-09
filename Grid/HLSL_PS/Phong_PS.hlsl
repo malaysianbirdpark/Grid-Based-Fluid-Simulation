@@ -54,9 +54,6 @@ PS_OUT main(PS_IN input)
 {
     PS_OUT output;
 
-    output.color = float4(1.0f, 1.0f, 1.0f, 1.0f);
-    return output;
-
     const float4 diffuse_color = albedo_map.Sample(sampler2, input.uv);
 
     clip(diffuse_color.a < 0.1f ? -1 : 1);
