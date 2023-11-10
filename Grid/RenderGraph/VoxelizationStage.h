@@ -25,6 +25,7 @@ private:
 
 	Microsoft::WRL::ComPtr<ID3D11RenderTargetView>               _velocityRTV;
     Microsoft::WRL::ComPtr<ID3D11ShaderResourceView>             _velocitySRV;
+    Microsoft::WRL::ComPtr<ID3D11UnorderedAccessView>            _velocityUAV;
 
     Microsoft::WRL::ComPtr<ID3D11ComputeShader>                  _boundingBoxCS;
 private:

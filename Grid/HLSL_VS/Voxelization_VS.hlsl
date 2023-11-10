@@ -28,7 +28,7 @@ VS_OUT main(VS_IN input, uint id : SV_InstanceID)
 
     const float4 pos = mul(input.pos, m);
     output.pos = mul(pos, mip[id].data);
-    output.velocity = (input.prev.xyz - pos.xyz) * 60.0f * 200.0f;
+    output.velocity = (input.prev.xyz - pos.xyz) * 60.0f * 5.0f;
     output.slice = id;
 
     return output;

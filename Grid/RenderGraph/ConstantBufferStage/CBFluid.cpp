@@ -56,7 +56,7 @@ void CBFluid::Update()
 	ImGui::Text("Color");
 	ImGui::RadioButton("Random Color", &color_mode, 0); ImGui::SameLine();
 	ImGui::RadioButton("Fixed Color", &color_mode, 1); 
-	ImGui::DragFloat("Color Scale", &_data._colorScale, 0.01f, 0.0f, 50.0f);
+	ImGui::DragFloat("Color Scale", &_data._colorScale, 0.1f, 0.0f, 50.0f);
 	if (color_mode == 1)
 		ImGui::ColorPicker3("Fluid Color", &_data._color.x);
 

@@ -8,6 +8,7 @@
 Sourcing3DStage::Sourcing3DStage()
 	: Compute3DStage{"3D-Sourcing", "./CSO/SourcingSmoke3D_CS.cso", 8, 8, 8}
 	//: Compute3DStage{"3D-Sourcing", "./CSO/SourcingWater3D_CS.cso", 8, 8, 8}
+	//: Compute3DStage{"3D-Sourcing", "./CSO/SourcingFire3D_CS.cso", 8, 8, 8}
 {
     _uav.resize(2);
     _srv.resize(2);
@@ -57,6 +58,7 @@ Sourcing3DStage::Sourcing3DStage()
 void Sourcing3DStage::Run(ID3D11DeviceContext& context)
 {
     _fluid.Run(context);
+    _ts.Run(context);
 
     context.OMSetRenderTargets(0u, nullptr, nullptr);
     context.CSSetShaderResources(0u, 2u, _srv[0].GetAddressOf());

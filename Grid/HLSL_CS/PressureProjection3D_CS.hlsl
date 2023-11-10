@@ -1,8 +1,8 @@
 Texture3D<min16float>  p : register(t0);
 Texture3D<min16float3> v : register(t1);
 
-Texture2DArray obstacle : register(t6);
-Texture2DArray obstacle_vel : register(t7);
+Texture2DArray<uint>        obstacle : register(t6);
+Texture2DArray<min16float3> obstacle_vel : register(t7);
 
 RWTexture3D<min16float3> result     : register(u0);
 
@@ -52,6 +52,6 @@ void main(uint3 DTid : SV_DispatchThreadID)
         result[DTid.xyz] = (v[DTid.xyz] - min16float3(right - left, up - down, front - behind) * 0.5f) * velocity_mask + obstacle_velocity;
     }
     else {
-        result[DTid.xyz] = 0.0f;
+        result[DTid.xyz] = obstacle_vel[DTid.xyz];
     }
 }

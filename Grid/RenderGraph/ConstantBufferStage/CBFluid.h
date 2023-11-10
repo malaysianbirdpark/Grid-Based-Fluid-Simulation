@@ -8,7 +8,7 @@ class CBFluid final : public ConstantBufferStage
 		DirectX::XMFLOAT3 _velocityDir;
 		float             _speed{ 0.0f };
 		DirectX::XMFLOAT4 _color;
-		float             _colorScale{ 2.0f };
+		float             _colorScale{ 0.0f };
 		float             _dissipation{ 0.0f };
 		float             _pad[2];
 	};

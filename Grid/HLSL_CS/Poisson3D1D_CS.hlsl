@@ -1,7 +1,7 @@
 Texture3D<min16float> x_in : register(t0);
 Texture3D<min16float> div : register(t1);
 
-Texture2DArray obstacle : register(t6);
+Texture2DArray<uint> obstacle : register(t6);
 
 RWTexture3D<min16float> x_out : register(u0);
 

@@ -1,10 +1,10 @@
 Texture3D<min16float3> velocity_n : register(t0);
-Texture3D<min16float2> quantity_n : register(t1);
+Texture3D<min16float3> quantity_n : register(t1);
 
-Texture2DArray obstacle : register(t6);
+Texture2DArray<uint> obstacle : register(t6);
 
 RWTexture3D<min16float3> velocity_n_1 : register(u0);
-RWTexture3D<min16float2> quantity_n_1 : register(u1);
+RWTexture3D<min16float3> quantity_n_1 : register(u1);
 
 SamplerState sampler0 : register(s0);
 SamplerState sampler1 : register(s1);

@@ -90,7 +90,7 @@ VoxelizationStage::VoxelizationStage(ID3D11DeviceContext& context)
 		desc.SampleDesc.Count = 1u;
 		desc.SampleDesc.Quality = 0u;
 
-		desc.Format = DXGI_FORMAT_R8_UNORM;
+		desc.Format = DXGI_FORMAT_R8_UINT;
 		pDevice->CreateTexture2D(&desc, nullptr, _voxelTex.ReleaseAndGetAddressOf());
 
 		pDevice->CreateShaderResourceView(_voxelTex.Get(), nullptr, _voxelSRV.ReleaseAndGetAddressOf());
@@ -162,7 +162,7 @@ VoxelizationStage::VoxelizationStage(ID3D11DeviceContext& context)
 		Microsoft::WRL::ComPtr<ID3D11Texture2D> _velocityTex;
 		D3D11_TEXTURE2D_DESC desc{};
 		desc.Usage = D3D11_USAGE_DEFAULT;
-		desc.BindFlags = D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE;
+		desc.BindFlags = D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE | D3D11_BIND_UNORDERED_ACCESS;
 		desc.Width = gSimulationInfo.width;
 		desc.Height = gSimulationInfo.height;
 		desc.MipLevels = 1u;
@@ -182,6 +182,7 @@ VoxelizationStage::VoxelizationStage(ID3D11DeviceContext& context)
 		rtv_desc.Texture2DArray.FirstArraySlice = 0u;
 		pDevice->CreateRenderTargetView(_velocityTex.Get(), &rtv_desc, _velocityRTV.ReleaseAndGetAddressOf());
 		pDevice->CreateShaderResourceView(_velocityTex.Get(), nullptr, _velocitySRV.ReleaseAndGetAddressOf());
+		pDevice->CreateUnorderedAccessView(_velocityTex.Get(), nullptr, _velocityUAV.ReleaseAndGetAddressOf());
 	}
 
 	_cb = std::make_unique<CBVoxelization>();
@@ -206,7 +207,9 @@ void VoxelizationStage::Run(ID3D11DeviceContext& context)
 
 	context.OMSetRenderTargets(0u, nullptr, nullptr);
     context.CSSetShaderResources(0u, 1u, _dsvSRV.GetAddressOf());
-    context.CSSetUnorderedAccessViews(0u, 1u, _voxelUAV.GetAddressOf(), nullptr);
+
+	ID3D11UnorderedAccessView* const uav[2]{ _voxelUAV.Get(), _velocityUAV.Get() };
+    context.CSSetUnorderedAccessViews(0u, 2u, uav, nullptr);
     context.CSSetShader(_boundingBoxCS.Get(), nullptr, 0u);
     context.Dispatch(
         static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.width) / 8)),
@@ -215,9 +218,9 @@ void VoxelizationStage::Run(ID3D11DeviceContext& context)
     );
 
 	static ID3D11ShaderResourceView* const barrier0[1]{ nullptr };
-	static ID3D11UnorderedAccessView* const barrier1[1]{ nullptr };
+	static ID3D11UnorderedAccessView* const barrier1[2]{ nullptr, nullptr };
     context.CSSetShaderResources(0u, 1u, barrier0);
-    context.CSSetUnorderedAccessViews(0u, 1u, barrier1, nullptr);
+    context.CSSetUnorderedAccessViews(0u, 2u, barrier1, nullptr);
 
 	ID3D11ShaderResourceView* const voxels[2]{ _voxelSRV.Get(), _velocitySRV.Get() };
 	context.CSSetShaderResources(6u, 2u, voxels);

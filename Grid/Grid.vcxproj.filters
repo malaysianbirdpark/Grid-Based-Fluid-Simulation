@@ -477,6 +477,9 @@
     <FxCompile Include="HLSL_CS\Sourcing2D_CS.hlsl">
       <Filter>HLSL_CS</Filter>
     </FxCompile>
+    <FxCompile Include="HLSL_CS\SourcingFire3D_CS.hlsl">
+      <Filter>HLSL_CS</Filter>
+    </FxCompile>
     <FxCompile Include="HLSL_CS\SourcingSmoke3D_CS.hlsl">
       <Filter>HLSL_CS</Filter>
     </FxCompile>
@@ -495,6 +498,9 @@
     <FxCompile Include="HLSL_GS\TEMP_GS.hlsl">
       <Filter>HLSL_GS</Filter>
     </FxCompile>
+    <FxCompile Include="HLSL_GS\Voxelization_GS.hlsl">
+      <Filter>HLSL_GS</Filter>
+    </FxCompile>
     <FxCompile Include="HLSL_PS\DrawUV_PS.hlsl">
       <Filter>HLSL_PS</Filter>
     </FxCompile>
@@ -505,6 +511,9 @@
       <Filter>HLSL_PS</Filter>
     </FxCompile>
     <FxCompile Include="HLSL_PS\VolumeCube_PS.hlsl">
+      <Filter>HLSL_PS</Filter>
+    </FxCompile>
+    <FxCompile Include="HLSL_PS\VolumeFire_PS.hlsl">
       <Filter>HLSL_PS</Filter>
     </FxCompile>
     <FxCompile Include="HLSL_PS\VolumeModel_PS.hlsl">

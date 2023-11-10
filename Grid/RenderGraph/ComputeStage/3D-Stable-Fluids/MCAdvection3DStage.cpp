@@ -132,7 +132,6 @@ MCAdvection3DStage::MCAdvection3DStage()
 
 void MCAdvection3DStage::Run(ID3D11DeviceContext& context)
 {
-    _ts.Run(context);
 
     context.OMSetRenderTargets(0u, nullptr, nullptr);
 

@@ -2,6 +2,7 @@
 
 #include "Compute3DStage.h"
 #include "CBFluid.h"
+#include "CBTimestep.h"
 
 class Sourcing3DStage final : public Compute3DStage {
 public: explicit Sourcing3DStage();
@@ -16,6 +17,7 @@ private:
 	int32_t _quantityInID{};
 	int32_t _quantityOutID{};
 
-	CBFluid _fluid;
+	CBFluid    _fluid;
+	CBTimestep _ts{};
 };
 

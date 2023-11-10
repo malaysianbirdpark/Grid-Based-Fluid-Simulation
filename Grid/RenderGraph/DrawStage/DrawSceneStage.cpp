@@ -139,7 +139,6 @@ void DrawSceneStage::RawDrawInstanced(ID3D11DeviceContext& context, UINT num_of_
             auto& mesh{ _scene._mesh[_scene._nodeId_to_meshId[node]] };
             mesh.RawBind(context);
 			context.DrawIndexedInstanced(mesh.GetIndexCount(), num_of_instance, 0u, 0u, 0u);
-			//context.DrawIndexedInstanced(mesh.GetIndexCount(), 1u, 0u, 0u, 0u);
         }
 
         if ((_scene._tree[node]._firstChild != -1) && !_visited[_scene._tree[node]._firstChild]) {

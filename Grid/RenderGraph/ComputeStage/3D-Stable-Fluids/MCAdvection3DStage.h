@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Compute3DStage.h"
-#include "CBTimestep.h"
 
 class MCAdvection3DStage final : public Compute3DStage
 {
@@ -19,7 +18,5 @@ private:
 	int32_t _velocityOutID{};
 	int32_t _quantityInID{};
 	int32_t _quantityOutID{};
-
-	CBTimestep _ts{};
 };
 

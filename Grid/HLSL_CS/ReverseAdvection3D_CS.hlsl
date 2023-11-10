@@ -1,10 +1,10 @@
 Texture3D<min16float3> velocity_n : register(t0);
-Texture3D<min16float2>  quantity_n : register(t1);
+Texture3D<min16float4>  quantity_n : register(t1);
 
-Texture2DArray obstacle : register(t6);
+Texture2DArray<uint> obstacle : register(t6);
 
 RWTexture3D<min16float3> velocity_n_1 : register(u0);
-RWTexture3D<min16float2>  quantity_n_1  : register(u1);
+RWTexture3D<min16float4>  quantity_n_1  : register(u1);
 
 SamplerState sampler0 : register(s0);
 SamplerState sampler1 : register(s1);
@@ -20,7 +20,8 @@ void main( uint3 DTid : SV_DispatchThreadID ) {
 	uint depth;
 	velocity_n.GetDimensions(width, height, depth);
 
-	if (obstacle[DTid.xyz].r <= 0.9f) {
+	if (obstacle[DTid.xyz].r <= 0.9f) 
+	{
 		const min16float3 dr = min16float3((1.0f / width), (1.0f / height), (1.0f / depth));
 
 		const min16float3 pos = min16float3(DTid.xyz);
