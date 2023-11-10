@@ -31,7 +31,7 @@ float4 main(PS_IN input) : SV_Target
     float3 cur_uvw = front_uvw;
 
     static const int iterations = 50;
-    static const float3 albedo = float3(10.0f, 10.0f, 10.0f);
+    static const float3 albedo = float3(0.2f, 0.2f, 0.2f);
 
     float4 dest_color = float4(0.0f, 0.0f, 0.0f, 1.0f);
     float src = 0.0f;
@@ -64,10 +64,10 @@ float4 main(PS_IN input) : SV_Target
 
         src = lerp(int_val_0, int_val_1, 0.5f);
  
-        static const float absorption_coeff = 0.15f;
+        static const float absorption_coeff = 0.55f;
         if (src > 1e-3) {
             const float prev_visibility = dest_color.a;
-            dest_color.a   *= exp(-(src * absorption_coeff) * step_size);
+            dest_color.a   *= exp(-(src * absorption_coeff) * (step_size * i));
             const float absorption = prev_visibility - dest_color.a;
             dest_color.rgb += absorption * albedo * src;
         }

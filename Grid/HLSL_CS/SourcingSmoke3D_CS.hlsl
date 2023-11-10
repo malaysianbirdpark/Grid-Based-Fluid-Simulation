@@ -43,7 +43,7 @@ void main(uint3 DTid : SV_DispatchThreadID)
 				static const min16float t_rate = 1000.0f;
 				static const min16float t_target = 880.0f;
 				const min16float delta_t = (1.0f - exp(-t_rate * dt)) * (t_target - quantity[DTid.xyz]);
-				const min16float delta_s = 3500.0f * dt;
+				const min16float delta_s = 350.0f * dt;
 				quantity[DTid.xyz] += min16float2(delta_s, delta_t) * quantity_scale;
 			}
 		}

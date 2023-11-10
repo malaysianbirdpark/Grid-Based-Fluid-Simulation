@@ -68,8 +68,8 @@ void DrawSceneStage::Run(ID3D11DeviceContext& context)
 
             auto& mesh{ _scene._mesh[_scene._nodeId_to_meshId[node]] };
             mesh.Bind(context);
-    //        if (_scene._nodeId_to_materialId.contains(node)) 
-				//_scene._material[_scene._nodeId_to_materialId[node]].Bind(context);
+            if (_scene._nodeId_to_materialId.contains(node)) 
+				_scene._material[_scene._nodeId_to_materialId[node]].Bind(context);
 			context.DrawIndexedInstanced(mesh.GetIndexCount(), 1u, 0u, 0u, 0u);
             mesh.CalculateVelocity(context);
         }
