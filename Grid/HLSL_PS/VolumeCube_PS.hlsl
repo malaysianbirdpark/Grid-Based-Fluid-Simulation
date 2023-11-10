@@ -30,29 +30,34 @@ float4 main(PS_IN input) : SV_Target
     
     float3 cur_uvw = front_uvw;
 
-    static const int iterations = 50;
-    static const float3 albedo = float3(0.2f, 0.2f, 0.2f);
+    static const float3 albedo = float3(0.1f, 0.1f, 0.1f);
 
     float4 dest_color = float4(0.0f, 0.0f, 0.0f, 1.0f);
     float src = 0.0f;
 
-    const float step_size = uvw_len / iterations;
+    float step_size = 0.03f;
     const float3 step_uvw = uvw_dir * step_size;
 
     if (uvw_len < step_size)
         return float4(0.0f, 0.0f, 0.0f, 0.0f);
 
+    int iterations = uvw_len / step_size;
+    if (iterations < 40) {
+        iterations = 40;
+        step_size = uvw_len / 40;
+    }
+
     [loop]
     for (int i = 0; i < iterations + 1; ++i) { 
         float val[8];
-        val[0] = volume_tex.Sample(sampler2, cur_uvw + float3(-dr.x, -dr.y, -dr.z)).r;
-        val[1] = volume_tex.Sample(sampler2, cur_uvw + float3( dr.x, -dr.y, -dr.z)).r;
-        val[2] = volume_tex.Sample(sampler2, cur_uvw + float3(-dr.x, -dr.y,  dr.z)).r;
-        val[3] = volume_tex.Sample(sampler2, cur_uvw + float3( dr.x, -dr.y,  dr.z)).r;
-        val[4] = volume_tex.Sample(sampler2, cur_uvw + float3(-dr.x,  dr.y, -dr.z)).r;
-        val[5] = volume_tex.Sample(sampler2, cur_uvw + float3( dr.x,  dr.y, -dr.z)).r;
-        val[6] = volume_tex.Sample(sampler2, cur_uvw + float3(-dr.x,  dr.y,  dr.z)).r;
-        val[7] = volume_tex.Sample(sampler2, cur_uvw + float3( dr.x,  dr.y,  dr.z)).r;
+        val[0] = volume_tex.Sample(sampler0, cur_uvw + float3(-dr.x, -dr.y, -dr.z)).r;
+        val[1] = volume_tex.Sample(sampler0, cur_uvw + float3( dr.x, -dr.y, -dr.z)).r;
+        val[2] = volume_tex.Sample(sampler0, cur_uvw + float3(-dr.x, -dr.y,  dr.z)).r;
+        val[3] = volume_tex.Sample(sampler0, cur_uvw + float3( dr.x, -dr.y,  dr.z)).r;
+        val[4] = volume_tex.Sample(sampler0, cur_uvw + float3(-dr.x,  dr.y, -dr.z)).r;
+        val[5] = volume_tex.Sample(sampler0, cur_uvw + float3( dr.x,  dr.y, -dr.z)).r;
+        val[6] = volume_tex.Sample(sampler0, cur_uvw + float3(-dr.x,  dr.y,  dr.z)).r;
+        val[7] = volume_tex.Sample(sampler0, cur_uvw + float3( dr.x,  dr.y,  dr.z)).r;
 
         float int_val[4];
         int_val[0] = lerp(val[0], val[1], 0.5f);
@@ -64,10 +69,10 @@ float4 main(PS_IN input) : SV_Target
 
         src = lerp(int_val_0, int_val_1, 0.5f);
  
-        static const float absorption_coeff = 0.55f;
+        static const float absorption_coeff = 0.1f;
         if (src > 1e-3) {
             const float prev_visibility = dest_color.a;
-            dest_color.a   *= exp(-(src * absorption_coeff) * (step_size * i));
+            dest_color.a   *= exp(-(src * absorption_coeff) * step_size);
             const float absorption = prev_visibility - dest_color.a;
             dest_color.rgb += absorption * albedo * src;
         }
