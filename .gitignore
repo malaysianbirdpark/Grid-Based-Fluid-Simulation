@@ -4,6 +4,7 @@ bin/**
 bin-int/**
 lib/**
 **.ilk
+**.cso
 packages/**
 **/x64/
 .vs/
