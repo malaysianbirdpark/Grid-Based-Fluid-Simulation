@@ -1,4 +1,7 @@
 #pragma once
+
+#include <vector>
+
 class Transform
 {
     struct Data {
@@ -42,4 +45,26 @@ private:
     DirectX::XMFLOAT4X4 _model{};
     DirectX::XMFLOAT4X4 _proj{};
     Data _transform{};
+    std::vector<Data> _instancedTransform{};
+};
+
+class InstancedInverseTransform {
+    struct Data {
+        DirectX::XMFLOAT4X4 _mip;
+    };
+
+public: InstancedInverseTransform(ID3D11DeviceContext& context, UINT num);
+public: ~InstancedInverseTransform() = default;
+
+public: void SetModel(DirectX::FXMMATRIX model);
+public: void SetProjAt(UINT idx, DirectX::FXMMATRIX proj);
+
+public: void Update(ID3D11DeviceContext& context);
+public: void Bind(ID3D11DeviceContext& context) const;
+private:
+    Microsoft::WRL::ComPtr<ID3D11Buffer>             _resource;
+    Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> _srv;
+    DirectX::XMFLOAT4X4                              _model{};
+    std::vector<DirectX::XMFLOAT4X4>                 _proj{};
+    std::vector<Data>                                _instancedTransform{};
 };

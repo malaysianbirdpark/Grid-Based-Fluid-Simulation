@@ -492,7 +492,7 @@
     <FxCompile Include="HLSL_CS\Vorticity3D_CS.hlsl">
       <Filter>HLSL_CS</Filter>
     </FxCompile>
-    <FxCompile Include="HLSL_GS\Voxelization_GS.hlsl">
+    <FxCompile Include="HLSL_GS\TEMP_GS.hlsl">
       <Filter>HLSL_GS</Filter>
     </FxCompile>
     <FxCompile Include="HLSL_PS\DrawUV_PS.hlsl">

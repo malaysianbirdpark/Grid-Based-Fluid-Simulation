@@ -8,7 +8,7 @@ public: explicit  DrawSceneStage(ID3D11DeviceContext& context, char const* name)
 public: virtual  ~DrawSceneStage() override = default;
 public: virtual  void Run(ID3D11DeviceContext& context) override;
 public: virtual  void Update(ID3D11DeviceContext& context) override;
-public: void     RawDraw(ID3D11DeviceContext& context);
+public: void     RawDrawInstanced(ID3D11DeviceContext& context, UINT num_of_instance);
 private: virtual void InitBS() override;
 private:
 	SceneGraph                        _scene{};

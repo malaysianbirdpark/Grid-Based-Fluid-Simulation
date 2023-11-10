@@ -1,5 +1,5 @@
 struct PS_IN {
-    float3 velocity    : VELOCITY;
+    float3 velocity : VELOCITY;
 };
 
 float4 main(PS_IN input) : SV_TARGET

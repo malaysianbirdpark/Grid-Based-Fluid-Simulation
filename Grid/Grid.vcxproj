@@ -398,11 +398,11 @@
       <EntryPointName>main</EntryPointName>
       <ObjectFileOutput>../Grid/CSO/Vorticity3D_CS.cso</ObjectFileOutput>
     </FxCompile>
-    <FxCompile Include="HLSL_GS\Voxelization_GS.hlsl">
+    <FxCompile Include="HLSL_GS\TEMP_GS.hlsl">
       <ShaderType>Geometry</ShaderType>
       <ShaderModel>5.0</ShaderModel>
       <EntryPointName>main</EntryPointName>
-      <ObjectFileOutput>../Grid/CSO/Voxelization_GS.cso</ObjectFileOutput>
+      <ObjectFileOutput>../Grid/CSO/TEMP_GS.cso</ObjectFileOutput>
     </FxCompile>
     <FxCompile Include="HLSL_PS\DrawUV_PS.hlsl">
       <ShaderType>Pixel</ShaderType>
