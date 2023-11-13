@@ -7,6 +7,10 @@
 
 #include "NodeManager.h"
 
+#include <cstdlib>
+#include <ctime>
+#include <iostream>
+
 DrawVolumeStage::DrawVolumeStage(ID3D11DeviceContext& context)
     : DrawStage{"Volume Cube", std::move(std::make_shared<VolumeCube>(context))}
 {
@@ -15,11 +19,15 @@ DrawVolumeStage::DrawVolumeStage(ID3D11DeviceContext& context)
     _attrNames[_volumeTexID] = { "Volume Texture" };
 
     {
+		Microsoft::WRL::ComPtr<ID3D11Texture2D> _frontFacesUvwBuffer;
+		Microsoft::WRL::ComPtr<ID3D11Texture2D> _frontFacesWorldBuffer;
+		Microsoft::WRL::ComPtr<ID3D11Texture2D> _backFacesUvwBuffer;
+		Microsoft::WRL::ComPtr<ID3D11Texture2D> _backFacesWorldBuffer;
 		auto desc {CD3D11_TEXTURE2D_DESC{}};
 		desc.BindFlags = D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE;
 		desc.Usage = D3D11_USAGE_DEFAULT;
 		desc.CPUAccessFlags = 0u;
-		desc.Format = DXGI_FORMAT_R16G16B16A16_FLOAT;
+        desc.Format = DXGI_FORMAT_R16G16B16A16_FLOAT;
 		desc.Width = gViewportInfo.width;
 		desc.Height = gViewportInfo.height;
 		desc.MipLevels = 1u;
@@ -31,9 +39,49 @@ DrawVolumeStage::DrawVolumeStage(ID3D11DeviceContext& context)
 		pDevice->CreateShaderResourceView(_frontFacesUvwBuffer.Get(), nullptr, _frontFacesUvwSRV.ReleaseAndGetAddressOf());
 		pDevice->CreateRenderTargetView(_frontFacesUvwBuffer.Get(), nullptr, _frontFacesUvwRTV.ReleaseAndGetAddressOf());
 
+		pDevice->CreateTexture2D(&desc, nullptr, _frontFacesWorldBuffer.ReleaseAndGetAddressOf());
+		pDevice->CreateShaderResourceView(_frontFacesWorldBuffer.Get(), nullptr, _frontFacesWorldSRV.ReleaseAndGetAddressOf());
+		pDevice->CreateRenderTargetView(_frontFacesWorldBuffer.Get(), nullptr, _frontFacesWorldRTV.ReleaseAndGetAddressOf());
+
 		pDevice->CreateTexture2D(&desc, nullptr, _backFacesUvwBuffer.ReleaseAndGetAddressOf());
 		pDevice->CreateShaderResourceView(_backFacesUvwBuffer.Get(), nullptr, _backFacesUvwSRV.ReleaseAndGetAddressOf());
 		pDevice->CreateRenderTargetView(_backFacesUvwBuffer.Get(), nullptr, _backFacesUvwRTV.ReleaseAndGetAddressOf());
+
+		pDevice->CreateTexture2D(&desc, nullptr, _backFacesWorldBuffer.ReleaseAndGetAddressOf());
+		pDevice->CreateShaderResourceView(_backFacesWorldBuffer.Get(), nullptr, _backFacesWorldSRV.ReleaseAndGetAddressOf());
+		pDevice->CreateRenderTargetView(_backFacesWorldBuffer.Get(), nullptr, _backFacesWorldRTV.ReleaseAndGetAddressOf());
+    }
+
+    // jitter
+    {
+		std::srand(std::time(nullptr));
+        auto jitter{ std::vector<DirectX::XMFLOAT3>(17) };
+        for (auto& i : jitter) {
+            i = DirectX::XMFLOAT3{
+                static_cast<float>(std::rand()) / RAND_MAX / gSimulationInfo.width / 2.0f,
+                static_cast<float>(std::rand()) / RAND_MAX / gSimulationInfo.height / 2.0f,
+                static_cast<float>(std::rand()) / RAND_MAX / gSimulationInfo.depth / 2.0f,
+            };
+        }
+
+		Microsoft::WRL::ComPtr<ID3D11Texture1D> _jitterBuffer;
+        auto desc{ CD3D11_TEXTURE1D_DESC{} };
+        desc.BindFlags = D3D11_BIND_SHADER_RESOURCE;
+        desc.Usage = D3D11_USAGE_IMMUTABLE;
+        desc.Format = DXGI_FORMAT_R32G32B32_FLOAT;
+        desc.Width = 17;
+        desc.MipLevels = 1u;
+        desc.CPUAccessFlags = 0u;
+        desc.MiscFlags = 0u;
+        desc.ArraySize = 1u;
+
+        D3D11_SUBRESOURCE_DATA sd{};
+        sd.pSysMem = jitter.data();
+        sd.SysMemPitch = 0u;
+        sd.SysMemSlicePitch = 0u;
+
+		pDevice->CreateTexture1D(&desc, &sd, _jitterBuffer.ReleaseAndGetAddressOf());
+		pDevice->CreateShaderResourceView(_jitterBuffer.Get(), nullptr, _jitterSRV.ReleaseAndGetAddressOf());
     }
 
     InitRS();
@@ -49,22 +97,23 @@ DrawVolumeStage::DrawVolumeStage(ID3D11DeviceContext& context)
     _pso.push_back(std::move(std::make_unique<PipelineStateObject>()));
 	_pso.back()->SetVertexShader("./CSO/VolumeCube_VS.cso");
 	_pso.back()->SetInputLayout(_object->GetInputElementDest());
-	_pso.back()->SetPixelShader("./CSO/DrawUV_PS.cso");
+	_pso.back()->SetPixelShader("./CSO/DrawVolumeFront_PS.cso");
 }
 
 void DrawVolumeStage::Run(ID3D11DeviceContext& context)
 {
-    _pso.back()->Bind(context);
-
     context.RSSetViewports(1u, &_vp);
     context.OMSetDepthStencilState(_ds.Get(), 0u);
     //context.OMSetBlendState(nullptr, nullptr, 0xFFFFFFFFu);
 
     // draw front faces
+    _pso[1]->Bind(context);
     context.RSSetState(_rs.Get());
 
-    context.OMSetRenderTargets(1u, _frontFacesUvwRTV.GetAddressOf(), nullptr);
+    ID3D11RenderTargetView* const rtvs0[2]{ _frontFacesUvwRTV.Get(), _frontFacesWorldRTV.Get() };
+    context.OMSetRenderTargets(2u, rtvs0, nullptr);
     context.ClearRenderTargetView(_frontFacesUvwRTV.Get(), clear_color);
+    context.ClearRenderTargetView(_frontFacesWorldRTV.Get(), clear_color);
     //context.ClearDepthStencilView(_dsv.Get(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0u);
 
 	_object->Draw(context);
@@ -72,17 +121,18 @@ void DrawVolumeStage::Run(ID3D11DeviceContext& context)
     // draw back faces
     context.RSSetState(_rsBack.Get());
 
-    context.OMSetRenderTargets(1u, _backFacesUvwRTV.GetAddressOf(), nullptr);
+    ID3D11RenderTargetView* const rtvs1[2]{ _backFacesUvwRTV.Get(), _backFacesWorldRTV.Get() };
+    context.OMSetRenderTargets(2u, rtvs1, nullptr);
     context.ClearRenderTargetView(_backFacesUvwRTV.Get(), clear_color);
+    context.ClearRenderTargetView(_backFacesWorldRTV.Get(), clear_color);
     //context.ClearDepthStencilView(_dsv.Get(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0u);
 
 	_object->Draw(context);
 
     // Set Shader Resources
     context.OMSetRenderTargets(1u, _resultRTV.GetAddressOf(), _gDSV.Get());
-    static ID3D11ShaderResourceView* srv[3]{ _volumeTexView.Get(), _frontFacesUvwSRV.Get(), _backFacesUvwSRV.Get() };
-    srv[0] = _volumeTexView.Get();
-    context.PSSetShaderResources(0u, 3u, &srv[0]);
+    static ID3D11ShaderResourceView* const srv[6]{ _volumeTexView.Get(), _frontFacesUvwSRV.Get(), _frontFacesWorldSRV.Get(), _backFacesUvwSRV.Get(), _backFacesWorldSRV.Get(), _jitterSRV.Get() };
+    context.PSSetShaderResources(0u, 6u, srv);
 
     // Draw Volume
     context.RSSetViewports(1u, &_vp);

@@ -30,7 +30,7 @@ void main(uint3 DTid : SV_DispatchThreadID)
 
     //if (obstacle[DTid.xyz].r <= 0.9f) 
 	{
-		const min16float r = min16float(width) * 0.125f;
+		const min16float r = min16float(width) * 0.25f;
 		if (DTid.y > height - 5 && DTid.y <= height - 2)
 		{
 			const min16float x = DTid.x - (min16float(width) * 0.5f);
@@ -41,9 +41,9 @@ void main(uint3 DTid : SV_DispatchThreadID)
 				velocity[DTid.xyz] += normalize(min16float3(dir.xyz)) * speed;
 
 				static const min16float t_rate = 1000.0f;
-				static const min16float t_target = 880.0f;
+				static const min16float t_target = 630.0f;
 				const min16float delta_t = (1.0f - exp(-t_rate * dt)) * (t_target - quantity[DTid.xyz]);
-				const min16float delta_s = 3500.0f * dt;
+				const min16float delta_s = 1500.0f * dt;
 				quantity[DTid.xyz] += min16float2(delta_s, delta_t) * quantity_scale;
 			}
 		}

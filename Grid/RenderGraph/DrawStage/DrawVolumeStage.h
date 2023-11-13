@@ -16,13 +16,19 @@ private:
 	Microsoft::WRL::ComPtr<ID3D11RasterizerState>    _rsBack;
 	Microsoft::WRL::ComPtr<ID3D11BlendState>         _bsAlpha;
 
-	Microsoft::WRL::ComPtr<ID3D11Texture2D>          _frontFacesUvwBuffer;
 	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> _frontFacesUvwSRV;
 	Microsoft::WRL::ComPtr<ID3D11RenderTargetView>   _frontFacesUvwRTV;
 
-	Microsoft::WRL::ComPtr<ID3D11Texture2D>          _backFacesUvwBuffer;
+	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> _frontFacesWorldSRV;
+	Microsoft::WRL::ComPtr<ID3D11RenderTargetView>   _frontFacesWorldRTV;
+
 	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> _backFacesUvwSRV;
 	Microsoft::WRL::ComPtr<ID3D11RenderTargetView>   _backFacesUvwRTV;
+
+	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> _backFacesWorldSRV;
+	Microsoft::WRL::ComPtr<ID3D11RenderTargetView>   _backFacesWorldRTV;
+
+	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> _jitterSRV;
 
 	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView>  _volumeTexView;
 };

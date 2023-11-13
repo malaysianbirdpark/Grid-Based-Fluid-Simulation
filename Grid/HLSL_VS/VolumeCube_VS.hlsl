@@ -24,7 +24,7 @@ VS_OUT main(VS_IN input)
 {
 	VS_OUT output;
 
-    output.world_pos  = mul(float4(input.pos, 1.0f), m);
+    output.world_pos = mul(float4(input.pos, 1.0f), m);
     output.uvw       = input.uvw;
     output.sv_pos    = mul(float4(input.pos, 1.0f), mvp);
 

@@ -422,6 +422,12 @@
       <EntryPointName>main</EntryPointName>
       <ObjectFileOutput>../Grid/CSO/DrawUV_PS.cso</ObjectFileOutput>
     </FxCompile>
+    <FxCompile Include="HLSL_PS\DrawVolumeFaces_PS.hlsl">
+      <ShaderType>Pixel</ShaderType>
+      <ShaderModel>5.0</ShaderModel>
+      <EntryPointName>main</EntryPointName>
+      <ObjectFileOutput>../Grid/CSO/DrawVolumeFront_PS.cso</ObjectFileOutput>
+    </FxCompile>
     <FxCompile Include="HLSL_PS\Phong_PS.hlsl">
       <ShaderType>Pixel</ShaderType>
       <ShaderModel>5.0</ShaderModel>

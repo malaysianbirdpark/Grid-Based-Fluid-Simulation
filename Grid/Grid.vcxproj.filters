@@ -504,6 +504,9 @@
     <FxCompile Include="HLSL_PS\DrawUV_PS.hlsl">
       <Filter>HLSL_PS</Filter>
     </FxCompile>
+    <FxCompile Include="HLSL_PS\DrawVolumeFaces_PS.hlsl">
+      <Filter>HLSL_PS</Filter>
+    </FxCompile>
     <FxCompile Include="HLSL_PS\Phong_PS.hlsl">
       <Filter>HLSL_PS</Filter>
     </FxCompile>

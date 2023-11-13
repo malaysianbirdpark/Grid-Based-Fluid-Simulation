@@ -95,7 +95,7 @@ void Poisson3D1DStage::Run(ID3D11DeviceContext& context)
 	);
 	SetBarrier(context);
 
-    for (auto i {0}; i != 15; ++i) {
+    for (auto i {0}; i != 13; ++i) {
         context.CSSetShaderResources(0u, 1u, _srv[i & 0b1].GetAddressOf());
         context.CSSetShaderResources(1u, 1u, _srv[2].GetAddressOf());
         context.CSSetUnorderedAccessViews(0u, 1u, _uav[!(i & 0b1)].GetAddressOf(), nullptr);
@@ -108,14 +108,14 @@ void Poisson3D1DStage::Run(ID3D11DeviceContext& context)
         SetBarrier(context);
     }
 
-    context.CSSetUnorderedAccessViews(0u, 1u, _uav[1].GetAddressOf(), nullptr);
-    context.CSSetShader(_bcCS.Get(), nullptr, 0u);
-    context.Dispatch(
-        static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.width) / _groupX)),
-        static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.height) / _groupY)), 
-        static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.depth) / _groupZ)) 
-    );
-    SetBarrier(context);
+    //context.CSSetUnorderedAccessViews(0u, 1u, _uav[1].GetAddressOf(), nullptr);
+    //context.CSSetShader(_bcCS.Get(), nullptr, 0u);
+    //context.Dispatch(
+    //    static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.width) / _groupX)),
+    //    static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.height) / _groupY)), 
+    //    static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.depth) / _groupZ)) 
+    //);
+    //SetBarrier(context);
 }
 
 void Poisson3D1DStage::Consume(ID3D11Resource* resource, int32_t attribute_id)
