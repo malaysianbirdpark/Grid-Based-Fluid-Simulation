@@ -110,7 +110,7 @@ float4 main(PS_IN input) : SV_Target
         const min16float int_val_1 = lerp(int_val[2], int_val[3], 0.5f);
         src = lerp(int_val_0, int_val_1, 0.5f);
 
-        static const min16float absorption_coeff = 0.35f;
+        static const min16float absorption_coeff = 0.3f;
         if (src > 1e-3) 
         {
             min16float3 dir_to_light = pl_pos - cur_world;

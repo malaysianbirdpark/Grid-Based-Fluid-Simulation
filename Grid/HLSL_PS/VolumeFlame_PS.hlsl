@@ -46,7 +46,6 @@ min16float LightVisibility(min16float3 origin, min16float coeff, min16float3 dir
 min16float3 GetColor(min16float t) {
     min16float3 result = min16float3(0.0f, 0.0f, 0.0f);
 
-    t = clamp(t, 1000.0f, 40000.0f);
     t /= 100.0f;
 
     if (t <= 66.0f) {
@@ -100,12 +99,12 @@ float4 main(PS_IN input) : SV_Target
     min16float3 cur_uvw = front_uvw;
     min16float3 cur_world = front_pos;
 
-    static const min16float3 albedo = min16float3(0.3f, 0.3f, 0.3f);
+    static const min16float3 albedo = min16float3(0.5f, 0.5f, 0.5f);
 
     float4 dest_color = float4(0.0f, 0.0f, 0.0f, 1.0f);
     min16float src = 0.0f;
 
-    static const min16float step_size = reciprocal_width;
+    static const min16float step_size = reciprocal_width * 0.5f;
     const min16float3 step_uvw = uvw_dir * step_size;
 
     if (uvw_len < step_size)
@@ -129,43 +128,53 @@ float4 main(PS_IN input) : SV_Target
         const min16float3 p6 = cur_uvw + min16float3( dr.x, -dr.y, -dr.z) + min16float3(jitt.x, jitt.y, jitt.z);
         const min16float3 p7 = cur_uvw + min16float3(-dr.x, -dr.y, -dr.z) + min16float3(jitt.y, jitt.z, jitt.x);
 
-        min16float val[8];
-        val[0] = volume_tex.Sample(sampler0, p0).r;
-        val[1] = volume_tex.Sample(sampler0, p1).r;
-        val[2] = volume_tex.Sample(sampler0, p2).r;
-        val[3] = volume_tex.Sample(sampler0, p3).r;
-        val[4] = volume_tex.Sample(sampler0, p4).r;
-        val[5] = volume_tex.Sample(sampler0, p5).r;
-        val[6] = volume_tex.Sample(sampler0, p6).r;
-        val[7] = volume_tex.Sample(sampler0, p7).r;
+        min16float2 val[8];
+        val[0] = volume_tex.Sample(sampler0, p0).rg;
+        val[1] = volume_tex.Sample(sampler0, p1).rg;
+        val[2] = volume_tex.Sample(sampler0, p2).rg;
+        val[3] = volume_tex.Sample(sampler0, p3).rg;
+        val[4] = volume_tex.Sample(sampler0, p4).rg;
+        val[5] = volume_tex.Sample(sampler0, p5).rg;
+        val[6] = volume_tex.Sample(sampler0, p6).rg;
+        val[7] = volume_tex.Sample(sampler0, p7).rg;
 
-        min16float int_val[4];
+        min16float2 int_val[4];
         int_val[0] = lerp(val[0], val[1], 0.5f);
         int_val[1] = lerp(val[2], val[3], 0.5f);
-        const min16float int_val_0 = lerp(int_val[0], int_val[1], 0.5f);
+        const min16float2 int_val_0 = lerp(int_val[0], int_val[1], 0.5f);
         int_val[2] = lerp(val[4], val[5], 0.5f);
         int_val[3] = lerp(val[6], val[7], 0.5f);
-        const min16float int_val_1 = lerp(int_val[2], int_val[3], 0.5f);
-        src = lerp(int_val_0, int_val_1, 0.5f);
+        const min16float2 int_val_1 = lerp(int_val[2], int_val[3], 0.5f);
+        const min16float2 final_val = lerp(int_val_0, int_val_1, 0.5f);
+        src = final_val.r;
 
-        const min16float temperature = volume_tex.Sample(sampler0, cur_uvw).g;
+        const min16float temperature = final_val.g;
 
         static const min16float absorption_coeff = 0.35f;
         if (src > 1e-3) 
         {
-            min16float3 dir_to_light = pl_pos - cur_world;
-			const min16float dist_to_light = length(dir_to_light);
-			const min16float dist_to_light_norm = 1.0f - saturate(dist_to_light * pl_reciprocal_range);
-			const min16float att = dist_to_light_norm * dist_to_light_norm;
-            dir_to_light = dir_to_light / dist_to_light;
-            dir_to_light.y = -dir_to_light.y;
-            const min16float light_visibility = LightVisibility(cur_uvw, absorption_coeff, dir_to_light, step_size);
+            if (temperature < 1400.0f) {
+				min16float3 dir_to_light = pl_pos - cur_world;
+				const min16float dist_to_light = length(dir_to_light);
+				const min16float dist_to_light_norm = 1.0f - saturate(dist_to_light * pl_reciprocal_range);
+				const min16float att = dist_to_light_norm * dist_to_light_norm;
+				dir_to_light = dir_to_light / dist_to_light;
+				dir_to_light.y = -dir_to_light.y;
+				const min16float light_visibility = LightVisibility(cur_uvw, absorption_coeff, dir_to_light, step_size);
 
-            const min16float prev_visibility = dest_color.a;
-            const min16float coeff = src * absorption_coeff;
-            dest_color.a   *= exp(-coeff * step_size);
-            const min16float absorption = prev_visibility - dest_color.a;
-            dest_color.rgb += absorption * GetColor(temperature) * pl_color * light_visibility * att;
+				const min16float prev_visibility = dest_color.a;
+				const min16float coeff = src * absorption_coeff;
+				dest_color.a   *= exp(-coeff * step_size);
+				const min16float absorption = prev_visibility - dest_color.a;
+				dest_color.rgb += absorption * albedo * pl_color * light_visibility * att;
+            }
+            else {
+				const min16float prev_visibility = dest_color.a;
+				const min16float coeff = src * 0.12f;
+				dest_color.a   *= exp(-coeff * step_size);
+				const min16float absorption = prev_visibility - dest_color.a;
+                dest_color.rgb += absorption * GetColor(temperature);
+            }
         }
 
         if (dest_color.a <= 1e-4)
