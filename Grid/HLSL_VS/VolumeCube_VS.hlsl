@@ -4,9 +4,9 @@ struct VS_IN {
 };
 
 struct VS_OUT {
-    float4 world_pos : POSITION;
-    float3 uvw      : TEXCOORD;
-    float4 sv_pos   : SV_POSITION;
+    float3 world_pos : POSITION;
+    float3 uvw       : TEXCOORD;
+    float4 sv_pos    : SV_Position;
 };
 
 cbuffer mvp : register(b0)
@@ -24,7 +24,7 @@ VS_OUT main(VS_IN input)
 {
 	VS_OUT output;
 
-    output.world_pos = mul(float4(input.pos, 1.0f), m);
+    output.world_pos = mul(float4(input.pos, 1.0f), m).xyz;
     output.uvw       = input.uvw;
     output.sv_pos    = mul(float4(input.pos, 1.0f), mvp);
 

@@ -6,9 +6,9 @@
 #include "imnodes.h"
 
 Sourcing3DStage::Sourcing3DStage()
-	: Compute3DStage{"3D-Sourcing", "./CSO/SourcingSmoke3D_CS.cso", 8, 8, 8}
+	//: Compute3DStage{"3D-Sourcing", "./CSO/SourcingSmoke3D_CS.cso", 8, 8, 8}
 	//: Compute3DStage{"3D-Sourcing", "./CSO/SourcingWater3D_CS.cso", 8, 8, 8}
-	//: Compute3DStage{"3D-Sourcing", "./CSO/SourcingFire3D_CS.cso", 8, 8, 8}
+	: Compute3DStage{"3D-Sourcing", "./CSO/SourcingFire3D_CS.cso", 8, 8, 8}
 {
     _uav.resize(2);
     _srv.resize(2);
@@ -33,7 +33,7 @@ Sourcing3DStage::Sourcing3DStage()
     // quantity :
     // r : density
     // g : temperature
-    // b : signed distance
+    // b : fuel to be burnt
 	desc.Format = DXGI_FORMAT_R16G16B16A16_FLOAT;
     pDevice->CreateTexture3D(&desc, nullptr, _resource[1].ReleaseAndGetAddressOf());
     pDevice->CreateUnorderedAccessView(_resource[1].Get(), nullptr, _uav[1].ReleaseAndGetAddressOf());

@@ -2,14 +2,19 @@ Texture2DArray<uint> obstacle : register(t6);
 
 RWTexture3D<min16float> value : register(u0);
 
-[numthreads(8, 8, 8)]
-void main( uint3 DTid : SV_DispatchThreadID )
+cbuffer Dimension : register(b3) 
 {
     uint width;
     uint height;
     uint depth;
-    value.GetDimensions(width, height, depth);
+    float reciprocal_width;
+    float reciprocal_height;
+    float reciprocal_depth;
+}
 
+[numthreads(8, 8, 8)]
+void main( uint3 DTid : SV_DispatchThreadID )
+{
     if (DTid.x == 0) {
         value[DTid.xyz] = value[uint3(DTid.x + 1, DTid.y, DTid.z)];
     }

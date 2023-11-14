@@ -10,11 +10,6 @@ SamplerState sampler1 : register(s1);
 [numthreads(8, 8, 8)]
 void main( uint3 DTid : SV_DispatchThreadID )
 {
-	uint width;
-	uint height;
-	uint depth;
-	x_in.GetDimensions(width, height, depth);
-
 	{
 		const min16float4 center = x_in[DTid.xyz]; 
 

@@ -17,14 +17,19 @@ cbuffer timestep : register(b1) {
 	min16float dt;
 }
 
+cbuffer Dimension : register(b3) 
+{
+    uint width;
+    uint height;
+    uint depth;
+    float reciprocal_width;
+    float reciprocal_height;
+    float reciprocal_depth;
+}
+
 [numthreads(8, 8, 8)]
 void main(uint3 DTid : SV_DispatchThreadID)
 {
-	uint width;
-	uint height;
-	uint depth;
-	velocity_in.GetDimensions(width, height, depth);
-
 	velocity[DTid.xyz] = velocity_in[DTid.xyz];
     quantity[DTid.xyz] = quantity_in[DTid.xyz];
 

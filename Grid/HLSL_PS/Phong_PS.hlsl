@@ -32,8 +32,8 @@ float4 PhongAmbient(float3 normal)
 {
     static const float3 amb_down_color = float3(0.03f, 0.03f, 0.03f);
     static const float3 amb_up_color = float3(0.1f, 0.1f, 0.1f);
-    const float up = normal.y * 0.5f + 0.5f;
-    const float3 ambient = amb_down_color + up * amb_up_color;
+    const float up = (normal.y * 0.5f) + 0.5f;
+    const float3 ambient = amb_down_color + (up * amb_up_color);
     return float4(ambient, 1.0f);
 }
 
@@ -59,7 +59,7 @@ PS_OUT main(PS_IN input)
     clip(diffuse_color.a < 0.1f ? -1 : 1);
 
     float3 sampled_normal = normal_map.Sample(sampler2, input.uv).xyz;
-    sampled_normal = sampled_normal * 2.0f - float3(1.0f, 1.0f, 1.0f);
+    sampled_normal = (sampled_normal * 2.0f) - float3(1.0f, 1.0f, 1.0f);
     const float3 binormal = cross(input.normal, input.tangent);
     const float3x3 tbn = float3x3(input.tangent, binormal, input.normal);
     const float3 normal = normalize(mul(sampled_normal, tbn));

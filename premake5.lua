@@ -36,6 +36,7 @@ project "Grid"
         "3rd_party/",
         "3rd_party/ImGui/",
         "3rd_party/ImGui/backends/",
+        "3rd_party/FP16-master/include",
     }
 
     floatingpoint "Fast"

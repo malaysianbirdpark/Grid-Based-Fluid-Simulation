@@ -9,7 +9,8 @@
 
 #include <cstdlib>
 #include <ctime>
-#include <iostream>
+
+#include "fp16.h"
 
 DrawVolumeStage::DrawVolumeStage(ID3D11DeviceContext& context)
     : DrawStage{"Volume Cube", std::move(std::make_shared<VolumeCube>(context))}
@@ -54,22 +55,36 @@ DrawVolumeStage::DrawVolumeStage(ID3D11DeviceContext& context)
 
     // jitter
     {
+        struct float16_t {
+            explicit float16_t() = default;
+
+            explicit float16_t(float x, float y, float z, float w) {
+                data[0] = fp16_ieee_from_fp32_value(x);
+                data[1] = fp16_ieee_from_fp32_value(y);
+                data[2] = fp16_ieee_from_fp32_value(z);
+                data[3] = fp16_ieee_from_fp32_value(w);
+            }
+
+            uint16_t data[4]{};
+        };
+
 		std::srand(std::time(nullptr));
-        auto jitter{ std::vector<DirectX::XMFLOAT3>(17) };
+        auto jitter{ std::vector<float16_t>(16) };
         for (auto& i : jitter) {
-            i = DirectX::XMFLOAT3{
-                static_cast<float>(std::rand()) / RAND_MAX / gSimulationInfo.width / 2.0f,
-                static_cast<float>(std::rand()) / RAND_MAX / gSimulationInfo.height / 2.0f,
-                static_cast<float>(std::rand()) / RAND_MAX / gSimulationInfo.depth / 2.0f,
+            i = float16_t{
+                (static_cast<float>(std::rand()) / RAND_MAX - 0.5f) / gSimulationInfo.width / 2.0f,
+                (static_cast<float>(std::rand()) / RAND_MAX - 0.5f) / gSimulationInfo.height / 2.0f,
+                (static_cast<float>(std::rand()) / RAND_MAX - 0.5f) / gSimulationInfo.depth / 2.0f,
+                0.0f
             };
         }
-
+        
 		Microsoft::WRL::ComPtr<ID3D11Texture1D> _jitterBuffer;
         auto desc{ CD3D11_TEXTURE1D_DESC{} };
         desc.BindFlags = D3D11_BIND_SHADER_RESOURCE;
         desc.Usage = D3D11_USAGE_IMMUTABLE;
-        desc.Format = DXGI_FORMAT_R32G32B32_FLOAT;
-        desc.Width = 17;
+        desc.Format = DXGI_FORMAT_R16G16B16A16_FLOAT;
+        desc.Width = 16;
         desc.MipLevels = 1u;
         desc.CPUAccessFlags = 0u;
         desc.MiscFlags = 0u;
@@ -91,13 +106,13 @@ DrawVolumeStage::DrawVolumeStage(ID3D11DeviceContext& context)
     _pso.push_back(std::move(std::make_unique<PipelineStateObject>()));
 	_pso.back()->SetVertexShader("./CSO/VolumeCube_VS.cso");
 	_pso.back()->SetInputLayout(_object->GetInputElementDest());
-	_pso.back()->SetPixelShader("./CSO/VolumeCube_PS.cso");
-	//_pso.back()->SetPixelShader("./CSO/VolumeFire_PS.cso");
+	//_pso.back()->SetPixelShader("./CSO/VolumeCube_PS.cso");
+	_pso.back()->SetPixelShader("./CSO/VolumeFlame_PS.cso");
 
     _pso.push_back(std::move(std::make_unique<PipelineStateObject>()));
 	_pso.back()->SetVertexShader("./CSO/VolumeCube_VS.cso");
 	_pso.back()->SetInputLayout(_object->GetInputElementDest());
-	_pso.back()->SetPixelShader("./CSO/DrawVolumeFront_PS.cso");
+	_pso.back()->SetPixelShader("./CSO/DrawVolumeFaces_PS.cso");
 }
 
 void DrawVolumeStage::Run(ID3D11DeviceContext& context)

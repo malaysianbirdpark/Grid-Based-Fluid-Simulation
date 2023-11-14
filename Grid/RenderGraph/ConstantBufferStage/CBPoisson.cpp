@@ -30,7 +30,7 @@ CBPoisson::CBPoisson(ID3D11DeviceContext& context)
 
 void CBPoisson::Run(ID3D11DeviceContext& context)
 {
-    context.CSSetConstantBuffers(2u, 1u, _buffer.GetAddressOf());
+    //context.CSSetConstantBuffers(2u, 1u, _buffer.GetAddressOf());
 }
 
 void CBPoisson::Upload(ID3D11DeviceContext& context)

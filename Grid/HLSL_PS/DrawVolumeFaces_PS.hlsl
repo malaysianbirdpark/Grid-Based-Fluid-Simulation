@@ -1,11 +1,11 @@
 struct PS_IN {
-    float4 world_pos : POSITION;
+    float3 world_pos : POSITION;
     float3 uvw       : TEXCOORD;
 };
 
 struct PS_OUT {
-    float3 uvw   : SV_TARGET0;
-    float3 world : SV_TARGET1;
+    min16float3 uvw   : SV_TARGET0;
+    min16float3 world : SV_TARGET1;
 };
 
 PS_OUT main(PS_IN input)

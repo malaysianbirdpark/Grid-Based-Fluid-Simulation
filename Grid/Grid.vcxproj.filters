@@ -119,6 +119,9 @@
     <ClInclude Include="RenderGraph\ComputeStage\Initializer2DStage.h">
       <Filter>RenderGraph\ComputeStage</Filter>
     </ClInclude>
+    <ClInclude Include="RenderGraph\ConstantBufferStage\CBDimension.h">
+      <Filter>RenderGraph\ConstantBufferStage</Filter>
+    </ClInclude>
     <ClInclude Include="RenderGraph\ConstantBufferStage\CBFluid.h">
       <Filter>RenderGraph\ConstantBufferStage</Filter>
     </ClInclude>
@@ -298,6 +301,9 @@
     </ClCompile>
     <ClCompile Include="RenderGraph\ComputeStage\Initializer2DStage.cpp">
       <Filter>RenderGraph\ComputeStage</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderGraph\ConstantBufferStage\CBDimension.cpp">
+      <Filter>RenderGraph\ConstantBufferStage</Filter>
     </ClCompile>
     <ClCompile Include="RenderGraph\ConstantBufferStage\CBFluid.cpp">
       <Filter>RenderGraph\ConstantBufferStage</Filter>
@@ -516,7 +522,7 @@
     <FxCompile Include="HLSL_PS\VolumeCube_PS.hlsl">
       <Filter>HLSL_PS</Filter>
     </FxCompile>
-    <FxCompile Include="HLSL_PS\VolumeFire_PS.hlsl">
+    <FxCompile Include="HLSL_PS\VolumeFlame_PS.hlsl">
       <Filter>HLSL_PS</Filter>
     </FxCompile>
     <FxCompile Include="HLSL_PS\VolumeModel_PS.hlsl">

@@ -44,6 +44,8 @@
 #include "VoxelizationStage.h"
 #include "CBVoxelization.h"
 
+#include "CBDimension.h"
+
 Game::Game() 
 {
 	int constexpr width{ 1920 };
@@ -70,6 +72,7 @@ Game::Game()
     _pointLight = std::make_unique<PointLight>();
 
 	_voxeler = std::make_unique<VoxelizationStage>(Renderer::Context());
+	_dimension = std::make_unique<CBDimension>(Renderer::Context());
 
 	std::shared_ptr<DrawSceneStage> _target{std::make_shared<DrawSceneStage>(Renderer::Context(), "Scene")};
 	_smoke.AddStage(_target);
@@ -172,8 +175,8 @@ void Game::Render(float const dt)
 {
 	Renderer::BeginFrame();
 
+	_dimension->Run(Renderer::Context());
 	_voxeler->Run(Renderer::Context());
-
     _dirLight->Run(Renderer::Context());
     _pointLight->Run(Renderer::Context());
 	_smoke.Run(Renderer::Context());

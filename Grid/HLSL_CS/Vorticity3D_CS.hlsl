@@ -8,14 +8,19 @@ cbuffer constants : register(b1) {
 	min16float dt;
 }
 
-[numthreads(8, 8, 8)]
-void main( uint3 DTid : SV_DispatchThreadID )
+cbuffer Dimension : register(b3) 
 {
     uint width;
     uint height;
     uint depth;
-    velocity.GetDimensions(width, height, depth);
+    float reciprocal_width;
+    float reciprocal_height;
+    float reciprocal_depth;
+}
 
+[numthreads(8, 8, 8)]
+void main( uint3 DTid : SV_DispatchThreadID )
+{
 	//if (obstacle[DTid.xyz].r <= 0.9f) 
 	{
 		const uint3 right  = DTid.x + 1 < width - 1  ? uint3(DTid.x + 1, DTid.yz) : DTid.xyz;

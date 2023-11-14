@@ -13,16 +13,21 @@ cbuffer constants : register(b1) {
 	min16float dt;
 }
 
+cbuffer Dimension : register(b3) 
+{
+    uint width;
+    uint height;
+    uint depth;
+    float reciprocal_width;
+    float reciprocal_height;
+    float reciprocal_depth;
+}
+
 [numthreads(8, 8, 8)]
 void main( uint3 DTid : SV_DispatchThreadID ) {
-	uint width;
-	uint height;
-	uint depth;
-	velocity_n.GetDimensions(width, height, depth);
-
 	if (obstacle[DTid.xyz].r <= 0.9f) 
 	{
-		const min16float3 dr = min16float3((1.0f / width), (1.0f / height), (1.0f / depth));
+		static const min16float3 dr = min16float3(reciprocal_width, reciprocal_height, reciprocal_depth);
 
 		const min16float3 pos = min16float3(DTid.xyz);
 		min16float3 k1 = pos - velocity_n.SampleLevel(sampler0, (pos + 0.5f) * dr, 0.0f) * dt;

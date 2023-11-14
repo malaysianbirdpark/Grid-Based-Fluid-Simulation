@@ -11,11 +11,6 @@ SamplerState sampler1 : register(s1);
 [numthreads(8, 8, 8)]
 void main(uint3 DTid : SV_DispatchThreadID)
 {
-    uint width;
-    uint height;
-    uint depth;
-    p.GetDimensions(width, height, depth);
-
     if (obstacle[DTid.xyz].r <= 0.9f)
     {
         const min16float center = p[DTid.xyz];

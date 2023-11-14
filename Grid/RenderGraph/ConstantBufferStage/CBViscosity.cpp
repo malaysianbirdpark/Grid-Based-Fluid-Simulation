@@ -32,7 +32,7 @@ void CBViscosity::Run(ID3D11DeviceContext& context)
 {
     Update();
     Upload(context);
-    context.CSSetConstantBuffers(2u, 1u, _buffer.GetAddressOf());
+    //context.CSSetConstantBuffers(2u, 1u, _buffer.GetAddressOf());
 }
 
 void CBViscosity::Upload(ID3D11DeviceContext& context)
