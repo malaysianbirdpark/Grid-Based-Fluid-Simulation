@@ -9,12 +9,12 @@
 MultiGrid3D1DStage::MultiGrid3D1DStage()
     : Compute3DStage{"3D1D-MultiGrid", "./CSO/MultiGrid3D1D_CS.cso", 8, 8, 8}
 {
-    _uav.resize(11);
-    _srv.resize(12);
-    _nullUav.resize(11);
-    _nullSrv.resize(12);
+    _uav.resize(20);
+    _srv.resize(21);
+    _nullUav.resize(20);
+    _nullSrv.resize(21);
 
-    _resource.resize(11);
+    _resource.resize(20);
 
 	auto desc {CD3D11_TEXTURE3D_DESC{}};
 	desc.BindFlags = D3D11_BIND_UNORDERED_ACCESS | D3D11_BIND_SHADER_RESOURCE;
@@ -32,7 +32,7 @@ MultiGrid3D1DStage::MultiGrid3D1DStage()
     pDevice->CreateUnorderedAccessView(_resource[0].Get(), nullptr, _uav[0].ReleaseAndGetAddressOf());
     pDevice->CreateShaderResourceView(_resource[0].Get(), nullptr, _srv[0].ReleaseAndGetAddressOf());
 
-	// Ah_temp
+	// Ah_residual
     pDevice->CreateTexture3D(&desc, nullptr, _resource[1].ReleaseAndGetAddressOf());
     pDevice->CreateUnorderedAccessView(_resource[1].Get(), nullptr, _uav[1].ReleaseAndGetAddressOf());
     pDevice->CreateShaderResourceView(_resource[1].Get(), nullptr, _srv[1].ReleaseAndGetAddressOf());
@@ -45,57 +45,113 @@ MultiGrid3D1DStage::MultiGrid3D1DStage()
     pDevice->CreateUnorderedAccessView(_resource[2].Get(), nullptr, _uav[2].ReleaseAndGetAddressOf());
     pDevice->CreateShaderResourceView(_resource[2].Get(), nullptr, _srv[2].ReleaseAndGetAddressOf());
 
-	// A2h_temp
+	// A2h_residual
     pDevice->CreateTexture3D(&desc, nullptr, _resource[3].ReleaseAndGetAddressOf());
     pDevice->CreateUnorderedAccessView(_resource[3].Get(), nullptr, _uav[3].ReleaseAndGetAddressOf());
     pDevice->CreateShaderResourceView(_resource[3].Get(), nullptr, _srv[3].ReleaseAndGetAddressOf());
+
+	// A2h_rhs
+    pDevice->CreateTexture3D(&desc, nullptr, _resource[4].ReleaseAndGetAddressOf());
+    pDevice->CreateUnorderedAccessView(_resource[4].Get(), nullptr, _uav[4].ReleaseAndGetAddressOf());
+    pDevice->CreateShaderResourceView(_resource[4].Get(), nullptr, _srv[4].ReleaseAndGetAddressOf());
 
 	// A4h
 	desc.Width = gSimulationInfo.width >> 2;
 	desc.Height = gSimulationInfo.height >> 2;
 	desc.Depth = gSimulationInfo.depth >> 2;
-    pDevice->CreateTexture3D(&desc, nullptr, _resource[4].ReleaseAndGetAddressOf());
-    pDevice->CreateUnorderedAccessView(_resource[4].Get(), nullptr, _uav[4].ReleaseAndGetAddressOf());
-    pDevice->CreateShaderResourceView(_resource[4].Get(), nullptr, _srv[4].ReleaseAndGetAddressOf());
-
-	// A4h_temp
     pDevice->CreateTexture3D(&desc, nullptr, _resource[5].ReleaseAndGetAddressOf());
     pDevice->CreateUnorderedAccessView(_resource[5].Get(), nullptr, _uav[5].ReleaseAndGetAddressOf());
     pDevice->CreateShaderResourceView(_resource[5].Get(), nullptr, _srv[5].ReleaseAndGetAddressOf());
+
+	// A4h_residual
+    pDevice->CreateTexture3D(&desc, nullptr, _resource[6].ReleaseAndGetAddressOf());
+    pDevice->CreateUnorderedAccessView(_resource[6].Get(), nullptr, _uav[6].ReleaseAndGetAddressOf());
+    pDevice->CreateShaderResourceView(_resource[6].Get(), nullptr, _srv[6].ReleaseAndGetAddressOf());
+
+	// A4h_rhs
+    pDevice->CreateTexture3D(&desc, nullptr, _resource[7].ReleaseAndGetAddressOf());
+    pDevice->CreateUnorderedAccessView(_resource[7].Get(), nullptr, _uav[7].ReleaseAndGetAddressOf());
+    pDevice->CreateShaderResourceView(_resource[7].Get(), nullptr, _srv[7].ReleaseAndGetAddressOf());
 
 	// A8h
 	desc.Width = gSimulationInfo.width >> 3;
 	desc.Height = gSimulationInfo.height >> 3;
 	desc.Depth = gSimulationInfo.depth >> 3;
-    pDevice->CreateTexture3D(&desc, nullptr, _resource[6].ReleaseAndGetAddressOf());
-    pDevice->CreateUnorderedAccessView(_resource[6].Get(), nullptr, _uav[6].ReleaseAndGetAddressOf());
-    pDevice->CreateShaderResourceView(_resource[6].Get(), nullptr, _srv[6].ReleaseAndGetAddressOf());
+    pDevice->CreateTexture3D(&desc, nullptr, _resource[8].ReleaseAndGetAddressOf());
+    pDevice->CreateUnorderedAccessView(_resource[8].Get(), nullptr, _uav[8].ReleaseAndGetAddressOf());
+    pDevice->CreateShaderResourceView(_resource[8].Get(), nullptr, _srv[8].ReleaseAndGetAddressOf());
 
-	// A8h_temp
-    pDevice->CreateTexture3D(&desc, nullptr, _resource[7].ReleaseAndGetAddressOf());
-    pDevice->CreateUnorderedAccessView(_resource[7].Get(), nullptr, _uav[7].ReleaseAndGetAddressOf());
-    pDevice->CreateShaderResourceView(_resource[7].Get(), nullptr, _srv[7].ReleaseAndGetAddressOf());
+	// A8h_residual
+    pDevice->CreateTexture3D(&desc, nullptr, _resource[9].ReleaseAndGetAddressOf());
+    pDevice->CreateUnorderedAccessView(_resource[9].Get(), nullptr, _uav[9].ReleaseAndGetAddressOf());
+    pDevice->CreateShaderResourceView(_resource[9].Get(), nullptr, _srv[9].ReleaseAndGetAddressOf());
+
+	// A8h_rhs
+    pDevice->CreateTexture3D(&desc, nullptr, _resource[10].ReleaseAndGetAddressOf());
+    pDevice->CreateUnorderedAccessView(_resource[10].Get(), nullptr, _uav[10].ReleaseAndGetAddressOf());
+    pDevice->CreateShaderResourceView(_resource[10].Get(), nullptr, _srv[10].ReleaseAndGetAddressOf());
 
 	// A16h
 	desc.Width = gSimulationInfo.width >> 4;
 	desc.Height = gSimulationInfo.height >> 4;
 	desc.Depth = gSimulationInfo.depth >> 4;
-    pDevice->CreateTexture3D(&desc, nullptr, _resource[8].ReleaseAndGetAddressOf());
-    pDevice->CreateUnorderedAccessView(_resource[8].Get(), nullptr, _uav[8].ReleaseAndGetAddressOf());
-    pDevice->CreateShaderResourceView(_resource[8].Get(), nullptr, _srv[8].ReleaseAndGetAddressOf());
+    pDevice->CreateTexture3D(&desc, nullptr, _resource[11].ReleaseAndGetAddressOf());
+    pDevice->CreateUnorderedAccessView(_resource[11].Get(), nullptr, _uav[11].ReleaseAndGetAddressOf());
+    pDevice->CreateShaderResourceView(_resource[11].Get(), nullptr, _srv[11].ReleaseAndGetAddressOf());
 
-	// A16h_temp
-    pDevice->CreateTexture3D(&desc, nullptr, _resource[9].ReleaseAndGetAddressOf());
-    pDevice->CreateUnorderedAccessView(_resource[9].Get(), nullptr, _uav[9].ReleaseAndGetAddressOf());
-    pDevice->CreateShaderResourceView(_resource[9].Get(), nullptr, _srv[9].ReleaseAndGetAddressOf());
+	// A16h_residual
+    pDevice->CreateTexture3D(&desc, nullptr, _resource[12].ReleaseAndGetAddressOf());
+    pDevice->CreateUnorderedAccessView(_resource[12].Get(), nullptr, _uav[12].ReleaseAndGetAddressOf());
+    pDevice->CreateShaderResourceView(_resource[12].Get(), nullptr, _srv[12].ReleaseAndGetAddressOf());
+
+	// A16h_rhs
+    pDevice->CreateTexture3D(&desc, nullptr, _resource[13].ReleaseAndGetAddressOf());
+    pDevice->CreateUnorderedAccessView(_resource[13].Get(), nullptr, _uav[13].ReleaseAndGetAddressOf());
+    pDevice->CreateShaderResourceView(_resource[13].Get(), nullptr, _srv[13].ReleaseAndGetAddressOf());
+
+	// A32h
+	desc.Width = gSimulationInfo.width >> 5;
+	desc.Height = gSimulationInfo.height >> 5;
+	desc.Depth = gSimulationInfo.depth >> 5;
+    pDevice->CreateTexture3D(&desc, nullptr, _resource[14].ReleaseAndGetAddressOf());
+    pDevice->CreateUnorderedAccessView(_resource[14].Get(), nullptr, _uav[14].ReleaseAndGetAddressOf());
+    pDevice->CreateShaderResourceView(_resource[14].Get(), nullptr, _srv[14].ReleaseAndGetAddressOf());
+
+	// A32h_residual
+    pDevice->CreateTexture3D(&desc, nullptr, _resource[15].ReleaseAndGetAddressOf());
+    pDevice->CreateUnorderedAccessView(_resource[15].Get(), nullptr, _uav[15].ReleaseAndGetAddressOf());
+    pDevice->CreateShaderResourceView(_resource[15].Get(), nullptr, _srv[15].ReleaseAndGetAddressOf());
+
+	// A32h_rhs
+    pDevice->CreateTexture3D(&desc, nullptr, _resource[16].ReleaseAndGetAddressOf());
+    pDevice->CreateUnorderedAccessView(_resource[16].Get(), nullptr, _uav[16].ReleaseAndGetAddressOf());
+    pDevice->CreateShaderResourceView(_resource[16].Get(), nullptr, _srv[16].ReleaseAndGetAddressOf());
+
+	// A32h
+	desc.Width = gSimulationInfo.width >> 6;
+	desc.Height = gSimulationInfo.height >> 6;
+	desc.Depth = gSimulationInfo.depth >> 6;
+    pDevice->CreateTexture3D(&desc, nullptr, _resource[17].ReleaseAndGetAddressOf());
+    pDevice->CreateUnorderedAccessView(_resource[17].Get(), nullptr, _uav[17].ReleaseAndGetAddressOf());
+    pDevice->CreateShaderResourceView(_resource[17].Get(), nullptr, _srv[17].ReleaseAndGetAddressOf());
+
+	// A32h_residual
+    pDevice->CreateTexture3D(&desc, nullptr, _resource[18].ReleaseAndGetAddressOf());
+    pDevice->CreateUnorderedAccessView(_resource[18].Get(), nullptr, _uav[18].ReleaseAndGetAddressOf());
+    pDevice->CreateShaderResourceView(_resource[18].Get(), nullptr, _srv[18].ReleaseAndGetAddressOf());
+
+	// A32h_rhs
+    pDevice->CreateTexture3D(&desc, nullptr, _resource[19].ReleaseAndGetAddressOf());
+    pDevice->CreateUnorderedAccessView(_resource[19].Get(), nullptr, _uav[19].ReleaseAndGetAddressOf());
+    pDevice->CreateShaderResourceView(_resource[19].Get(), nullptr, _srv[19].ReleaseAndGetAddressOf());
 
 	// Final Result
 	desc.Width = gSimulationInfo.width;
 	desc.Height = gSimulationInfo.height;
 	desc.Depth = gSimulationInfo.depth;
-    pDevice->CreateTexture3D(&desc, nullptr, _resource[10].ReleaseAndGetAddressOf());
-    pDevice->CreateUnorderedAccessView(_resource[10].Get(), nullptr, _uav[10].ReleaseAndGetAddressOf());
-    pDevice->CreateShaderResourceView(_resource[10].Get(), nullptr, _srv[10].ReleaseAndGetAddressOf());
+    pDevice->CreateTexture3D(&desc, nullptr, _resource[20].ReleaseAndGetAddressOf());
+    pDevice->CreateUnorderedAccessView(_resource[20].Get(), nullptr, _uav[20].ReleaseAndGetAddressOf());
+    pDevice->CreateShaderResourceView(_resource[20].Get(), nullptr, _srv[20].ReleaseAndGetAddressOf());
 
     _divID = NodeManager::IssueIncomingAttrID();
     _incoming[_divID] = -1;
@@ -177,9 +233,9 @@ void MultiGrid3D1DStage::Run(ID3D11DeviceContext& context)
 	SetBarrier(context);
 
 	// Jacobi for Ah
-	context.CSSetShaderResources(0u, 1u, _srv[0].GetAddressOf());
-	context.CSSetShaderResources(1u, 1u, _srv[11].GetAddressOf());
-	context.CSSetUnorderedAccessViews(0u, 1u, _uav[1].GetAddressOf(), nullptr);
+	context.CSSetShaderResources(0u, 1u, _srv[Ah].GetAddressOf());
+	context.CSSetShaderResources(1u, 1u, _srv[Div].GetAddressOf());
+	context.CSSetUnorderedAccessViews(0u, 1u, _uav[Ah_residual].GetAddressOf(), nullptr);
 	context.CSSetShader(_cs.Get(), nullptr, 0u);
 	context.Dispatch(
 		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.width) / _groupX)),
@@ -284,14 +340,14 @@ void MultiGrid3D1DStage::Run(ID3D11DeviceContext& context)
 void MultiGrid3D1DStage::Consume(ID3D11Resource* resource, int32_t attribute_id)
 {
     if (attribute_id == _divID) {
-        pDevice->CreateShaderResourceView(resource, nullptr, _srv[11].ReleaseAndGetAddressOf());
+        pDevice->CreateShaderResourceView(resource, nullptr, _srv[Div].ReleaseAndGetAddressOf());
     }
 }
 
 ID3D11Resource* MultiGrid3D1DStage::Expose(int32_t attribute_id)
 {
     if (attribute_id == _pressureOutID)
-        return static_cast<ID3D11Resource*>(_resource[10].Get());
+        return static_cast<ID3D11Resource*>(_resource[Final].Get());
 	return nullptr;
 }
 
