@@ -95,6 +95,9 @@
     <ClInclude Include="RenderGraph\ComputeStage\3D-Stable-Fluids\MCAdvection3DStage.h">
       <Filter>RenderGraph\ComputeStage\3D-Stable-Fluids</Filter>
     </ClInclude>
+    <ClInclude Include="RenderGraph\ComputeStage\3D-Stable-Fluids\MultiGrid3D1DStage.h">
+      <Filter>RenderGraph\ComputeStage\3D-Stable-Fluids</Filter>
+    </ClInclude>
     <ClInclude Include="RenderGraph\ComputeStage\3D-Stable-Fluids\Poisson3D1DStage.h">
       <Filter>RenderGraph\ComputeStage\3D-Stable-Fluids</Filter>
     </ClInclude>
@@ -278,6 +281,9 @@
     <ClCompile Include="RenderGraph\ComputeStage\3D-Stable-Fluids\MCAdvection3DStage.cpp">
       <Filter>RenderGraph\ComputeStage\3D-Stable-Fluids</Filter>
     </ClCompile>
+    <ClCompile Include="RenderGraph\ComputeStage\3D-Stable-Fluids\MultiGrid3D1DStage.cpp">
+      <Filter>RenderGraph\ComputeStage\3D-Stable-Fluids</Filter>
+    </ClCompile>
     <ClCompile Include="RenderGraph\ComputeStage\3D-Stable-Fluids\Poisson3D1DStage.cpp">
       <Filter>RenderGraph\ComputeStage\3D-Stable-Fluids</Filter>
     </ClCompile>
@@ -456,7 +462,13 @@
     <FxCompile Include="HLSL_CS\Initializer3D_CS.hlsl">
       <Filter>HLSL_CS</Filter>
     </FxCompile>
+    <FxCompile Include="HLSL_CS\Interpolate3D_CS.hlsl">
+      <Filter>HLSL_CS</Filter>
+    </FxCompile>
     <FxCompile Include="HLSL_CS\MacCormackAdvection3D_CS.hlsl">
+      <Filter>HLSL_CS</Filter>
+    </FxCompile>
+    <FxCompile Include="HLSL_CS\Multigrid3D1D_CS.hlsl">
       <Filter>HLSL_CS</Filter>
     </FxCompile>
     <FxCompile Include="HLSL_CS\Poisson2D1D_CS.hlsl">
@@ -475,6 +487,9 @@
       <Filter>HLSL_CS</Filter>
     </FxCompile>
     <FxCompile Include="HLSL_CS\PressureProjection3D_CS.hlsl">
+      <Filter>HLSL_CS</Filter>
+    </FxCompile>
+    <FxCompile Include="HLSL_CS\Restrict3D_CS.hlsl">
       <Filter>HLSL_CS</Filter>
     </FxCompile>
     <FxCompile Include="HLSL_CS\ReverseAdvection3D_CS.hlsl">

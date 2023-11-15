@@ -117,6 +117,7 @@
     <ClInclude Include="RenderGraph\ComputeStage\3D-Stable-Fluids\ExternalForces3DStage.h" />
     <ClInclude Include="RenderGraph\ComputeStage\3D-Stable-Fluids\Initializer3DStage.h" />
     <ClInclude Include="RenderGraph\ComputeStage\3D-Stable-Fluids\MCAdvection3DStage.h" />
+    <ClInclude Include="RenderGraph\ComputeStage\3D-Stable-Fluids\MultiGrid3D1DStage.h" />
     <ClInclude Include="RenderGraph\ComputeStage\3D-Stable-Fluids\Poisson3D1DStage.h" />
     <ClInclude Include="RenderGraph\ComputeStage\3D-Stable-Fluids\Poisson3D4DStage.h" />
     <ClInclude Include="RenderGraph\ComputeStage\3D-Stable-Fluids\PressureProjection3DStage.h" />
@@ -182,6 +183,7 @@
     <ClCompile Include="RenderGraph\ComputeStage\3D-Stable-Fluids\ExternalForces3DStage.cpp" />
     <ClCompile Include="RenderGraph\ComputeStage\3D-Stable-Fluids\Initializer3DStage.cpp" />
     <ClCompile Include="RenderGraph\ComputeStage\3D-Stable-Fluids\MCAdvection3DStage.cpp" />
+    <ClCompile Include="RenderGraph\ComputeStage\3D-Stable-Fluids\MultiGrid3D1DStage.cpp" />
     <ClCompile Include="RenderGraph\ComputeStage\3D-Stable-Fluids\Poisson3D1DStage.cpp" />
     <ClCompile Include="RenderGraph\ComputeStage\3D-Stable-Fluids\Poisson3D4DStage.cpp" />
     <ClCompile Include="RenderGraph\ComputeStage\3D-Stable-Fluids\PressureProjection3DStage.cpp" />
@@ -316,11 +318,23 @@
       <EntryPointName>main</EntryPointName>
       <ObjectFileOutput>../Grid/CSO/Initializer3D_CS.cso</ObjectFileOutput>
     </FxCompile>
+    <FxCompile Include="HLSL_CS\Interpolate3D_CS.hlsl">
+      <ShaderType>Compute</ShaderType>
+      <ShaderModel>5.0</ShaderModel>
+      <EntryPointName>main</EntryPointName>
+      <ObjectFileOutput>../Grid/CSO/Interpolate3D_CS.cso</ObjectFileOutput>
+    </FxCompile>
     <FxCompile Include="HLSL_CS\MacCormackAdvection3D_CS.hlsl">
       <ShaderType>Compute</ShaderType>
       <ShaderModel>5.0</ShaderModel>
       <EntryPointName>main</EntryPointName>
       <ObjectFileOutput>../Grid/CSO/MacCormackAdvection3D_CS.cso</ObjectFileOutput>
+    </FxCompile>
+    <FxCompile Include="HLSL_CS\Multigrid3D1D_CS.hlsl">
+      <ShaderType>Compute</ShaderType>
+      <ShaderModel>5.0</ShaderModel>
+      <EntryPointName>main</EntryPointName>
+      <ObjectFileOutput>../Grid/CSO/Multigrid3D1D_CS.cso</ObjectFileOutput>
     </FxCompile>
     <FxCompile Include="HLSL_CS\Poisson2D1D_CS.hlsl">
       <ShaderType>Compute</ShaderType>
@@ -357,6 +371,12 @@
       <ShaderModel>5.0</ShaderModel>
       <EntryPointName>main</EntryPointName>
       <ObjectFileOutput>../Grid/CSO/PressureProjection3D_CS.cso</ObjectFileOutput>
+    </FxCompile>
+    <FxCompile Include="HLSL_CS\Restrict3D_CS.hlsl">
+      <ShaderType>Compute</ShaderType>
+      <ShaderModel>5.0</ShaderModel>
+      <EntryPointName>main</EntryPointName>
+      <ObjectFileOutput>../Grid/CSO/Restrict3D_CS.cso</ObjectFileOutput>
     </FxCompile>
     <FxCompile Include="HLSL_CS\ReverseAdvection3D_CS.hlsl">
       <ShaderType>Compute</ShaderType>

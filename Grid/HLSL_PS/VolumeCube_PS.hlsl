@@ -35,7 +35,8 @@ cbuffer Dimension : register(b3)
 
 min16float LightVisibility(min16float3 origin, min16float coeff, min16float3 dir, min16float step_size) {
     min16float visibility = 1.0f;
-    for (int i = 0; i != 15; ++i) {
+    [unroll]
+    for (int i = 0; i != 20; ++i) {
         const min16float src = volume_tex.Sample(sampler0, origin).r;
         visibility *= exp(-(coeff * src) * step_size);
         origin     += dir * step_size;
@@ -54,6 +55,12 @@ float4 main(PS_IN input) : SV_Target
     const min16float  uvw_len   = length(back_uvw - front_uvw);
     const min16float3 uvw_dir   = (back_uvw - front_uvw) / uvw_len;
 
+    static const min16float step_size = reciprocal_width * 0.5f;
+    const min16float3 step_uvw = uvw_dir * step_size;
+
+    if (uvw_len < step_size)
+        return min16float4(0.0f, 0.0f, 0.0f, 0.0f);
+
     const min16float3 front_pos = front_world.Load(pixel_pos);
     const min16float3 back_pos  = back_world.Load(pixel_pos);
     const min16float  world_len = length(back_pos - front_pos);
@@ -66,12 +73,6 @@ float4 main(PS_IN input) : SV_Target
 
     float4 dest_color = float4(0.0f, 0.0f, 0.0f, 1.0f);
     min16float src = 0.0f;
-
-    static const min16float step_size = reciprocal_width;
-    const min16float3 step_uvw = uvw_dir * step_size;
-
-    if (uvw_len < step_size)
-        return min16float4(0.0f, 0.0f, 0.0f, 0.0f);
 
     const int iterations = uvw_len / step_size;
     const min16float step_world = world_len / iterations;
@@ -101,17 +102,19 @@ float4 main(PS_IN input) : SV_Target
         val[6] = volume_tex.Sample(sampler0, p6).r;
         val[7] = volume_tex.Sample(sampler0, p7).r;
 
-        min16float int_val[4];
-        int_val[0] = lerp(val[0], val[1], 0.5f);
-        int_val[1] = lerp(val[2], val[3], 0.5f);
-        const min16float int_val_0 = lerp(int_val[0], int_val[1], 0.5f);
-        int_val[2] = lerp(val[4], val[5], 0.5f);
-        int_val[3] = lerp(val[6], val[7], 0.5f);
-        const min16float int_val_1 = lerp(int_val[2], int_val[3], 0.5f);
-        src = lerp(int_val_0, int_val_1, 0.5f);
+        //min16float int_val[4];
+        //int_val[0] = lerp(val[0], val[1], 0.5f);
+        //int_val[1] = lerp(val[2], val[3], 0.5f);
+        //const min16float int_val_0 = lerp(int_val[0], int_val[1], 0.5f);
+        //int_val[2] = lerp(val[4], val[5], 0.5f);
+        //int_val[3] = lerp(val[6], val[7], 0.5f);
+        //const min16float int_val_1 = lerp(int_val[2], int_val[3], 0.5f);
+        //src = lerp(int_val_0, int_val_1, 0.5f);
+
+        src = (val[0] + val[1] + val[2] + val[3] + val[4] + val[5] + val[6] + val[7]) * 0.125f;
 
         static const min16float absorption_coeff = 0.3f;
-        if (src > 1e-3) 
+        if (src >= 10.9f) 
         {
             min16float3 dir_to_light = pl_pos - cur_world;
 			const min16float dist_to_light = length(dir_to_light);
@@ -127,9 +130,6 @@ float4 main(PS_IN input) : SV_Target
             const min16float absorption = prev_visibility - dest_color.a;
             dest_color.rgb += absorption * albedo * pl_color * light_visibility * att;
         }
-
-        if (dest_color.a <= 1e-4)
-            break;
 
         cur_uvw   += step_uvw;
         cur_world += step_world;

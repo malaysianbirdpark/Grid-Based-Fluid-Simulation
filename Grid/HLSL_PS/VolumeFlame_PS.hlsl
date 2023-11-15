@@ -35,7 +35,7 @@ cbuffer Dimension : register(b3)
 
 min16float LightVisibility(min16float3 origin, min16float coeff, min16float3 dir, min16float step_size) {
     min16float visibility = 1.0f;
-    for (int i = 0; i != 15; ++i) {
+    for (int i = 0; i != 10; ++i) {
         const min16float src = volume_tex.Sample(sampler0, origin).r;
         visibility *= exp(-(coeff * src) * step_size);
         origin     += dir * step_size;
@@ -91,19 +91,6 @@ float4 main(PS_IN input) : SV_Target
     const min16float  uvw_len   = length(back_uvw - front_uvw);
     const min16float3 uvw_dir   = (back_uvw - front_uvw) / uvw_len;
 
-    const min16float3 front_pos = front_world.Load(pixel_pos);
-    const min16float3 back_pos  = back_world.Load(pixel_pos);
-    const min16float  world_len = length(back_pos - front_pos);
-    const min16float3 world_dir = (back_pos - front_pos) / world_len;
-    
-    min16float3 cur_uvw = front_uvw;
-    min16float3 cur_world = front_pos;
-
-    static const min16float3 albedo = min16float3(0.5f, 0.5f, 0.5f);
-
-    float4 dest_color = float4(0.0f, 0.0f, 0.0f, 1.0f);
-    min16float src = 0.0f;
-
     static const min16float step_size = reciprocal_width * 0.5f;
     const min16float3 step_uvw = uvw_dir * step_size;
 
@@ -111,7 +98,21 @@ float4 main(PS_IN input) : SV_Target
         return min16float4(0.0f, 0.0f, 0.0f, 0.0f);
 
     const int iterations = uvw_len / step_size;
+
+    const min16float3 front_pos = front_world.Load(pixel_pos);
+    const min16float3 back_pos  = back_world.Load(pixel_pos);
+    const min16float  world_len = length(back_pos - front_pos);
+    const min16float3 world_dir = (back_pos - front_pos) / world_len;
+
     const min16float step_world = world_len / iterations;
+    
+    min16float3 cur_uvw   = front_uvw;
+    min16float3 cur_world = front_pos;
+
+    static const min16float3 albedo = min16float3(0.3f, 0.3f, 0.3f);
+
+    float4 dest_color = float4(0.0f, 0.0f, 0.0f, 1.0f);
+    min16float src = 0.0f;
 
     static uint jit = 0;
 
@@ -119,14 +120,23 @@ float4 main(PS_IN input) : SV_Target
     for (int i = 0; i < iterations + 1; ++i) { 
         const min16float3 jitt = jitter[jit];
 
-        const min16float3 p0 = cur_uvw + min16float3( dr.x,  dr.y,  dr.z) + min16float3(jitt.x, jitt.y, jitt.z);
-        const min16float3 p1 = cur_uvw + min16float3(-dr.x,  dr.y,  dr.z) + min16float3(jitt.y, jitt.z, jitt.x);
-        const min16float3 p2 = cur_uvw + min16float3( dr.x, -dr.y,  dr.z) + min16float3(jitt.z, jitt.x, jitt.y);
-        const min16float3 p3 = cur_uvw + min16float3(-dr.x, -dr.y,  dr.z) + min16float3(jitt.x, jitt.y, jitt.z);
-        const min16float3 p4 = cur_uvw + min16float3( dr.x,  dr.y, -dr.z) + min16float3(jitt.y, jitt.z, jitt.x);
-        const min16float3 p5 = cur_uvw + min16float3(-dr.x,  dr.y, -dr.z) + min16float3(jitt.z, jitt.x, jitt.y);
-        const min16float3 p6 = cur_uvw + min16float3( dr.x, -dr.y, -dr.z) + min16float3(jitt.x, jitt.y, jitt.z);
-        const min16float3 p7 = cur_uvw + min16float3(-dr.x, -dr.y, -dr.z) + min16float3(jitt.y, jitt.z, jitt.x);
+        //const min16float3 p0 = cur_uvw + min16float3( dr.x,  dr.y,  dr.z) + min16float3(jitt.x, jitt.y, jitt.z);
+        //const min16float3 p1 = cur_uvw + min16float3(-dr.x,  dr.y,  dr.z) + min16float3(jitt.y, jitt.z, jitt.x);
+        //const min16float3 p2 = cur_uvw + min16float3( dr.x, -dr.y,  dr.z) + min16float3(jitt.z, jitt.x, jitt.y);
+        //const min16float3 p3 = cur_uvw + min16float3(-dr.x, -dr.y,  dr.z) + min16float3(jitt.x, jitt.y, jitt.z);
+        //const min16float3 p4 = cur_uvw + min16float3( dr.x,  dr.y, -dr.z) + min16float3(jitt.y, jitt.z, jitt.x);
+        //const min16float3 p5 = cur_uvw + min16float3(-dr.x,  dr.y, -dr.z) + min16float3(jitt.z, jitt.x, jitt.y);
+        //const min16float3 p6 = cur_uvw + min16float3( dr.x, -dr.y, -dr.z) + min16float3(jitt.x, jitt.y, jitt.z);
+        //const min16float3 p7 = cur_uvw + min16float3(-dr.x, -dr.y, -dr.z) + min16float3(jitt.y, jitt.z, jitt.x);
+
+        const min16float3 p0 = cur_uvw + min16float3( dr.x,  dr.y,  dr.z);
+        const min16float3 p1 = cur_uvw + min16float3(-dr.x,  dr.y,  dr.z);
+        const min16float3 p2 = cur_uvw + min16float3( dr.x, -dr.y,  dr.z);
+        const min16float3 p3 = cur_uvw + min16float3(-dr.x, -dr.y,  dr.z);
+        const min16float3 p4 = cur_uvw + min16float3( dr.x,  dr.y, -dr.z);
+        const min16float3 p5 = cur_uvw + min16float3(-dr.x,  dr.y, -dr.z);
+        const min16float3 p6 = cur_uvw + min16float3( dr.x, -dr.y, -dr.z);
+        const min16float3 p7 = cur_uvw + min16float3(-dr.x, -dr.y, -dr.z);
 
         min16float2 val[8];
         val[0] = volume_tex.Sample(sampler0, p0).rg;
@@ -150,8 +160,8 @@ float4 main(PS_IN input) : SV_Target
 
         const min16float temperature = final_val.g;
 
-        static const min16float absorption_coeff = 0.35f;
-        if (src > 1e-3) 
+        static const min16float absorption_coeff = 0.3f;
+        if (src > 1e-1) 
         {
             if (temperature < 1400.0f) {
 				min16float3 dir_to_light = pl_pos - cur_world;
@@ -160,7 +170,7 @@ float4 main(PS_IN input) : SV_Target
 				const min16float att = dist_to_light_norm * dist_to_light_norm;
 				dir_to_light = dir_to_light / dist_to_light;
 				dir_to_light.y = -dir_to_light.y;
-				const min16float light_visibility = LightVisibility(cur_uvw, absorption_coeff, dir_to_light, step_size);
+				const min16float light_visibility = LightVisibility(cur_uvw, absorption_coeff, dir_to_light, step_size * 2.5f);
 
 				const min16float prev_visibility = dest_color.a;
 				const min16float coeff = src * absorption_coeff;
@@ -170,7 +180,7 @@ float4 main(PS_IN input) : SV_Target
             }
             else {
 				const min16float prev_visibility = dest_color.a;
-				const min16float coeff = src * 0.12f;
+				const min16float coeff = src * 0.6f;
 				dest_color.a   *= exp(-coeff * step_size);
 				const min16float absorption = prev_visibility - dest_color.a;
                 dest_color.rgb += absorption * GetColor(temperature);
