@@ -49,6 +49,6 @@ protected: D3D11_VIEWPORT                                    _vp{};
 
 protected: int32_t _inputID{};
 private:   int32_t _resultID{};
-protected: static float constexpr clear_color[4]{ 1.0f, 1.0f, 1.0f, 1.0f };
+protected: static float constexpr clear_color[4]{ 0.0f, 0.0f, 0.0f, 1.0f };
 };
 

@@ -55,7 +55,7 @@ float4 main(PS_IN input) : SV_Target
     const min16float  uvw_len   = length(back_uvw - front_uvw);
     const min16float3 uvw_dir   = (back_uvw - front_uvw) / uvw_len;
 
-    static const min16float step_size = reciprocal_width * 0.5f;
+    const min16float step_size = reciprocal_width * clamp(uvw_len, 1.0f, 2.0f);
     const min16float3 step_uvw = uvw_dir * step_size;
 
     if (uvw_len < step_size)
@@ -66,8 +66,8 @@ float4 main(PS_IN input) : SV_Target
     const min16float  world_len = length(back_pos - front_pos);
     const min16float3 world_dir = (back_pos - front_pos) / world_len;
     
-    min16float3 cur_uvw = front_uvw;
-    min16float3 cur_world = front_pos;
+    min16float3 cur_uvw = front_uvw + 1e-4;
+    min16float3 cur_world = front_pos + 1e-4;
 
     static const min16float3 albedo = min16float3(1.0f, 1.0f, 1.0f);
 
@@ -102,19 +102,10 @@ float4 main(PS_IN input) : SV_Target
         val[6] = volume_tex.Sample(sampler0, p6).r;
         val[7] = volume_tex.Sample(sampler0, p7).r;
 
-        //min16float int_val[4];
-        //int_val[0] = lerp(val[0], val[1], 0.5f);
-        //int_val[1] = lerp(val[2], val[3], 0.5f);
-        //const min16float int_val_0 = lerp(int_val[0], int_val[1], 0.5f);
-        //int_val[2] = lerp(val[4], val[5], 0.5f);
-        //int_val[3] = lerp(val[6], val[7], 0.5f);
-        //const min16float int_val_1 = lerp(int_val[2], int_val[3], 0.5f);
-        //src = lerp(int_val_0, int_val_1, 0.5f);
-
         src = (val[0] + val[1] + val[2] + val[3] + val[4] + val[5] + val[6] + val[7]) * 0.125f;
 
         static const min16float absorption_coeff = 0.3f;
-        if (src >= 10.9f) 
+        if (src >= 9.9f) 
         {
             min16float3 dir_to_light = pl_pos - cur_world;
 			const min16float dist_to_light = length(dir_to_light);

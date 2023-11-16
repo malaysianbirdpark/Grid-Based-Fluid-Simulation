@@ -30,6 +30,7 @@
 #include "CBPoisson.h"
 #include "Divergence3DStage.h"
 #include "Poisson3D1DStage.h"
+#include "MultiGrid3D1DStage.h"
 #include "Diffusion3DStage.h"
 #include "PressureProjection3DStage.h"
 #include "CBViscosity.h"
@@ -86,7 +87,8 @@ Game::Game()
 	_smoke.AddStage(std::move(std::make_shared<ExternalForces3DStage>()));
 
 	_smoke.AddStage(std::move(std::make_shared<Divergence3DStage>()));
-	_smoke.AddStage(std::move(std::make_shared<Poisson3D1DStage>()));
+	//_smoke.AddStage(std::move(std::make_shared<Poisson3D1DStage>()));
+	_smoke.AddStage(std::move(std::make_shared<MultiGrid3D1DStage>()));
 
 	_smoke.AddStage(std::move(std::make_shared<PressureProjection3DStage>()));
 

@@ -330,11 +330,17 @@
       <EntryPointName>main</EntryPointName>
       <ObjectFileOutput>../Grid/CSO/MacCormackAdvection3D_CS.cso</ObjectFileOutput>
     </FxCompile>
-    <FxCompile Include="HLSL_CS\Multigrid3D1D_CS.hlsl">
+    <FxCompile Include="HLSL_CS\MultiGridInit_CS.hlsl">
       <ShaderType>Compute</ShaderType>
       <ShaderModel>5.0</ShaderModel>
       <EntryPointName>main</EntryPointName>
-      <ObjectFileOutput>../Grid/CSO/Multigrid3D1D_CS.cso</ObjectFileOutput>
+      <ObjectFileOutput>../Grid/CSO/MultiGridInit_CS.cso</ObjectFileOutput>
+    </FxCompile>
+    <FxCompile Include="HLSL_CS\MultiGridJacobi_CS.hlsl">
+      <ShaderType>Compute</ShaderType>
+      <ShaderModel>5.0</ShaderModel>
+      <EntryPointName>main</EntryPointName>
+      <ObjectFileOutput>../Grid/CSO/MultiGridJacobi_CS.cso</ObjectFileOutput>
     </FxCompile>
     <FxCompile Include="HLSL_CS\Poisson2D1D_CS.hlsl">
       <ShaderType>Compute</ShaderType>
@@ -371,6 +377,12 @@
       <ShaderModel>5.0</ShaderModel>
       <EntryPointName>main</EntryPointName>
       <ObjectFileOutput>../Grid/CSO/PressureProjection3D_CS.cso</ObjectFileOutput>
+    </FxCompile>
+    <FxCompile Include="HLSL_CS\Residual3D_CS.hlsl">
+      <ShaderType>Compute</ShaderType>
+      <ShaderModel>5.0</ShaderModel>
+      <EntryPointName>main</EntryPointName>
+      <ObjectFileOutput>../Grid/CSO/Residual3D_CS.cso</ObjectFileOutput>
     </FxCompile>
     <FxCompile Include="HLSL_CS\Restrict3D_CS.hlsl">
       <ShaderType>Compute</ShaderType>

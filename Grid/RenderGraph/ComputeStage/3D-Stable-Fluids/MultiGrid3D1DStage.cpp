@@ -7,14 +7,14 @@
 #include "NodeManager.h"
 
 MultiGrid3D1DStage::MultiGrid3D1DStage()
-    : Compute3DStage{"3D1D-MultiGrid", "./CSO/MultiGrid3D1D_CS.cso", 8, 8, 8}
+    : Compute3DStage{"3D1D-MultiGrid", "./CSO/Poisson3D1D_CS.cso", 8, 8, 8}
 {
-    _uav.resize(20);
-    _srv.resize(21);
-    _nullUav.resize(20);
-    _nullSrv.resize(21);
+    _uav.resize(Final + 1);
+    _srv.resize(Final + 2);
+    _nullUav.resize(Final + 1);
+    _nullSrv.resize(Final + 2);
 
-    _resource.resize(20);
+    _resource.resize(Final + 1);
 
 	auto desc {CD3D11_TEXTURE3D_DESC{}};
 	desc.BindFlags = D3D11_BIND_UNORDERED_ACCESS | D3D11_BIND_SHADER_RESOURCE;
@@ -28,130 +28,205 @@ MultiGrid3D1DStage::MultiGrid3D1DStage()
     desc.Format = DXGI_FORMAT_R16_FLOAT;
 
 	// Ah
-    pDevice->CreateTexture3D(&desc, nullptr, _resource[0].ReleaseAndGetAddressOf());
-    pDevice->CreateUnorderedAccessView(_resource[0].Get(), nullptr, _uav[0].ReleaseAndGetAddressOf());
-    pDevice->CreateShaderResourceView(_resource[0].Get(), nullptr, _srv[0].ReleaseAndGetAddressOf());
+    pDevice->CreateTexture3D(&desc, nullptr, _resource[Ah].ReleaseAndGetAddressOf());
+    pDevice->CreateUnorderedAccessView(_resource[Ah].Get(), nullptr, _uav[Ah].ReleaseAndGetAddressOf());
+    pDevice->CreateShaderResourceView(_resource[Ah].Get(), nullptr, _srv[Ah].ReleaseAndGetAddressOf());
+
+	// Ah_temp
+    pDevice->CreateTexture3D(&desc, nullptr, _resource[Ah_temp].ReleaseAndGetAddressOf());
+    pDevice->CreateUnorderedAccessView(_resource[Ah_temp].Get(), nullptr, _uav[Ah_temp].ReleaseAndGetAddressOf());
+    pDevice->CreateShaderResourceView(_resource[Ah_temp].Get(), nullptr, _srv[Ah_temp].ReleaseAndGetAddressOf());
 
 	// Ah_residual
-    pDevice->CreateTexture3D(&desc, nullptr, _resource[1].ReleaseAndGetAddressOf());
-    pDevice->CreateUnorderedAccessView(_resource[1].Get(), nullptr, _uav[1].ReleaseAndGetAddressOf());
-    pDevice->CreateShaderResourceView(_resource[1].Get(), nullptr, _srv[1].ReleaseAndGetAddressOf());
+    pDevice->CreateTexture3D(&desc, nullptr, _resource[Ah_residual].ReleaseAndGetAddressOf());
+    pDevice->CreateUnorderedAccessView(_resource[Ah_residual].Get(), nullptr, _uav[Ah_residual].ReleaseAndGetAddressOf());
+    pDevice->CreateShaderResourceView(_resource[Ah_residual].Get(), nullptr, _srv[Ah_residual].ReleaseAndGetAddressOf());
+
+	// Ah_rhs
+    pDevice->CreateTexture3D(&desc, nullptr, _resource[Ah_rhs].ReleaseAndGetAddressOf());
+    pDevice->CreateUnorderedAccessView(_resource[Ah_rhs].Get(), nullptr, _uav[Ah_rhs].ReleaseAndGetAddressOf());
+    pDevice->CreateShaderResourceView(_resource[Ah_rhs].Get(), nullptr, _srv[Ah_rhs].ReleaseAndGetAddressOf());
+
+	// Dh
+    pDevice->CreateTexture3D(&desc, nullptr, _resource[Dh].ReleaseAndGetAddressOf());
+    pDevice->CreateUnorderedAccessView(_resource[Dh].Get(), nullptr, _uav[Dh].ReleaseAndGetAddressOf());
+    pDevice->CreateShaderResourceView(_resource[Dh].Get(), nullptr, _srv[Dh].ReleaseAndGetAddressOf());
 
 	// A2h
 	desc.Width = gSimulationInfo.width >> 1;
 	desc.Height = gSimulationInfo.height >> 1;
 	desc.Depth = gSimulationInfo.depth >> 1;
-    pDevice->CreateTexture3D(&desc, nullptr, _resource[2].ReleaseAndGetAddressOf());
-    pDevice->CreateUnorderedAccessView(_resource[2].Get(), nullptr, _uav[2].ReleaseAndGetAddressOf());
-    pDevice->CreateShaderResourceView(_resource[2].Get(), nullptr, _srv[2].ReleaseAndGetAddressOf());
+    pDevice->CreateTexture3D(&desc, nullptr, _resource[A2h].ReleaseAndGetAddressOf());
+    pDevice->CreateUnorderedAccessView(_resource[A2h].Get(), nullptr, _uav[A2h].ReleaseAndGetAddressOf());
+    pDevice->CreateShaderResourceView(_resource[A2h].Get(), nullptr, _srv[A2h].ReleaseAndGetAddressOf());
+
+	// A2h_temp
+    pDevice->CreateTexture3D(&desc, nullptr, _resource[A2h_temp].ReleaseAndGetAddressOf());
+    pDevice->CreateUnorderedAccessView(_resource[A2h_temp].Get(), nullptr, _uav[A2h_temp].ReleaseAndGetAddressOf());
+    pDevice->CreateShaderResourceView(_resource[A2h_temp].Get(), nullptr, _srv[A2h_temp].ReleaseAndGetAddressOf());
 
 	// A2h_residual
-    pDevice->CreateTexture3D(&desc, nullptr, _resource[3].ReleaseAndGetAddressOf());
-    pDevice->CreateUnorderedAccessView(_resource[3].Get(), nullptr, _uav[3].ReleaseAndGetAddressOf());
-    pDevice->CreateShaderResourceView(_resource[3].Get(), nullptr, _srv[3].ReleaseAndGetAddressOf());
+    pDevice->CreateTexture3D(&desc, nullptr, _resource[A2h_residual].ReleaseAndGetAddressOf());
+    pDevice->CreateUnorderedAccessView(_resource[A2h_residual].Get(), nullptr, _uav[A2h_residual].ReleaseAndGetAddressOf());
+    pDevice->CreateShaderResourceView(_resource[A2h_residual].Get(), nullptr, _srv[A2h_residual].ReleaseAndGetAddressOf());
 
 	// A2h_rhs
-    pDevice->CreateTexture3D(&desc, nullptr, _resource[4].ReleaseAndGetAddressOf());
-    pDevice->CreateUnorderedAccessView(_resource[4].Get(), nullptr, _uav[4].ReleaseAndGetAddressOf());
-    pDevice->CreateShaderResourceView(_resource[4].Get(), nullptr, _srv[4].ReleaseAndGetAddressOf());
+    pDevice->CreateTexture3D(&desc, nullptr, _resource[A2h_rhs].ReleaseAndGetAddressOf());
+    pDevice->CreateUnorderedAccessView(_resource[A2h_rhs].Get(), nullptr, _uav[A2h_rhs].ReleaseAndGetAddressOf());
+    pDevice->CreateShaderResourceView(_resource[A2h_rhs].Get(), nullptr, _srv[A2h_rhs].ReleaseAndGetAddressOf());
+
+	// D2h
+    pDevice->CreateTexture3D(&desc, nullptr, _resource[D2h].ReleaseAndGetAddressOf());
+    pDevice->CreateUnorderedAccessView(_resource[D2h].Get(), nullptr, _uav[D2h].ReleaseAndGetAddressOf());
+    pDevice->CreateShaderResourceView(_resource[D2h].Get(), nullptr, _srv[D2h].ReleaseAndGetAddressOf());
 
 	// A4h
 	desc.Width = gSimulationInfo.width >> 2;
 	desc.Height = gSimulationInfo.height >> 2;
 	desc.Depth = gSimulationInfo.depth >> 2;
-    pDevice->CreateTexture3D(&desc, nullptr, _resource[5].ReleaseAndGetAddressOf());
-    pDevice->CreateUnorderedAccessView(_resource[5].Get(), nullptr, _uav[5].ReleaseAndGetAddressOf());
-    pDevice->CreateShaderResourceView(_resource[5].Get(), nullptr, _srv[5].ReleaseAndGetAddressOf());
+    pDevice->CreateTexture3D(&desc, nullptr, _resource[A4h].ReleaseAndGetAddressOf());
+    pDevice->CreateUnorderedAccessView(_resource[A4h].Get(), nullptr, _uav[A4h].ReleaseAndGetAddressOf());
+    pDevice->CreateShaderResourceView(_resource[A4h].Get(), nullptr, _srv[A4h].ReleaseAndGetAddressOf());
+
+	// A4h_temp
+    pDevice->CreateTexture3D(&desc, nullptr, _resource[A4h_temp].ReleaseAndGetAddressOf());
+    pDevice->CreateUnorderedAccessView(_resource[A4h_temp].Get(), nullptr, _uav[A4h_temp].ReleaseAndGetAddressOf());
+    pDevice->CreateShaderResourceView(_resource[A4h_temp].Get(), nullptr, _srv[A4h_temp].ReleaseAndGetAddressOf());
 
 	// A4h_residual
-    pDevice->CreateTexture3D(&desc, nullptr, _resource[6].ReleaseAndGetAddressOf());
-    pDevice->CreateUnorderedAccessView(_resource[6].Get(), nullptr, _uav[6].ReleaseAndGetAddressOf());
-    pDevice->CreateShaderResourceView(_resource[6].Get(), nullptr, _srv[6].ReleaseAndGetAddressOf());
+    pDevice->CreateTexture3D(&desc, nullptr, _resource[A4h_residual].ReleaseAndGetAddressOf());
+    pDevice->CreateUnorderedAccessView(_resource[A4h_residual].Get(), nullptr, _uav[A4h_residual].ReleaseAndGetAddressOf());
+    pDevice->CreateShaderResourceView(_resource[A4h_residual].Get(), nullptr, _srv[A4h_residual].ReleaseAndGetAddressOf());
 
 	// A4h_rhs
-    pDevice->CreateTexture3D(&desc, nullptr, _resource[7].ReleaseAndGetAddressOf());
-    pDevice->CreateUnorderedAccessView(_resource[7].Get(), nullptr, _uav[7].ReleaseAndGetAddressOf());
-    pDevice->CreateShaderResourceView(_resource[7].Get(), nullptr, _srv[7].ReleaseAndGetAddressOf());
+    pDevice->CreateTexture3D(&desc, nullptr, _resource[A4h_rhs].ReleaseAndGetAddressOf());
+    pDevice->CreateUnorderedAccessView(_resource[A4h_rhs].Get(), nullptr, _uav[A4h_rhs].ReleaseAndGetAddressOf());
+    pDevice->CreateShaderResourceView(_resource[A4h_rhs].Get(), nullptr, _srv[A4h_rhs].ReleaseAndGetAddressOf());
+
+	// D4h
+    pDevice->CreateTexture3D(&desc, nullptr, _resource[D4h].ReleaseAndGetAddressOf());
+    pDevice->CreateUnorderedAccessView(_resource[D4h].Get(), nullptr, _uav[D4h].ReleaseAndGetAddressOf());
+    pDevice->CreateShaderResourceView(_resource[D4h].Get(), nullptr, _srv[D4h].ReleaseAndGetAddressOf());
 
 	// A8h
 	desc.Width = gSimulationInfo.width >> 3;
 	desc.Height = gSimulationInfo.height >> 3;
 	desc.Depth = gSimulationInfo.depth >> 3;
-    pDevice->CreateTexture3D(&desc, nullptr, _resource[8].ReleaseAndGetAddressOf());
-    pDevice->CreateUnorderedAccessView(_resource[8].Get(), nullptr, _uav[8].ReleaseAndGetAddressOf());
-    pDevice->CreateShaderResourceView(_resource[8].Get(), nullptr, _srv[8].ReleaseAndGetAddressOf());
+    pDevice->CreateTexture3D(&desc, nullptr, _resource[A8h].ReleaseAndGetAddressOf());
+    pDevice->CreateUnorderedAccessView(_resource[A8h].Get(), nullptr, _uav[A8h].ReleaseAndGetAddressOf());
+    pDevice->CreateShaderResourceView(_resource[A8h].Get(), nullptr, _srv[A8h].ReleaseAndGetAddressOf());
+
+	// A8h_temp
+    pDevice->CreateTexture3D(&desc, nullptr, _resource[A8h_temp].ReleaseAndGetAddressOf());
+    pDevice->CreateUnorderedAccessView(_resource[A8h_temp].Get(), nullptr, _uav[A8h_temp].ReleaseAndGetAddressOf());
+    pDevice->CreateShaderResourceView(_resource[A8h_temp].Get(), nullptr, _srv[A8h_temp].ReleaseAndGetAddressOf());
 
 	// A8h_residual
-    pDevice->CreateTexture3D(&desc, nullptr, _resource[9].ReleaseAndGetAddressOf());
-    pDevice->CreateUnorderedAccessView(_resource[9].Get(), nullptr, _uav[9].ReleaseAndGetAddressOf());
-    pDevice->CreateShaderResourceView(_resource[9].Get(), nullptr, _srv[9].ReleaseAndGetAddressOf());
+    pDevice->CreateTexture3D(&desc, nullptr, _resource[A8h_residual].ReleaseAndGetAddressOf());
+    pDevice->CreateUnorderedAccessView(_resource[A8h_residual].Get(), nullptr, _uav[A8h_residual].ReleaseAndGetAddressOf());
+    pDevice->CreateShaderResourceView(_resource[A8h_residual].Get(), nullptr, _srv[A8h_residual].ReleaseAndGetAddressOf());
 
 	// A8h_rhs
-    pDevice->CreateTexture3D(&desc, nullptr, _resource[10].ReleaseAndGetAddressOf());
-    pDevice->CreateUnorderedAccessView(_resource[10].Get(), nullptr, _uav[10].ReleaseAndGetAddressOf());
-    pDevice->CreateShaderResourceView(_resource[10].Get(), nullptr, _srv[10].ReleaseAndGetAddressOf());
+    pDevice->CreateTexture3D(&desc, nullptr, _resource[A8h_rhs].ReleaseAndGetAddressOf());
+    pDevice->CreateUnorderedAccessView(_resource[A8h_rhs].Get(), nullptr, _uav[A8h_rhs].ReleaseAndGetAddressOf());
+    pDevice->CreateShaderResourceView(_resource[A8h_rhs].Get(), nullptr, _srv[A8h_rhs].ReleaseAndGetAddressOf());
+
+	// D8h
+    pDevice->CreateTexture3D(&desc, nullptr, _resource[D8h].ReleaseAndGetAddressOf());
+    pDevice->CreateUnorderedAccessView(_resource[D8h].Get(), nullptr, _uav[D8h].ReleaseAndGetAddressOf());
+    pDevice->CreateShaderResourceView(_resource[D8h].Get(), nullptr, _srv[D8h].ReleaseAndGetAddressOf());
 
 	// A16h
 	desc.Width = gSimulationInfo.width >> 4;
 	desc.Height = gSimulationInfo.height >> 4;
 	desc.Depth = gSimulationInfo.depth >> 4;
-    pDevice->CreateTexture3D(&desc, nullptr, _resource[11].ReleaseAndGetAddressOf());
-    pDevice->CreateUnorderedAccessView(_resource[11].Get(), nullptr, _uav[11].ReleaseAndGetAddressOf());
-    pDevice->CreateShaderResourceView(_resource[11].Get(), nullptr, _srv[11].ReleaseAndGetAddressOf());
+    pDevice->CreateTexture3D(&desc, nullptr, _resource[A16h].ReleaseAndGetAddressOf());
+    pDevice->CreateUnorderedAccessView(_resource[A16h].Get(), nullptr, _uav[A16h].ReleaseAndGetAddressOf());
+    pDevice->CreateShaderResourceView(_resource[A16h].Get(), nullptr, _srv[A16h].ReleaseAndGetAddressOf());
+
+	// A16h_temp
+    pDevice->CreateTexture3D(&desc, nullptr, _resource[A16h_temp].ReleaseAndGetAddressOf());
+    pDevice->CreateUnorderedAccessView(_resource[A16h_temp].Get(), nullptr, _uav[A16h_temp].ReleaseAndGetAddressOf());
+    pDevice->CreateShaderResourceView(_resource[A16h_temp].Get(), nullptr, _srv[A16h_temp].ReleaseAndGetAddressOf());
 
 	// A16h_residual
-    pDevice->CreateTexture3D(&desc, nullptr, _resource[12].ReleaseAndGetAddressOf());
-    pDevice->CreateUnorderedAccessView(_resource[12].Get(), nullptr, _uav[12].ReleaseAndGetAddressOf());
-    pDevice->CreateShaderResourceView(_resource[12].Get(), nullptr, _srv[12].ReleaseAndGetAddressOf());
+    pDevice->CreateTexture3D(&desc, nullptr, _resource[A16h_residual].ReleaseAndGetAddressOf());
+    pDevice->CreateUnorderedAccessView(_resource[A16h_residual].Get(), nullptr, _uav[A16h_residual].ReleaseAndGetAddressOf());
+    pDevice->CreateShaderResourceView(_resource[A16h_residual].Get(), nullptr, _srv[A16h_residual].ReleaseAndGetAddressOf());
 
 	// A16h_rhs
-    pDevice->CreateTexture3D(&desc, nullptr, _resource[13].ReleaseAndGetAddressOf());
-    pDevice->CreateUnorderedAccessView(_resource[13].Get(), nullptr, _uav[13].ReleaseAndGetAddressOf());
-    pDevice->CreateShaderResourceView(_resource[13].Get(), nullptr, _srv[13].ReleaseAndGetAddressOf());
+    pDevice->CreateTexture3D(&desc, nullptr, _resource[A16h_rhs].ReleaseAndGetAddressOf());
+    pDevice->CreateUnorderedAccessView(_resource[A16h_rhs].Get(), nullptr, _uav[A16h_rhs].ReleaseAndGetAddressOf());
+    pDevice->CreateShaderResourceView(_resource[A16h_rhs].Get(), nullptr, _srv[A16h_rhs].ReleaseAndGetAddressOf());
+
+	// D16h
+    pDevice->CreateTexture3D(&desc, nullptr, _resource[D16h].ReleaseAndGetAddressOf());
+    pDevice->CreateUnorderedAccessView(_resource[D16h].Get(), nullptr, _uav[D16h].ReleaseAndGetAddressOf());
+    pDevice->CreateShaderResourceView(_resource[D16h].Get(), nullptr, _srv[D16h].ReleaseAndGetAddressOf());
 
 	// A32h
 	desc.Width = gSimulationInfo.width >> 5;
 	desc.Height = gSimulationInfo.height >> 5;
 	desc.Depth = gSimulationInfo.depth >> 5;
-    pDevice->CreateTexture3D(&desc, nullptr, _resource[14].ReleaseAndGetAddressOf());
-    pDevice->CreateUnorderedAccessView(_resource[14].Get(), nullptr, _uav[14].ReleaseAndGetAddressOf());
-    pDevice->CreateShaderResourceView(_resource[14].Get(), nullptr, _srv[14].ReleaseAndGetAddressOf());
+    pDevice->CreateTexture3D(&desc, nullptr, _resource[A32h].ReleaseAndGetAddressOf());
+    pDevice->CreateUnorderedAccessView(_resource[A32h].Get(), nullptr, _uav[A32h].ReleaseAndGetAddressOf());
+    pDevice->CreateShaderResourceView(_resource[A32h].Get(), nullptr, _srv[A32h].ReleaseAndGetAddressOf());
+
+	// A32h_temp
+    pDevice->CreateTexture3D(&desc, nullptr, _resource[A32h_temp].ReleaseAndGetAddressOf());
+    pDevice->CreateUnorderedAccessView(_resource[A32h_temp].Get(), nullptr, _uav[A32h_temp].ReleaseAndGetAddressOf());
+    pDevice->CreateShaderResourceView(_resource[A32h_temp].Get(), nullptr, _srv[A32h_temp].ReleaseAndGetAddressOf());
 
 	// A32h_residual
-    pDevice->CreateTexture3D(&desc, nullptr, _resource[15].ReleaseAndGetAddressOf());
-    pDevice->CreateUnorderedAccessView(_resource[15].Get(), nullptr, _uav[15].ReleaseAndGetAddressOf());
-    pDevice->CreateShaderResourceView(_resource[15].Get(), nullptr, _srv[15].ReleaseAndGetAddressOf());
+    pDevice->CreateTexture3D(&desc, nullptr, _resource[A32h_residual].ReleaseAndGetAddressOf());
+    pDevice->CreateUnorderedAccessView(_resource[A32h_residual].Get(), nullptr, _uav[A32h_residual].ReleaseAndGetAddressOf());
+    pDevice->CreateShaderResourceView(_resource[A32h_residual].Get(), nullptr, _srv[A32h_residual].ReleaseAndGetAddressOf());
 
 	// A32h_rhs
-    pDevice->CreateTexture3D(&desc, nullptr, _resource[16].ReleaseAndGetAddressOf());
-    pDevice->CreateUnorderedAccessView(_resource[16].Get(), nullptr, _uav[16].ReleaseAndGetAddressOf());
-    pDevice->CreateShaderResourceView(_resource[16].Get(), nullptr, _srv[16].ReleaseAndGetAddressOf());
+    pDevice->CreateTexture3D(&desc, nullptr, _resource[A32h_rhs].ReleaseAndGetAddressOf());
+    pDevice->CreateUnorderedAccessView(_resource[A32h_rhs].Get(), nullptr, _uav[A32h_rhs].ReleaseAndGetAddressOf());
+    pDevice->CreateShaderResourceView(_resource[A32h_rhs].Get(), nullptr, _srv[A32h_rhs].ReleaseAndGetAddressOf());
 
-	// A32h
+	// D32h
+    pDevice->CreateTexture3D(&desc, nullptr, _resource[D32h].ReleaseAndGetAddressOf());
+    pDevice->CreateUnorderedAccessView(_resource[D32h].Get(), nullptr, _uav[D32h].ReleaseAndGetAddressOf());
+    pDevice->CreateShaderResourceView(_resource[D32h].Get(), nullptr, _srv[D32h].ReleaseAndGetAddressOf());
+
+	// A64h
 	desc.Width = gSimulationInfo.width >> 6;
 	desc.Height = gSimulationInfo.height >> 6;
 	desc.Depth = gSimulationInfo.depth >> 6;
-    pDevice->CreateTexture3D(&desc, nullptr, _resource[17].ReleaseAndGetAddressOf());
-    pDevice->CreateUnorderedAccessView(_resource[17].Get(), nullptr, _uav[17].ReleaseAndGetAddressOf());
-    pDevice->CreateShaderResourceView(_resource[17].Get(), nullptr, _srv[17].ReleaseAndGetAddressOf());
+    pDevice->CreateTexture3D(&desc, nullptr, _resource[A64h].ReleaseAndGetAddressOf());
+    pDevice->CreateUnorderedAccessView(_resource[A64h].Get(), nullptr, _uav[A64h].ReleaseAndGetAddressOf());
+    pDevice->CreateShaderResourceView(_resource[A64h].Get(), nullptr, _srv[A64h].ReleaseAndGetAddressOf());
 
-	// A32h_residual
-    pDevice->CreateTexture3D(&desc, nullptr, _resource[18].ReleaseAndGetAddressOf());
-    pDevice->CreateUnorderedAccessView(_resource[18].Get(), nullptr, _uav[18].ReleaseAndGetAddressOf());
-    pDevice->CreateShaderResourceView(_resource[18].Get(), nullptr, _srv[18].ReleaseAndGetAddressOf());
+	// A64h_temp
+    pDevice->CreateTexture3D(&desc, nullptr, _resource[A64h_temp].ReleaseAndGetAddressOf());
+    pDevice->CreateUnorderedAccessView(_resource[A64h_temp].Get(), nullptr, _uav[A64h_temp].ReleaseAndGetAddressOf());
+    pDevice->CreateShaderResourceView(_resource[A64h_temp].Get(), nullptr, _srv[A64h_temp].ReleaseAndGetAddressOf());
 
-	// A32h_rhs
-    pDevice->CreateTexture3D(&desc, nullptr, _resource[19].ReleaseAndGetAddressOf());
-    pDevice->CreateUnorderedAccessView(_resource[19].Get(), nullptr, _uav[19].ReleaseAndGetAddressOf());
-    pDevice->CreateShaderResourceView(_resource[19].Get(), nullptr, _srv[19].ReleaseAndGetAddressOf());
+	// A64h_residual
+    pDevice->CreateTexture3D(&desc, nullptr, _resource[A64h_residual].ReleaseAndGetAddressOf());
+    pDevice->CreateUnorderedAccessView(_resource[A64h_residual].Get(), nullptr, _uav[A64h_residual].ReleaseAndGetAddressOf());
+    pDevice->CreateShaderResourceView(_resource[A64h_residual].Get(), nullptr, _srv[A64h_residual].ReleaseAndGetAddressOf());
+
+	// A64h_rhs
+    pDevice->CreateTexture3D(&desc, nullptr, _resource[A64h_rhs].ReleaseAndGetAddressOf());
+    pDevice->CreateUnorderedAccessView(_resource[A64h_rhs].Get(), nullptr, _uav[A64h_rhs].ReleaseAndGetAddressOf());
+    pDevice->CreateShaderResourceView(_resource[A64h_rhs].Get(), nullptr, _srv[A64h_rhs].ReleaseAndGetAddressOf());
+
+	// D64h
+    pDevice->CreateTexture3D(&desc, nullptr, _resource[D64h].ReleaseAndGetAddressOf());
+    pDevice->CreateUnorderedAccessView(_resource[D64h].Get(), nullptr, _uav[D64h].ReleaseAndGetAddressOf());
+    pDevice->CreateShaderResourceView(_resource[D64h].Get(), nullptr, _srv[D64h].ReleaseAndGetAddressOf());
 
 	// Final Result
 	desc.Width = gSimulationInfo.width;
 	desc.Height = gSimulationInfo.height;
 	desc.Depth = gSimulationInfo.depth;
-    pDevice->CreateTexture3D(&desc, nullptr, _resource[20].ReleaseAndGetAddressOf());
-    pDevice->CreateUnorderedAccessView(_resource[20].Get(), nullptr, _uav[20].ReleaseAndGetAddressOf());
-    pDevice->CreateShaderResourceView(_resource[20].Get(), nullptr, _srv[20].ReleaseAndGetAddressOf());
+    pDevice->CreateTexture3D(&desc, nullptr, _resource[Final].ReleaseAndGetAddressOf());
+    pDevice->CreateUnorderedAccessView(_resource[Final].Get(), nullptr, _uav[Final].ReleaseAndGetAddressOf());
+    pDevice->CreateShaderResourceView(_resource[Final].Get(), nullptr, _srv[Final].ReleaseAndGetAddressOf());
 
     _divID = NodeManager::IssueIncomingAttrID();
     _incoming[_divID] = -1;
@@ -162,7 +237,7 @@ MultiGrid3D1DStage::MultiGrid3D1DStage()
     _attrNames[_pressureOutID] = { "Pressure" };
 
     {
-		std::string _path{"./CSO/Initializer3D_CS.cso"};
+		std::string _path{"./CSO/MultiGridInit_CS.cso"};
 		std::wstring p(_path.length(), L' ');
 		std::ranges::copy(_path, p.begin());
 
@@ -177,6 +252,44 @@ MultiGrid3D1DStage::MultiGrid3D1DStage()
 			pBlob->GetBufferSize(),
 			nullptr,
 			_initCS.ReleaseAndGetAddressOf()
+		);
+    }
+
+    {
+		std::string _path{"./CSO/MultiGridJacobi_CS.cso"};
+		std::wstring p(_path.length(), L' ');
+		std::ranges::copy(_path, p.begin());
+
+		Microsoft::WRL::ComPtr<ID3DBlob> pBlob;
+		D3DReadFileToBlob(
+			p.c_str(),
+			pBlob.ReleaseAndGetAddressOf()
+		);
+
+		pDevice->CreateComputeShader(
+			pBlob->GetBufferPointer(), 
+			pBlob->GetBufferSize(),
+			nullptr,
+			_mgJacobiCS.ReleaseAndGetAddressOf()
+		);
+    }
+
+    {
+		std::string _path{"./CSO/Residual3D_CS.cso"};
+		std::wstring p(_path.length(), L' ');
+		std::ranges::copy(_path, p.begin());
+
+		Microsoft::WRL::ComPtr<ID3DBlob> pBlob;
+		D3DReadFileToBlob(
+			p.c_str(),
+			pBlob.ReleaseAndGetAddressOf()
+		);
+
+		pDevice->CreateComputeShader(
+			pBlob->GetBufferPointer(), 
+			pBlob->GetBufferSize(),
+			nullptr,
+			_residualCS.ReleaseAndGetAddressOf()
 		);
     }
 
@@ -223,7 +336,9 @@ void MultiGrid3D1DStage::Run(ID3D11DeviceContext& context)
 {
     context.OMSetRenderTargets(0u, nullptr, nullptr);
 
-	context.CSSetUnorderedAccessViews(0u, 2u, _uav[0].GetAddressOf(), nullptr);
+	// initial guess 
+	ID3D11UnorderedAccessView* uav[7]{ _uav[Ah].Get(), _uav[A2h].Get(), _uav[A4h].Get(), _uav[A8h].Get(), _uav[A16h].Get(), _uav[A32h].Get(), _uav[A64h].Get() };
+	context.CSSetUnorderedAccessViews(0u, 7u, uav, nullptr);
 	context.CSSetShader(_initCS.Get(), nullptr, 0u);
 	context.Dispatch(
 		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.width) / _groupX)),
@@ -233,10 +348,35 @@ void MultiGrid3D1DStage::Run(ID3D11DeviceContext& context)
 	SetBarrier(context);
 
 	// Jacobi for Ah
-	context.CSSetShaderResources(0u, 1u, _srv[Ah].GetAddressOf());
-	context.CSSetShaderResources(1u, 1u, _srv[Div].GetAddressOf());
-	context.CSSetUnorderedAccessViews(0u, 1u, _uav[Ah_residual].GetAddressOf(), nullptr);
+	ID3D11ShaderResourceView* srv[3]{ _srv[Ah].Get(), _srv[Dh].Get() };
+	context.CSSetShaderResources(0u, 2u, srv);
+	context.CSSetUnorderedAccessViews(0u, 1u, _uav[Ah_temp].GetAddressOf(), nullptr);
 	context.CSSetShader(_cs.Get(), nullptr, 0u);
+	context.Dispatch(
+		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.width) / _groupX)),
+		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.height) / _groupY)), 
+		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.depth) / _groupZ)) 
+	);
+	SetBarrier(context);
+
+	// Residual Ah
+	srv[0] = _srv[Ah_temp].Get();
+	srv[1] = _srv[Dh].Get();
+	context.CSSetShaderResources(0u, 2u, srv);
+	context.CSSetUnorderedAccessViews(0u, 1u, _uav[Ah_residual].GetAddressOf(), nullptr);
+	context.CSSetShader(_residualCS.Get(), nullptr, 0u);
+	context.Dispatch(
+		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.width) / _groupX)),
+		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.height) / _groupY)), 
+		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.depth) / _groupZ)) 
+	);
+	SetBarrier(context);
+
+	// RHS Ah
+	context.CSSetShaderResources(0u, 1u, _srv[Ah_residual].GetAddressOf());
+	context.CSSetShaderResources(1u, 1u, _srv[Ah_temp].GetAddressOf());
+	context.CSSetUnorderedAccessViews(0u, 1u, _uav[Ah_rhs].GetAddressOf(), nullptr);
+	context.CSSetShader(_residualCS.Get(), nullptr, 0u);
 	context.Dispatch(
 		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.width) / _groupX)),
 		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.height) / _groupY)), 
@@ -245,78 +385,579 @@ void MultiGrid3D1DStage::Run(ID3D11DeviceContext& context)
 	SetBarrier(context);
 
 	// Restrict Ah to A2h
-	context.CSSetShaderResources(0u, 1u, _srv[1].GetAddressOf());
-	context.CSSetUnorderedAccessViews(0u, 1u, _uav[2].GetAddressOf(), nullptr);
+	context.CSSetShaderResources(0u, 1u, _srv[Ah_rhs].GetAddressOf());
+	context.CSSetUnorderedAccessViews(0u, 1u, _uav[A2h].GetAddressOf(), nullptr);
 	context.CSSetShader(_restrictCS.Get(), nullptr, 0u);
 	context.Dispatch(
-		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.width) / _groupX)),
-		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.height) / _groupY)), 
-		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.depth) / _groupZ)) 
+		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.width  >> 1) / _groupX)),
+		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.height >> 1) / _groupY)), 
+		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.depth  >> 1) / _groupZ)) 
+	);
+	SetBarrier(context);
+
+	context.CSSetShaderResources(0u, 1u, _srv[Dh].GetAddressOf());
+	context.CSSetUnorderedAccessViews(0u, 1u, _uav[D2h].GetAddressOf(), nullptr);
+	context.CSSetShader(_restrictCS.Get(), nullptr, 0u);
+	context.Dispatch(
+		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.width  >> 1) / _groupX)),
+		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.height >> 1) / _groupY)), 
+		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.depth  >> 1) / _groupZ)) 
 	);
 	SetBarrier(context);
 
 	// Jacobi for A2h
-	context.CSSetShaderResources(0u, 1u, _srv[2].GetAddressOf());
-	context.CSSetShaderResources(1u, 1u, _srv[11].GetAddressOf());
-	context.CSSetUnorderedAccessViews(0u, 1u, _uav[3].GetAddressOf(), nullptr);
-	context.CSSetShader(_cs.Get(), nullptr, 0u);
+	context.CSSetShaderResources(0u, 1u, _srv[A2h].GetAddressOf());
+	context.CSSetShaderResources(1u, 1u, _srv[D2h].GetAddressOf());
+	context.CSSetUnorderedAccessViews(0u, 1u, _uav[A2h_temp].GetAddressOf(), nullptr);
+	context.CSSetShader(_mgJacobiCS.Get(), nullptr, 0u);
 	context.Dispatch(
-		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.width) / _groupX)),
-		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.height) / _groupY)), 
-		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.depth) / _groupZ)) 
+		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.width  >> 1) / _groupX)),
+		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.height >> 1) / _groupY)), 
+		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.depth  >> 1) / _groupZ)) 
+	);
+	SetBarrier(context);
+
+	// RHS A2h
+	context.CSSetShaderResources(0u, 1u, _srv[Ah_residual].GetAddressOf());
+	context.CSSetUnorderedAccessViews(0u, 1u, _uav[A2h_int].GetAddressOf(), nullptr);
+	context.CSSetShader(_restrictCS.Get(), nullptr, 0u);
+	context.Dispatch(
+		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.width  >> 1) / _groupX)),
+		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.height >> 1) / _groupY)), 
+		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.depth  >> 1) / _groupZ)) 
+	);
+	SetBarrier(context);
+
+	context.CSSetShaderResources(0u, 1u, _srv[A2h_int].GetAddressOf());
+	context.CSSetShaderResources(1u, 1u, _srv[A2h_temp].GetAddressOf());
+	context.CSSetUnorderedAccessViews(0u, 1u, _uav[A2h_rhs].GetAddressOf(), nullptr);
+	context.CSSetShader(_residualCS.Get(), nullptr, 0u);
+	context.Dispatch(
+		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.width  >> 1) / _groupX)),
+		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.height >> 1) / _groupY)), 
+		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.depth  >> 1) / _groupZ)) 
+	);
+	SetBarrier(context);
+
+	// Residual A2h
+	context.CSSetShaderResources(0u, 1u, _srv[A2h_temp].GetAddressOf());
+	context.CSSetShaderResources(1u, 1u, _srv[D2h].GetAddressOf());
+	context.CSSetUnorderedAccessViews(0u, 1u, _uav[A2h_residual].GetAddressOf(), nullptr);
+	context.CSSetShader(_residualCS.Get(), nullptr, 0u);
+	context.Dispatch(
+		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.width  >> 1) / _groupX)),
+		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.height >> 1) / _groupY)), 
+		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.depth  >> 1) / _groupZ)) 
 	);
 	SetBarrier(context);
 
 	// Restrict A2h to A4h
-	context.CSSetShaderResources(0u, 1u, _srv[3].GetAddressOf());
-	context.CSSetUnorderedAccessViews(0u, 1u, _uav[4].GetAddressOf(), nullptr);
+	context.CSSetShaderResources(0u, 1u, _srv[A2h_rhs].GetAddressOf());
+	context.CSSetUnorderedAccessViews(0u, 1u, _uav[A4h].GetAddressOf(), nullptr);
 	context.CSSetShader(_restrictCS.Get(), nullptr, 0u);
 	context.Dispatch(
-		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.width) / _groupX)),
-		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.height) / _groupY)), 
-		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.depth) / _groupZ)) 
+		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.width  >> 2) / _groupX)),
+		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.height >> 2) / _groupY)), 
+		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.depth  >> 2) / _groupZ)) 
+	);
+	SetBarrier(context);
+
+	context.CSSetShaderResources(0u, 1u, _srv[D2h].GetAddressOf());
+	context.CSSetUnorderedAccessViews(0u, 1u, _uav[D4h].GetAddressOf(), nullptr);
+	context.CSSetShader(_restrictCS.Get(), nullptr, 0u);
+	context.Dispatch(
+		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.width  >> 2) / _groupX)),
+		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.height >> 2) / _groupY)), 
+		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.depth  >> 2) / _groupZ)) 
 	);
 	SetBarrier(context);
 
 	// Jacobi for A4h
-	context.CSSetShaderResources(0u, 1u, _srv[4].GetAddressOf());
-	context.CSSetShaderResources(1u, 1u, _srv[11].GetAddressOf());
-	context.CSSetUnorderedAccessViews(0u, 1u, _uav[5].GetAddressOf(), nullptr);
-	context.CSSetShader(_cs.Get(), nullptr, 0u);
+	context.CSSetShaderResources(0u, 1u, _srv[A4h].GetAddressOf());
+	context.CSSetShaderResources(1u, 1u, _srv[D4h].GetAddressOf());
+	context.CSSetUnorderedAccessViews(0u, 1u, _uav[A4h_temp].GetAddressOf(), nullptr);
+	context.CSSetShader(_mgJacobiCS.Get(), nullptr, 0u);
 	context.Dispatch(
-		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.width) / _groupX)),
-		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.height) / _groupY)), 
-		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.depth) / _groupZ)) 
+		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.width  >> 2) / _groupX)),
+		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.height >> 2) / _groupY)), 
+		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.depth  >> 2) / _groupZ)) 
+	);
+	SetBarrier(context);
+
+	// RHS A4h
+	context.CSSetShaderResources(0u, 1u, _srv[A2h_residual].GetAddressOf());
+	context.CSSetShaderResources(1u, 1u, _srv[A2h_rhs].GetAddressOf());
+	context.CSSetUnorderedAccessViews(0u, 1u, _uav[A2h_int].GetAddressOf(), nullptr);
+	context.CSSetShader(_residualCS.Get(), nullptr, 0u);
+	context.Dispatch(
+		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.width  >> 1) / _groupX)),
+		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.height >> 1) / _groupY)), 
+		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.depth  >> 1) / _groupZ)) 
+	);
+	SetBarrier(context);
+
+	context.CSSetShaderResources(0u, 1u, _srv[A2h_int].GetAddressOf());
+	context.CSSetUnorderedAccessViews(0u, 1u, _uav[A4h_int].GetAddressOf(), nullptr);
+	context.CSSetShader(_restrictCS.Get(), nullptr, 0u);
+	context.Dispatch(
+		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.width  >> 2) / _groupX)),
+		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.height >> 2) / _groupY)), 
+		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.depth  >> 2) / _groupZ)) 
+	);
+	SetBarrier(context);
+
+	context.CSSetShaderResources(0u, 1u, _srv[A4h_int].GetAddressOf());
+	context.CSSetShaderResources(1u, 1u, _srv[A4h_temp].GetAddressOf());
+	context.CSSetUnorderedAccessViews(0u, 1u, _uav[A4h_rhs].GetAddressOf(), nullptr);
+	context.CSSetShader(_residualCS.Get(), nullptr, 0u);
+	context.Dispatch(
+		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.width  >> 2) / _groupX)),
+		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.height >> 2) / _groupY)), 
+		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.depth  >> 2) / _groupZ)) 
+	);
+	SetBarrier(context);
+
+	// Residual A4h
+	context.CSSetShaderResources(0u, 1u, _srv[A4h_temp].GetAddressOf());
+	context.CSSetShaderResources(1u, 1u, _srv[D4h].GetAddressOf());
+	context.CSSetUnorderedAccessViews(0u, 1u, _uav[A4h_residual].GetAddressOf(), nullptr);
+	context.CSSetShader(_residualCS.Get(), nullptr, 0u);
+	context.Dispatch(
+		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.width  >> 2) / _groupX)),
+		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.height >> 2) / _groupY)), 
+		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.depth  >> 2) / _groupZ)) 
 	);
 	SetBarrier(context);
 
 	// Restrict A4h to A8h
-	context.CSSetShaderResources(0u, 1u, _srv[5].GetAddressOf());
-	context.CSSetUnorderedAccessViews(0u, 1u, _uav[6].GetAddressOf(), nullptr);
+	context.CSSetShaderResources(0u, 1u, _srv[A4h_temp].GetAddressOf());
+	context.CSSetUnorderedAccessViews(0u, 1u, _uav[A8h].GetAddressOf(), nullptr);
 	context.CSSetShader(_restrictCS.Get(), nullptr, 0u);
 	context.Dispatch(
-		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.width) / _groupX)),
-		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.height) / _groupY)), 
-		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.depth) / _groupZ)) 
+		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.width  >> 3) / _groupX)),
+		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.height >> 3) / _groupY)), 
+		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.depth  >> 3) / _groupZ)) 
+	);
+	SetBarrier(context);
+
+	context.CSSetShaderResources(0u, 1u, _srv[D4h].GetAddressOf());
+	context.CSSetUnorderedAccessViews(0u, 1u, _uav[D8h].GetAddressOf(), nullptr);
+	context.CSSetShader(_restrictCS.Get(), nullptr, 0u);
+	context.Dispatch(
+		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.width  >> 3) / _groupX)),
+		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.height >> 3) / _groupY)), 
+		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.depth  >> 3) / _groupZ)) 
 	);
 	SetBarrier(context);
 
 	// Jacobi for A8h
-	context.CSSetShaderResources(0u, 1u, _srv[6].GetAddressOf());
-	context.CSSetShaderResources(1u, 1u, _srv[11].GetAddressOf());
-	context.CSSetUnorderedAccessViews(0u, 1u, _uav[7].GetAddressOf(), nullptr);
-	context.CSSetShader(_cs.Get(), nullptr, 0u);
+	context.CSSetShaderResources(0u, 1u, _srv[A8h].GetAddressOf());
+	context.CSSetShaderResources(1u, 1u, _srv[D8h].GetAddressOf());
+	context.CSSetUnorderedAccessViews(0u, 1u, _uav[A8h_temp].GetAddressOf(), nullptr);
+	context.CSSetShader(_mgJacobiCS.Get(), nullptr, 0u);
 	context.Dispatch(
-		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.width) / _groupX)),
-		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.height) / _groupY)), 
-		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.depth) / _groupZ)) 
+		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.width  >> 3) / _groupX)),
+		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.height >> 3) / _groupY)), 
+		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.depth  >> 3) / _groupZ)) 
+	);
+	SetBarrier(context);
+
+	// RHS A8h
+	context.CSSetShaderResources(0u, 1u, _srv[A4h_residual].GetAddressOf());
+	context.CSSetShaderResources(1u, 1u, _srv[A4h_rhs].GetAddressOf());
+	context.CSSetUnorderedAccessViews(0u, 1u, _uav[A4h_int].GetAddressOf(), nullptr);
+	context.CSSetShader(_residualCS.Get(), nullptr, 0u);
+	context.Dispatch(
+		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.width  >> 2) / _groupX)),
+		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.height >> 2) / _groupY)), 
+		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.depth  >> 2) / _groupZ)) 
+	);
+	SetBarrier(context);
+
+	context.CSSetShaderResources(0u, 1u, _srv[A4h_int].GetAddressOf());
+	context.CSSetUnorderedAccessViews(0u, 1u, _uav[A8h_int].GetAddressOf(), nullptr);
+	context.CSSetShader(_restrictCS.Get(), nullptr, 0u);
+	context.Dispatch(
+		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.width  >> 3) / _groupX)),
+		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.height >> 3) / _groupY)), 
+		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.depth  >> 3) / _groupZ)) 
+	);
+	SetBarrier(context);
+
+	context.CSSetShaderResources(0u, 1u, _srv[A8h_int].GetAddressOf());
+	context.CSSetShaderResources(1u, 1u, _srv[A8h_temp].GetAddressOf());
+	context.CSSetUnorderedAccessViews(0u, 1u, _uav[A8h_rhs].GetAddressOf(), nullptr);
+	context.CSSetShader(_residualCS.Get(), nullptr, 0u);
+	context.Dispatch(
+		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.width  >> 3) / _groupX)),
+		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.height >> 3) / _groupY)), 
+		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.depth  >> 3) / _groupZ)) 
+	);
+	SetBarrier(context);
+
+	// Residual A8h
+	context.CSSetShaderResources(0u, 1u, _srv[A8h_temp].GetAddressOf());
+	context.CSSetShaderResources(1u, 1u, _srv[D8h].GetAddressOf());
+	context.CSSetUnorderedAccessViews(0u, 1u, _uav[A8h_residual].GetAddressOf(), nullptr);
+	context.CSSetShader(_residualCS.Get(), nullptr, 0u);
+	context.Dispatch(
+		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.width  >> 3) / _groupX)),
+		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.height >> 3) / _groupY)), 
+		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.depth  >> 3) / _groupZ)) 
 	);
 	SetBarrier(context);
 
 	// Restrict A8h to A16h
-	context.CSSetShaderResources(0u, 1u, _srv[7].GetAddressOf());
-	context.CSSetUnorderedAccessViews(0u, 1u, _uav[8].GetAddressOf(), nullptr);
+	context.CSSetShaderResources(0u, 1u, _srv[A8h_rhs].GetAddressOf());
+	context.CSSetUnorderedAccessViews(0u, 1u, _uav[A16h].GetAddressOf(), nullptr);
 	context.CSSetShader(_restrictCS.Get(), nullptr, 0u);
+	context.Dispatch(
+		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.width  >> 4) / _groupX)),
+		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.height >> 4) / _groupY)), 
+		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.depth  >> 4) / _groupZ)) 
+	);
+	SetBarrier(context);
+
+	context.CSSetShaderResources(0u, 1u, _srv[D8h].GetAddressOf());
+	context.CSSetUnorderedAccessViews(0u, 1u, _uav[D16h].GetAddressOf(), nullptr);
+	context.CSSetShader(_restrictCS.Get(), nullptr, 0u);
+	context.Dispatch(
+		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.width  >> 4) / _groupX)),
+		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.height >> 4) / _groupY)), 
+		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.depth  >> 4) / _groupZ)) 
+	);
+	SetBarrier(context);
+
+	// Jacobi for A16h
+	context.CSSetShaderResources(0u, 1u, _srv[A16h].GetAddressOf());
+	context.CSSetShaderResources(1u, 1u, _srv[D16h].GetAddressOf());
+	context.CSSetUnorderedAccessViews(0u, 1u, _uav[A16h_temp].GetAddressOf(), nullptr);
+	context.CSSetShader(_mgJacobiCS.Get(), nullptr, 0u);
+	context.Dispatch(
+		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.width  >> 4) / _groupX)),
+		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.height >> 4) / _groupY)), 
+		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.depth  >> 4) / _groupZ)) 
+	);
+	SetBarrier(context);
+
+	// RHS A16h
+	context.CSSetShaderResources(0u, 1u, _srv[A8h_residual].GetAddressOf());
+	context.CSSetShaderResources(1u, 1u, _srv[A8h_rhs].GetAddressOf());
+	context.CSSetUnorderedAccessViews(0u, 1u, _uav[A8h_int].GetAddressOf(), nullptr);
+	context.CSSetShader(_residualCS.Get(), nullptr, 0u);
+	context.Dispatch(
+		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.width  >> 3) / _groupX)),
+		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.height >> 3) / _groupY)), 
+		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.depth  >> 3) / _groupZ)) 
+	);
+	SetBarrier(context);
+
+	context.CSSetShaderResources(0u, 1u, _srv[A8h_int].GetAddressOf());
+	context.CSSetUnorderedAccessViews(0u, 1u, _uav[A16h_int].GetAddressOf(), nullptr);
+	context.CSSetShader(_restrictCS.Get(), nullptr, 0u);
+	context.Dispatch(
+		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.width  >> 4) / _groupX)),
+		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.height >> 4) / _groupY)), 
+		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.depth  >> 4) / _groupZ)) 
+	);
+	SetBarrier(context);
+
+	context.CSSetShaderResources(0u, 1u, _srv[A16h_int].GetAddressOf());
+	context.CSSetShaderResources(1u, 1u, _srv[A16h_temp].GetAddressOf());
+	context.CSSetUnorderedAccessViews(0u, 1u, _uav[A16h_rhs].GetAddressOf(), nullptr);
+	context.CSSetShader(_residualCS.Get(), nullptr, 0u);
+	context.Dispatch(
+		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.width  >> 4) / _groupX)),
+		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.height >> 4) / _groupY)), 
+		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.depth  >> 4) / _groupZ)) 
+	);
+	SetBarrier(context);
+
+	// Residual A16h
+	context.CSSetShaderResources(0u, 1u, _srv[A16h_temp].GetAddressOf());
+	context.CSSetShaderResources(1u, 1u, _srv[D16h].GetAddressOf());
+	context.CSSetUnorderedAccessViews(0u, 1u, _uav[A16h_residual].GetAddressOf(), nullptr);
+	context.CSSetShader(_residualCS.Get(), nullptr, 0u);
+	context.Dispatch(
+		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.width  >> 4) / _groupX)),
+		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.height >> 4) / _groupY)), 
+		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.depth  >> 4) / _groupZ)) 
+	);
+	SetBarrier(context);
+
+	// Restrict A16h to A32h
+	context.CSSetShaderResources(0u, 1u, _srv[A16h_rhs].GetAddressOf());
+	context.CSSetUnorderedAccessViews(0u, 1u, _uav[A32h].GetAddressOf(), nullptr);
+	context.CSSetShader(_restrictCS.Get(), nullptr, 0u);
+	context.Dispatch(
+		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.width  >> 5) / _groupX)),
+		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.height >> 5) / _groupY)), 
+		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.depth  >> 5) / _groupZ)) 
+	);
+	SetBarrier(context);
+
+	context.CSSetShaderResources(0u, 1u, _srv[D16h].GetAddressOf());
+	context.CSSetUnorderedAccessViews(0u, 1u, _uav[D32h].GetAddressOf(), nullptr);
+	context.CSSetShader(_restrictCS.Get(), nullptr, 0u);
+	context.Dispatch(
+		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.width  >> 5) / _groupX)),
+		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.height >> 5) / _groupY)), 
+		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.depth  >> 5) / _groupZ)) 
+	);
+	SetBarrier(context);
+
+	// Jacobi for A32h
+	context.CSSetShaderResources(0u, 1u, _srv[A32h].GetAddressOf());
+	context.CSSetShaderResources(1u, 1u, _srv[D32h].GetAddressOf());
+	context.CSSetUnorderedAccessViews(0u, 1u, _uav[A32h_temp].GetAddressOf(), nullptr);
+	context.CSSetShader(_mgJacobiCS.Get(), nullptr, 0u);
+	context.Dispatch(
+		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.width  >> 5) / _groupX)),
+		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.height >> 5) / _groupY)), 
+		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.depth  >> 5) / _groupZ)) 
+	);
+	SetBarrier(context);
+
+	// RHS A32h
+	context.CSSetShaderResources(0u, 1u, _srv[A16h_residual].GetAddressOf());
+	context.CSSetShaderResources(1u, 1u, _srv[A16h_rhs].GetAddressOf());
+	context.CSSetUnorderedAccessViews(0u, 1u, _uav[A16h_int].GetAddressOf(), nullptr);
+	context.CSSetShader(_residualCS.Get(), nullptr, 0u);
+	context.Dispatch(
+		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.width  >> 4) / _groupX)),
+		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.height >> 4) / _groupY)), 
+		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.depth  >> 4) / _groupZ)) 
+	);
+	SetBarrier(context);
+
+	context.CSSetShaderResources(0u, 1u, _srv[A16h_int].GetAddressOf());
+	context.CSSetUnorderedAccessViews(0u, 1u, _uav[A32h_int].GetAddressOf(), nullptr);
+	context.CSSetShader(_restrictCS.Get(), nullptr, 0u);
+	context.Dispatch(
+		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.width  >> 5) / _groupX)),
+		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.height >> 5) / _groupY)), 
+		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.depth  >> 5) / _groupZ)) 
+	);
+	SetBarrier(context);
+
+	context.CSSetShaderResources(0u, 1u, _srv[A32h_int].GetAddressOf());
+	context.CSSetShaderResources(1u, 1u, _srv[A32h_temp].GetAddressOf());
+	context.CSSetUnorderedAccessViews(0u, 1u, _uav[A32h_rhs].GetAddressOf(), nullptr);
+	context.CSSetShader(_residualCS.Get(), nullptr, 0u);
+	context.Dispatch(
+		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.width  >> 5) / _groupX)),
+		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.height >> 5) / _groupY)), 
+		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.depth  >> 5) / _groupZ)) 
+	);
+	SetBarrier(context);
+
+	// Residual A32h
+	context.CSSetShaderResources(0u, 1u, _srv[A32h_temp].GetAddressOf());
+	context.CSSetShaderResources(1u, 1u, _srv[D32h].GetAddressOf());
+	context.CSSetUnorderedAccessViews(0u, 1u, _uav[A32h_residual].GetAddressOf(), nullptr);
+	context.CSSetShader(_residualCS.Get(), nullptr, 0u);
+	context.Dispatch(
+		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.width  >> 5) / _groupX)),
+		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.height >> 5) / _groupY)), 
+		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.depth  >> 5) / _groupZ)) 
+	);
+	SetBarrier(context);
+
+	// Restrict A32h to A64h
+	context.CSSetShaderResources(0u, 1u, _srv[A32h_temp].GetAddressOf());
+	context.CSSetUnorderedAccessViews(0u, 1u, _uav[A64h].GetAddressOf(), nullptr);
+	context.CSSetShader(_restrictCS.Get(), nullptr, 0u);
+	context.Dispatch(
+		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.width  >> 6) / _groupX)),
+		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.height >> 6) / _groupY)), 
+		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.depth  >> 6) / _groupZ)) 
+	);
+	SetBarrier(context);
+
+	context.CSSetShaderResources(0u, 1u, _srv[A32h_residual].GetAddressOf());
+	context.CSSetUnorderedAccessViews(0u, 1u, _uav[A64h_rhs].GetAddressOf(), nullptr);
+	context.CSSetShader(_restrictCS.Get(), nullptr, 0u);
+	context.Dispatch(
+		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.width  >> 6) / _groupX)),
+		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.height >> 6) / _groupY)), 
+		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.depth  >> 6) / _groupZ)) 
+	);
+	SetBarrier(context);
+
+	context.CSSetShaderResources(0u, 1u, _srv[D32h].GetAddressOf());
+	context.CSSetUnorderedAccessViews(0u, 1u, _uav[D64h].GetAddressOf(), nullptr);
+	context.CSSetShader(_restrictCS.Get(), nullptr, 0u);
+	context.Dispatch(
+		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.width  >> 6) / _groupX)),
+		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.height >> 6) / _groupY)), 
+		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.depth  >> 6) / _groupZ)) 
+	);
+	SetBarrier(context);
+
+	// Jacobi for A64h
+	context.CSSetShaderResources(0u, 1u, _srv[A64h].GetAddressOf());
+	context.CSSetShaderResources(1u, 1u, _srv[A64h_rhs].GetAddressOf());
+	context.CSSetUnorderedAccessViews(0u, 1u, _uav[A64h_temp].GetAddressOf(), nullptr);
+	context.CSSetShader(_mgJacobiCS.Get(), nullptr, 0u);
+	context.Dispatch(
+		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.width  >> 6) / _groupX)),
+		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.height >> 6) / _groupY)), 
+		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.depth  >> 6) / _groupZ)) 
+	);
+	SetBarrier(context);
+
+	// RHS A64h
+	context.CSSetShaderResources(0u, 1u, _srv[A32h_residual].GetAddressOf());
+	context.CSSetShaderResources(1u, 1u, _srv[A32h_rhs].GetAddressOf());
+	context.CSSetUnorderedAccessViews(0u, 1u, _uav[A32h_int].GetAddressOf(), nullptr);
+	context.CSSetShader(_residualCS.Get(), nullptr, 0u);
+	context.Dispatch(
+		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.width  >> 5) / _groupX)),
+		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.height >> 5) / _groupY)), 
+		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.depth  >> 5) / _groupZ)) 
+	);
+	SetBarrier(context);
+
+	context.CSSetShaderResources(0u, 1u, _srv[A32h_int].GetAddressOf());
+	context.CSSetUnorderedAccessViews(0u, 1u, _uav[A64h_int].GetAddressOf(), nullptr);
+	context.CSSetShader(_restrictCS.Get(), nullptr, 0u);
+	context.Dispatch(
+		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.width  >> 6) / _groupX)),
+		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.height >> 6) / _groupY)), 
+		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.depth  >> 6) / _groupZ)) 
+	);
+	SetBarrier(context);
+
+	context.CSSetShaderResources(0u, 1u, _srv[A64h_int].GetAddressOf());
+	context.CSSetShaderResources(1u, 1u, _srv[A64h_temp].GetAddressOf());
+	context.CSSetUnorderedAccessViews(0u, 1u, _uav[A64h_rhs].GetAddressOf(), nullptr);
+	context.CSSetShader(_residualCS.Get(), nullptr, 0u);
+	context.Dispatch(
+		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.width  >> 6) / _groupX)),
+		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.height >> 6) / _groupY)), 
+		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.depth  >> 6) / _groupZ)) 
+	);
+	SetBarrier(context);
+
+	// Interpolate A64h to A32h
+	context.CSSetShaderResources(0u, 1u, _srv[A64h_temp].GetAddressOf());
+	context.CSSetUnorderedAccessViews(0u, 1u, _uav[A32h_temp].GetAddressOf(), nullptr);
+	context.CSSetShader(_interpolateCS.Get(), nullptr, 0u);
+	context.Dispatch(
+		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.width  >> 5) / _groupX)),
+		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.height >> 5) / _groupY)), 
+		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.depth  >> 5) / _groupZ)) 
+	);
+	SetBarrier(context);
+
+	// Jacobi for A32h Again
+	context.CSSetShaderResources(0u, 1u, _srv[A32h_temp].GetAddressOf());
+	context.CSSetShaderResources(1u, 1u, _srv[D32h].GetAddressOf());
+	context.CSSetUnorderedAccessViews(0u, 1u, _uav[A32h].GetAddressOf(), nullptr);
+	context.CSSetShader(_mgJacobiCS.Get(), nullptr, 0u);
+	context.Dispatch(
+		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.width  >> 5) / _groupX)),
+		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.height >> 5) / _groupY)), 
+		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.depth  >> 5) / _groupZ)) 
+	);
+	SetBarrier(context);
+
+	// Interpolate A32h to A16h
+	context.CSSetShaderResources(0u, 1u, _srv[A32h].GetAddressOf());
+	context.CSSetUnorderedAccessViews(0u, 1u, _uav[A16h_temp].GetAddressOf(), nullptr);
+	context.CSSetShader(_interpolateCS.Get(), nullptr, 0u);
+	context.Dispatch(
+		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.width  >> 4) / _groupX)),
+		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.height >> 4) / _groupY)), 
+		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.depth  >> 4) / _groupZ)) 
+	);
+	SetBarrier(context);
+
+	// Jacobi for A16h Again
+	context.CSSetShaderResources(0u, 1u, _srv[A16h_temp].GetAddressOf());
+	context.CSSetShaderResources(1u, 1u, _srv[D16h].GetAddressOf());
+	context.CSSetUnorderedAccessViews(0u, 1u, _uav[A16h].GetAddressOf(), nullptr);
+	context.CSSetShader(_mgJacobiCS.Get(), nullptr, 0u);
+	context.Dispatch(
+		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.width  >> 4) / _groupX)),
+		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.height >> 4) / _groupY)), 
+		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.depth  >> 4) / _groupZ)) 
+	);
+	SetBarrier(context);
+
+	// Interpolate A16h to A8h
+	context.CSSetShaderResources(0u, 1u, _srv[A16h].GetAddressOf());
+	context.CSSetUnorderedAccessViews(0u, 1u, _uav[A8h_temp].GetAddressOf(), nullptr);
+	context.CSSetShader(_interpolateCS.Get(), nullptr, 0u);
+	context.Dispatch(
+		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.width  >> 3) / _groupX)),
+		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.height >> 3) / _groupY)), 
+		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.depth  >> 3) / _groupZ)) 
+	);
+	SetBarrier(context);
+
+	// Jacobi for A8h Again
+	context.CSSetShaderResources(0u, 1u, _srv[A8h_temp].GetAddressOf());
+	context.CSSetShaderResources(1u, 1u, _srv[D8h].GetAddressOf());
+	context.CSSetUnorderedAccessViews(0u, 1u, _uav[A8h].GetAddressOf(), nullptr);
+	context.CSSetShader(_mgJacobiCS.Get(), nullptr, 0u);
+	context.Dispatch(
+		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.width  >> 3) / _groupX)),
+		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.height >> 3) / _groupY)), 
+		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.depth  >> 3) / _groupZ)) 
+	);
+	SetBarrier(context);
+
+	// Interpolate A8h to A4h
+	context.CSSetShaderResources(0u, 1u, _srv[A8h].GetAddressOf());
+	context.CSSetUnorderedAccessViews(0u, 1u, _uav[A4h_temp].GetAddressOf(), nullptr);
+	context.CSSetShader(_interpolateCS.Get(), nullptr, 0u);
+	context.Dispatch(
+		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.width  >> 2) / _groupX)),
+		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.height >> 2) / _groupY)), 
+		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.depth  >> 2) / _groupZ)) 
+	);
+	SetBarrier(context);
+
+	// Jacobi for A4h Again
+	context.CSSetShaderResources(0u, 1u, _srv[A4h_temp].GetAddressOf());
+	context.CSSetShaderResources(1u, 1u, _srv[D4h].GetAddressOf());
+	context.CSSetUnorderedAccessViews(0u, 1u, _uav[A4h].GetAddressOf(), nullptr);
+	context.CSSetShader(_mgJacobiCS.Get(), nullptr, 0u);
+	context.Dispatch(
+		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.width  >> 2) / _groupX)),
+		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.height >> 2) / _groupY)), 
+		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.depth  >> 2) / _groupZ)) 
+	);
+	SetBarrier(context);
+
+	// Interpolate A4h to A2h
+	context.CSSetShaderResources(0u, 1u, _srv[A4h].GetAddressOf());
+	context.CSSetUnorderedAccessViews(0u, 1u, _uav[A2h_temp].GetAddressOf(), nullptr);
+	context.CSSetShader(_interpolateCS.Get(), nullptr, 0u);
+	context.Dispatch(
+		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.width  >> 1) / _groupX)),
+		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.height >> 1) / _groupY)), 
+		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.depth  >> 1) / _groupZ)) 
+	);
+	SetBarrier(context);
+
+	// Jacobi for A2h
+	context.CSSetShaderResources(0u, 1u, _srv[A2h_temp].GetAddressOf());
+	context.CSSetShaderResources(1u, 1u, _srv[D2h].GetAddressOf());
+	context.CSSetUnorderedAccessViews(0u, 1u, _uav[A2h].GetAddressOf(), nullptr);
+	context.CSSetShader(_mgJacobiCS.Get(), nullptr, 0u);
+	context.Dispatch(
+		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.width  >> 1) / _groupX)),
+		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.height >> 1) / _groupY)), 
+		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.depth  >> 1) / _groupZ)) 
+	);
+	SetBarrier(context);
+
+	// Interpolate A2h to Ah
+	context.CSSetShaderResources(0u, 1u, _srv[A2h].GetAddressOf());
+	context.CSSetUnorderedAccessViews(0u, 1u, _uav[Ah_temp].GetAddressOf(), nullptr);
+	context.CSSetShader(_interpolateCS.Get(), nullptr, 0u);
 	context.Dispatch(
 		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.width) / _groupX)),
 		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.height) / _groupY)), 
@@ -324,10 +965,11 @@ void MultiGrid3D1DStage::Run(ID3D11DeviceContext& context)
 	);
 	SetBarrier(context);
 
-	// Jacobi for A16h
-	context.CSSetShaderResources(0u, 1u, _srv[8].GetAddressOf());
-	context.CSSetShaderResources(1u, 1u, _srv[11].GetAddressOf());
-	context.CSSetUnorderedAccessViews(0u, 1u, _uav[9].GetAddressOf(), nullptr);
+	// Jacobi for Ah Again
+	srv[0] = _srv[Ah_temp].Get();
+	srv[1] = _srv[Dh].Get();
+	context.CSSetShaderResources(0u, 2u, srv);
+	context.CSSetUnorderedAccessViews(0u, 1u, _uav[Final].GetAddressOf(), nullptr);
 	context.CSSetShader(_cs.Get(), nullptr, 0u);
 	context.Dispatch(
 		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.width) / _groupX)),
@@ -339,9 +981,8 @@ void MultiGrid3D1DStage::Run(ID3D11DeviceContext& context)
 
 void MultiGrid3D1DStage::Consume(ID3D11Resource* resource, int32_t attribute_id)
 {
-    if (attribute_id == _divID) {
-        pDevice->CreateShaderResourceView(resource, nullptr, _srv[Div].ReleaseAndGetAddressOf());
-    }
+    if (attribute_id == _divID)
+        pDevice->CreateShaderResourceView(resource, nullptr, _srv[Dh].ReleaseAndGetAddressOf());
 }
 
 ID3D11Resource* MultiGrid3D1DStage::Expose(int32_t attribute_id)

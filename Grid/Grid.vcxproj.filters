@@ -468,7 +468,10 @@
     <FxCompile Include="HLSL_CS\MacCormackAdvection3D_CS.hlsl">
       <Filter>HLSL_CS</Filter>
     </FxCompile>
-    <FxCompile Include="HLSL_CS\Multigrid3D1D_CS.hlsl">
+    <FxCompile Include="HLSL_CS\MultiGridInit_CS.hlsl">
+      <Filter>HLSL_CS</Filter>
+    </FxCompile>
+    <FxCompile Include="HLSL_CS\MultiGridJacobi_CS.hlsl">
       <Filter>HLSL_CS</Filter>
     </FxCompile>
     <FxCompile Include="HLSL_CS\Poisson2D1D_CS.hlsl">
@@ -487,6 +490,9 @@
       <Filter>HLSL_CS</Filter>
     </FxCompile>
     <FxCompile Include="HLSL_CS\PressureProjection3D_CS.hlsl">
+      <Filter>HLSL_CS</Filter>
+    </FxCompile>
+    <FxCompile Include="HLSL_CS\Residual3D_CS.hlsl">
       <Filter>HLSL_CS</Filter>
     </FxCompile>
     <FxCompile Include="HLSL_CS\Restrict3D_CS.hlsl">
