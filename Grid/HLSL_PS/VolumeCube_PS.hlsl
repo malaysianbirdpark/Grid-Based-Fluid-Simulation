@@ -105,7 +105,7 @@ float4 main(PS_IN input) : SV_Target
         src = (val[0] + val[1] + val[2] + val[3] + val[4] + val[5] + val[6] + val[7]) * 0.125f;
 
         static const min16float absorption_coeff = 0.3f;
-        if (src >= 9.9f) 
+        if (src >= 0.9f) 
         {
             min16float3 dir_to_light = pl_pos - cur_world;
 			const min16float dist_to_light = length(dir_to_light);
