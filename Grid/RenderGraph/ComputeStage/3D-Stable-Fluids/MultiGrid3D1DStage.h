@@ -60,6 +60,7 @@ private:
 	Microsoft::WRL::ComPtr<ID3D11ComputeShader> _mgJacobiCS;
 	Microsoft::WRL::ComPtr<ID3D11ComputeShader> _residualCS;
 	Microsoft::WRL::ComPtr<ID3D11ComputeShader> _subtractCS;
+	Microsoft::WRL::ComPtr<ID3D11ComputeShader> _additionCS;
 	Microsoft::WRL::ComPtr<ID3D11ComputeShader> _restrictCS;
 	Microsoft::WRL::ComPtr<ID3D11ComputeShader> _interpolateCS;
 
