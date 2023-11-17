@@ -420,6 +420,12 @@
       <EntryPointName>main</EntryPointName>
       <ObjectFileOutput>../Grid/CSO/SourcingWater3D_CS.cso</ObjectFileOutput>
     </FxCompile>
+    <FxCompile Include="HLSL_CS\Subtract3D_CS.hlsl">
+      <ShaderType>Compute</ShaderType>
+      <ShaderModel>5.0</ShaderModel>
+      <EntryPointName>main</EntryPointName>
+      <ObjectFileOutput>../Grid/CSO/Subtract3D_CS.cso</ObjectFileOutput>
+    </FxCompile>
     <FxCompile Include="HLSL_CS\Vector4DUnorm_CS.hlsl">
       <ShaderType>Compute</ShaderType>
       <ShaderModel>5.0</ShaderModel>

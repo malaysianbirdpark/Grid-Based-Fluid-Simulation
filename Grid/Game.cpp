@@ -87,8 +87,8 @@ Game::Game()
 	_smoke.AddStage(std::move(std::make_shared<ExternalForces3DStage>()));
 
 	_smoke.AddStage(std::move(std::make_shared<Divergence3DStage>()));
-	_smoke.AddStage(std::move(std::make_shared<Poisson3D1DStage>()));
-	//_smoke.AddStage(std::move(std::make_shared<MultiGrid3D1DStage>()));
+	//_smoke.AddStage(std::move(std::make_shared<Poisson3D1DStage>()));
+	_smoke.AddStage(std::move(std::make_shared<MultiGrid3D1DStage>()));
 
 	_smoke.AddStage(std::move(std::make_shared<PressureProjection3DStage>()));
 

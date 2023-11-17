@@ -95,7 +95,7 @@ void Poisson3D1DStage::Run(ID3D11DeviceContext& context)
 	);
 	SetBarrier(context);
 
-    for (auto i {0}; i != 40; ++i) {
+    for (auto i {0}; i != 80; ++i) {
         context.CSSetShaderResources(0u, 1u, _srv[i & 0b1].GetAddressOf());
         context.CSSetShaderResources(1u, 1u, _srv[2].GetAddressOf());
         context.CSSetUnorderedAccessViews(0u, 1u, _uav[!(i & 0b1)].GetAddressOf(), nullptr);

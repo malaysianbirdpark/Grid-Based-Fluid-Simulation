@@ -513,6 +513,9 @@
     <FxCompile Include="HLSL_CS\SourcingWater3D_CS.hlsl">
       <Filter>HLSL_CS</Filter>
     </FxCompile>
+    <FxCompile Include="HLSL_CS\Subtract3D_CS.hlsl">
+      <Filter>HLSL_CS</Filter>
+    </FxCompile>
     <FxCompile Include="HLSL_CS\Vector4DUnorm_CS.hlsl">
       <Filter>HLSL_CS</Filter>
     </FxCompile>

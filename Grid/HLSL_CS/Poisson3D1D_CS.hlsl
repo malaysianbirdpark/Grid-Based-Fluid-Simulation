@@ -11,7 +11,7 @@ SamplerState sampler1 : register(s1);
 void main( uint3 DTid : SV_DispatchThreadID )
 {
 	{
-		const min16float4 center = x_in[DTid.xyz]; 
+		const min16float center = x_in[DTid.xyz]; 
 
 		const min16float right = 
 			obstacle[uint3(DTid.x + 1, DTid.y, DTid.z)].r <= 0.9f ? x_in[uint3(DTid.x + 1, DTid.y, DTid.z)] : center;

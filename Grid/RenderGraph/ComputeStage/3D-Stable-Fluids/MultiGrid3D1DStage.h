@@ -8,6 +8,7 @@ class MultiGrid3D1DStage final : public Compute3DStage
 		Ah = 0,
 		Ah_temp,
 		Ah_residual,
+		Ah_int,
 		Ah_rhs,
 		Dh,
 		A2h,
@@ -58,6 +59,7 @@ private:
 	Microsoft::WRL::ComPtr<ID3D11ComputeShader> _initCS;
 	Microsoft::WRL::ComPtr<ID3D11ComputeShader> _mgJacobiCS;
 	Microsoft::WRL::ComPtr<ID3D11ComputeShader> _residualCS;
+	Microsoft::WRL::ComPtr<ID3D11ComputeShader> _subtractCS;
 	Microsoft::WRL::ComPtr<ID3D11ComputeShader> _restrictCS;
 	Microsoft::WRL::ComPtr<ID3D11ComputeShader> _interpolateCS;
 
