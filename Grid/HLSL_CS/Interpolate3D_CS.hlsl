@@ -5,19 +5,43 @@ RWTexture3D<min16float> finer;
 [numthreads(8, 8, 8)]
 void main( uint3 DTid : SV_DispatchThreadID )
 {
-	const uint x = DTid.x >> 1;
-	const uint y = DTid.y >> 1;
-	const uint z = DTid.z >> 1;
+	uint width;
+	uint height;
+	uint depth;
+	finer.GetDimensions(width, height, depth);
 
-	min16float p[8];
-	p[0] = coarser[uint3(x + 1, y + 1, z + 1)];
-	p[1] = coarser[uint3(x + 1, y + 1, z    )];
-	p[2] = coarser[uint3(x + 1, y    , z + 1)];
-	p[3] = coarser[uint3(x    , y + 1, z + 1)];
-	p[4] = coarser[uint3(x + 1, y    , z    )];
-	p[5] = coarser[uint3(x    , y + 1, z    )];
-	p[6] = coarser[uint3(x    , y    , z + 1)];
-	p[7] = coarser[uint3(x    , y    , z    )];
+	uint base_x = DTid.x >> 1;
+	DTid.x -= uint(DTid.x >= width - 2);
+	uint base_y = DTid.y >> 1;
+	DTid.y -= uint(DTid.y >= height - 2);
+	uint base_z = DTid.z >> 1;
+	DTid.z -= uint(DTid.z >= depth - 2);
 
-	finer[DTid.xyz] = (p[0] * 0.015625f) + ((p[1] + p[2] + p[3]) * 0.046875f) + ((p[4] + p[5] + p[6]) * 0.140625f) + (p[7] * 0.421875f);
+	const min16float c000 = coarser[uint3(base_x    , base_y    , base_z    )];
+	const min16float c100 = coarser[uint3(base_x + 1, base_y    , base_z    )];
+	const min16float c010 = coarser[uint3(base_x    , base_y + 1, base_z    )];
+	const min16float c110 = coarser[uint3(base_x + 1, base_y + 1, base_z    )];
+	const min16float c001 = coarser[uint3(base_x    , base_y    , base_z + 1)];
+	const min16float c101 = coarser[uint3(base_x + 1, base_y    , base_z + 1)];
+	const min16float c011 = coarser[uint3(base_x    , base_y + 1, base_z + 1)];
+	const min16float c111 = coarser[uint3(base_x + 1, base_y + 1, base_z + 1)];
+
+	const min16float fx = min16float(DTid.x);
+	const min16float fy = min16float(DTid.y);
+	const min16float fz = min16float(DTid.z);
+
+	const min16float offset = 0.5f + min16float(base_x << 1);
+	const min16float x_weight = abs(fx - offset) / (abs(fx - offset) + abs(fx - offset - 2.0f));
+	const min16float y_weight = abs(fy - offset) / (abs(fy - offset) + abs(fy - offset - 2.0f));
+	const min16float z_weight = abs(fz - offset) / (abs(fz - offset) + abs(fz - offset - 2.0f));
+
+	const min16float a = lerp(c000, c100, x_weight);
+	const min16float b = lerp(c010, c110, x_weight);
+	const min16float c = lerp(c001, c101, x_weight);
+	const min16float d = lerp(c011, c111, x_weight);
+	const min16float e = lerp(a, b, y_weight);
+	const min16float f = lerp(c, d, y_weight);
+	const min16float g = lerp(e, f, z_weight);
+
+	finer[DTid.xyz] = g;
 }

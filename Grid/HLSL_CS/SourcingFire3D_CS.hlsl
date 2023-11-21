@@ -1,10 +1,10 @@
-Texture3D<min16float3> velocity_in : register(t0);
-Texture3D<min16float3> quantity_in : register(t1);
+Texture3D<min16float4> velocity_in : register(t0);
+Texture3D<min16float4> quantity_in : register(t1);
 
-Texture2DArray<uint> obstacle : register(t6);
+Texture2DArray<uint> obstacle : register(t10);
 
-RWTexture3D<min16float3> velocity : register(u0);
-RWTexture3D<min16float3> quantity : register(u1);
+RWTexture3D<min16float4> velocity : register(u0);
+RWTexture3D<min16float4> quantity : register(u1);
 
 cbuffer color : register(b0) {
 	min16float3 dir;
@@ -35,7 +35,7 @@ void main(uint3 DTid : SV_DispatchThreadID)
 
     //if (obstacle[DTid.xyz].r <= 0.9f) 
 	{
-		const min16float r = min16float(width) * 0.25f;
+		const min16float r = min16float(width) * 0.0625f;
 		if (DTid.y > height - 5 && DTid.y <= height - 2)
 		{
 			const min16float x = DTid.x - (min16float(width) * 0.5f);
@@ -43,18 +43,22 @@ void main(uint3 DTid : SV_DispatchThreadID)
 
 			if (x * x + z * z <= r * r)
 			{
-				velocity[DTid.xyz] += normalize(min16float3(dir.xyz)) * speed;
+				velocity[DTid.xyz] += min16float4(normalize(min16float3(dir.xyz)), 0.0f) * speed;
 
-				static const min16float t_rate = 1000.0f;
-				static const min16float t_target = 580.0f;
-				const min16float delta_t = (1.0f - exp(-t_rate * dt)) * (t_target - quantity[DTid.xyz]);
-				const min16float delta_s = 1200.0f * dt;
-				quantity[DTid.xyz] += min16float3(delta_s, delta_t, 0.0f) * quantity_scale;
+				static const min16float t_rate = 200.0f;
+				static const min16float t_target = 1500.0f;
+				const min16float delta_t = (1.0f - exp(-t_rate * dt)) * (t_target - quantity_in[DTid.xyz].g);
+				const min16float delta_smoke = 0.0f;
+				const min16float delta_f = 99.5f * dt;
+				const min16float delta_soot = 0.0f;
+				quantity[DTid.xyz] += max(min16float4(delta_smoke, delta_t, delta_f, delta_soot), 0.0f) * quantity_scale;
 			}
 		}
 		else
 		{
-			quantity[DTid.xyz] *= exp(-dt * 0.4f);
+			const min16float dissipation = exp(-dt * 0.4f);
+			//quantity[DTid.xyz] *= min16float4(dissipation, 0.999f, dissipation, dissipation);
+			quantity[DTid.xyz] *= dissipation;
 		}
     }
 }

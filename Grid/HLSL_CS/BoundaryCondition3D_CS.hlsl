@@ -1,4 +1,4 @@
-Texture2DArray<uint> obstacle : register(t6);
+Texture2DArray<uint> obstacle : register(t10);
 
 RWTexture3D<min16float> value : register(u0);
 

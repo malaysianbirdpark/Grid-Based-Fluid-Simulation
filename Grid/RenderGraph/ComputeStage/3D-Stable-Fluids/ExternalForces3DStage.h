@@ -11,11 +11,13 @@ public: ID3D11Resource* Expose(int32_t attribute_id) override;
 private:
 	Microsoft::WRL::ComPtr<ID3D11ComputeShader> _gravityCS;
 	Microsoft::WRL::ComPtr<ID3D11ComputeShader> _buoyancyCS;
+	Microsoft::WRL::ComPtr<ID3D11ComputeShader> _combustionCS;
 	Microsoft::WRL::ComPtr<ID3D11ComputeShader> _vorticityCS;
 	Microsoft::WRL::ComPtr<ID3D11ComputeShader> _confineVorticityCS;
 
 	int32_t _velocityInID{};
 	int32_t _velocityOutID{};
 	int32_t _quantityInID{};
+	int32_t _quantityOutID{};
 };
 

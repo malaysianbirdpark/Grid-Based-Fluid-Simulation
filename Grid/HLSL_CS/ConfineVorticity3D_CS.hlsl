@@ -1,8 +1,8 @@
-Texture3D<min16float3> vorticity : register(t0);
+Texture3D<min16float4> vorticity : register(t0);
 
-Texture2DArray<uint> obstacle : register(t6);
+Texture2DArray<uint> obstacle : register(t10);
 
-RWTexture3D<min16float3> velocity : register(u0);
+RWTexture3D<min16float4> velocity : register(u0);
 
 cbuffer constants : register(b1) {
 	min16float dt;
@@ -29,6 +29,6 @@ void main( uint3 DTid : SV_DispatchThreadID )
         const min16float3 w = vorticity[DTid.xyz];
         const min16float3 f = 6.5f * cross(n, w);
 
-        velocity[DTid.xyz] += f * dt;
+        velocity[DTid.xyz] += min16float4(f * dt, 0.0f);
     }
 }

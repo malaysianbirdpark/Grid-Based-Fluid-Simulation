@@ -66,11 +66,11 @@ MCAdvection3DStage::MCAdvection3DStage()
 
     _quantityInID = NodeManager::IssueIncomingAttrID();
     _incoming[_quantityInID] = -1;
-    _attrNames[_quantityInID] = { "Density in" };
+    _attrNames[_quantityInID] = { "Quantity in" };
 
     _quantityOutID = NodeManager::IssueOutgoingAttrID();
     _outgoing[_quantityOutID] = -1;
-    _attrNames[_quantityOutID] = { "Density out" };
+    _attrNames[_quantityOutID] = { "Quantity out" };
 
     {
         std::string _path{"./CSO/FirstAdvection3D_CS.cso"};

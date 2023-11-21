@@ -46,6 +46,5 @@ void CBTimestep::Upload(ID3D11DeviceContext& context)
 
 void CBTimestep::Update()
 {
-    //_data._dt = 1.0f / ImGui::GetIO().Framerate;
-    _data._dt = 0.01666f;
+    _data._dt = 1.0f / ImGui::GetIO().Framerate;
 }

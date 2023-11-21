@@ -1,6 +1,6 @@
-Texture3D<min16float3> velocity : register(t0);
+Texture3D<min16float4> velocity : register(t0);
 
-Texture2DArray<uint> obstacle : register(t6);
+Texture2DArray<uint> obstacle : register(t10);
 
 RWTexture3D<min16float3> vorticity : register(u0);
 

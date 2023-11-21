@@ -1,10 +1,10 @@
 Texture3D<min16float>  p : register(t0);
-Texture3D<min16float3> v : register(t1);
+Texture3D<min16float4> v : register(t1);
 
-Texture2DArray<uint>        obstacle : register(t6);
-Texture2DArray<min16float3> obstacle_vel : register(t7);
+Texture2DArray<uint>        obstacle : register(t10);
+Texture2DArray<min16float3> obstacle_vel : register(t11);
 
-RWTexture3D<min16float3> result     : register(u0);
+RWTexture3D<min16float4> result     : register(u0);
 
 SamplerState sampler1 : register(s1);
 
@@ -44,9 +44,10 @@ void main(uint3 DTid : SV_DispatchThreadID)
             front = center; obstacle_velocity.z = obstacle_vel[uint3(DTid.x, DTid.y, DTid.z + 1)].z; velocity_mask.z = 0.0f;
         }
 
-        result[DTid.xyz] = (v[DTid.xyz] - min16float3(right - left, up - down, front - behind) * 0.5f) * velocity_mask + obstacle_velocity;
+        const min16float div = v[DTid.xyz].w;
+        result[DTid.xyz] = min16float4((v[DTid.xyz].xyz - min16float3(right - left, up - down, front - behind) * 0.5f) * velocity_mask + obstacle_velocity, div * 0.5f);
     }
     else {
-        result[DTid.xyz] = obstacle_vel[DTid.xyz];
+        result[DTid.xyz] = min16float4(obstacle_vel[DTid.xyz], 0.0f);
     }
 }

@@ -1,7 +1,7 @@
-Texture3D<min16float3> x_in : register(t0);
+Texture3D<min16float4> x_in : register(t0);
 
-Texture2DArray<uint>        obstacle : register(t6);
-Texture2DArray<min16float3> obstacle_velocity : register(t7);
+Texture2DArray<uint>        obstacle : register(t10);
+Texture2DArray<min16float3> obstacle_velocity : register(t11);
 
 RWTexture3D<min16float> div : register(u0);
 
@@ -25,5 +25,5 @@ void main( uint3 DTid : SV_DispatchThreadID )
 	const min16float behind = 
 		obstacle[uint3(DTid.x, DTid.y, DTid.z - 1)].r <= 0.9f ? x_in[uint3(DTid.x, DTid.y, DTid.z - 1)].z : obstacle_velocity[uint3(DTid.x, DTid.y, DTid.z - 1)].z;
 
-	div[DTid.xyz] = ((right - left) + (up - down) + (front - behind)) * 0.5f;
+	div[DTid.xyz] = ((right - left) + (up - down) + (front - behind)) * 0.5f - x_in[DTid.xyz].a;
 }

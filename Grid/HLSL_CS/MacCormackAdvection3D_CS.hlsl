@@ -1,16 +1,16 @@
-Texture3D<min16float3> velocity_n : register(t0);
+Texture3D<min16float4> velocity_n : register(t0);
 Texture3D<min16float4> quantity_n : register(t1);
 
-Texture3D<min16float3> velocity_n_1_hat : register(t2);
+Texture3D<min16float4> velocity_n_1_hat : register(t2);
 Texture3D<min16float4> quantity_n_1_hat : register(t3);
 
-Texture3D<min16float3> velocity_n_hat : register(t4);
+Texture3D<min16float4> velocity_n_hat : register(t4);
 Texture3D<min16float4> quantity_n_hat : register(t5);
 
-Texture2DArray<uint>        obstacle     : register(t6);
-Texture2DArray<min16float3> obstacle_vel : register(t7);
+Texture2DArray<uint>        obstacle     : register(t10);
+Texture2DArray<min16float3> obstacle_vel : register(t11);
 
-RWTexture3D<min16float3> velocity_n_1 : register(u0);
+RWTexture3D<min16float4> velocity_n_1 : register(u0);
 RWTexture3D<min16float4> quantity_n_1 : register(u1);
 
 SamplerState sampler0 : register(s0);
@@ -52,7 +52,7 @@ void main( uint3 DTid : SV_DispatchThreadID ) {
 
         dr *= 0.5f;
 
-        min16float3 vels[8];
+        min16float4 vels[8];
         vels[0] = velocity_n.SampleLevel(sampler0, target + min16float3(-dr.x, -dr.y, -dr.z), 0.0f);
         vels[1] = velocity_n.SampleLevel(sampler0, target + min16float3(-dr.x, -dr.y,  dr.z), 0.0f);
         vels[2] = velocity_n.SampleLevel(sampler0, target + min16float3(-dr.x,  dr.y, -dr.z), 0.0f);
@@ -62,9 +62,9 @@ void main( uint3 DTid : SV_DispatchThreadID ) {
         vels[6] = velocity_n.SampleLevel(sampler0, target + min16float3( dr.x,  dr.y, -dr.z), 0.0f);
         vels[7] = velocity_n.SampleLevel(sampler0, target + min16float3( dr.x,  dr.y,  dr.z), 0.0f);
 
-        const min16float3 vel_min = min(min(min(min(min(min(min(vels[0], vels[1]), vels[2]), vels[3]), vels[4]), vels[5]), vels[6]), vels[7]);
-        const min16float3 vel_max = max(max(max(max(max(max(max(vels[0], vels[1]), vels[2]), vels[3]), vels[4]), vels[5]), vels[6]), vels[7]);
-		min16float3 vel_final = velocity_n_1_hat.SampleLevel(sampler0, target, 0.0f) +
+        const min16float4 vel_min = min(min(min(min(min(min(min(vels[0], vels[1]), vels[2]), vels[3]), vels[4]), vels[5]), vels[6]), vels[7]);
+        const min16float4 vel_max = max(max(max(max(max(max(max(vels[0], vels[1]), vels[2]), vels[3]), vels[4]), vels[5]), vels[6]), vels[7]);
+		min16float4 vel_final = velocity_n_1_hat.SampleLevel(sampler0, target, 0.0f) +
 			0.5f * (velocity_n.SampleLevel(sampler1, pos, 0.0f) - velocity_n_hat.SampleLevel(sampler1, pos, 0.0f));
         vel_final = max(min(vel_final, vel_max), vel_min);
 

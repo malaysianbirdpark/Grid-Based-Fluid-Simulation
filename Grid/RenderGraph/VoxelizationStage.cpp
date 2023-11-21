@@ -223,7 +223,7 @@ void VoxelizationStage::Run(ID3D11DeviceContext& context)
     context.CSSetUnorderedAccessViews(0u, 2u, barrier1, nullptr);
 
 	ID3D11ShaderResourceView* const voxels[2]{ _voxelSRV.Get(), _velocitySRV.Get() };
-	context.CSSetShaderResources(6u, 2u, voxels);
+	context.CSSetShaderResources(10u, 2u, voxels);
 }
 
 void VoxelizationStage::AddTargetScene(std::shared_ptr<class DrawSceneStage> target)

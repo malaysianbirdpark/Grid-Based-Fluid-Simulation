@@ -11,8 +11,8 @@ MultiGrid3D1DStage::MultiGrid3D1DStage()
 {
     _uav.resize(Final + 1);
     _srv.resize(Final + 2);
-    _nullUav.resize(Final + 1);
-    _nullSrv.resize(Final + 2);
+    _nullUav.resize(7);
+    _nullSrv.resize(7);
 
     _resource.resize(Final + 1);
 
@@ -47,11 +47,6 @@ MultiGrid3D1DStage::MultiGrid3D1DStage()
     pDevice->CreateUnorderedAccessView(_resource[Ah_int].Get(), nullptr, _uav[Ah_int].ReleaseAndGetAddressOf());
     pDevice->CreateShaderResourceView(_resource[Ah_int].Get(), nullptr, _srv[Ah_int].ReleaseAndGetAddressOf());
 
-	// Ah_rhs
-    pDevice->CreateTexture3D(&desc, nullptr, _resource[Ah_rhs].ReleaseAndGetAddressOf());
-    pDevice->CreateUnorderedAccessView(_resource[Ah_rhs].Get(), nullptr, _uav[Ah_rhs].ReleaseAndGetAddressOf());
-    pDevice->CreateShaderResourceView(_resource[Ah_rhs].Get(), nullptr, _srv[Ah_rhs].ReleaseAndGetAddressOf());
-
 	// Dh
     pDevice->CreateTexture3D(&desc, nullptr, _resource[Dh].ReleaseAndGetAddressOf());
     pDevice->CreateUnorderedAccessView(_resource[Dh].Get(), nullptr, _uav[Dh].ReleaseAndGetAddressOf());
@@ -74,11 +69,6 @@ MultiGrid3D1DStage::MultiGrid3D1DStage()
     pDevice->CreateTexture3D(&desc, nullptr, _resource[A2h_residual].ReleaseAndGetAddressOf());
     pDevice->CreateUnorderedAccessView(_resource[A2h_residual].Get(), nullptr, _uav[A2h_residual].ReleaseAndGetAddressOf());
     pDevice->CreateShaderResourceView(_resource[A2h_residual].Get(), nullptr, _srv[A2h_residual].ReleaseAndGetAddressOf());
-
-	// A2h_rhs
-    pDevice->CreateTexture3D(&desc, nullptr, _resource[A2h_rhs].ReleaseAndGetAddressOf());
-    pDevice->CreateUnorderedAccessView(_resource[A2h_rhs].Get(), nullptr, _uav[A2h_rhs].ReleaseAndGetAddressOf());
-    pDevice->CreateShaderResourceView(_resource[A2h_rhs].Get(), nullptr, _srv[A2h_rhs].ReleaseAndGetAddressOf());
 
 	// D2h
     pDevice->CreateTexture3D(&desc, nullptr, _resource[D2h].ReleaseAndGetAddressOf());
@@ -103,11 +93,6 @@ MultiGrid3D1DStage::MultiGrid3D1DStage()
     pDevice->CreateUnorderedAccessView(_resource[A4h_residual].Get(), nullptr, _uav[A4h_residual].ReleaseAndGetAddressOf());
     pDevice->CreateShaderResourceView(_resource[A4h_residual].Get(), nullptr, _srv[A4h_residual].ReleaseAndGetAddressOf());
 
-	// A4h_rhs
-    pDevice->CreateTexture3D(&desc, nullptr, _resource[A4h_rhs].ReleaseAndGetAddressOf());
-    pDevice->CreateUnorderedAccessView(_resource[A4h_rhs].Get(), nullptr, _uav[A4h_rhs].ReleaseAndGetAddressOf());
-    pDevice->CreateShaderResourceView(_resource[A4h_rhs].Get(), nullptr, _srv[A4h_rhs].ReleaseAndGetAddressOf());
-
 	// D4h
     pDevice->CreateTexture3D(&desc, nullptr, _resource[D4h].ReleaseAndGetAddressOf());
     pDevice->CreateUnorderedAccessView(_resource[D4h].Get(), nullptr, _uav[D4h].ReleaseAndGetAddressOf());
@@ -130,11 +115,6 @@ MultiGrid3D1DStage::MultiGrid3D1DStage()
     pDevice->CreateTexture3D(&desc, nullptr, _resource[A8h_residual].ReleaseAndGetAddressOf());
     pDevice->CreateUnorderedAccessView(_resource[A8h_residual].Get(), nullptr, _uav[A8h_residual].ReleaseAndGetAddressOf());
     pDevice->CreateShaderResourceView(_resource[A8h_residual].Get(), nullptr, _srv[A8h_residual].ReleaseAndGetAddressOf());
-
-	// A8h_rhs
-    pDevice->CreateTexture3D(&desc, nullptr, _resource[A8h_rhs].ReleaseAndGetAddressOf());
-    pDevice->CreateUnorderedAccessView(_resource[A8h_rhs].Get(), nullptr, _uav[A8h_rhs].ReleaseAndGetAddressOf());
-    pDevice->CreateShaderResourceView(_resource[A8h_rhs].Get(), nullptr, _srv[A8h_rhs].ReleaseAndGetAddressOf());
 
 	// D8h
     pDevice->CreateTexture3D(&desc, nullptr, _resource[D8h].ReleaseAndGetAddressOf());
@@ -159,11 +139,6 @@ MultiGrid3D1DStage::MultiGrid3D1DStage()
     pDevice->CreateUnorderedAccessView(_resource[A16h_residual].Get(), nullptr, _uav[A16h_residual].ReleaseAndGetAddressOf());
     pDevice->CreateShaderResourceView(_resource[A16h_residual].Get(), nullptr, _srv[A16h_residual].ReleaseAndGetAddressOf());
 
-	// A16h_rhs
-    pDevice->CreateTexture3D(&desc, nullptr, _resource[A16h_rhs].ReleaseAndGetAddressOf());
-    pDevice->CreateUnorderedAccessView(_resource[A16h_rhs].Get(), nullptr, _uav[A16h_rhs].ReleaseAndGetAddressOf());
-    pDevice->CreateShaderResourceView(_resource[A16h_rhs].Get(), nullptr, _srv[A16h_rhs].ReleaseAndGetAddressOf());
-
 	// D16h
     pDevice->CreateTexture3D(&desc, nullptr, _resource[D16h].ReleaseAndGetAddressOf());
     pDevice->CreateUnorderedAccessView(_resource[D16h].Get(), nullptr, _uav[D16h].ReleaseAndGetAddressOf());
@@ -187,11 +162,6 @@ MultiGrid3D1DStage::MultiGrid3D1DStage()
     pDevice->CreateUnorderedAccessView(_resource[A32h_residual].Get(), nullptr, _uav[A32h_residual].ReleaseAndGetAddressOf());
     pDevice->CreateShaderResourceView(_resource[A32h_residual].Get(), nullptr, _srv[A32h_residual].ReleaseAndGetAddressOf());
 
-	// A32h_rhs
-    pDevice->CreateTexture3D(&desc, nullptr, _resource[A32h_rhs].ReleaseAndGetAddressOf());
-    pDevice->CreateUnorderedAccessView(_resource[A32h_rhs].Get(), nullptr, _uav[A32h_rhs].ReleaseAndGetAddressOf());
-    pDevice->CreateShaderResourceView(_resource[A32h_rhs].Get(), nullptr, _srv[A32h_rhs].ReleaseAndGetAddressOf());
-
 	// D32h
     pDevice->CreateTexture3D(&desc, nullptr, _resource[D32h].ReleaseAndGetAddressOf());
     pDevice->CreateUnorderedAccessView(_resource[D32h].Get(), nullptr, _uav[D32h].ReleaseAndGetAddressOf());
@@ -214,11 +184,6 @@ MultiGrid3D1DStage::MultiGrid3D1DStage()
     pDevice->CreateTexture3D(&desc, nullptr, _resource[A64h_residual].ReleaseAndGetAddressOf());
     pDevice->CreateUnorderedAccessView(_resource[A64h_residual].Get(), nullptr, _uav[A64h_residual].ReleaseAndGetAddressOf());
     pDevice->CreateShaderResourceView(_resource[A64h_residual].Get(), nullptr, _srv[A64h_residual].ReleaseAndGetAddressOf());
-
-	// A64h_rhs
-    pDevice->CreateTexture3D(&desc, nullptr, _resource[A64h_rhs].ReleaseAndGetAddressOf());
-    pDevice->CreateUnorderedAccessView(_resource[A64h_rhs].Get(), nullptr, _uav[A64h_rhs].ReleaseAndGetAddressOf());
-    pDevice->CreateShaderResourceView(_resource[A64h_rhs].Get(), nullptr, _srv[A64h_rhs].ReleaseAndGetAddressOf());
 
 	// D64h
     pDevice->CreateTexture3D(&desc, nullptr, _resource[D64h].ReleaseAndGetAddressOf());
@@ -373,6 +338,25 @@ MultiGrid3D1DStage::MultiGrid3D1DStage()
 			_interpolateCS.ReleaseAndGetAddressOf()
 		);
     }
+
+    {
+		std::string _path{"./CSO/Interpolate3D2x2_CS.cso"};
+		std::wstring p(_path.length(), L' ');
+		std::ranges::copy(_path, p.begin());
+
+		Microsoft::WRL::ComPtr<ID3DBlob> pBlob;
+		D3DReadFileToBlob(
+			p.c_str(),
+			pBlob.ReleaseAndGetAddressOf()
+		);
+
+		pDevice->CreateComputeShader(
+			pBlob->GetBufferPointer(), 
+			pBlob->GetBufferSize(),
+			nullptr,
+			_interpolate2x2CS.ReleaseAndGetAddressOf()
+		);
+    }
 }
 
 void MultiGrid3D1DStage::Run(ID3D11DeviceContext& context)
@@ -404,7 +388,6 @@ void MultiGrid3D1DStage::Run(ID3D11DeviceContext& context)
 		SetBarrier(context);
 
 		srv[0] = _srv[Ah_temp].Get();
-		srv[1] = _srv[Dh].Get();
 		context.CSSetShaderResources(0u, 2u, srv);
 		context.CSSetUnorderedAccessViews(0u, 1u, _uav[Ah].GetAddressOf(), nullptr);
 		context.CSSetShader(_cs.Get(), nullptr, 0u);
@@ -416,7 +399,6 @@ void MultiGrid3D1DStage::Run(ID3D11DeviceContext& context)
 		SetBarrier(context);
 
 		srv[0] = _srv[Ah].Get();
-		srv[1] = _srv[Dh].Get();
 		context.CSSetShaderResources(0u, 2u, srv);
 		context.CSSetUnorderedAccessViews(0u, 1u, _uav[Ah_temp].GetAddressOf(), nullptr);
 		context.CSSetShader(_cs.Get(), nullptr, 0u);
@@ -429,16 +411,18 @@ void MultiGrid3D1DStage::Run(ID3D11DeviceContext& context)
 	}
 
 	// Residual Ah
-	ID3D11ShaderResourceView* srv[2]{ _srv[Ah_temp].Get(), _srv[Dh].Get() };
-	context.CSSetShaderResources(0u, 2u, srv);
-	context.CSSetUnorderedAccessViews(0u, 1u, _uav[Ah_residual].GetAddressOf(), nullptr);
-	context.CSSetShader(_residualCS.Get(), nullptr, 0u);
-	context.Dispatch(
-		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.width)  / _groupX)),
-		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.height) / _groupY)), 
-		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.depth)  / _groupZ)) 
-	);
-	SetBarrier(context);
+	{
+		ID3D11ShaderResourceView* srv[2]{ _srv[Ah_temp].Get(), _srv[Dh].Get() };
+		context.CSSetShaderResources(0u, 2u, srv);
+		context.CSSetUnorderedAccessViews(0u, 1u, _uav[Ah_residual].GetAddressOf(), nullptr);
+		context.CSSetShader(_residualCS.Get(), nullptr, 0u);
+		context.Dispatch(
+			static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.width)  / _groupX)),
+			static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.height) / _groupY)), 
+			static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.depth)  / _groupZ)) 
+		);
+		SetBarrier(context);
+	}
 
 	// Restrict Ah_residual to D2h
 	context.CSSetShaderResources(0u, 1u, _srv[Ah_residual].GetAddressOf());
@@ -453,8 +437,8 @@ void MultiGrid3D1DStage::Run(ID3D11DeviceContext& context)
 
 	// Jacobi for A2h
 	{
-		context.CSSetShaderResources(0u, 1u, _srv[A2h].GetAddressOf());
-		context.CSSetShaderResources(1u, 1u, _srv[D2h].GetAddressOf());
+		ID3D11ShaderResourceView* srv[2]{ _srv[A2h].Get(), _srv[D2h].Get() };
+		context.CSSetShaderResources(0u, 2u, srv);
 		context.CSSetUnorderedAccessViews(0u, 1u, _uav[A2h_temp].GetAddressOf(), nullptr);
 		context.CSSetShader(_mgJacobiCS.Get(), nullptr, 0u);
 		context.Dispatch(
@@ -464,8 +448,8 @@ void MultiGrid3D1DStage::Run(ID3D11DeviceContext& context)
 		);
 		SetBarrier(context);
 
-		context.CSSetShaderResources(0u, 1u, _srv[A2h_temp].GetAddressOf());
-		context.CSSetShaderResources(1u, 1u, _srv[D2h].GetAddressOf());
+		srv[0] = _srv[A2h_temp].Get();
+		context.CSSetShaderResources(0u, 2u, srv);
 		context.CSSetUnorderedAccessViews(0u, 1u, _uav[A2h].GetAddressOf(), nullptr);
 		context.CSSetShader(_mgJacobiCS.Get(), nullptr, 0u);
 		context.Dispatch(
@@ -475,8 +459,8 @@ void MultiGrid3D1DStage::Run(ID3D11DeviceContext& context)
 		);
 		SetBarrier(context);
 
-		context.CSSetShaderResources(0u, 1u, _srv[A2h].GetAddressOf());
-		context.CSSetShaderResources(1u, 1u, _srv[D2h].GetAddressOf());
+		srv[0] = _srv[A2h].Get();
+		context.CSSetShaderResources(0u, 2u, srv);
 		context.CSSetUnorderedAccessViews(0u, 1u, _uav[A2h_temp].GetAddressOf(), nullptr);
 		context.CSSetShader(_mgJacobiCS.Get(), nullptr, 0u);
 		context.Dispatch(
@@ -488,16 +472,18 @@ void MultiGrid3D1DStage::Run(ID3D11DeviceContext& context)
 	}
 
 	// Residual A2h
-	context.CSSetShaderResources(0u, 1u, _srv[A2h_temp].GetAddressOf());
-	context.CSSetShaderResources(1u, 1u, _srv[D2h].GetAddressOf());
-	context.CSSetUnorderedAccessViews(0u, 1u, _uav[A2h_residual].GetAddressOf(), nullptr);
-	context.CSSetShader(_residualCS.Get(), nullptr, 0u);
-	context.Dispatch(
-		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.width  >> 1) / _groupX)),
-		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.height >> 1) / _groupY)), 
-		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.depth  >> 1) / _groupZ)) 
-	);
-	SetBarrier(context);
+	{
+		ID3D11ShaderResourceView* srv[2]{ _srv[A2h_temp].Get(), _srv[D2h].Get() };
+		context.CSSetShaderResources(0u, 2u, srv);
+		context.CSSetUnorderedAccessViews(0u, 1u, _uav[A2h_residual].GetAddressOf(), nullptr);
+		context.CSSetShader(_residualCS.Get(), nullptr, 0u);
+		context.Dispatch(
+			static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.width  >> 1) / _groupX)),
+			static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.height >> 1) / _groupY)), 
+			static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.depth  >> 1) / _groupZ)) 
+		);
+		SetBarrier(context);
+	}
 
 	// Restrict A2h_residual to D4h
 	context.CSSetShaderResources(0u, 1u, _srv[A2h_residual].GetAddressOf());
@@ -512,8 +498,8 @@ void MultiGrid3D1DStage::Run(ID3D11DeviceContext& context)
 
 	// Jacobi for A4h
 	{
-		context.CSSetShaderResources(0u, 1u, _srv[A4h].GetAddressOf());
-		context.CSSetShaderResources(1u, 1u, _srv[D4h].GetAddressOf());
+		ID3D11ShaderResourceView* srv[2]{ _srv[A4h].Get(), _srv[D4h].Get() };
+		context.CSSetShaderResources(0u, 2u, srv);
 		context.CSSetUnorderedAccessViews(0u, 1u, _uav[A4h_temp].GetAddressOf(), nullptr);
 		context.CSSetShader(_mgJacobiCS.Get(), nullptr, 0u);
 		context.Dispatch(
@@ -523,8 +509,8 @@ void MultiGrid3D1DStage::Run(ID3D11DeviceContext& context)
 		);
 		SetBarrier(context);
 
-		context.CSSetShaderResources(0u, 1u, _srv[A4h_temp].GetAddressOf());
-		context.CSSetShaderResources(1u, 1u, _srv[D4h].GetAddressOf());
+		srv[0] = _srv[A4h_temp].Get();
+		context.CSSetShaderResources(0u, 2u, srv);
 		context.CSSetUnorderedAccessViews(0u, 1u, _uav[A4h].GetAddressOf(), nullptr);
 		context.CSSetShader(_mgJacobiCS.Get(), nullptr, 0u);
 		context.Dispatch(
@@ -534,8 +520,8 @@ void MultiGrid3D1DStage::Run(ID3D11DeviceContext& context)
 		);
 		SetBarrier(context);
 
-		context.CSSetShaderResources(0u, 1u, _srv[A4h].GetAddressOf());
-		context.CSSetShaderResources(1u, 1u, _srv[D4h].GetAddressOf());
+		srv[0] = _srv[A4h].Get();
+		context.CSSetShaderResources(0u, 2u, srv);
 		context.CSSetUnorderedAccessViews(0u, 1u, _uav[A4h_temp].GetAddressOf(), nullptr);
 		context.CSSetShader(_mgJacobiCS.Get(), nullptr, 0u);
 		context.Dispatch(
@@ -547,16 +533,18 @@ void MultiGrid3D1DStage::Run(ID3D11DeviceContext& context)
 	}
 
 	// Residual A4h
-	context.CSSetShaderResources(0u, 1u, _srv[A4h_temp].GetAddressOf());
-	context.CSSetShaderResources(1u, 1u, _srv[D4h].GetAddressOf());
-	context.CSSetUnorderedAccessViews(0u, 1u, _uav[A4h_residual].GetAddressOf(), nullptr);
-	context.CSSetShader(_residualCS.Get(), nullptr, 0u);
-	context.Dispatch(
-		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.width  >> 2) / _groupX)),
-		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.height >> 2) / _groupY)), 
-		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.depth  >> 2) / _groupZ)) 
-	);
-	SetBarrier(context);
+	{
+		ID3D11ShaderResourceView* srv[2]{ _srv[A4h_temp].Get(), _srv[D4h].Get() };
+		context.CSSetShaderResources(0u, 2u, srv);
+		context.CSSetUnorderedAccessViews(0u, 1u, _uav[A4h_residual].GetAddressOf(), nullptr);
+		context.CSSetShader(_residualCS.Get(), nullptr, 0u);
+		context.Dispatch(
+			static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.width  >> 2) / _groupX)),
+			static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.height >> 2) / _groupY)), 
+			static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.depth  >> 2) / _groupZ)) 
+		);
+		SetBarrier(context);
+	}
 
 	// Restrict A4h_residual to D8h
 	context.CSSetShaderResources(0u, 1u, _srv[A4h_residual].GetAddressOf());
@@ -571,8 +559,8 @@ void MultiGrid3D1DStage::Run(ID3D11DeviceContext& context)
 
 	// Jacobi for A8h
 	{
-		context.CSSetShaderResources(0u, 1u, _srv[A8h].GetAddressOf());
-		context.CSSetShaderResources(1u, 1u, _srv[D8h].GetAddressOf());
+		ID3D11ShaderResourceView* srv[2]{ _srv[A8h].Get(), _srv[D8h].Get() };
+		context.CSSetShaderResources(0u, 2u, srv);
 		context.CSSetUnorderedAccessViews(0u, 1u, _uav[A8h_temp].GetAddressOf(), nullptr);
 		context.CSSetShader(_mgJacobiCS.Get(), nullptr, 0u);
 		context.Dispatch(
@@ -582,8 +570,8 @@ void MultiGrid3D1DStage::Run(ID3D11DeviceContext& context)
 		);
 		SetBarrier(context);
 
-		context.CSSetShaderResources(0u, 1u, _srv[A8h_temp].GetAddressOf());
-		context.CSSetShaderResources(1u, 1u, _srv[D8h].GetAddressOf());
+		srv[0] = _srv[A8h_temp].Get();
+		context.CSSetShaderResources(0u, 2u, srv);
 		context.CSSetUnorderedAccessViews(0u, 1u, _uav[A8h].GetAddressOf(), nullptr);
 		context.CSSetShader(_mgJacobiCS.Get(), nullptr, 0u);
 		context.Dispatch(
@@ -593,8 +581,8 @@ void MultiGrid3D1DStage::Run(ID3D11DeviceContext& context)
 		);
 		SetBarrier(context);
 
-		context.CSSetShaderResources(0u, 1u, _srv[A8h].GetAddressOf());
-		context.CSSetShaderResources(1u, 1u, _srv[D8h].GetAddressOf());
+		srv[0] = _srv[A8h].Get();
+		context.CSSetShaderResources(0u, 2u, srv);
 		context.CSSetUnorderedAccessViews(0u, 1u, _uav[A8h_temp].GetAddressOf(), nullptr);
 		context.CSSetShader(_mgJacobiCS.Get(), nullptr, 0u);
 		context.Dispatch(
@@ -606,16 +594,18 @@ void MultiGrid3D1DStage::Run(ID3D11DeviceContext& context)
 	}
 
 	// Residual A8h
-	context.CSSetShaderResources(0u, 1u, _srv[A8h_temp].GetAddressOf());
-	context.CSSetShaderResources(1u, 1u, _srv[D8h].GetAddressOf());
-	context.CSSetUnorderedAccessViews(0u, 1u, _uav[A8h_residual].GetAddressOf(), nullptr);
-	context.CSSetShader(_residualCS.Get(), nullptr, 0u);
-	context.Dispatch(
-		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.width  >> 3) / _groupX)),
-		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.height >> 3) / _groupY)), 
-		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.depth  >> 3) / _groupZ)) 
-	);
-	SetBarrier(context);
+	{
+		ID3D11ShaderResourceView* srv[2]{ _srv[A8h_temp].Get(), _srv[D8h].Get() };
+		context.CSSetShaderResources(0u, 2u, srv);
+		context.CSSetUnorderedAccessViews(0u, 1u, _uav[A8h_residual].GetAddressOf(), nullptr);
+		context.CSSetShader(_residualCS.Get(), nullptr, 0u);
+		context.Dispatch(
+			static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.width  >> 3) / _groupX)),
+			static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.height >> 3) / _groupY)), 
+			static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.depth  >> 3) / _groupZ)) 
+		);
+		SetBarrier(context);
+	}
 
 	// Restrict A8h_residual to D16h
 	context.CSSetShaderResources(0u, 1u, _srv[A8h_residual].GetAddressOf());
@@ -630,8 +620,8 @@ void MultiGrid3D1DStage::Run(ID3D11DeviceContext& context)
 
 	// Jacobi for A16h
 	{
-		context.CSSetShaderResources(0u, 1u, _srv[A16h].GetAddressOf());
-		context.CSSetShaderResources(1u, 1u, _srv[D16h].GetAddressOf());
+		ID3D11ShaderResourceView* srv[2]{ _srv[A16h].Get(), _srv[D16h].Get() };
+		context.CSSetShaderResources(0u, 2u, srv);
 		context.CSSetUnorderedAccessViews(0u, 1u, _uav[A16h_temp].GetAddressOf(), nullptr);
 		context.CSSetShader(_mgJacobiCS.Get(), nullptr, 0u);
 		context.Dispatch(
@@ -641,8 +631,8 @@ void MultiGrid3D1DStage::Run(ID3D11DeviceContext& context)
 		);
 		SetBarrier(context);
 
-		context.CSSetShaderResources(0u, 1u, _srv[A16h_temp].GetAddressOf());
-		context.CSSetShaderResources(1u, 1u, _srv[D16h].GetAddressOf());
+		srv[0] = _srv[A16h_temp].Get();
+		context.CSSetShaderResources(0u, 2u, srv);
 		context.CSSetUnorderedAccessViews(0u, 1u, _uav[A16h].GetAddressOf(), nullptr);
 		context.CSSetShader(_mgJacobiCS.Get(), nullptr, 0u);
 		context.Dispatch(
@@ -652,8 +642,8 @@ void MultiGrid3D1DStage::Run(ID3D11DeviceContext& context)
 		);
 		SetBarrier(context);
 
-		context.CSSetShaderResources(0u, 1u, _srv[A16h].GetAddressOf());
-		context.CSSetShaderResources(1u, 1u, _srv[D16h].GetAddressOf());
+		srv[0] = _srv[A16h].Get();
+		context.CSSetShaderResources(0u, 2u, srv);
 		context.CSSetUnorderedAccessViews(0u, 1u, _uav[A16h_temp].GetAddressOf(), nullptr);
 		context.CSSetShader(_mgJacobiCS.Get(), nullptr, 0u);
 		context.Dispatch(
@@ -665,16 +655,18 @@ void MultiGrid3D1DStage::Run(ID3D11DeviceContext& context)
 	}
 
 	// Residual A16h
-	context.CSSetShaderResources(0u, 1u, _srv[A16h_temp].GetAddressOf());
-	context.CSSetShaderResources(1u, 1u, _srv[D16h].GetAddressOf());
-	context.CSSetUnorderedAccessViews(0u, 1u, _uav[A16h_residual].GetAddressOf(), nullptr);
-	context.CSSetShader(_residualCS.Get(), nullptr, 0u);
-	context.Dispatch(
-		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.width  >> 4) / _groupX)),
-		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.height >> 4) / _groupY)), 
-		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.depth  >> 4) / _groupZ)) 
-	);
-	SetBarrier(context);
+	{
+		ID3D11ShaderResourceView* srv[2]{ _srv[A16h_temp].Get(), _srv[D16h].Get() };
+		context.CSSetShaderResources(0u, 2u, srv);
+		context.CSSetUnorderedAccessViews(0u, 1u, _uav[A16h_residual].GetAddressOf(), nullptr);
+		context.CSSetShader(_residualCS.Get(), nullptr, 0u);
+		context.Dispatch(
+			static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.width  >> 4) / _groupX)),
+			static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.height >> 4) / _groupY)), 
+			static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.depth  >> 4) / _groupZ)) 
+		);
+		SetBarrier(context);
+	}
 
 	// Restrict A16h_residual to D32h
 	context.CSSetShaderResources(0u, 1u, _srv[A16h_residual].GetAddressOf());
@@ -689,8 +681,8 @@ void MultiGrid3D1DStage::Run(ID3D11DeviceContext& context)
 
 	// Jacobi for A32h
 	{
-		context.CSSetShaderResources(0u, 1u, _srv[A32h].GetAddressOf());
-		context.CSSetShaderResources(1u, 1u, _srv[D32h].GetAddressOf());
+		ID3D11ShaderResourceView* srv[2]{ _srv[A32h].Get(), _srv[D32h].Get() };
+		context.CSSetShaderResources(0u, 2u, srv);
 		context.CSSetUnorderedAccessViews(0u, 1u, _uav[A32h_temp].GetAddressOf(), nullptr);
 		context.CSSetShader(_mgJacobiCS.Get(), nullptr, 0u);
 		context.Dispatch(
@@ -700,8 +692,8 @@ void MultiGrid3D1DStage::Run(ID3D11DeviceContext& context)
 		);
 		SetBarrier(context);
 
-		context.CSSetShaderResources(0u, 1u, _srv[A32h_temp].GetAddressOf());
-		context.CSSetShaderResources(1u, 1u, _srv[D32h].GetAddressOf());
+		srv[0] = _srv[A32h_temp].Get();
+		context.CSSetShaderResources(0u, 2u, srv);
 		context.CSSetUnorderedAccessViews(0u, 1u, _uav[A32h].GetAddressOf(), nullptr);
 		context.CSSetShader(_mgJacobiCS.Get(), nullptr, 0u);
 		context.Dispatch(
@@ -711,8 +703,8 @@ void MultiGrid3D1DStage::Run(ID3D11DeviceContext& context)
 		);
 		SetBarrier(context);
 
-		context.CSSetShaderResources(0u, 1u, _srv[A32h].GetAddressOf());
-		context.CSSetShaderResources(1u, 1u, _srv[D32h].GetAddressOf());
+		srv[0] = _srv[A32h].Get();
+		context.CSSetShaderResources(0u, 2u, srv);
 		context.CSSetUnorderedAccessViews(0u, 1u, _uav[A32h_temp].GetAddressOf(), nullptr);
 		context.CSSetShader(_mgJacobiCS.Get(), nullptr, 0u);
 		context.Dispatch(
@@ -724,16 +716,18 @@ void MultiGrid3D1DStage::Run(ID3D11DeviceContext& context)
 	}
 
 	// Residual A32h
-	context.CSSetShaderResources(0u, 1u, _srv[A32h_temp].GetAddressOf());
-	context.CSSetShaderResources(1u, 1u, _srv[D32h].GetAddressOf());
-	context.CSSetUnorderedAccessViews(0u, 1u, _uav[A32h_residual].GetAddressOf(), nullptr);
-	context.CSSetShader(_residualCS.Get(), nullptr, 0u);
-	context.Dispatch(
-		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.width  >> 5) / _groupX)),
-		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.height >> 5) / _groupY)), 
-		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.depth  >> 5) / _groupZ)) 
-	);
-	SetBarrier(context);
+	{
+		ID3D11ShaderResourceView* srv[2]{ _srv[A32h_temp].Get(), _srv[D32h].Get() };
+		context.CSSetShaderResources(0u, 2u, srv);
+		context.CSSetUnorderedAccessViews(0u, 1u, _uav[A32h_residual].GetAddressOf(), nullptr);
+		context.CSSetShader(_residualCS.Get(), nullptr, 0u);
+		context.Dispatch(
+			static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.width  >> 5) / _groupX)),
+			static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.height >> 5) / _groupY)), 
+			static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.depth  >> 5) / _groupZ)) 
+		);
+		SetBarrier(context);
+	}
 
 	// Restrict A32h_residual to D64h
 	context.CSSetShaderResources(0u, 1u, _srv[A32h_residual].GetAddressOf());
@@ -748,30 +742,8 @@ void MultiGrid3D1DStage::Run(ID3D11DeviceContext& context)
 
 	// Jacobi for A64h
 	{
-		context.CSSetShaderResources(0u, 1u, _srv[A64h].GetAddressOf());
-		context.CSSetShaderResources(1u, 1u, _srv[D64h].GetAddressOf());
-		context.CSSetUnorderedAccessViews(0u, 1u, _uav[A64h_temp].GetAddressOf(), nullptr);
-		context.CSSetShader(_mgJacobiCS.Get(), nullptr, 0u);
-		context.Dispatch(
-			static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.width  >> 6) / _groupX)),
-			static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.height >> 6) / _groupY)), 
-			static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.depth  >> 6) / _groupZ)) 
-		);
-		SetBarrier(context);
-
-		context.CSSetShaderResources(0u, 1u, _srv[A64h_temp].GetAddressOf());
-		context.CSSetShaderResources(1u, 1u, _srv[D64h].GetAddressOf());
-		context.CSSetUnorderedAccessViews(0u, 1u, _uav[A64h].GetAddressOf(), nullptr);
-		context.CSSetShader(_mgJacobiCS.Get(), nullptr, 0u);
-		context.Dispatch(
-			static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.width  >> 6) / _groupX)),
-			static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.height >> 6) / _groupY)), 
-			static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.depth  >> 6) / _groupZ)) 
-		);
-		SetBarrier(context);
-
-		context.CSSetShaderResources(0u, 1u, _srv[A64h].GetAddressOf());
-		context.CSSetShaderResources(1u, 1u, _srv[D64h].GetAddressOf());
+		ID3D11ShaderResourceView* srv[2]{ _srv[A64h].Get(), _srv[D64h].Get() };
+		context.CSSetShaderResources(0u, 2u, srv);
 		context.CSSetUnorderedAccessViews(0u, 1u, _uav[A64h_temp].GetAddressOf(), nullptr);
 		context.CSSetShader(_mgJacobiCS.Get(), nullptr, 0u);
 		context.Dispatch(
@@ -785,7 +757,7 @@ void MultiGrid3D1DStage::Run(ID3D11DeviceContext& context)
 	// Interpolate A64h to A32h
 	context.CSSetShaderResources(0u, 1u, _srv[A64h_temp].GetAddressOf());
 	context.CSSetUnorderedAccessViews(0u, 1u, _uav[A32h_int].GetAddressOf(), nullptr);
-	context.CSSetShader(_interpolateCS.Get(), nullptr, 0u);
+	context.CSSetShader(_interpolate2x2CS.Get(), nullptr, 0u);
 	context.Dispatch(
 		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.width  >> 5) / _groupX)),
 		static_cast<UINT>(ceil(static_cast<float>(gSimulationInfo.height >> 5) / _groupY)), 
@@ -805,8 +777,8 @@ void MultiGrid3D1DStage::Run(ID3D11DeviceContext& context)
 
 	// Jacobi for A32h Again
 	{
-		context.CSSetShaderResources(0u, 1u, _srv[A32h_temp].GetAddressOf());
-		context.CSSetShaderResources(1u, 1u, _srv[D32h].GetAddressOf());
+		ID3D11ShaderResourceView* srv[2]{ _srv[A32h_temp].Get(), _srv[D32h].Get() };
+		context.CSSetShaderResources(0u, 2u, srv);
 		context.CSSetUnorderedAccessViews(0u, 1u, _uav[A32h].GetAddressOf(), nullptr);
 		context.CSSetShader(_mgJacobiCS.Get(), nullptr, 0u);
 		context.Dispatch(
@@ -816,8 +788,8 @@ void MultiGrid3D1DStage::Run(ID3D11DeviceContext& context)
 		);
 		SetBarrier(context);
 
-		context.CSSetShaderResources(0u, 1u, _srv[A32h].GetAddressOf());
-		context.CSSetShaderResources(1u, 1u, _srv[D32h].GetAddressOf());
+		srv[0] = _srv[A32h].Get();
+		context.CSSetShaderResources(0u, 2u, srv);
 		context.CSSetUnorderedAccessViews(0u, 1u, _uav[A32h_temp].GetAddressOf(), nullptr);
 		context.CSSetShader(_mgJacobiCS.Get(), nullptr, 0u);
 		context.Dispatch(
@@ -827,8 +799,8 @@ void MultiGrid3D1DStage::Run(ID3D11DeviceContext& context)
 		);
 		SetBarrier(context);
 
-		context.CSSetShaderResources(0u, 1u, _srv[A32h_temp].GetAddressOf());
-		context.CSSetShaderResources(1u, 1u, _srv[D32h].GetAddressOf());
+		srv[0] = _srv[A32h_temp].Get();
+		context.CSSetShaderResources(0u, 2u, srv);
 		context.CSSetUnorderedAccessViews(0u, 1u, _uav[A32h].GetAddressOf(), nullptr);
 		context.CSSetShader(_mgJacobiCS.Get(), nullptr, 0u);
 		context.Dispatch(
@@ -862,8 +834,8 @@ void MultiGrid3D1DStage::Run(ID3D11DeviceContext& context)
 
 	// Jacobi for A16h Again
 	{
-		context.CSSetShaderResources(0u, 1u, _srv[A16h_temp].GetAddressOf());
-		context.CSSetShaderResources(1u, 1u, _srv[D16h].GetAddressOf());
+		ID3D11ShaderResourceView* srv[2]{ _srv[A16h_temp].Get(), _srv[D16h].Get() };
+		context.CSSetShaderResources(0u, 2u, srv);
 		context.CSSetUnorderedAccessViews(0u, 1u, _uav[A16h].GetAddressOf(), nullptr);
 		context.CSSetShader(_mgJacobiCS.Get(), nullptr, 0u);
 		context.Dispatch(
@@ -873,8 +845,8 @@ void MultiGrid3D1DStage::Run(ID3D11DeviceContext& context)
 		);
 		SetBarrier(context);
 
-		context.CSSetShaderResources(0u, 1u, _srv[A16h].GetAddressOf());
-		context.CSSetShaderResources(1u, 1u, _srv[D16h].GetAddressOf());
+		srv[0] = _srv[A16h].Get();
+		context.CSSetShaderResources(0u, 2u, srv);
 		context.CSSetUnorderedAccessViews(0u, 1u, _uav[A16h_temp].GetAddressOf(), nullptr);
 		context.CSSetShader(_mgJacobiCS.Get(), nullptr, 0u);
 		context.Dispatch(
@@ -884,8 +856,8 @@ void MultiGrid3D1DStage::Run(ID3D11DeviceContext& context)
 		);
 		SetBarrier(context);
 
-		context.CSSetShaderResources(0u, 1u, _srv[A16h_temp].GetAddressOf());
-		context.CSSetShaderResources(1u, 1u, _srv[D16h].GetAddressOf());
+		srv[0] = _srv[A16h_temp].Get();
+		context.CSSetShaderResources(0u, 2u, srv);
 		context.CSSetUnorderedAccessViews(0u, 1u, _uav[A16h].GetAddressOf(), nullptr);
 		context.CSSetShader(_mgJacobiCS.Get(), nullptr, 0u);
 		context.Dispatch(
@@ -919,8 +891,8 @@ void MultiGrid3D1DStage::Run(ID3D11DeviceContext& context)
 
 	// Jacobi for A8h Again
 	{
-		context.CSSetShaderResources(0u, 1u, _srv[A8h_temp].GetAddressOf());
-		context.CSSetShaderResources(1u, 1u, _srv[D8h].GetAddressOf());
+		ID3D11ShaderResourceView* srv[2]{ _srv[A8h_temp].Get(), _srv[D8h].Get() };
+		context.CSSetShaderResources(0u, 2u, srv);
 		context.CSSetUnorderedAccessViews(0u, 1u, _uav[A8h].GetAddressOf(), nullptr);
 		context.CSSetShader(_mgJacobiCS.Get(), nullptr, 0u);
 		context.Dispatch(
@@ -930,8 +902,8 @@ void MultiGrid3D1DStage::Run(ID3D11DeviceContext& context)
 		);
 		SetBarrier(context);
 
-		context.CSSetShaderResources(0u, 1u, _srv[A8h].GetAddressOf());
-		context.CSSetShaderResources(1u, 1u, _srv[D8h].GetAddressOf());
+		srv[0] = _srv[A8h].Get();
+		context.CSSetShaderResources(0u, 2u, srv);
 		context.CSSetUnorderedAccessViews(0u, 1u, _uav[A8h_temp].GetAddressOf(), nullptr);
 		context.CSSetShader(_mgJacobiCS.Get(), nullptr, 0u);
 		context.Dispatch(
@@ -941,8 +913,8 @@ void MultiGrid3D1DStage::Run(ID3D11DeviceContext& context)
 		);
 		SetBarrier(context);
 
-		context.CSSetShaderResources(0u, 1u, _srv[A8h_temp].GetAddressOf());
-		context.CSSetShaderResources(1u, 1u, _srv[D8h].GetAddressOf());
+		srv[0] = _srv[A8h_temp].Get();
+		context.CSSetShaderResources(0u, 2u, srv);
 		context.CSSetUnorderedAccessViews(0u, 1u, _uav[A8h].GetAddressOf(), nullptr);
 		context.CSSetShader(_mgJacobiCS.Get(), nullptr, 0u);
 		context.Dispatch(
@@ -976,8 +948,8 @@ void MultiGrid3D1DStage::Run(ID3D11DeviceContext& context)
 
 	// Jacobi for A4h Again
 	{
-		context.CSSetShaderResources(0u, 1u, _srv[A4h_temp].GetAddressOf());
-		context.CSSetShaderResources(1u, 1u, _srv[D4h].GetAddressOf());
+		ID3D11ShaderResourceView* srv[2]{ _srv[A4h_temp].Get(), _srv[D4h].Get() };
+		context.CSSetShaderResources(0u, 2u, srv);
 		context.CSSetUnorderedAccessViews(0u, 1u, _uav[A4h].GetAddressOf(), nullptr);
 		context.CSSetShader(_mgJacobiCS.Get(), nullptr, 0u);
 		context.Dispatch(
@@ -987,8 +959,8 @@ void MultiGrid3D1DStage::Run(ID3D11DeviceContext& context)
 		);
 		SetBarrier(context);
 
-		context.CSSetShaderResources(0u, 1u, _srv[A4h].GetAddressOf());
-		context.CSSetShaderResources(1u, 1u, _srv[D4h].GetAddressOf());
+		srv[0] = _srv[A4h].Get();
+		context.CSSetShaderResources(0u, 2u, srv);
 		context.CSSetUnorderedAccessViews(0u, 1u, _uav[A4h_temp].GetAddressOf(), nullptr);
 		context.CSSetShader(_mgJacobiCS.Get(), nullptr, 0u);
 		context.Dispatch(
@@ -998,8 +970,8 @@ void MultiGrid3D1DStage::Run(ID3D11DeviceContext& context)
 		);
 		SetBarrier(context);
 
-		context.CSSetShaderResources(0u, 1u, _srv[A4h_temp].GetAddressOf());
-		context.CSSetShaderResources(1u, 1u, _srv[D4h].GetAddressOf());
+		srv[0] = _srv[A4h_temp].Get();
+		context.CSSetShaderResources(0u, 2u, srv);
 		context.CSSetUnorderedAccessViews(0u, 1u, _uav[A4h].GetAddressOf(), nullptr);
 		context.CSSetShader(_mgJacobiCS.Get(), nullptr, 0u);
 		context.Dispatch(
@@ -1033,8 +1005,8 @@ void MultiGrid3D1DStage::Run(ID3D11DeviceContext& context)
 
 	// Jacobi for A2h
 	{
-		context.CSSetShaderResources(0u, 1u, _srv[A2h_temp].GetAddressOf());
-		context.CSSetShaderResources(1u, 1u, _srv[D2h].GetAddressOf());
+		ID3D11ShaderResourceView* srv[2]{ _srv[A2h_temp].Get(), _srv[D2h].Get() };
+		context.CSSetShaderResources(0u, 2u, srv);
 		context.CSSetUnorderedAccessViews(0u, 1u, _uav[A2h].GetAddressOf(), nullptr);
 		context.CSSetShader(_mgJacobiCS.Get(), nullptr, 0u);
 		context.Dispatch(
@@ -1044,8 +1016,8 @@ void MultiGrid3D1DStage::Run(ID3D11DeviceContext& context)
 		);
 		SetBarrier(context);
 
-		context.CSSetShaderResources(0u, 1u, _srv[A2h].GetAddressOf());
-		context.CSSetShaderResources(1u, 1u, _srv[D2h].GetAddressOf());
+		srv[0] = _srv[A2h].Get();
+		context.CSSetShaderResources(0u, 2u, srv);
 		context.CSSetUnorderedAccessViews(0u, 1u, _uav[A2h_temp].GetAddressOf(), nullptr);
 		context.CSSetShader(_mgJacobiCS.Get(), nullptr, 0u);
 		context.Dispatch(
@@ -1055,8 +1027,8 @@ void MultiGrid3D1DStage::Run(ID3D11DeviceContext& context)
 		);
 		SetBarrier(context);
 
-		context.CSSetShaderResources(0u, 1u, _srv[A2h_temp].GetAddressOf());
-		context.CSSetShaderResources(1u, 1u, _srv[D2h].GetAddressOf());
+		srv[0] = _srv[A2h_temp].Get();
+		context.CSSetShaderResources(0u, 2u, srv);
 		context.CSSetUnorderedAccessViews(0u, 1u, _uav[A2h].GetAddressOf(), nullptr);
 		context.CSSetShader(_mgJacobiCS.Get(), nullptr, 0u);
 		context.Dispatch(
@@ -1090,7 +1062,7 @@ void MultiGrid3D1DStage::Run(ID3D11DeviceContext& context)
 
 	// Jacobi for Ah Again
 	{
-		ID3D11ShaderResourceView* srv[3]{ _srv[Ah_temp].Get(), _srv[Dh].Get() };
+		ID3D11ShaderResourceView* srv[2]{ _srv[Ah_temp].Get(), _srv[Dh].Get() };
 		context.CSSetShaderResources(0u, 2u, srv);
 		context.CSSetUnorderedAccessViews(0u, 1u, _uav[Final].GetAddressOf(), nullptr);
 		context.CSSetShader(_cs.Get(), nullptr, 0u);

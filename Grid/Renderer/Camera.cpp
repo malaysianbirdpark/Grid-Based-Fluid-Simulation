@@ -7,7 +7,7 @@
 
 void Camera::Init() {
     //DirectX::XMVECTOR const init_pos{ 0.5f, 1.7f, -2.2f, 1.0f };
-    DirectX::XMVECTOR const init_pos{ 0.0f, 0.0f, 0.0f, 1.0f };
+    DirectX::XMVECTOR const init_pos{ 0.0f, 0.0f, -1.2f, 1.0f };
     //_pitch = 0.6f;
     //_yaw = -0.3f;
     _pitch = 0.0f;

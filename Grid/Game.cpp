@@ -82,7 +82,6 @@ Game::Game()
 	_smoke.AddStage(std::move(std::make_shared<Sourcing3DStage>()));
 
 	_smoke.AddStage(std::move(std::make_shared<MCAdvection3DStage>()));
-	//_smoke.AddStage(std::move(std::make_shared<Advection3DStage>()));
 
 	_smoke.AddStage(std::move(std::make_shared<ExternalForces3DStage>()));
 
@@ -106,21 +105,22 @@ Game::Game()
 
 	_smoke.Link(2, 259, 3, 5);
 	_smoke.Link(2, 260, 3, 6);
-	_smoke.Link(2, 260, 7, 12);
-	_smoke.Link(2, 260, 1, 2);
 
 	_smoke.Link(3, 261, 4, 7);
 	_smoke.Link(3, 261, 6, 10);
+	_smoke.Link(3, 261, 7, 13);
+	_smoke.Link(3, 262, 7, 12);
+	_smoke.Link(3, 262, 1, 2);
 
-	_smoke.Link(4, 262, 5, 8);
+	_smoke.Link(4, 263, 5, 8);
 
-	_smoke.Link(5, 263, 6, 9);
+	_smoke.Link(5, 264, 6, 9);
 
-	_smoke.Link(6, 264, 1, 1);
+	_smoke.Link(6, 265, 1, 1);
 
-	_smoke.Link(7, 265, 8, 13);
+	_smoke.Link(7, 266, 8, 14);
 
-	_smoke.Link(8, 266, 9, 14);
+	_smoke.Link(8, 267, 9, 15);
 
 	ImNodes::LoadCurrentEditorStateFromIniFile("imnodes_state.ini");
 }

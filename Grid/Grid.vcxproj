@@ -59,7 +59,7 @@
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>.;3rd_party;Assets;CSO;HLSL_CS;HLSL_GS;HLSL_PS;HLSL_VS;Platform;Renderer;RenderGraph;RenderObject;Utils;Assets\ABeautifulGame;Assets\Avocado;Assets\BarramundiFish;Assets\DragonAttenuation;Assets\Sponza;Assets\Textures;Assets\ABeautifulGame\Textures;Assets\Avocado\Textures;Assets\BarramundiFish\Textures;Assets\DragonAttenuation\Textures;Assets\Sponza\Textures;RenderGraph\ComputeStage;RenderGraph\ConstantBufferStage;RenderGraph\DrawStage;RenderGraph\ResourceStage;RenderGraph\ComputeStage\2D-Stable-Fluids;RenderGraph\ComputeStage\3D-Stable-Fluids;..\3rd_party;..\3rd_party\ImGui;..\3rd_party\ImGui\backends;..\3rd_party\FP16-master\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.;Assets;CSO;HLSL_CS;HLSL_GS;HLSL_PS;HLSL_VS;Platform;Renderer;RenderGraph;RenderObject;Utils;Assets\ABeautifulGame;Assets\Avocado;Assets\BarramundiFish;Assets\DragonAttenuation;Assets\Sponza;Assets\Textures;Assets\ABeautifulGame\Textures;Assets\Avocado\Textures;Assets\BarramundiFish\Textures;Assets\DragonAttenuation\Textures;Assets\Sponza\Textures;RenderGraph\ComputeStage;RenderGraph\ConstantBufferStage;RenderGraph\DrawStage;RenderGraph\ResourceStage;RenderGraph\ComputeStage\2D-Stable-Fluids;RenderGraph\ComputeStage\3D-Stable-Fluids;..\3rd_party;..\3rd_party\ImGui;..\3rd_party\ImGui\backends;..\3rd_party\FP16-master\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
@@ -80,7 +80,7 @@
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>.;3rd_party;Assets;CSO;HLSL_CS;HLSL_GS;HLSL_PS;HLSL_VS;Platform;Renderer;RenderGraph;RenderObject;Utils;Assets\ABeautifulGame;Assets\Avocado;Assets\BarramundiFish;Assets\DragonAttenuation;Assets\Sponza;Assets\Textures;Assets\ABeautifulGame\Textures;Assets\Avocado\Textures;Assets\BarramundiFish\Textures;Assets\DragonAttenuation\Textures;Assets\Sponza\Textures;RenderGraph\ComputeStage;RenderGraph\ConstantBufferStage;RenderGraph\DrawStage;RenderGraph\ResourceStage;RenderGraph\ComputeStage\2D-Stable-Fluids;RenderGraph\ComputeStage\3D-Stable-Fluids;..\3rd_party;..\3rd_party\ImGui;..\3rd_party\ImGui\backends;..\3rd_party\FP16-master\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.;Assets;CSO;HLSL_CS;HLSL_GS;HLSL_PS;HLSL_VS;Platform;Renderer;RenderGraph;RenderObject;Utils;Assets\ABeautifulGame;Assets\Avocado;Assets\BarramundiFish;Assets\DragonAttenuation;Assets\Sponza;Assets\Textures;Assets\ABeautifulGame\Textures;Assets\Avocado\Textures;Assets\BarramundiFish\Textures;Assets\DragonAttenuation\Textures;Assets\Sponza\Textures;RenderGraph\ComputeStage;RenderGraph\ConstantBufferStage;RenderGraph\DrawStage;RenderGraph\ResourceStage;RenderGraph\ComputeStage\2D-Stable-Fluids;RenderGraph\ComputeStage\3D-Stable-Fluids;..\3rd_party;..\3rd_party\ImGui;..\3rd_party\ImGui\backends;..\3rd_party\FP16-master\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -270,6 +270,12 @@
       <EntryPointName>main</EntryPointName>
       <ObjectFileOutput>../Grid/CSO/Buoyancy3D_CS.cso</ObjectFileOutput>
     </FxCompile>
+    <FxCompile Include="HLSL_CS\Combustion3D_CS.hlsl">
+      <ShaderType>Compute</ShaderType>
+      <ShaderModel>5.0</ShaderModel>
+      <EntryPointName>main</EntryPointName>
+      <ObjectFileOutput>../Grid/CSO/Combustion3D_CS.cso</ObjectFileOutput>
+    </FxCompile>
     <FxCompile Include="HLSL_CS\ConfineVorticity3D_CS.hlsl">
       <ShaderType>Compute</ShaderType>
       <ShaderModel>5.0</ShaderModel>
@@ -323,6 +329,12 @@
       <ShaderModel>5.0</ShaderModel>
       <EntryPointName>main</EntryPointName>
       <ObjectFileOutput>../Grid/CSO/Initializer3D_CS.cso</ObjectFileOutput>
+    </FxCompile>
+    <FxCompile Include="HLSL_CS\Interpolate3D2x2_CS.hlsl">
+      <ShaderType>Compute</ShaderType>
+      <ShaderModel>5.0</ShaderModel>
+      <EntryPointName>main</EntryPointName>
+      <ObjectFileOutput>../Grid/CSO/Interpolate3D2x2_CS.cso</ObjectFileOutput>
     </FxCompile>
     <FxCompile Include="HLSL_CS\Interpolate3D_CS.hlsl">
       <ShaderType>Compute</ShaderType>
