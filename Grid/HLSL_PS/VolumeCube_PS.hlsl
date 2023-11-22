@@ -4,14 +4,14 @@ struct PS_IN {
     float4 sv_pos    : SV_Position;
 };
 
-Texture3D<min16float3> volume_tex : register(t0);
+Texture3D<min16float4> volume_tex : register(t0);
 
-Texture2D<min16float3> front_texcoord : register(t1);
-Texture2D<min16float3> front_world    : register(t2);
-Texture2D<min16float3> back_texcoord  : register(t3);
-Texture2D<min16float3> back_world     : register(t4);
+Texture2D<min16float3> front_texcoord : register(t2);
+Texture2D<min16float3> front_world    : register(t3);
+Texture2D<min16float3> back_texcoord  : register(t4);
+Texture2D<min16float3> back_world     : register(t5);
 
-Texture1D<min16float4> jitter    : register(t5);
+Texture1D<min16float4> jitter    : register(t6);
 
 SamplerState sampler0 : register(s0);
 SamplerState sampler1 : register(s1);
@@ -44,6 +44,13 @@ min16float LightVisibility(min16float3 origin, min16float coeff, min16float3 dir
     return visibility;
 }
 
+min16float HenyeyGreenstein(min16float cos) {
+    static const min16float g = 0.0f;
+    static const min16float coeff = 1.0f / (4.0f * 3.148592f);
+    const min16float denom = 1.0f + g * g - 2.0f * g * cos;
+    return coeff * (1.0f - g * g) / (denom * sqrt(denom));
+}
+
 float4 main(PS_IN input) : SV_Target
 {
 	static const min16float3 dr = min16float3(reciprocal_width, reciprocal_height, reciprocal_depth) * 0.5f;
@@ -69,7 +76,7 @@ float4 main(PS_IN input) : SV_Target
     min16float3 cur_uvw = front_uvw + 1e-4;
     min16float3 cur_world = front_pos + 1e-4;
 
-    static const min16float3 albedo = min16float3(1.0f, 1.0f, 1.0f);
+    static const min16float3 albedo = min16float3(10.0f, 10.0f, 10.0f);
 
     float4 dest_color = float4(0.0f, 0.0f, 0.0f, 1.0f);
     min16float src = 0.0f;
@@ -104,7 +111,8 @@ float4 main(PS_IN input) : SV_Target
 
         src = (val[0] + val[1] + val[2] + val[3] + val[4] + val[5] + val[6] + val[7]) * 0.125f;
 
-        static const min16float absorption_coeff = 0.3f;
+        static const min16float absorption_coeff = 0.2f;
+        static const min16float scattering_coeff = 0.1f;
         if (src >= 0.9f) 
         {
             min16float3 dir_to_light = pl_pos - cur_world;
@@ -113,18 +121,22 @@ float4 main(PS_IN input) : SV_Target
 			const min16float att = dist_to_light_norm * dist_to_light_norm;
             dir_to_light = dir_to_light / dist_to_light;
             dir_to_light.y = -dir_to_light.y;
-            const min16float light_visibility = LightVisibility(cur_uvw, absorption_coeff, dir_to_light, step_size);
+            const min16float light_visibility = LightVisibility(cur_uvw, scattering_coeff, dir_to_light, step_size);
+            const min16float phase = HenyeyGreenstein(dot(dir_to_light, world_dir));
 
             const min16float prev_visibility = dest_color.a;
-            const min16float coeff = src * absorption_coeff;
+            const min16float coeff = src * (absorption_coeff + scattering_coeff);
             dest_color.a   *= exp(-coeff * step_size);
-            const min16float absorption = prev_visibility - dest_color.a;
-            dest_color.rgb += absorption * albedo * pl_color * light_visibility * att;
+            const min16float absorption = max(prev_visibility - dest_color.a, 0.0f);
+            dest_color.rgb += absorption * albedo * phase * pl_color * light_visibility * att;
         }
 
         cur_uvw   += step_uvw;
         cur_world += step_world;
         jit = (jit + 1) - ((jit + 1) & 16);
+
+        if (dest_color.a <= 1e-3)
+            break;
     }
 
     dest_color.a = 1.0f - dest_color.a;

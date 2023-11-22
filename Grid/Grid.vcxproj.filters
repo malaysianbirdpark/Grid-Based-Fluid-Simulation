@@ -537,9 +537,6 @@
     <FxCompile Include="HLSL_GS\TEMP_GS.hlsl">
       <Filter>HLSL_GS</Filter>
     </FxCompile>
-    <FxCompile Include="HLSL_GS\Voxelization_GS.hlsl">
-      <Filter>HLSL_GS</Filter>
-    </FxCompile>
     <FxCompile Include="HLSL_PS\DrawUV_PS.hlsl">
       <Filter>HLSL_PS</Filter>
     </FxCompile>
@@ -556,9 +553,6 @@
       <Filter>HLSL_PS</Filter>
     </FxCompile>
     <FxCompile Include="HLSL_PS\VolumeFlame_PS.hlsl">
-      <Filter>HLSL_PS</Filter>
-    </FxCompile>
-    <FxCompile Include="HLSL_PS\VolumeModel_PS.hlsl">
       <Filter>HLSL_PS</Filter>
     </FxCompile>
     <FxCompile Include="HLSL_PS\Voxelization_PS.hlsl">

@@ -34,12 +34,12 @@ cbuffer Dimension : register(b3)
     float reciprocal_depth;
 }
 
-min16float LightVisibility(min16float3 origin, min16float smoke_coeff, min16float soot_coeff, min16float3 dir, min16float step_size) {
+min16float LightVisibility(min16float3 origin, min16float smoke_coeff, min16float3 dir, min16float step_size) {
     min16float visibility = 1.0f;
     [unroll]
     for (int i = 0; i != 20; ++i) {
-        const min16float2 src = volume_tex.Sample(sampler0, origin).ra;
-        visibility *= exp(-(src.r * smoke_coeff + src.g * soot_coeff) * step_size);
+        const min16float2 src = volume_tex.Sample(sampler0, origin).r;
+        visibility *= exp(-src.r * smoke_coeff * step_size);
         origin     += dir * step_size;
     }
     return visibility;
@@ -144,9 +144,11 @@ float4 main(PS_IN input) : SV_Target
 		src = (val[0] + val[1] + val[2] + val[3] + val[4] + val[5] + val[6] + val[7]) * 0.125f;
         const min16float temperature = src.g;
 
-		static const min16float smoke_absorption = 0.3f;
-		static const min16float soot_absorption = 1.0f;
-		if (temperature < 1200.0f && src.r + src.b >= 5.9f) 
+		static const min16float smoke_absorption = 0.1f;
+		static const min16float smoke_scattering = 0.1f;
+		static const min16float soot_absorption = 0.1f;
+		static const min16float soot_scattering = 0.1f;
+		if (temperature < 1000.0f && src.r + src.b >= 4.9f) 
 		{
 			min16float3 dir_to_light = pl_pos - cur_world;
 			const min16float dist_to_light = length(dir_to_light);
@@ -154,19 +156,19 @@ float4 main(PS_IN input) : SV_Target
 			const min16float att = dist_to_light_norm * dist_to_light_norm;
 			dir_to_light = dir_to_light / dist_to_light;
 			dir_to_light.y = -dir_to_light.y;
-			const min16float light_visibility = LightVisibility(cur_uvw, smoke_absorption, soot_absorption, dir_to_light, step_size);
+			const min16float light_visibility = LightVisibility(cur_uvw, smoke_scattering, dir_to_light, step_size);
 
 			const min16float prev_visibility = dest_color.a;
-			const min16float coeff = src.r * smoke_absorption + src.b * soot_absorption;
+			const min16float coeff = src.r * (smoke_absorption + smoke_scattering) + src.b * soot_absorption;
 			dest_color.a   *= exp(-coeff * step_size);
 			const min16float absorption = max(prev_visibility - dest_color.a, 0.0f);
 			dest_color.rgb += absorption * lerp(smoke_albedo, soot_albedo, src.b / (src.r + src.b)) * pl_color * light_visibility * att;
 		}
         else if (temperature >= 1000.0f) {
             const min16float prev_visibility = dest_color.a;
-			const min16float coeff = (src.r + src.b) * 0.6f;
+			const min16float coeff = src.b * soot_absorption;
             dest_color.a *= exp(-coeff * step_size);
-            const min16float absorption = prev_visibility - dest_color.a;
+            const min16float absorption = max(prev_visibility - dest_color.a, 0.0f);
             dest_color.rgb += absorption * GetColor(temperature);
         }
 

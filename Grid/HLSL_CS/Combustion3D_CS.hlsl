@@ -21,14 +21,16 @@ void main( uint3 DTid : SV_DispatchThreadID )
 	min16float        fuel        = q.b;
 
 	static const min16float combustion_coeff = 200.0f;
-	static const min16float temperature_rate = 5700.0f;
-	static const min16float smoke_rate = 160.0f;
-	static const min16float soot_rate = 12.0f;
+	static const min16float temperature_rate = 1700.0f;
+	static const min16float smoke_rate = 30.0f;
+	static const min16float soot_rate = 60.0f;
 	static const min16float burn_rate = 300.0f;
-	static const min16float divergence_coeff = 31.19f;
+	//static const min16float divergence_coeff = 31.19f;
+	//static const min16float divergence_coeff = 0.00015f;
+	static const min16float divergence_coeff = 0.0f;
 
 	static const min16float temperature_threshold = 1200.0f;
-	static const min16float fuel_threshold = 20.0f;
+	static const min16float fuel_threshold = 10.0f;
 
 	if (temperature >= temperature_threshold && fuel >= fuel_threshold) {
 		const min16float fuel_before = fuel;
