@@ -99,9 +99,9 @@ DrawVolumeStage::DrawVolumeStage(ID3D11DeviceContext& context)
 		pDevice->CreateShaderResourceView(_jitterBuffer.Get(), nullptr, _jitterSRV.ReleaseAndGetAddressOf());
     }
 
-    InitRS();
-    InitDS();
-    InitBS();
+    DrawVolumeStage::InitRS();
+    DrawVolumeStage::InitDS();
+    DrawVolumeStage::InitBS();
 
     _pso.push_back(std::move(std::make_unique<PipelineStateObject>()));
 	_pso.back()->SetVertexShader("./CSO/VolumeCube_VS.cso");

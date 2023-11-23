@@ -45,8 +45,10 @@ void main(uint3 DTid : SV_DispatchThreadID)
 			{
 				velocity[DTid.xyz] += min16float4(normalize(min16float3(dir.xyz)), 0.0f) * speed;
 
-				static const min16float t_rate = 1000.0f;
-				static const min16float t_target = 630.0f;
+				//static const min16float t_rate = 1000.0f;
+				//static const min16float t_target = 630.0f;
+				static const min16float t_rate = 200.0f;
+				static const min16float t_target = 1500.0f;
 				const min16float delta_t = (1.0f - exp(-t_rate * dt)) * (t_target - quantity[DTid.xyz]);
 				const min16float delta_s = 1500.0f * dt;
 				quantity[DTid.xyz] += min16float4(delta_s, delta_t, 0.0f, 0.0f) * quantity_scale;

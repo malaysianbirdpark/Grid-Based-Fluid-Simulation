@@ -10,9 +10,9 @@ CBDimension::CBDimension(ID3D11DeviceContext& context)
     _data._width = static_cast<uint32_t>(gSimulationInfo.width);
     _data._height = static_cast<uint32_t>(gSimulationInfo.height);
     _data._depth = static_cast<uint32_t>(gSimulationInfo.depth);
-    _data._reciprocal_width = static_cast<float>(1.0f / gSimulationInfo.height);
-    _data._reciprocal_height = static_cast<float>(1.0f / gSimulationInfo.height);
-    _data._reciprocal_depth = static_cast<float>(1.0f / gSimulationInfo.height);
+    _data._reciprocal_width = 1.0f / static_cast<float>(gSimulationInfo.width);
+    _data._reciprocal_height = 1.0f / static_cast<float>(gSimulationInfo.height);
+    _data._reciprocal_depth = 1.0f / static_cast<float>(gSimulationInfo.depth);
 
     D3D11_BUFFER_DESC bd{};
     bd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
