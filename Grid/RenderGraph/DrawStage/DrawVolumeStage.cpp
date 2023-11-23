@@ -19,10 +19,6 @@ DrawVolumeStage::DrawVolumeStage(ID3D11DeviceContext& context)
     _incoming[_volumeTexID] = -1;
     _attrNames[_volumeTexID] = { "Volume Texture" };
 
-    _velocityID = NodeManager::IssueIncomingAttrID();
-    _incoming[_velocityID] = -1;
-    _attrNames[_velocityID] = { "Velocity" };
-
     {
 		Microsoft::WRL::ComPtr<ID3D11Texture2D> _frontFacesUvwBuffer;
 		Microsoft::WRL::ComPtr<ID3D11Texture2D> _frontFacesWorldBuffer;
@@ -150,8 +146,8 @@ void DrawVolumeStage::Run(ID3D11DeviceContext& context)
 
     // Set Shader Resources
     context.OMSetRenderTargets(1u, _resultRTV.GetAddressOf(), _gDSV.Get());
-    static ID3D11ShaderResourceView* const srv[7]{ _volumeTexView.Get(), _velocityView.Get(), _frontFacesUvwSRV.Get(), _frontFacesWorldSRV.Get(), _backFacesUvwSRV.Get(), _backFacesWorldSRV.Get(), _jitterSRV.Get() };
-    context.PSSetShaderResources(0u, 7u, srv);
+    static ID3D11ShaderResourceView* const srv[6]{ _volumeTexView.Get(), _frontFacesUvwSRV.Get(), _frontFacesWorldSRV.Get(), _backFacesUvwSRV.Get(), _backFacesWorldSRV.Get(), _jitterSRV.Get() };
+    context.PSSetShaderResources(0u, 6u, srv);
 
     // Draw Volume
     context.RSSetViewports(1u, &_vp);
@@ -188,8 +184,6 @@ void DrawVolumeStage::Consume(ID3D11Resource* resource, int32_t attribute_id)
         pDevice->CreateShaderResourceView(resource, nullptr, _previous.ReleaseAndGetAddressOf());
     else if (attribute_id == _volumeTexID)
         pDevice->CreateShaderResourceView(resource, nullptr, _volumeTexView.ReleaseAndGetAddressOf());
-    else if (attribute_id == _velocityID)
-        pDevice->CreateShaderResourceView(resource, nullptr, _velocityView.ReleaseAndGetAddressOf());
 }
 
 void DrawVolumeStage::InitRS()

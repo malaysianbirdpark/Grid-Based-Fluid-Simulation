@@ -108,7 +108,6 @@ Game::Game()
 
 	_smoke.Link(3, 261, 4, 7);
 	_smoke.Link(3, 261, 6, 10);
-	_smoke.Link(3, 261, 7, 13);
 	_smoke.Link(3, 262, 7, 12);
 	_smoke.Link(3, 262, 1, 2);
 
@@ -118,9 +117,9 @@ Game::Game()
 
 	_smoke.Link(6, 265, 1, 1);
 
-	_smoke.Link(7, 266, 8, 14);
+	_smoke.Link(7, 266, 8, 13);
 
-	_smoke.Link(8, 267, 9, 15);
+	_smoke.Link(8, 267, 9, 14);
 
 	ImNodes::LoadCurrentEditorStateFromIniFile("imnodes_state.ini");
 }

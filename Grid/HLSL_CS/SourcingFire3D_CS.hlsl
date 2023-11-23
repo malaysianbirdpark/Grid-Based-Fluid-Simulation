@@ -50,7 +50,7 @@ void main(uint3 DTid : SV_DispatchThreadID)
 				static const min16float t_target = 1500.0f;
 				const min16float delta_t = (1.0f - exp(-t_rate * dt)) * (t_target - quantity_in[DTid.xyz].g);
 				const min16float delta_smoke = 0.0f;
-				const min16float delta_f = 39.5f * dt;
+				const min16float delta_f = 159.5f * dt;
 				const min16float delta_soot = 0.0f;
 				quantity[DTid.xyz] += max(min16float4(delta_smoke, delta_t, delta_f, delta_soot), 0.0f) * quantity_scale;
 			}

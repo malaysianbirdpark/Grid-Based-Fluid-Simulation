@@ -12,7 +12,6 @@ private: virtual void InitRS() override;
 private: virtual void InitBS() override;
 private:
 	int32_t _volumeTexID{};
-	int32_t _velocityID{};
 
 	Microsoft::WRL::ComPtr<ID3D11RasterizerState>    _rsBack;
 	Microsoft::WRL::ComPtr<ID3D11BlendState>         _bsAlpha;
@@ -32,6 +31,5 @@ private:
 	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> _jitterSRV;
 
 	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView>  _volumeTexView;
-	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView>  _velocityView;
 };
 
