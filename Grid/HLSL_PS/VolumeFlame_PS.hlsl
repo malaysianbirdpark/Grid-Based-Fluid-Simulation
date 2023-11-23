@@ -174,6 +174,9 @@ float4 main(PS_IN input) : SV_Target
 
     float acc_density = 0.0f;
 
+    float absorbed = 1.0f;
+    float emitted = 1.0f;
+
     [loop]
     for (int i = 0; i < iterations + 1; ++i) { 
 		const min16float3 jitt = jitter[jit];
@@ -223,6 +226,7 @@ float4 main(PS_IN input) : SV_Target
             const float absorption_coeff = exp(-smoke_density * extinction_coeff * step_size);
             const float3 absorption = (prev_visibility - dest_color.a * absorption_coeff) * soot_albedo * pl_color * light_visibility * att;
             dest_color.a *= absorption_coeff;
+            absorbed *= absorption_coeff;
             dest_color.rgb += absorption;
         }
 
@@ -241,6 +245,7 @@ float4 main(PS_IN input) : SV_Target
             const float emission_coeff = exp(smoke_density * extinction_coeff * step_size);
             //const float3 emission = (dest_color.a * emission_coeff - prev_visibility) * GetColor(temperature) * exp(-acc_density * extinction_coeff * step_size);
             const float3 emission = (dest_color.a * emission_coeff - prev_visibility) * GetColor(temperature);
+            emitted *= emission_coeff;
             dest_color.rgb += emission;
         }
 
@@ -259,6 +264,6 @@ float4 main(PS_IN input) : SV_Target
 		jit = (jit + 1) - ((jit + 1) & 16);
     }
 
-    dest_color.a = 1.0f - dest_color.a;
+    dest_color.a = 1.0f - ((1.0f - emitted) + absorbed);
     return dest_color;
 }
