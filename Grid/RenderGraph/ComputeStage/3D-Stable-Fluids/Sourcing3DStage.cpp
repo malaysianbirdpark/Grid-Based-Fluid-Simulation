@@ -6,8 +6,8 @@
 #include "imnodes.h"
 
 Sourcing3DStage::Sourcing3DStage()
-	: Compute3DStage{"3D-Sourcing", "./CSO/SourcingSmoke3D_CS.cso", 8, 8, 8}
-	//: Compute3DStage{"3D-Sourcing", "./CSO/SourcingFire3D_CS.cso", 8, 8, 8}
+	//: Compute3DStage{"3D-Sourcing", "./CSO/SourcingSmoke3D_CS.cso", 8, 8, 8}
+	: Compute3DStage{"3D-Sourcing", "./CSO/SourcingFire3D_CS.cso", 8, 8, 8}
 {
     _uav.resize(2);
     _srv.resize(2);

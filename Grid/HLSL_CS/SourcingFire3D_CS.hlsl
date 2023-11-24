@@ -44,13 +44,14 @@ void main(uint3 DTid : SV_DispatchThreadID)
 
 			if (x * x + z * z <= r * r)
 			{
-				velocity[DTid.xyz] += min16float4(normalize(min16float3(dir.xyz)), 0.0f) * speed;
+				//velocity[DTid.xyz] += min16float4(normalize(min16float3(dir.xyz)), 0.0f) * speed;
+				velocity[DTid.xyz] += min16float4(0.0f, 0.0f, 0.0f, 1.0f);
 
 				static const min16float t_rate = 200.0f;
 				static const min16float t_target = 1500.0f;
 				const min16float delta_t = (1.0f - exp(-t_rate * dt)) * (t_target - quantity_in[DTid.xyz].g);
 				const min16float delta_smoke = 0.0f;
-				const min16float delta_f = 59.5f * dt;
+				const min16float delta_f = 79.5f * dt;
 				const min16float delta_soot = 0.0f;
 				quantity[DTid.xyz] += max(min16float4(delta_smoke, delta_t, delta_f, delta_soot), 0.0f) * quantity_scale;
 			}

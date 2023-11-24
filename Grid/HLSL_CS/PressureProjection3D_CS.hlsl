@@ -45,7 +45,7 @@ void main(uint3 DTid : SV_DispatchThreadID)
         }
 
         const min16float div = v[DTid.xyz].w;
-        result[DTid.xyz] = min16float4((v[DTid.xyz].xyz - min16float3(right - left, up - down, front - behind) * 0.5f) * velocity_mask + obstacle_velocity, div * 0.5f);
+        result[DTid.xyz] = min16float4((v[DTid.xyz].xyz - min16float3(right - left, up - down, front - behind) * 0.5f) * velocity_mask + obstacle_velocity, 0.0f);
     }
     else {
         result[DTid.xyz] = min16float4(obstacle_vel[DTid.xyz], 0.0f);

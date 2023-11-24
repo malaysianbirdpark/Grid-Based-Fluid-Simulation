@@ -94,7 +94,7 @@ float3 GetXYZ(const float t) {
         lambda_nano += 10.0f;
     }
     const float sum = result.x + result.y + result.z;
-    if (sum <= 1e-4)
+    if (sum <= 1e-8)
         return float3(0.0f, 0.0f, 0.0f);
     result.x = result.x / sum;
     result.y = result.y / sum;
@@ -103,17 +103,11 @@ float3 GetXYZ(const float t) {
 }
 
 float3 ToRGB(float3 xyz) {
-    //return float3(
-		  //  	3.240479f * xyz.x - 1.537150f * xyz.y - 0.498535f * xyz.z,
-		  //  	-0.969256f * xyz.x + 1.875991f * xyz.y + 0.041556f * xyz.z,
-		  //  	0.055648f * xyz.x - 0.204043f * xyz.y + 1.057311f * xyz.z
-		  // );
-
-    return float3(
+    return clamp(float3(
                 1.656492f * xyz.x - 0.354851f * xyz.y - 0.255038f * xyz.z,
                 -0.707196f * xyz.x + 1.655397f * xyz.y + 0.036152f * xyz.z,
                 0.051713f * xyz.x - 0.121364f * xyz.y + 1.011530f * xyz.z
-		   );
+		   ), 0.0f, 1.0f);
 }
 
 float GammaCorrection(const float u) {
@@ -136,6 +130,23 @@ float3 GetColor(const float t) {
     return ToRGB(result);
 }
 
+float SootAbsorption(const float t) {
+    if (t <= 1e-3)
+        return 0.0f;
+    static const float b = 2898.0f;
+    const float wavelength_micro = b / t;
+    const float mu = log(wavelength_micro);
+    const float n = 1.811f + 0.1263f * mu + 0.027f * mu * mu + 0.0417f * mu * mu * mu;
+    const float k = 0.5821f + 0.1213f * mu + 0.2309f * mu * mu + 0.01f * mu * mu * mu;
+
+    return ((36.0f * 3.148592f) / pow(wavelength_micro, 5.39f)) * ((n * k) / max((n * n - k * k + 2.0f) * (n * n - k * k + 2.0f) + 4.0f * n * n * k * k, 1e-13));
+}
+
+float EmittedRadiance(const float t) {
+    static const float sigma = 5.670373f * 1e-8f;
+    return sigma * ((t * t) * (t * t)) / 3.148592f;
+}
+
 float4 main(PS_IN input) : SV_Target
 {
 	static const min16float3 dr = min16float3(reciprocal_width, reciprocal_height, reciprocal_depth) * 0.5f;
@@ -147,7 +158,8 @@ float4 main(PS_IN input) : SV_Target
     const min16float  uvw_len   = length(back_uvw - front_uvw);
     const min16float3 uvw_dir   = (back_uvw - front_uvw) / uvw_len;
 
-    const min16float step_size = reciprocal_width * clamp(uvw_len, 1.0f, 2.0f);
+    //const min16float step_size = reciprocal_width * clamp(uvw_len, 1.0f, 2.0f);
+    const min16float step_size = reciprocal_width;
     const min16float3 step_uvw = uvw_dir * step_size;
 
     if (uvw_len < step_size)
@@ -158,14 +170,15 @@ float4 main(PS_IN input) : SV_Target
     const min16float  world_len = length(back_pos - front_pos);
     const min16float3 world_dir = (back_pos - front_pos) / world_len;
     
-    min16float3 cur_uvw = front_uvw + 1e-4;
-    min16float3 cur_world = front_pos + 1e-4;
+    min16float3 cur_uvw = front_uvw + uvw_dir * 1e-5;
+    min16float3 cur_world = front_pos + world_dir * 1e-5;
 
-    static const min16float3 smoke_albedo = min16float3(0.6f, 0.6f, 0.6f);
+    static const min16float3 smoke_albedo = min16float3(0.3f, 0.3f, 0.3f);
     static const min16float3 soot_albedo = min16float3(0.1f, 0.1f, 0.1f);
 
     float4 dest_color = float4(0.0f, 0.0f, 0.0f, 1.0f);
     float3 src = 0.0f;
+    float3 emission = 0.0f;
 
     const int iterations = uvw_len / step_size;
     const min16float step_world = world_len / iterations;
@@ -173,7 +186,6 @@ float4 main(PS_IN input) : SV_Target
     static uint jit = 0;
 
     float acc_density = 0.0f;
-
     float absorbed = 1.0f;
     float emitted = 1.0f;
 
@@ -181,89 +193,73 @@ float4 main(PS_IN input) : SV_Target
     for (int i = 0; i < iterations + 1; ++i) { 
 		const min16float3 jitt = jitter[jit];
 
-		const float3 p0 = cur_uvw + float3( dr.x,  dr.y,  dr.z) + float3(jitt.x, jitt.y, jitt.z);
-		const float3 p1 = cur_uvw + float3(-dr.x,  dr.y,  dr.z) + float3(jitt.y, jitt.z, jitt.x);
-		const float3 p2 = cur_uvw + float3( dr.x, -dr.y,  dr.z) + float3(jitt.z, jitt.x, jitt.y);
-		const float3 p3 = cur_uvw + float3(-dr.x, -dr.y,  dr.z) + float3(jitt.x, jitt.y, jitt.z);
-		const float3 p4 = cur_uvw + float3( dr.x,  dr.y, -dr.z) + float3(jitt.y, jitt.z, jitt.x);
-		const float3 p5 = cur_uvw + float3(-dr.x,  dr.y, -dr.z) + float3(jitt.z, jitt.x, jitt.y);
-		const float3 p6 = cur_uvw + float3( dr.x, -dr.y, -dr.z) + float3(jitt.x, jitt.y, jitt.z);
-		const float3 p7 = cur_uvw + float3(-dr.x, -dr.y, -dr.z) + float3(jitt.y, jitt.z, jitt.x);
+		//const float3 p0 = cur_uvw + float3( dr.x,  dr.y,  dr.z) + float3(jitt.x, jitt.y, jitt.z);
+		//const float3 p1 = cur_uvw + float3(-dr.x,  dr.y,  dr.z) + float3(jitt.y, jitt.z, jitt.x);
+		//const float3 p2 = cur_uvw + float3( dr.x, -dr.y,  dr.z) + float3(jitt.z, jitt.x, jitt.y);
+		//const float3 p3 = cur_uvw + float3(-dr.x, -dr.y,  dr.z) + float3(jitt.x, jitt.y, jitt.z);
+		//const float3 p4 = cur_uvw + float3( dr.x,  dr.y, -dr.z) + float3(jitt.y, jitt.z, jitt.x);
+		//const float3 p5 = cur_uvw + float3(-dr.x,  dr.y, -dr.z) + float3(jitt.z, jitt.x, jitt.y);
+		//const float3 p6 = cur_uvw + float3( dr.x, -dr.y, -dr.z) + float3(jitt.x, jitt.y, jitt.z);
+		//const float3 p7 = cur_uvw + float3(-dr.x, -dr.y, -dr.z) + float3(jitt.y, jitt.z, jitt.x);
 
-		float3 val[8];
-		val[0] = volume_tex.Sample(sampler0, p0).rga;
-		val[1] = volume_tex.Sample(sampler0, p1).rga;
-		val[2] = volume_tex.Sample(sampler0, p2).rga;
-		val[3] = volume_tex.Sample(sampler0, p3).rga;
-		val[4] = volume_tex.Sample(sampler0, p4).rga;
-		val[5] = volume_tex.Sample(sampler0, p5).rga;
-		val[6] = volume_tex.Sample(sampler0, p6).rga;
-		val[7] = volume_tex.Sample(sampler0, p7).rga;
+		//float3 val[8];
+		//val[0] = volume_tex.Sample(sampler0, p0).rga;
+		//val[1] = volume_tex.Sample(sampler0, p1).rga;
+		//val[2] = volume_tex.Sample(sampler0, p2).rga;
+		//val[3] = volume_tex.Sample(sampler0, p3).rga;
+		//val[4] = volume_tex.Sample(sampler0, p4).rga;
+		//val[5] = volume_tex.Sample(sampler0, p5).rga;
+		//val[6] = volume_tex.Sample(sampler0, p6).rga;
+		//val[7] = volume_tex.Sample(sampler0, p7).rga;
 
-		src = (val[0] + val[1] + val[2] + val[3] + val[4] + val[5] + val[6] + val[7]) * 0.125f;
+		//src = (val[0] + val[1] + val[2] + val[3] + val[4] + val[5] + val[6] + val[7]) * 0.125f;
+        src = volume_tex.Sample(sampler0, cur_uvw + jitt).rga;
 
         const float smoke_density = src.r;
         const float temperature = src.g;
         const float soot_density = src.b;
-        acc_density += smoke_density;
 
-		static const float smoke_absorption = 0.1f;
-		static const float smoke_scattering = 0.1f;
+		static const float smoke_absorption = 0.3f;
+		static const float smoke_scattering = 0.3f;
 		static const float soot_absorption = 0.1f;
 		static const float soot_scattering = 0.1f;
 
-		float3 dir_to_light = pl_pos - cur_world;
-		const float dist_to_light = length(dir_to_light);
-		const float dist_to_light_norm = 1.0f - saturate(dist_to_light * pl_reciprocal_range);
-		const float att = dist_to_light_norm * dist_to_light_norm;
-		dir_to_light = dir_to_light / dist_to_light;
-		dir_to_light.y = -dir_to_light.y;
-		const float light_visibility = LightVisibility(cur_uvw, soot_scattering, dir_to_light, step_size);
-
+        // smoke
+        if (smoke_density >= 1.9f)
         {
-            const float prev_visibility = dest_color.a;
-            const float extinction_coeff = smoke_absorption + smoke_scattering;
-            const float absorption_coeff = exp(-smoke_density * extinction_coeff * step_size);
-            const float3 absorption = (prev_visibility - dest_color.a * absorption_coeff) * soot_albedo * pl_color * light_visibility * att;
-            dest_color.a *= absorption_coeff;
-            absorbed *= absorption_coeff;
-            dest_color.rgb += absorption;
+			float3 dir_to_light = pl_pos - cur_world;
+			const float dist_to_light = length(dir_to_light);
+			const float dist_to_light_norm = 1.0f - saturate(dist_to_light * pl_reciprocal_range);
+			const float att = dist_to_light_norm * dist_to_light_norm;
+			dir_to_light = dir_to_light / dist_to_light;
+			dir_to_light.y = -dir_to_light.y;
+			const float light_visibility = LightVisibility(cur_uvw, smoke_scattering, dir_to_light, step_size);
+
+			const float prev_visibility = dest_color.a;
+			const float extinction_coeff = smoke_absorption + smoke_scattering;
+			const float absorption = exp(-smoke_density * extinction_coeff * step_size);
+			dest_color.a *= absorption;
+            absorbed *= absorption;
+			const float transmittance = max(prev_visibility - dest_color.a, 0.0f);
+			const float3 radiance = transmittance * smoke_albedo * pl_color * light_visibility * att;
+			dest_color.rgb += radiance;
         }
 
-        //{
-        //    const float prev_visibility = dest_color.a;
-        //    const float extinction_coeff = smoke_absorption + smoke_scattering;
-        //    const float absorption_coeff = exp(-smoke_density * extinction_coeff * step_size);
-        //    const float3 absorption = (prev_visibility - dest_color.a * absorption_coeff) * GetColor(temperature);
-        //    dest_color.a *= absorption_coeff;
-        //    dest_color.rgb += absorption;
-        //}
-
+        if (soot_density >= 1.9f)
         {
-            const float prev_visibility = dest_color.a;
-            const float extinction_coeff = smoke_absorption + smoke_scattering;
-            const float emission_coeff = exp(smoke_density * extinction_coeff * step_size);
-            //const float3 emission = (dest_color.a * emission_coeff - prev_visibility) * GetColor(temperature) * exp(-acc_density * extinction_coeff * step_size);
-            const float3 emission = (dest_color.a * emission_coeff - prev_visibility) * GetColor(temperature);
-            emitted *= emission_coeff;
-            dest_color.rgb += emission;
+			const float extinction_coeff = SootAbsorption(temperature);
+			const float absorption = exp(-soot_density * extinction_coeff * step_size);
+			dest_color.a *= absorption;
+			//const float transmittance = max(prev_visibility - dest_color.a, 0.0f);
+		    const float3 radiance = absorption * extinction_coeff * GetColor(temperature);
+			dest_color.rgb += radiance;
         }
-
-        //{
-        //    const float prev_visibility = dest_color.a;
-        //    const float extinction_coeff = soot_absorption + soot_scattering;
-        //    const float absorption_coeff = exp(-soot_density * extinction_coeff * step_size);
-        //    const float emission_coeff = 1.0f - absorption_coeff;
-        //    const float3 emission = GetColor(temperature);
-        //    dest_color.a *= absorption_coeff;
-        //    dest_color.rgb += emission;
-        //}
 
         cur_uvw   += step_uvw;
         cur_world += step_world;
 		jit = (jit + 1) - ((jit + 1) & 16);
     }
 
-    dest_color.a = 1.0f - ((1.0f - emitted) + absorbed);
+    dest_color.a = 1.0f - dest_color.a;
     return dest_color;
 }
