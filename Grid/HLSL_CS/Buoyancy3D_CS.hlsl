@@ -15,14 +15,16 @@ void main( uint3 DTid : SV_DispatchThreadID )
 	velocity_out[DTid.xyz] = velocity_in[DTid.xyz];
 
 	// magic number 288K for room temperature
-    const min16float4 q = quantity_in[DTid.xyz];
-    {
-        if (obstacle[DTid.xyz].r <= 0.9f)
-        {
-            const min16float alpha = 0.01f;
-            const min16float beta = 0.0355f;
-            const min16float4 f_b = (alpha * -(q.r + q.a) + beta * (q.g - 288.0f)) * min16float4(0.0f, -1.0f, 0.0f, 0.0f);
-            velocity_out[DTid.xyz] += f_b * dt;
-        }
-    }
+    //const min16float4 q = quantity_in[DTid.xyz];
+    //{
+    //    if (obstacle[DTid.xyz].r <= 0.9f)
+    //    {
+    //        //const min16float alpha = 0.0001f;
+    //        const min16float alpha = 0.0f;
+    //        //const min16float beta = 0.0355f;
+    //        const min16float beta = 0.1355f;
+    //        const min16float4 f_b = (alpha * -(q.a) + beta * (q.g - 288.0f)) * min16float4(0.0f, -1.0f, 0.0f, 0.0f);
+    //        velocity_out[DTid.xyz] += f_b * dt;
+    //    }
+    //}
 }

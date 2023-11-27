@@ -23,12 +23,10 @@ void main( uint3 DTid : SV_DispatchThreadID )
 	min16float        soot        = q.a;
 
 	static const min16float combustion_coeff = 200.0f;
-	static const min16float temperature_rate = 2800.0f + 270.0f;
+	static const min16float temperature_rate = 100.0f + 270.0f;
 	static const min16float smoke_rate = 20.0f;
-	static const min16float soot_rate = 70.0f;
+	static const min16float soot_rate = 100.0f;
 	static const min16float burn_rate = 300.0f;
-	static const min16float divergence_coeff = 0.57515f;
-    //static const min16float divergence_coeff = 0.0f;
 
 	static const min16float autoignition_temperature = 570.0f + 270.0f;
 	static const min16float fuel_threshold = 10.0f;
@@ -39,6 +37,7 @@ void main( uint3 DTid : SV_DispatchThreadID )
 		const min16float coeff = abs(fuel - fuel_before) * combustion_coeff;
 		temperature = temperature + temperature_rate * coeff * dt;
 		quantity_out[DTid.xyz] = min16float4(smoke + smoke_rate * coeff * dt, temperature, fuel, soot + soot_rate * coeff * dt);
-		velocity_out[DTid.xyz] += min16float4(0.0f, 0.0f, 0.0f, (divergence_coeff * coeff) / dt);
+		//velocity_out[DTid.xyz] += min16float4(0.0f, 0.0f, 0.0f, (divergence_coeff * coeff) / dt);
+		velocity_out[DTid.xyz] += min16float4(0.0f, 0.0f, 0.0f, coeff / dt);
 	}
 }

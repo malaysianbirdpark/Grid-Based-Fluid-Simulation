@@ -72,9 +72,9 @@ DrawVolumeStage::DrawVolumeStage(ID3D11DeviceContext& context)
         auto jitter{ std::vector<float16_t>(16) };
         for (auto& i : jitter) {
             i = float16_t{
-                (static_cast<float>(std::rand()) / RAND_MAX - 0.5f) / gSimulationInfo.width,
-                (static_cast<float>(std::rand()) / RAND_MAX - 0.5f) / gSimulationInfo.height,
-                (static_cast<float>(std::rand()) / RAND_MAX - 0.5f) / gSimulationInfo.depth,
+                (static_cast<float>(std::rand()) / RAND_MAX - 0.5f) / gSimulationInfo.width / 2.0f,
+                (static_cast<float>(std::rand()) / RAND_MAX - 0.5f) / gSimulationInfo.height / 2.0f,
+                (static_cast<float>(std::rand()) / RAND_MAX - 0.5f) / gSimulationInfo.depth / 2.0f,
                 0.0f
             };
         }
